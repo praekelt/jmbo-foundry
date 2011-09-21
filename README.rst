@@ -73,7 +73,7 @@ Methods & Properties
     
 get_absolute_url(self)
 ++++++++++++++++++++++
-Returns URL to which link should redirect based on a `reversed <https://docs.djangoproject.com/en/dev/topics/http/urls/#reverse>_` view name as specified in :ref:`generic.models.Link.view_name` or otherwise an explicitly provided URL as specified in :ref:`generic.models.Link.url`.
+Returns URL to which link should redirect based on a `reversed <https://docs.djangoproject.com/en/dev/topics/http/urls/#reverse>`_ view name as specified in :ref:`generic.models.Link.view_name` or otherwise an explicitly provided URL as specified in :ref:`generic.models.Link.url`.
 
 .. _generic.models.Link.is_active:
 
