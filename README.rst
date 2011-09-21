@@ -28,7 +28,7 @@ Installation
         'generic.loaders.TypeLoader',
     )
 
-   This casues templates to be loaded from a path prefixed with whatever value was specified in the `` TEMPLATE_TYPE`` setting.
+   This casues templates to be loaded from a path prefixed with whatever value was specified in the ``TEMPLATE_TYPE`` setting. For example in this case a template specified as ``generic/home.html`` would actually be loaded from ``basic/generic/home.html``.
 
 #. ``jmbo-generic`` includes static media resources which you need to configure as described in `Django`s managing static files documentation <https://docs.djangoproject.com/en/dev/howto/static-files/>`_.
 
