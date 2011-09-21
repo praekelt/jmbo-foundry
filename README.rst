@@ -17,7 +17,7 @@ Installation
 
     (r'^$', include('generic.urls')),
 
-#. ``generic`` includes a number of template sets allowing you to deliver lightweight(``zero``), mobile(``basic``) or desktop/touch(``full``) specific output. Determing which template set to use is simply a matter of specifying a ``TEMPLATE_TYPE`` setting, and adding  ``generic.loaders.TypeLoader`` to the ``TEMPLATE_LOADERS`` setting. For example to use the ``basic`` template set update your settings as follows::
+#. ``jmbo-generic`` includes a number of template sets allowing you to deliver lightweight(``zero``), mobile(``basic``) or desktop/touch(``full``) specific output. Determing which template set to use is simply a matter of specifying a ``TEMPLATE_TYPE`` setting, and adding  ``generic.loaders.TypeLoader`` to the ``TEMPLATE_LOADERS`` setting. For example to use the ``basic`` template set update your settings as follows::
     
     TEMPLATE_TYPE = "basic"
 
@@ -26,3 +26,4 @@ Installation
         'generic.loaders.TypeLoader',
     )
 
+#. ``jmbo-generic`` includes static media resources which you need to configure as described in `Django`s managing static files doc <https://docs.djangoproject.com/en/dev/howto/static-files/>`_.
