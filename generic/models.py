@@ -13,7 +13,8 @@ class Link(models.Model):
     )
     view_name = models.CharField(
         max_length=256,
-        help_text="View name to which this link will redirect. This takes precedence over url field below.",
+        help_text="View name to which this link will redirect. This takes \
+precedence over url field below.",
         blank=True,
         null=True,
     )
@@ -26,7 +27,8 @@ class Link(models.Model):
 
     def get_absolute_url(self):
         """
-        Returns url to which link should redirect based on a reversed view name or otherwise explicitly provided url.
+        Returns url to which link should redirect based on a reversed view name
+        or otherwise explicitly provided url.
         """
         if self.view_name:
             return reverse(self.view_name)
@@ -35,9 +37,10 @@ class Link(models.Model):
 
     def is_active(self, request):
         """
-        Determines wheteher or not the link can be consider active based on the request path.
-        True if the request path can be resolved to the same view name as is contained in view_name field.
-        Otherwise True if request path starts with url as contained in url field (needs some work).
+        Determines wheteher or not the link can be consider active based on the
+        request path. True if the request path can be resolved to the same view
+        name as is contained in view_name field. Otherwise True if request path
+        starts with url as contained in url field (needs some work).
         """
         try:
             pattern_name = resolve_to_name(request.path_info)
@@ -74,7 +77,8 @@ class LinkPosition(models.Model):
         ordering = ('position',)
 
     def __unicode__(self):
-        return "Link titled %s in position %s." % (self.link.title, self.position)
+        return "Link titled %s in position %s." % (self.link.title, \
+                self.position)
 
 
 class MenuLinkPosition(LinkPosition):

@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib import admin
 
-from generic.models import Link, MenuLinkPosition, MenuPreferences, NavbarLinkPosition, NavbarPreferences
+from generic.models import Link, MenuLinkPosition, MenuPreferences, \
+        NavbarLinkPosition, NavbarPreferences
 
 from preferences.admin import PreferencesAdmin
 
@@ -35,8 +36,9 @@ def build_view_names(url_patterns=None):
 
 class LinkAdminForm(forms.ModelForm):
     view_name = forms.ChoiceField(
-        label='View Name', 
-        help_text="View name to which this link will redirect. This takes precedence over url field below.",
+        label='View Name',
+        help_text="View name to which this link will redirect. This takes \
+precedence over url field below.",
         required=False
     )
 
@@ -66,13 +68,13 @@ class MenuPreferenceAdmin(PreferencesAdmin):
         MenuLinkPositionInline,
     ]
 
-    
+
 class NavbarPreferenceAdmin(PreferencesAdmin):
     inlines = [
         NavbarLinkPositionInline,
     ]
 
-    
+
 class LinkAdmin(admin.ModelAdmin):
     form = LinkAdminForm
 
