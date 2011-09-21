@@ -38,6 +38,8 @@ Models
 generic.models.Link
 *******************
 
+Used in conjunction with :ref:`generic_inclusion_tags.menu` and :ref:`generic_inclusion_tags.navbar` to provide an admin configurable navbar and menu.
+
 Fields
 ~~~~~~
         
@@ -69,18 +71,20 @@ Methods & Properties
     
 get_absolute_url(self)
 ++++++++++++++++++++++
-Returns url to which link should redirect based on a reversed view name as specified in :ref:`generic.models.Link.view_name` or otherwise an explicitly provided url as specified in :ref:`generic.models.Link.url`.
+Returns url to which link should redirect based on a `reversed <https://docs.djangoproject.com/en/dev/topics/http/urls/#reverse>_` view name as specified in :ref:`generic.models.Link.view_name` or otherwise an explicitly provided url as specified in :ref:`generic.models.Link.url`.
 
 .. _generic.models.Link.is_active:
 
 is_active(self, request)
 ++++++++++++++++++++++++
-Determines whether or not the link can be consider active based on the request path. True if the request path can be resolved to the same view name as is contained in :ref:`generic.models.Link.view_name`. Otherwise True if request path starts with url as contained in :ref:`generic.models.Link.url` field.
+Determines whether or not the link can be consider active based on the request path. ``True`` if the request path can be resolved to the same view name as is contained in :ref:`generic.models.Link.view_name`. Otherwise ``True`` if request path starts with url as contained in :ref:`generic.models.Link.url` field.
 
 .. _generic.models.LinkPosition:
 
 generic.models.LinkPosition
 ***************************
+
+Used to determine position/order of elements in :ref:`generic_inclusion_tags.menu` and :ref:`generic_inclusion_tags.navbar` inclusion tags.
 
 .. _generic.models.LinkPosition.Fields:
 
@@ -91,7 +95,7 @@ Fields
     
 position
 ++++++++
-Used to determine in which position/order elements should render in :ref:`generic_inclusion_tags.menu` and :ref:`generic_inclusion_tags.navbar` inclusion tags.
+Specifies position/order of link in :ref:`generic_inclusion_tags.menu` and :ref:`generic_inclusion_tags.navbar` inclusion tags.
 
 .. _generic_inclusion_tags:
 
@@ -101,16 +105,18 @@ Inclusion Tags
 generic.templatetags.generic_inclusion_tags
 *******************************************
 
-Generic inclusion tags delivering various functionality like :ref:`generic_inclusion_tags.menu` and :ref:`generic_inclusion_tags.navbar`. Load these tags by including ``{% load generic_inclusion_tags %}`` in your templates.
+Provides generic inclusion tags like :ref:`generic_inclusion_tags.menu` and :ref:`generic_inclusion_tags.navbar`. Load these tags by including ``{% load generic_inclusion_tags %}`` in your templates.
 
 .. _generic_inclusion_tags.menu:
 
 {% menu %}
 ~~~~~~~~~~
 
+Renders a navigation menu normally used as part of footer navigation element. Utilizes :ref:`generic.models.Link` objects configurable via `Menu Preferences in admin <http://localhost:8000/admin/preferences/menupreferences>`_ to provide a flexible menu navigation system. Elements are ordered using :ref:`generic.models.LinkPosition.position` values as specified via admin. You can customize the resulting HTML by overriding the ``generic/inclusion_tags/menu.html`` template file. The template receives  an ``object_list`` context variable, which is a collection of ordered :ref:`generic.models.Link` elements to display.
+
 .. _generic_inclusion_tags.navbar:
 
 {% navbar %}
 ~~~~~~~~~~~~
 
-Renders a navigation bar normally used as part of main navigation element positioned at top of pages. Utilizes :ref:`generic.models.Link` objects configurable via `Navbar Preferences in admin <http://localhost:8000/admin/preferences/navbarpreferences>`_ to provide a flexible navbar system. Elements are ordered using :ref:`generic.models.LinkPosition.position` values as specified via admin. You can customize the resulting HTML by overriding the ``generic/inclusion_tags/navbar.html`` file. The template recieves  ``object_list`` and ``active_link`` context variables. ``object_list`` is a collection of :ref:`generic.models.Link` elements to display and ``active_link`` is an :ref:`generic.models.Link` determined to be active for the requested path.
+Renders a navigation bar normally used as part of main navigation element positioned at top of pages. Utilizes :ref:`generic.models.Link` objects configurable via `Navbar Preferences in admin <http://localhost:8000/admin/preferences/navbarpreferences>`_ to provide a flexible navbar system. Elements are ordered using :ref:`generic.models.LinkPosition.position` values as specified via admin. You can customize the resulting HTML by overriding the ``generic/inclusion_tags/navbar.html`` template file. The template receives  ``object_list`` and ``active_link`` context variables. ``object_list`` is a collection of ordered :ref:`generic.models.Link` elements to display and ``active_link`` is an :ref:`generic.models.Link` object determined to be active for the requested path.
