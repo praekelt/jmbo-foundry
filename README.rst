@@ -17,4 +17,12 @@ Installation
 
     (r'^$', include('generic.urls')),
 
+#. ``generic`` includes a number of template sets allowing you to deliver lightweight(``zero``), mobile(``basic``) or desktop/touch(``full``) specific output. Determing which template set to use is simply a matter of specifying a ``TEMPLATE_TYPE`` setting, and adding  ``generic.loaders.TypeLoader`` to the ``TEMPLATE_LOADERS`` setting. For example to use the ``basic`` template set update your settings as follows::
+    
+    TEMPLATE_TYPE = "basic"
+
+    TEMPLATE_LOADERS = (
+        ...other template loader classes...
+        'generic.loaders.TypeLoader',
+    )
 
