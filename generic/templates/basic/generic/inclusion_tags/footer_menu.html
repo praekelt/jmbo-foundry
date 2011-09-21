@@ -1,0 +1,9 @@
+{% if object_list %}
+    <a name="menu-dl" id="menu-dl"></a>
+    <div id="browse">
+        <div class="h2 nomargin dark">Browse</div>
+        {% for link in object_list %}
+            <span><a href="{{ link.get_absolute_url }}">{{ link.title }}</a></span>
+        {% endfor %}
+    </div>
+{% endif %}
