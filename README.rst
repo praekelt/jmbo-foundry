@@ -38,6 +38,44 @@ Models
 generic.models.Link
 *******************
 
+Fields
+~~~~~~
+        
+.. _generic.models.Link.title:
+    
+title
++++++
+A short descriptive title for link.
+
+.. _generic.models.Link.view_name:
+    
+view_name
++++++++++
+View name to which this link will redirect. This takes precedence over :ref:`generic.models.Link.url` field.
+    
+
+.. _generic.models.Link.url:
+    
+url
++++
+URL to which this menu link will redriect. Only used if :ref:`generic.models.Link.view_name` is not specified.
+
+.. _generic.models.Link.methods:
+
+Methods & Properties
+~~~~~~~~~~~~~~~~~~~~
+
+.. _generic.models.Link.get_absolute_url:
+    
+get_absolute_url(self)
+++++++++++++++++++++++
+Returns url to which link should redirect based on a reversed view name as specified in :ref:`generic.models.Link.view_name` or otherwise an explicitly provided url as specified in :ref:`generic.models.Link.url`.
+
+.. _generic.models.Link.is_active:
+
+is_active(self, request)
+++++++++++++++++++++++++
+Determines whether or not the link can be consider active based on the request path. True if the request path can be resolved to the same view name as is contained in :ref:`generic.models.Link.view_name`. Otherwise True if request path starts with url as contained in :ref:`generic.models.Link.url` field.
 
 .. _generic.models.LinkPosition:
 
@@ -54,6 +92,8 @@ Fields
 position
 ++++++++
 Used to determine in which position/order elements should render in :ref:`generic_inclusion_tags.menu` and :ref:`generic_inclusion_tags.navbar` inclusion tags.
+
+.. _generic_inclusion_tags:
 
 Inclusion Tags
 --------------
