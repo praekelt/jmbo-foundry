@@ -1,4 +1,6 @@
+from django.core.urlresolvers import reverse
 from django.db import models
+
 from preferences.models import Preferences
 
 
@@ -25,7 +27,6 @@ class FooterMenuLink(models.Model):
 
     def get_absolute_url(self):
         if self.view_name:
-            from django.core.urlresolvers import reverse
             return reverse(self.view_name)
         else:
             return self.url
