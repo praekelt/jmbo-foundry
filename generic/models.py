@@ -37,7 +37,7 @@ precedence over url field below.",
 
     def is_active(self, request):
         """
-        Determines wheteher or not the link can be consider active based on the
+        Determines whether or not the link can be consider active based on the
         request path. True if the request path can be resolved to the same view
         name as is contained in view_name field. Otherwise True if request path
         starts with url as contained in url field (needs some work).
