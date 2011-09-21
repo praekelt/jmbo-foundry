@@ -11,6 +11,8 @@ Installation
 
 #. Install or add ``jmbo-generic`` to your Python path.
 
+#. Install ``django-preferences`` as described `here <http://pypi.python.org/pypi/django-preferences#installation>`_.
+
 #. Add ``generic`` to your ``INSTALLED_APPS`` setting.
 
 #. Add ``generic`` url include to your project's ``urls.py`` file::
@@ -26,4 +28,4 @@ Installation
         'generic.loaders.TypeLoader',
     )
 
-#. ``jmbo-generic`` includes static media resources which you need to configure as described in `Django`s managing static files doc <https://docs.djangoproject.com/en/dev/howto/static-files/>`_.
+#. ``jmbo-generic`` includes static media resources which you need to configure as described in `Django`s managing static files documentation <https://docs.djangoproject.com/en/dev/howto/static-files/>`_.
