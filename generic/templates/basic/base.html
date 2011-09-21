@@ -1,3 +1,5 @@
+{% load generic_inclusion_tags %}
+
 <?xml version="1.0" encoding="utf-8"?> 
 <!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd"> 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -73,16 +75,14 @@
         
     </div>
     
-    <a name="menu-dl" id="menu-dl"></a>
-    <div id="browse">
-    	<div class="h2 nomargin dark">Browse</div>
-        <span><a href="index.html">Home</a></span><span><a href="news.html">News</a></span><span><a href="events.html">Events</a></span><span><a href="galleries.html">Pics+Vids</a></span><span><a href="downloads.html">Downloads</a></span><span><a href="win.html">Win</a></span>
-        <a name="searchdl" id="searchdl"></a>
-        <div id="search" class="last">
-			<form name="search-form" action="search-results.html" method="get"><fieldset><input type="text" name="search" class="txt" /><input type="submit" name="search-btn" value="Search" /></fieldset></form>
-		</div>
-    </div>
+    {% footer_menu %}
     
+    <a name="searchdl" id="searchdl"></a>
+    <div id="search" class="last">
+	    <form name="search-form" action="search-results.html" method="get"><fieldset><input type="text" name="search" class="txt" /><input type="submit" name="search-btn" value="Search" /></fieldset></form>
+	</div>
+    
+
     <div id="footer">
     	<span><a href="about.html">About Us</a></span> - <span><a href="contact.html">Contact Us</a></span> - <span><a href="terms.html">Terms</a></span><br />&copy; Praekelt Digital 2011 - <a href="http://prototypes.praekelt.co.za/panya/mobile-web/advanced/">Touch Site</a> - <a href="http://www.facebook.com">Facebook</a> - <a href="http://www.twitter.com">Twitter</a></span>
     </div>
