@@ -1,7 +1,7 @@
 Jmbo Generic
 ============
 
-Jmbo generic behaviour/templates app.
+Jmbo generic behavior/templates app.
 
 .. contents:: Contents
     :depth: 5
@@ -15,11 +15,11 @@ Installation
 
 #. Add ``generic`` to your ``INSTALLED_APPS`` setting.
 
-#. Add ``generic`` url include to your project's ``urls.py`` file::
+#. Add ``generic`` URL include to your project's ``urls.py`` file::
 
     (r'^$', include('generic.urls')),
 
-#. ``jmbo-generic`` includes a number of template sets allowing you to deliver lightweight(``zero``), mobile(``basic``) or desktop/touch(``full``) specific output. Determing which template set to use is simply a matter of specifying a ``TEMPLATE_TYPE`` setting, and adding  ``generic.loaders.TypeLoader`` to the ``TEMPLATE_LOADERS`` setting. For example to use the ``basic`` template set update your settings as follows::
+#. ``jmbo-generic`` includes a number of template sets allowing you to deliver lightweight(``zero``), mobile(``basic``) or desktop/touch(``full``) specific output. Specifying which template set to use is simply a matter of specifying a ``TEMPLATE_TYPE`` setting, and adding  ``generic.loaders.TypeLoader`` to the ``TEMPLATE_LOADERS`` setting. For example to use the ``basic`` template set update your settings as follows::
     
     TEMPLATE_TYPE = "basic"
 
@@ -27,6 +27,8 @@ Installation
         ...other template loader classes...
         'generic.loaders.TypeLoader',
     )
+
+   This casues templates to be loaded from a path prefixed with whatever value was specified in the `` TEMPLATE_TYPE`` setting.
 
 #. ``jmbo-generic`` includes static media resources which you need to configure as described in `Django`s managing static files documentation <https://docs.djangoproject.com/en/dev/howto/static-files/>`_.
 
@@ -60,7 +62,7 @@ View name to which this link will redirect. This takes precedence over :ref:`gen
     
 url
 +++
-URL to which this menu link will redriect. Only used if :ref:`generic.models.Link.view_name` is not specified.
+URL to which this menu link will redirect. Only used if :ref:`generic.models.Link.view_name` is not specified.
 
 .. _generic.models.Link.methods:
 
@@ -71,13 +73,13 @@ Methods & Properties
     
 get_absolute_url(self)
 ++++++++++++++++++++++
-Returns url to which link should redirect based on a `reversed <https://docs.djangoproject.com/en/dev/topics/http/urls/#reverse>_` view name as specified in :ref:`generic.models.Link.view_name` or otherwise an explicitly provided url as specified in :ref:`generic.models.Link.url`.
+Returns URL to which link should redirect based on a `reversed <https://docs.djangoproject.com/en/dev/topics/http/urls/#reverse>_` view name as specified in :ref:`generic.models.Link.view_name` or otherwise an explicitly provided URL as specified in :ref:`generic.models.Link.url`.
 
 .. _generic.models.Link.is_active:
 
 is_active(self, request)
 ++++++++++++++++++++++++
-Determines whether or not the link can be consider active based on the request path. ``True`` if the request path can be resolved to the same view name as is contained in :ref:`generic.models.Link.view_name`. Otherwise ``True`` if request path starts with url as contained in :ref:`generic.models.Link.url` field.
+Determines whether or not the link can be consider active based on the request path. ``True`` if the request path can be resolved to the same view name as is contained in :ref:`generic.models.Link.view_name`. Otherwise ``True`` if request path starts with URL as contained in :ref:`generic.models.Link.url` field.
 
 .. _generic.models.LinkPosition:
 

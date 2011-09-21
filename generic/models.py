@@ -20,7 +20,7 @@ precedence over url field below.",
     )
     url = models.CharField(
         max_length=256,
-        help_text='URL to which this menu link will redriect.',
+        help_text='URL to which this menu link will redirect.',
         blank=True,
         null=True,
     )
