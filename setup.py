@@ -12,6 +12,7 @@ setup(
     packages = find_packages(),
     install_requires = [
         'django-preferences',
+        'django-snippetscream',
     ],
     include_package_data=True,
     tests_require=[
