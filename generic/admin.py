@@ -1,16 +1,17 @@
 from django import forms
 from django.contrib import admin
 
-from generic.models import FooterMenuLink, FooterMenuLinkPosition, FooterMenuPreferences
+from generic.models import Link, MenuLinkPosition, MenuPreferences, NavbarLinkPosition, NavbarPreferences
 
 from preferences.admin import PreferencesAdmin
 
 from django.conf import settings
 
+
 def build_view_names(url_patterns=None):
     """
-Returns a tuple of url pattern names suitable for use as field choices
-"""
+    Returns a tuple of url pattern names suitable for use as field choices
+    """
     if not url_patterns:
         urlconf = settings.ROOT_URLCONF
         url_patterns = __import__(settings.ROOT_URLCONF, globals(), locals(), \
@@ -31,7 +32,8 @@ Returns a tuple of url pattern names suitable for use as field choices
                     pass
     return result
 
-class FooterMenuLinkAdminForm(forms.ModelForm):
+
+class LinkAdminForm(forms.ModelForm):
     view_name = forms.ChoiceField(
         label='View Name', 
         help_text="View name to which this link will redirect. This takes precedence over url field below.",
@@ -39,7 +41,7 @@ class FooterMenuLinkAdminForm(forms.ModelForm):
     )
 
     class Meta:
-        model = FooterMenuLink
+        model = Link
 
     def __init__(self, *args, **kwargs):
         """
@@ -48,20 +50,33 @@ class FooterMenuLinkAdminForm(forms.ModelForm):
         self.declared_fields['view_name'].choices = [('', '---------'), ] + \
                 build_view_names()
 
-        super(FooterMenuLinkAdminForm, self).__init__(*args, **kwargs)
+        super(LinkAdminForm, self).__init__(*args, **kwargs)
 
 
-class FooterMenuLinkPositionInline(admin.StackedInline):
-    model = FooterMenuLinkPosition
+class MenuLinkPositionInline(admin.StackedInline):
+    model = MenuLinkPosition
 
-class FooterMenuPreferenceAdmin(PreferencesAdmin):
+
+class NavbarLinkPositionInline(admin.StackedInline):
+    model = NavbarLinkPosition
+
+
+class MenuPreferenceAdmin(PreferencesAdmin):
     inlines = [
-        FooterMenuLinkPositionInline,
+        MenuLinkPositionInline,
     ]
+
     
+class NavbarPreferenceAdmin(PreferencesAdmin):
+    inlines = [
+        NavbarLinkPositionInline,
+    ]
 
-class FooterMenuLinkAdmin(admin.ModelAdmin):
-    form = FooterMenuLinkAdminForm
+    
+class LinkAdmin(admin.ModelAdmin):
+    form = LinkAdminForm
 
-admin.site.register(FooterMenuPreferences, FooterMenuPreferenceAdmin)
-admin.site.register(FooterMenuLink, FooterMenuLinkAdmin)
+
+admin.site.register(MenuPreferences, MenuPreferenceAdmin)
+admin.site.register(NavbarPreferences, NavbarPreferenceAdmin)
+admin.site.register(Link, LinkAdmin)
