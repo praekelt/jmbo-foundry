@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>Join</h1>
+
+    <form action="{% url join %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_ul }}
+        <input type="submit" value="Join" />
+    </form>
+
+{% endblock content %}
