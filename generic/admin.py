@@ -2,7 +2,8 @@ from django import forms
 from django.contrib import admin
 
 from generic.models import Link, MenuLinkPosition, MenuPreferences, \
-        NavbarLinkPosition, NavbarPreferences
+        NavbarLinkPosition, NavbarPreferences, GeneralPreferences, \
+        LoginRegistrationPreferences
 
 from preferences.admin import PreferencesAdmin
 
@@ -79,6 +80,17 @@ class LinkAdmin(admin.ModelAdmin):
     form = LinkAdminForm
 
 
+class GeneralPreferencesAdmin(PreferencesAdmin):
+    pass
+
+
+class LoginRegistrationPreferencesAdmin(PreferencesAdmin):
+    pass
+
 admin.site.register(MenuPreferences, MenuPreferenceAdmin)
 admin.site.register(NavbarPreferences, NavbarPreferenceAdmin)
 admin.site.register(Link, LinkAdmin)
+admin.site.register(GeneralPreferences, GeneralPreferencesAdmin)
+admin.site.register(LoginRegistrationPreferences, LoginRegistrationPreferencesAdmin)
+
+

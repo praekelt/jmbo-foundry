@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Log in</h1>
+
+<p>You may also login using your Facebook account.</p>
+
+<form action="{% url login %}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ request.REQUEST.next }}" />
+    {{ form.as_ul }}
+	<input type="submit" value="Log in" />
+
+    <p><a href="/auth/password_reset">I forgot my password!</a></p>
+</form>
+
+<div id="facebook-connect-area">
+</div>
+
+{% endblock %}

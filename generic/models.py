@@ -1,10 +1,11 @@
 from django.core.urlresolvers import reverse, Resolver404
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 from preferences.models import Preferences
+from ckeditor.fields import RichTextField
 
 from snippetscream import resolve_to_name
-
 
 class Link(models.Model):
     title = models.CharField(
@@ -62,10 +63,16 @@ class MenuPreferences(Preferences):
     __module__ = 'preferences.models'
     links = models.ManyToManyField(Link, through='generic.MenuLinkPosition')
 
+    class Meta:
+        verbose_name_plural = 'Menu Preferences'
+
 
 class NavbarPreferences(Preferences):
     __module__ = 'preferences.models'
     links = models.ManyToManyField(Link, through='generic.NavbarLinkPosition')
+
+    class Meta:
+        verbose_name_plural = 'Navbar Preferences'
 
 
 class LinkPosition(models.Model):
@@ -87,3 +94,53 @@ class MenuLinkPosition(LinkPosition):
 
 class NavbarLinkPosition(LinkPosition):
     preferences = models.ForeignKey(NavbarPreferences)
+
+
+class GeneralPreferences(Preferences):
+    __module__ = 'preferences.models'
+
+    about_us = RichTextField()
+    terms_and_conditions = RichTextField()
+    login_fields = models.CharField(
+        max_length=32, 
+        default='username',
+        choices=(
+            ('username', _('Username only')),
+            ('email', _('Email address only')),
+            ('mobile', _('Mobile only')),
+            ('username_or_email', _('Username or email address')),
+
+        ),
+        help_text=_('Users may log in with more than one identifier.')
+    )
+
+    class Meta:
+        verbose_name_plural = 'General Preferences'
+
+    def __unicode__(self):
+        return u"General Preferences"
+
+
+class LoginRegistrationPreferences(Preferences):
+    __module__ = 'preferences.models'
+
+    login_fields = models.CharField(
+        max_length=32, 
+        default='username',
+        choices=(
+            ('username', _('Username only')),
+            ('email', _('Email address only')),
+            ('mobile', _('Mobile only')),
+            ('username_or_email', _('Username or email address')),
+
+        ),
+        help_text=_('Users may log in with more than one identifier.')
+    )
+
+    class Meta:
+        verbose_name_plural = 'Login and Registration Preferences'
+
+    def __unicode__(self):
+        return u"Login and registration Preferences"
+
+

@@ -11,8 +11,10 @@ setup(
     url='http://github.com/praekelt/jmbo-generic',
     packages = find_packages(),
     install_requires = [
+        'jmbo',
         'django-preferences',
         'django-snippetscream',
+        'south',
     ],
     include_package_data=True,
     tests_require=[
