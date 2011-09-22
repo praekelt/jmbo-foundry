@@ -101,18 +101,6 @@ class GeneralPreferences(Preferences):
 
     about_us = RichTextField()
     terms_and_conditions = RichTextField()
-    login_fields = models.CharField(
-        max_length=32, 
-        default='username',
-        choices=(
-            ('username', _('Username only')),
-            ('email', _('Email address only')),
-            ('mobile', _('Mobile only')),
-            ('username_or_email', _('Username or email address')),
-
-        ),
-        help_text=_('Users may log in with more than one identifier.')
-    )
 
     class Meta:
         verbose_name_plural = 'General Preferences'
@@ -131,8 +119,7 @@ class LoginRegistrationPreferences(Preferences):
             ('username', _('Username only')),
             ('email', _('Email address only')),
             ('mobile', _('Mobile only')),
-            ('username_or_email', _('Username or email address')),
-
+            ('username,email', _('Username or email address')),
         ),
         help_text=_('Users may log in with more than one identifier.')
     )

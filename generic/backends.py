@@ -3,6 +3,8 @@ from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import User
 from django.conf import settings
 
+from preferences import preferences
+
 class MultiBackend(ModelBackend):
 
     @property
@@ -14,14 +16,15 @@ class MultiBackend(ModelBackend):
             return result
        
         # Prep result
-        result = [(User, ('username', 'email'))]
+        fields = preferences.LoginRegistrationPreferences.login_fields.split(',')
+        result = [(User, fields)]
 
         # Retrieve profile model if possible
         module = getattr(settings, 'AUTH_PROFILE_MODULE', None)
         if module is not None:
             app_label, model_name = settings.AUTH_PROFILE_MODULE.split('.')
             profile_model = models.get_model(app_label, model_name)
-            result.append(profile_model, ('mobile',))
+            result.append(profile_model, fields)
 
         return result
 
