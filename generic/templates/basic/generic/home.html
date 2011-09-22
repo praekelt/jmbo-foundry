@@ -1,1 +1,47 @@
 {% extends 'base.html' %}
+
+{% block content %}
+    	<div id="promo">
+        	<img src="media/pics/promo-1.jpg" alt="Title Here" />
+            <div id="promotxt"><a href="win.html">Win A Brand New Mercedes SLS AMG</a></div>
+        </div>
+        
+        <div class="h2">Updates</div>
+        
+        <div class="article">
+        	<div class="h3"><a href="article.html?rand=111">How To Build An Accessible Mobile Website</a></div>
+            <span class="byline news">News - 5 mins ago</span>
+        </div>
+        <div class="article">
+        	<div class="h3"><a href="event.html?rand=112">U2 360 Concert Cape Town</a></div>
+            <span class="byline event">18 Feb 2011, Green Point</span>
+        </div>
+        <div class="article last">
+        	<div class="h3"><a href="article.html?rand=113">The Bright (Near) Future of CSS</a></div>
+            <span class="byline comp">News - About an hour ago</span>
+        </div>
+        
+        <div class="h2">New Pics</div>
+        	<div class="carousel">
+            
+            	<div class="carousel-img"><a href="pic.html?rand=111"><img src="media/pics/thumb1.jpg" width="50" height="50" alt="Title Here" /></a>1k+<br />Likes</div>
+                <div class="carousel-img"><a href="pic.html?rand=112"><img src="media/pics/thumb2.jpg" width="50" height="50" alt="Title Here" /></a>100<br />Likes</div>
+                <div class="carousel-img"><a href="pic.html?rand=113"><img src="media/pics/thumb3.jpg" width="50" height="50" alt="Title Here" /></a>999<br />Likes</div>
+                <div class="carousel-img"><a href="pic.html?rand=114"><img src="media/pics/thumb4.jpg" width="50" height="50" alt="Title Here" /></a>1k+<br />Likes</div>
+            
+            	<div class="clear"></div>
+                
+            </div>
+        
+        <div class="h2">New Videos</div>
+        <div class="img-article">
+        	<img src="media/pics/thumb2.jpg" width="50" height="50" alt="Title Here" class="left" />
+        	<div class="h3"><a href="vid.html?rand=111">Build An Accessible Mobile Website</a></div>
+            <span class="byline">15:35 - 23 Likes</span>
+        </div>
+        <div class="img-article last">
+        	<img src="media/pics/thumb3.jpg" width="50" height="50" alt="Title Here" class="left" />
+        	<div class="h3"><a href="vid.html?rand=112">Minimum Viable Product: A Guide</a></div>
+            <span class="byline">04:31 - 87 Likes</span>
+        </div>
+{% endblock %}
