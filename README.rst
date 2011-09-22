@@ -122,3 +122,4 @@ Renders a navigation menu normally used as part of footer navigation element. Ut
 ~~~~~~~~~~~~
 
 Renders a navigation bar normally used as part of main navigation element positioned at top of pages. Utilizes `generic.models.Link`_ objects configurable via `Navbar Preferences in admin <http://localhost:8000/admin/preferences/navbarpreferences>`_ to provide a flexible navbar system. Elements are ordered using `position`_ values as specified on `generic.models.LinkPosition`_ objects via admin. You can customize the resulting HTML by overriding the ``generic/inclusion_tags/navbar.html`` template file. The template receives  ``object_list`` and ``active_link`` context variables. ``object_list`` is a collection of ordered `generic.models.Link`_ elements to display and ``active_link`` is an `generic.models.Link`_ object determined to be active for the requested path.
+
