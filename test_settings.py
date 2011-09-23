@@ -16,9 +16,9 @@ INSTALLED_APPS = (
 
     # Jmbo minimum
 #    'photologue',
-#    'jmbo',
-#    'category',
-#    'publisher',
+    'jmbo',
+    'category',
+    'publisher',
 #    'preferences',
 #    'post',
 #    'secretballot',
