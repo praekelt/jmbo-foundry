@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% load jmbo_inclusion_tags %}
+
+{% block content %}
+    <div class="h2">{{ category.title }} Updates</div>
+    {% for object in object_list %}
+        {% render_object object "list_item" %}
+    {% endfor %}
+    {% pager page_obj %}
+{% endblock %}
