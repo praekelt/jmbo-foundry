@@ -11,10 +11,11 @@ setup(
     url='http://github.com/praekelt/jmbo-generic',
     packages = find_packages(),
     install_requires = [
-        'jmbo',
+        'django-category',
         'django-preferences',
         'django-snippetscream',
         'django-ckeditor',
+        'jmbo',
         'south',
     ],
     include_package_data=True,

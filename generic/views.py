@@ -1,10 +1,15 @@
-from django.http import HttpResponseRedirect 
-from django.template import RequestContext
-from django.shortcuts import render_to_response
-from django.contrib.auth import authenticate, login, get_backends
 from django.conf import settings
+from django.contrib.auth import authenticate, login, get_backends
+from django.http import HttpResponseRedirect 
+from django.shortcuts import get_object_or_404, render_to_response
+from django.template import RequestContext
+from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
 
 from generic.forms import JoinForm
+
+from category.models import Category
+from jmbo.models import ModelBase
 
 def join(request):
     """Surface join form"""
@@ -21,4 +26,16 @@ def join(request):
 
     extra = dict(form=form)
     return render_to_response('generic/join.html', extra, context_instance=RequestContext(request))
+
+class CategoryObjectDetailView(DetailView):
+    pass
+
+
+class CategoryObjectListView(ListView):
+    def get_queryset(self):
+        self.category = get_object_or_404(Category, slug__iexact=self.kwargs['category_slug'])
+        return ModelBase.permitted.filter(categories=self.category)
+    
+    def get_template_names(self):
+        return ['category/%s_list.html' % self.category.slug] + super(CategoryObjectListView, self).get_template_names()
 
