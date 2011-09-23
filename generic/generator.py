@@ -90,4 +90,21 @@ def generate():
             },
         },
     ] 
+
+    for i in range(1, 14):
+        objects.append({
+            "model": "post.Post",
+            "fields": {
+                "title": "News Post %s" % i,
+                "state": "published",
+                "sites": settings.SITE_ID,
+                "categories": [{
+                    "model": "category.Category",
+                    "fields": {
+                        "title": "News",
+                        "slug": "news",
+                    },
+                },]
+            },
+        })
     return objects
