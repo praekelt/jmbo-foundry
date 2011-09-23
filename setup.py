@@ -14,6 +14,7 @@ setup(
         'jmbo',
         'django-preferences',
         'django-snippetscream',
+        'django-ckeditor',
         'south',
     ],
     include_package_data=True,
