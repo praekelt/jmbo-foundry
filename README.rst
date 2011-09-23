@@ -28,7 +28,11 @@ Installation
         ...other template loader classes...
     )
 
-   **Note: You have to add ``TypeLoader`` as the first loader for it to work correctly.** This causes templates to be loaded from a path prefixed with whatever value was specified as the ``TEMPLATE_TYPE`` setting. For example in this case a template specified as ``generic/home.html`` would actually be loaded from ``basic/generic/home.html``.
+   This causes templates to be loaded from a path prefixed with whatever value was specified as the ``TEMPLATE_TYPE`` setting. For example in this case a template specified as ``generic/home.html`` would actually be loaded from ``basic/generic/home.html``.
+
+   .. note:: 
+   
+        You have to add ``TypeLoader`` as the first loader for it to resolve templates correctly.
 
 #. ``jmbo-generic`` includes static media resources which you need to configure as described in `Django`s managing static files documentation <https://docs.djangoproject.com/en/dev/howto/static-files/>`_.
 
@@ -55,8 +59,14 @@ A short descriptive title for link.
     
 view_name
 +++++++++
-View name to which this link will redirect. This takes precedence over `url`_ field.
+View name to which this link will redirect. This takes precedence over `category`_ and `url`_ fields.
     
+    
+.. _generic.models.Link.category:
+    
+category
+++++++++
+Category to which this link will redirect. This takes precedence over `url`_ field.
 
 .. _generic.models.Link.url:
     
@@ -73,13 +83,13 @@ Methods & Properties
     
 get_absolute_url(self)
 ++++++++++++++++++++++
-Returns URL to which link should redirect based on a `reversed <https://docs.djangoproject.com/en/dev/topics/http/urls/#reverse>`_ view name as specified in `view_name`_ field or otherwise an explicitly provided URL as specified in `url`_ field.
+Returns URL to which link should redirect based on a `reversed <https://docs.djangoproject.com/en/dev/topics/http/urls/#reverse>`_ view name as specified in `view_name`_ field or category view for category specified in `category`_ field or otherwise an explicitly provided URL as specified in `url`_ field.
 
 .. _generic.models.Link.is_active:
 
 is_active(self, request)
 ++++++++++++++++++++++++
-Determines whether or not the link can be consider active based on the request path. ``True`` if the request path can be resolved to the same view name as is contained in `view_name`_ field. Otherwise ``True`` if request path starts with URL as contained in `url`_ field.
+Determines whether or not the link can be consider active based on the request path. ``True`` if the request path can be resolved to the same view name as is contained in `view_name`_ field. Otherwise ``True`` if request path starts with URL as resolved for category contained in `category`_ field. Otherwise ``True`` if request path starts with URL as contained in `url`_ field.
 
 .. _generic.models.LinkPosition:
 
