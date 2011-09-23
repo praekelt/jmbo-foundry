@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
 
@@ -10,5 +11,7 @@
         {{ form.as_ul }}
     	<input type="submit" value="Log in" />
     </form>
+
+    <p><a href="/auth/password_reset">{% blocktrans %}I forgot my password!{% endblocktrans %}</a></p>
 
 {% endblock %}

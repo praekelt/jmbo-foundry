@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls.defaults import patterns, url, include
 from django.views.generic import TemplateView
 from django.contrib.auth.views import login, logout
 
@@ -28,5 +28,5 @@ urlpatterns = patterns(
         {},
         name='logout',
     ),
-
+    (r'^auth/', include('django.contrib.auth.urls')),
 )
