@@ -14,6 +14,8 @@ setup(
         'django-category',
         'django-preferences',
         'django-snippetscream',
+        'jmbo',
+        'south',
     ],
     include_package_data=True,
     tests_require=[

@@ -1,4 +1,4 @@
-{% load generic_inclusion_tags %}
+{% load generic_inclusion_tags i18n %}
 
 <?xml version="1.0" encoding="utf-8"?> 
 <!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd"> 
@@ -20,7 +20,13 @@
     	<div id="header">
             <img src="{{ STATIC_URL }}basic/pics/logo.jpg" alt="Jmbo" />
             <div id="signin-button">
-              <span><a href="signin.html">Sign In</a></span>
+              {% if request.user.is_authenticated %}
+                <span><a href="{% url logout %}">Sign Out</a></span>
+              {% endif %}
+              {% if request.user.is_anonymous %}
+                  <span><a href="{% url login %}">Sign In</a></span>
+                  <span><a href="{% url join %}">Join</a></span>
+              {% endif %}
           	</div>
         </div>
     {% endblock %}
@@ -33,7 +39,7 @@
         <!--<div class="success">This is a success message</div>
         <div class="warning">This is a warning message</div>-->
     {% endblock %}
-    
+   
     <div id="content">
         {% block content %}
         {% endblock %}

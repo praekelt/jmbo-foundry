@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+    <h1>Log in</h1>
+
+    <form action="{% url login %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.REQUEST.next }}" />
+        {{ form.as_ul }}
+    	<input type="submit" value="Log in" />
+    </form>
+
+    <p><a href="/auth/password_reset">{% blocktrans %}I forgot my password!{% endblocktrans %}</a></p>
+
+{% endblock %}
