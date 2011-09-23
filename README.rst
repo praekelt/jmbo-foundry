@@ -17,15 +17,15 @@ Installation
 
 #. Add ``generic`` URL include to your project's ``urls.py`` file::
 
-    (r'^$', include('generic.urls')),
+    (r'^', include('generic.urls')),
 
 #. ``jmbo-generic`` includes a number of template sets allowing you to deliver lightweight(``zero``), mobile(``basic``) or desktop/touch(``full``) specific output. Specifying which template set to use is simply a matter of specifying a ``TEMPLATE_TYPE`` setting, and adding  ``generic.loaders.TypeLoader`` to the ``TEMPLATE_LOADERS`` setting. For example to use the ``basic`` template set update your settings as follows::
     
     TEMPLATE_TYPE = "basic"
 
     TEMPLATE_LOADERS = (
-        ...other template loader classes...
         'generic.loaders.TypeLoader',
+        ...other template loader classes...
     )
 
    This casues templates to be loaded from a path prefixed with whatever value was specified as the ``TEMPLATE_TYPE`` setting. For example in this case a template specified as ``generic/home.html`` would actually be loaded from ``basic/generic/home.html``.
