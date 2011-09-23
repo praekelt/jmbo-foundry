@@ -14,7 +14,14 @@ class Link(models.Model):
     view_name = models.CharField(
         max_length=256,
         help_text="View name to which this link will redirect. This takes \
-precedence over url field below.",
+precedence over Category and URL fields below.",
+        blank=True,
+        null=True,
+    )
+    category = models.ForeignKey(
+        'category.Category',
+        help_text="Category to which this link will redirect. This takes \
+precedence over URL field below.",
         blank=True,
         null=True,
     )
@@ -27,11 +34,13 @@ precedence over url field below.",
 
     def get_absolute_url(self):
         """
-        Returns url to which link should redirect based on a reversed view name
-        or otherwise explicitly provided url.
+        Returns URL to which link should redirect based on a reversed view name
+        category or explicitly provided URL in that order of precedence.
         """
         if self.view_name:
             return reverse(self.view_name)
+        elif self.category:
+            return self.category.get_absolute_url()
         else:
             return self.url
 
@@ -40,7 +49,9 @@ precedence over url field below.",
         Determines whether or not the link can be consider active based on the
         request path. True if the request path can be resolved to the same view
         name as is contained in view_name field. Otherwise True if request path
-        starts with url as contained in url field (needs some work).
+        starts with URL as resolved for category contained in category field.
+        Otherwise True if request path starts with URL as contained in url
+        field (needs some work).
         """
         try:
             pattern_name = resolve_to_name(request.path_info)
@@ -50,6 +61,8 @@ precedence over url field below.",
         active = False
         if pattern_name:
             active = pattern_name == self.view_name
+        if not active and self.category:
+            active = request.path_info.startswith(self.category.get_absolute_url())
         if not active and self.url:
             active = request.path_info.startswith(self.url)
         return active
