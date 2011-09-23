@@ -3,4 +3,3 @@
 {% if page_obj.has_next %}
     <div class="page-controls"><a href="{% smart_query_string 'page' page_obj.next_page_number %}">Next {{ page_obj.paginator.per_page }} Stories &raquo;</a></div>
 {% endif %}
-
