@@ -96,6 +96,7 @@ def generate():
             "model": "post.Post",
             "fields": {
                 "title": "News Post %s" % i,
+                "description": "News Post %s %s description." % (i, 'very ' * 50),
                 "state": "published",
                 "sites": settings.SITE_ID,
                 "categories": [{
