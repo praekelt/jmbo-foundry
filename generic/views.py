@@ -36,14 +36,14 @@ class CategoryObjectListView(ListView):
 
     def get_queryset(self):
         self.category = get_object_or_404(Category, slug__iexact=self.kwargs['category_slug'])
-        return ModelBase.permitted.filter(categories=self.category).order_by('-created')
-    
+        return ModelBase.permitted.filter(categories=self.category).exclude(pin__category=self.category).order_by('-created')
+        
     def get_template_names(self):
         return ['category/%s_list.html' % self.category.slug, 'category/list.html'] + super(CategoryObjectListView, self).get_template_names()
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(CategoryObjectListView, self).get_context_data(**kwargs)
+        context['pinned_object_list'] = ModelBase.permitted.filter(pin__category=self.category).order_by('-created')
         context['category'] = self.category
         return context
-
