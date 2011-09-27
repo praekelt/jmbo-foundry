@@ -1,0 +1,8 @@
+{% load jmbo_template_tags jmbo_inclusion_tags %}
+
+{% if object_list %}
+    <div class="h2">{{ element.title }}</div>
+    {% for object in object_list %}
+        {% render_object object "list_item" %}
+    {% endfor %}
+{% endif %}
