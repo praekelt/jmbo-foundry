@@ -24,7 +24,7 @@ urlpatterns = patterns('',
     # Join, login, password reset            
     url(
         r'^join/$',
-        'join',
+        'generic.views.join',
         {},
         name='join',
     ),

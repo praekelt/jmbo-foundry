@@ -1,10 +1,10 @@
 from django.core.urlresolvers import reverse, Resolver404
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import User
 
 from preferences.models import Preferences
 from ckeditor.fields import RichTextField
-
 from snippetscream import resolve_to_name
 
 class Link(models.Model):
@@ -123,10 +123,54 @@ class GeneralPreferences(Preferences):
         return u"General Preferences"
 
 
-class LoginRegistrationPreferences(Preferences):
+class RegistrationPreferences(Preferences):
     __module__ = 'preferences.models'
 
-    login_fields = models.CharField(
+    raw_display_fields = models.CharField(
+        'Display fields',
+        max_length=32, 
+        default='',
+        help_text=_('Fields to display on the registration form.')
+    )
+    raw_required_fields = models.CharField(
+        'Required fields',
+        max_length=32, 
+        default='',
+        blank=True,
+        help_text=_('Set fields which are not required by default as required on the registration form.')
+    )
+    raw_unique_fields = models.CharField(
+        'Unique fields',
+        max_length=32, 
+        default='',
+        blank=True,
+        help_text=_('Set fields which must be unique on the registration form.')
+    )
+
+    class Meta:
+        verbose_name_plural = 'Registration Preferences'
+
+    def __unicode__(self):
+        return u"Registration Preferences"
+
+    @property
+    def display_fields(self):
+        return self.raw_display_fields.split(',')
+
+    @property
+    def required_fields(self):
+        return self.raw_required_fields.split(',')
+
+    @property
+    def unique_fields(self):
+        return self.raw_unique_fields.split(',')
+
+
+class LoginPreferences(Preferences):
+    __module__ = 'preferences.models'
+
+    raw_login_fields = models.CharField(
+        'Login fields',
         max_length=32, 
         default='username',
         choices=(
@@ -139,9 +183,12 @@ class LoginRegistrationPreferences(Preferences):
     )
 
     class Meta:
-        verbose_name_plural = 'Login and Registration Preferences'
+        verbose_name_plural = 'Login Preferences'
 
     def __unicode__(self):
-        return u"Login and registration Preferences"
+        return u"Login Preferences"
 
+    @property
+    def login_fields(self):
+        return self.raw_login_fields.split(',')
 

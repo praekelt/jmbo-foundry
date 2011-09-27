@@ -16,15 +16,15 @@ class MultiBackend(ModelBackend):
             return result
        
         # Prep result
-        fields = preferences.LoginRegistrationPreferences.login_fields.split(',')
-        result = [(User, fields)]
+        fieldnames = preferences.LoginPreferences.login_fields
+        result = [(User, fieldnames)]
 
         # Retrieve profile model if possible
         module = getattr(settings, 'AUTH_PROFILE_MODULE', None)
         if module is not None:
             app_label, model_name = settings.AUTH_PROFILE_MODULE.split('.')
             profile_model = models.get_model(app_label, model_name)
-            result.append(profile_model, fields)
+            result.append(profile_model, fieldnames)
 
         return result
 
