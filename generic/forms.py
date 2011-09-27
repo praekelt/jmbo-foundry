@@ -36,7 +36,7 @@ class LoginForm(AuthenticationForm):
         super(LoginForm, self).__init__(*args, **kwargs)
 
         # Set label
-        v = preferences.LoginPreferences.login_fields
+        v = preferences.LoginPreferences.raw_login_fields
         label = None
         if v == 'email':
             label = _("Email address")
