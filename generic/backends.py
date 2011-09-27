@@ -5,6 +5,8 @@ from django.conf import settings
 
 from preferences import preferences
 
+from generic.models import Member
+
 class MultiBackend(ModelBackend):
 
     @property
@@ -17,7 +19,7 @@ class MultiBackend(ModelBackend):
        
         # Prep result
         fieldnames = preferences.LoginPreferences.login_fields
-        result = [(User, fieldnames)]
+        result = [(Member, fieldnames)]
 
         # Retrieve profile model if possible
         module = getattr(settings, 'AUTH_PROFILE_MODULE', None)

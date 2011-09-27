@@ -6,6 +6,8 @@ from django.utils.safestring import mark_safe
 
 from preferences import preferences
 
+from generic.models import Member
+
 def as_ul_replacement(form):
     """This formatter arranges label, widget, help text and error messages in a
     sane order. Apply to custom form classes, or use to monkey patch form
@@ -55,7 +57,7 @@ class JoinForm(UserCreationForm):
     accept_terms = forms.BooleanField(required=True, label="", widget=TermsCheckboxInput)
 
     class Meta:
-        model = User
+        model = Member
 
     def clean(self):
         cleaned_data = super(JoinForm, self).clean()

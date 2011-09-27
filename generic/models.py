@@ -9,6 +9,7 @@ from ckeditor.fields import RichTextField
 from preferences.models import Preferences
 from snippetscream import resolve_to_name
 
+from generic.profile_models import AbstractAvatarProfile, AbstractSocialProfile
 from generic.templatetags import element_styles
 
 class Link(models.Model):
@@ -219,3 +220,13 @@ class ElementOption(models.Model):
         max_length=64
     )
     position = models.IntegerField()
+
+
+class Member(User, AbstractAvatarProfile, AbstractSocialProfile):
+    """Class that models the default user account. Subclassing is superior to profiles since 
+    a site may conceivably have more than one type of user account, but the profile architecture 
+    limits the entire site to a single type of profile."""
+    
+    def __unicode__(self):
+        return self.username
+

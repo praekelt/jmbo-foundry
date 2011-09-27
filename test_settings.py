@@ -46,3 +46,6 @@ CKEDITOR_MEDIA_PREFIX = '/media/ckeditor/'
 #TEMPLATE_TYPE = "basic"
 #LOGIN_URL = '/login'
 #LOGIN_REDIRECT_URL = '/'
+
+# Will be removed when django-profile gets refactored
+AUTH_PROFILE_MODULE = 'generic.Member'

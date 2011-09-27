@@ -2,7 +2,7 @@ from django.template.loader import render_to_string
 
 from jmbo import models
 
-from generic import views
+#from generic import views
 
 class Promo(object):
     template_name = 'generic/inclusion_tags/element_promo.html'
@@ -19,6 +19,8 @@ class Promo(object):
         return queryset[:self.element.count]
     
     def get_url_callable(self, *args, **kwargs):
+        # Must put the import here to avoid circular import error
+        from generic import views
         return views.CategoryURL(category=self.element.category)
     
     def get_context_data(self, *args, **kwargs):
