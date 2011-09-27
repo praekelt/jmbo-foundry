@@ -1,9 +1,9 @@
 from django import forms
 from django.contrib import admin
 
-from generic.models import Link, MenuLinkPosition, MenuPreferences, \
-        NavbarLinkPosition, NavbarPreferences, GeneralPreferences, \
-        LoginRegistrationPreferences
+from generic.models import ElementOption, ElementPreferences, Link, \
+        MenuLinkPosition, MenuPreferences, NavbarLinkPosition, \
+        NavbarPreferences, GeneralPreferences, LoginRegistrationPreferences
 
 from preferences.admin import PreferencesAdmin
 
@@ -87,10 +87,20 @@ class GeneralPreferencesAdmin(PreferencesAdmin):
 class LoginRegistrationPreferencesAdmin(PreferencesAdmin):
     pass
 
+
+class ElementOptionInline(admin.StackedInline):
+    model = ElementOption
+
+class ElementPreferencesAdmin(PreferencesAdmin):
+    inlines = [
+        ElementOptionInline,
+    ]
+
 admin.site.register(MenuPreferences, MenuPreferenceAdmin)
 admin.site.register(NavbarPreferences, NavbarPreferenceAdmin)
 admin.site.register(Link, LinkAdmin)
 admin.site.register(GeneralPreferences, GeneralPreferencesAdmin)
+admin.site.register(ElementPreferences, ElementPreferencesAdmin)
 admin.site.register(LoginRegistrationPreferences, LoginRegistrationPreferencesAdmin)
 
 
