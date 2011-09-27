@@ -1,3 +1,7 @@
+ul.form-ul {
+    margin-top: 0;
+}
+
 ul.form-ul li {
     margin-bottom: 6px;
     margin-left: -40px;

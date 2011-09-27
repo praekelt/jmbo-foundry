@@ -2,6 +2,7 @@
 
 {% block content %}
 
+    {% comment %}Below should be an h1{% endcomment %}
     <div class="h2">Sign Up</div>
             
     <span>
@@ -10,12 +11,12 @@
     </span>
 
     <form action="{% url join %}" method="POST" enctype="multipart/form-data" class="content-form">   
-        <fieldset>
         {% csrf_token %}
-        <ul class="form-ul">
-        {{ form.as_ul }}
-        </ul>
-        <input type="submit" value="Sign Up" />
+        <fieldset>
+            <ul class="form-ul">
+            {{ form.as_ul }}
+            </ul>
+            <input type="submit" value="Sign Up" />
         </fieldset>
     </form>
 
