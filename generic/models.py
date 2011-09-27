@@ -1,11 +1,14 @@
+import inspect
+
 from django.core.urlresolvers import reverse, Resolver404
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from preferences.models import Preferences
 from ckeditor.fields import RichTextField
-
+from preferences.models import Preferences
 from snippetscream import resolve_to_name
+
+from generic.templatetags import element_styles
 
 class Link(models.Model):
     title = models.CharField(
@@ -145,3 +148,35 @@ class LoginRegistrationPreferences(Preferences):
         return u"Login and registration Preferences"
 
 
+class ElementPreferences(Preferences):
+    __module__ = 'preferences.models'
+    
+    class Meta:
+        verbose_name_plural = 'Element preferences'
+
+class ElementOption(models.Model):
+    preferences = models.ForeignKey('preferences.ElementPreferences')
+    title = models.CharField(
+        max_length=256,
+        help_text='A short descriptive title.',
+    )
+    content = models.ManyToManyField(
+        'jmbo.ModelBase',
+        help_text="Content to display, takes preference over Category field.",
+        blank=True,
+        null=True,
+    )
+    category = models.ForeignKey(
+        'category.Category',
+        help_text="Category for which to collect objects.",
+        blank=True,
+        null=True,
+    )
+    count = models.IntegerField(
+        help_text="Number of content objects to display.",
+    )
+    style = models.CharField(
+        choices=((style[0], style[0]) for style in inspect.getmembers(element_styles, inspect.isclass)),
+        max_length=64
+    )
+    position = models.IntegerField()
