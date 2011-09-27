@@ -1,14 +1,15 @@
 from django import forms
 from django.contrib import admin
-
-from generic.models import ElementOption, ElementPreferences, Link, \
-        MenuLinkPosition, MenuPreferences, NavbarLinkPosition, \
-        NavbarPreferences, GeneralPreferences, LoginRegistrationPreferences
+from django.contrib.auth.models import User
+from django.conf import settings
 
 from preferences.admin import PreferencesAdmin
 
-from django.conf import settings
-
+from generic.models import ElementOption, ElementPreferences, Link, \
+        MenuLinkPosition, MenuPreferences, NavbarLinkPosition, \
+        NavbarPreferences, GeneralPreferences, GeneralPreferences, \
+        RegistrationPreferences, LoginPreferences
+from generic.widgets import SelectCommaWidget
 
 def build_view_names(url_patterns=None):
     """
@@ -84,9 +85,32 @@ class GeneralPreferencesAdmin(PreferencesAdmin):
     pass
 
 
-class LoginRegistrationPreferencesAdmin(PreferencesAdmin):
-    pass
+class RegistrationPreferencesAdminForm(forms.ModelForm):
+    """Form enabling the use of MultipleChoiceCommaField"""
 
+    class Meta:
+        model = RegistrationPreferences
+        widgets = {
+            'raw_display_fields':SelectCommaWidget,
+            'raw_required_fields':SelectCommaWidget,
+            'raw_unique_fields':SelectCommaWidget
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(RegistrationPreferencesAdminForm, self).__init__(*args, **kwargs)
+        protected_fields = ('id', 'username', 'password')
+        choices = [(unicode(f.name), f.name) for f in User._meta.fields if f.name not in protected_fields]
+        self.fields['raw_display_fields'].widget.choices = choices
+        self.fields['raw_unique_fields'].widget.choices = choices
+        choices = [(f.name, f.name) for f in User._meta.fields if f.blank and (f.name not in protected_fields)]
+        self.fields['raw_required_fields'].widget.choices = choices
+
+class RegistrationPreferencesAdmin(PreferencesAdmin):
+    form = RegistrationPreferencesAdminForm
+
+
+class LoginPreferencesAdmin(PreferencesAdmin):
+    pass
 
 class ElementOptionInline(admin.StackedInline):
     model = ElementOption
@@ -101,6 +125,7 @@ admin.site.register(NavbarPreferences, NavbarPreferenceAdmin)
 admin.site.register(Link, LinkAdmin)
 admin.site.register(GeneralPreferences, GeneralPreferencesAdmin)
 admin.site.register(ElementPreferences, ElementPreferencesAdmin)
-admin.site.register(LoginRegistrationPreferences, LoginRegistrationPreferencesAdmin)
+admin.site.register(RegistrationPreferences, RegistrationPreferencesAdmin)
+admin.site.register(LoginPreferences, LoginPreferencesAdmin)
 
 

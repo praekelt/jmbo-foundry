@@ -11,7 +11,7 @@ class LoginForm(AuthenticationForm):
         super(LoginForm, self).__init__(*args, **kwargs)
 
         # Set label
-        v = preferences.LoginRegistrationPreferences.login_fields
+        v = preferences.LoginPreferences.login_fields
         label = None
         if v == 'email':
             label = _("Email address")
@@ -31,27 +31,44 @@ class JoinForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('email', 'username', 'password1', 'password2')
 
-    def clean_email(self):
-        if User.objects.filter(email__iexact=self.cleaned_data['email']):
-            raise forms.ValidationError(_("This email address is already in use. Please supply a different email address."))
-        return self.cleaned_data['email']
+    def clean(self):
+        cleaned_data = super(JoinForm, self).clean()
+
+        # Validate unique fields
+        required_fields = preferences.RegistrationPreferences.required_fields
+        for name in required_fields:
+            value = self.cleaned_data.get(name, None)
+            if value is not None:
+                di = {'%s__iexact' % name:value}
+                if User.objects.filter(**di):
+                    pretty_name = self.fields[name].label.lower()
+                    message =_("The %s is already in use. Please supply a different %s." % (pretty_name, pretty_name))
+                    self._errors[name] = self.error_class([message])
+
+        return cleaned_data
 
     def __init__(self, *args, **kwargs):
         super(JoinForm, self).__init__(*args, **kwargs)
+        
+        display_fields = preferences.RegistrationPreferences.display_fields
+        for name, field in self.fields.items():
+            # Skip over protected fields
+            if name in ('id', 'username', 'password1', 'password2', 'accept_terms'):
+                continue
+            if name not in display_fields:
+                del self.fields[name]
+            
+        # Set some fields required
+        required_fields = preferences.RegistrationPreferences.required_fields
+        for name in required_fields:
+            field = self.fields.get(name, None)
+            if field and not field.required:
+                field.required = True
 
-        # Adjust fields
-        self.fields['email'].required = True
-        self.fields['email'].help_text = _("Your email address is required in case you lose your password.")
+        # Make some messages and labels more reassuring
+        self.fields['username'].label = _("Display Name")
         self.fields['username'].help_text = _("This name is visible to other users on the site.")
         self.fields['password1'].help_text = _("We never store your password in its original form.")
-
-    def save(self, commit=True):
-        # Set username to be email
-        self.cleaned_data['username'] = self.cleaned_data['email']
-        instance = super(JoinForm, self).save(commit=commit)
-        if commit:
-            instance.save()       
-        return instance
-
+        if self.fields.has_key('email'):
+            self.fields['email'].help_text = _("Your email address is required in case you lose your password.")
