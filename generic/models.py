@@ -119,9 +119,6 @@ class GeneralPreferences(Preferences):
     class Meta:
         verbose_name_plural = 'General Preferences'
 
-    def __unicode__(self):
-        return u"General Preferences"
-
 
 class RegistrationPreferences(Preferences):
     __module__ = 'preferences.models'
@@ -149,9 +146,6 @@ class RegistrationPreferences(Preferences):
 
     class Meta:
         verbose_name_plural = 'Registration Preferences'
-
-    def __unicode__(self):
-        return u"Registration Preferences"
 
     @property
     def display_fields(self):
@@ -184,9 +178,6 @@ class LoginPreferences(Preferences):
 
     class Meta:
         verbose_name_plural = 'Login Preferences'
-
-    def __unicode__(self):
-        return u"Login Preferences"
 
     @property
     def login_fields(self):
