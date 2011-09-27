@@ -43,7 +43,8 @@ class JoinForm(UserCreationForm):
                 di = {'%s__iexact' % name:value}
                 if User.objects.filter(**di):
                     pretty_name = self.fields[name].label.lower()
-                    raise forms.ValidationError(_("This %s is already in use. Please supply a different %s." % (pretty_name, pretty_name)))
+                    message =_("The %s is already in use. Please supply a different %s." % (pretty_name, pretty_name))
+                    self._errors[name] = self.error_class([message])
 
         return cleaned_data
 
