@@ -2,8 +2,31 @@ from django.utils.translation import ugettext_lazy as _
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from django.utils.safestring import mark_safe
 
 from preferences import preferences
+
+def as_ul_replacement(form):
+    """This formatter arranges label, widget, help text and error messages in a
+    sane order. Apply to custom form classes, or use to monkey patch form
+    classes not under our direct control."""
+    # Yes, evil but the easiest way to set this property for all forms.
+    form.required_css_class = 'required'
+ 
+    return form._html_output(  
+        normal_row = u'<li%(html_class_attr)s>%(label)s %(errors)s <div class="helptext">%(help_text)s</div> %(field)s</li>',
+        error_row = u'<li>%s</li>',
+        row_ender = '</li>',
+        help_text_html = u'%s',
+        errors_on_separate_row = False)
+
+
+class TermsCheckboxInput(forms.widgets.CheckboxInput):
+
+    def render(self, *args, **kwargs):
+        result = super(TermsCheckboxInput, self).render(*args, **kwargs)
+        return result + """I accept the <a href="/terms-and-conditions" target="external">terms and conditions</a>"""
+
 
 class LoginForm(AuthenticationForm):
 
@@ -24,10 +47,12 @@ class LoginForm(AuthenticationForm):
 
         # todo: customize error messages
 
-
+    as_ul = as_ul_replacement
+    
+    
 class JoinForm(UserCreationForm):
     """Custom join form"""
-    accept_terms = forms.BooleanField(required=True, label="Accept terms")
+    accept_terms = forms.BooleanField(required=True, label="", widget=TermsCheckboxInput)
 
     class Meta:
         model = User
@@ -72,3 +97,5 @@ class JoinForm(UserCreationForm):
         self.fields['password1'].help_text = _("We never store your password in its original form.")
         if self.fields.has_key('email'):
             self.fields['email'].help_text = _("Your email address is required in case you lose your password.")
+
+    as_ul = as_ul_replacement

@@ -2,12 +2,21 @@
 
 {% block content %}
 
-    <h1>Join</h1>
+    <div class="h2">Sign Up</div>
+            
+    <span>
+        Sign up easily with Facebook or Twitter, or register a new account directly with us.
+        xxx: issues on mobile. Looks dumb when we hide this white bar.
+    </span>
 
-    <form action="{% url join %}" method="POST" enctype="multipart/form-data">
+    <form action="{% url join %}" method="POST" enctype="multipart/form-data" class="content-form">   
+        <fieldset>
         {% csrf_token %}
+        <ul class="form-ul">
         {{ form.as_ul }}
-        <input type="submit" value="Join" />
+        </ul>
+        <input type="submit" value="Sign Up" />
+        </fieldset>
     </form>
 
 {% endblock content %}

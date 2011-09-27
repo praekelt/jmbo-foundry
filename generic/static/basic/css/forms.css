@@ -1,0 +1,32 @@
+ul.form-ul li {
+    margin-bottom: 6px;
+    margin-left: -40px;
+    list-style: none;
+}
+
+ul.form-ul ul.errorlist {
+    margin-left: -3.1em;
+}    
+
+ul.form-ul ul.errorlist li {
+    margin: 0;
+    color: red;
+}
+
+ul.form-ul label {
+    display: block;
+    margin-bottom: 2px;
+}    
+
+ul.form-ul .helptext {
+    display: block;
+    margin-bottom: 2px;
+    color: #7e7e7e;
+}    
+
+li.required label {
+    background-image: url('/static/basic/images/red-asterisk.png');
+    background-position: left center;
+    background-repeat: no-repeat;
+    padding-left: 16px;
+}    
