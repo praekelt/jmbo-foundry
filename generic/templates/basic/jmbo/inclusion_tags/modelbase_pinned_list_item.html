@@ -1,8 +1,8 @@
 {% load jmbo_template_tags %}
 
 <div class="img-article feature">
-    <img src="media/pics/thumb2.jpg" width="50" height="50" alt="{{ object.title }}" class="left" />
+    <img src="{{ object.get_thumbnail_basic_url }}" alt="{{ object.title }}" class="left" />
     <span class="byline news">{% humanize_time_diff object.created 'ago' 'lower' %}</span>
-    <div class="h3"><a href="article.html?rand=111">{{ object.title|truncatewords_html:10 }}</a></div>
+    <div class="h3"><a href="{% smart_url url_callable object %}">{{ object.title|truncatewords_html:10 }}</a></div>
     <span>{{ object.description|truncatewords_html:10 }}</span>
 </div>

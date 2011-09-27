@@ -2,6 +2,8 @@ from django import template
 
 from preferences import preferences
 
+from generic.templatetags import element_styles
+
 register = template.Library()
 
 
@@ -32,3 +34,22 @@ def navbar(context):
         'object_list': object_list,
         'active_link': active_link,
     }
+
+@register.tag
+def element(parser, token):
+    try:
+        tag_name, element = token.split_contents()
+    except ValueError:
+        raise template.TemplateSyntaxError(
+            'element tag requires 1 argument (element), %s given' % \
+                    (len(token.split_contents()) - 1)
+            )
+    return ElementNode(element)
+
+class ElementNode(template.Node):
+    def __init__(self, element):
+        self.element = template.Variable(element)
+
+    def render(self, context):
+        element = self.element.resolve(context)
+        return getattr(element_styles, element.style)(element).render(context)

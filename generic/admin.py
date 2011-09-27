@@ -5,8 +5,9 @@ from django.conf import settings
 
 from preferences.admin import PreferencesAdmin
 
-from generic.models import Link, MenuLinkPosition, MenuPreferences, \
-        NavbarLinkPosition, NavbarPreferences, GeneralPreferences, \
+from generic.models import ElementOption, ElementPreferences, Link, \
+        MenuLinkPosition, MenuPreferences, NavbarLinkPosition, \
+        NavbarPreferences, GeneralPreferences, GeneralPreferences, \
         RegistrationPreferences, LoginPreferences
 from generic.widgets import SelectCommaWidget
 
@@ -111,11 +112,19 @@ class RegistrationPreferencesAdmin(PreferencesAdmin):
 class LoginPreferencesAdmin(PreferencesAdmin):
     pass
 
+class ElementOptionInline(admin.StackedInline):
+    model = ElementOption
+
+class ElementPreferencesAdmin(PreferencesAdmin):
+    inlines = [
+        ElementOptionInline,
+    ]
 
 admin.site.register(MenuPreferences, MenuPreferenceAdmin)
 admin.site.register(NavbarPreferences, NavbarPreferenceAdmin)
 admin.site.register(Link, LinkAdmin)
 admin.site.register(GeneralPreferences, GeneralPreferencesAdmin)
+admin.site.register(ElementPreferences, ElementPreferencesAdmin)
 admin.site.register(RegistrationPreferences, RegistrationPreferencesAdmin)
 admin.site.register(LoginPreferences, LoginPreferencesAdmin)
 

@@ -1,0 +1,8 @@
+{% if object_list %}
+    <div id="promo">
+        {% for object in object_list %}
+            <img src="{{ object.get_promo_basic_url }}" alt="{{ object.title }}" />
+            <div id="promotxt"><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></div>
+        {% endfor %}
+    </div>        
+{% endif %}
