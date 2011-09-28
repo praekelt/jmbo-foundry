@@ -120,6 +120,8 @@ class GeneralPreferences(Preferences):
 
     about_us = RichTextField()
     terms_and_conditions = RichTextField()
+    privacy_policy = RichTextField()
+    show_age_gateway = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = 'General Preferences'
@@ -188,11 +190,13 @@ class LoginPreferences(Preferences):
     def login_fields(self):
         return self.raw_login_fields.split(',')
 
+
 class ElementPreferences(Preferences):
     __module__ = 'preferences.models'
     
     class Meta:
         verbose_name_plural = 'Element preferences'
+
 
 class ElementOption(models.Model):
     preferences = models.ForeignKey('preferences.ElementPreferences')

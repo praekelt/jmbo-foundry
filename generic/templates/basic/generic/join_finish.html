@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="h2">Sign Up - Set your profile picture</div>
+            
+    <form action="{% url join-finish %}" method="POST" enctype="multipart/form-data" class="content-form">   
+        {% csrf_token %}
+        <fieldset>
+            <ul class="form-ul">
+            {{ form.as_ul }}
+            </ul>
+            <input type="submit" value="Finish" />
+        </fieldset>
+    </form>
+
+{% endblock content %}

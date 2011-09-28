@@ -29,6 +29,12 @@ urlpatterns = patterns('',
         name='join',
     ),
     url(
+        r'^join-finish/$',
+        'generic.views.join_finish',
+        {},
+        name='join-finish',
+    ),
+    url(
         r'^login/$',
         login,
         {'authentication_form':LoginForm},

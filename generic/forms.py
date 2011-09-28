@@ -101,3 +101,19 @@ class JoinForm(UserCreationForm):
             self.fields['email'].help_text = _("Your email address is required in case you lose your password.")
 
     as_ul = as_ul_replacement
+
+
+class JoinFinishForm(forms.ModelForm):
+    """Show avatar selection form"""
+
+    class Meta:
+        model = Member
+        fields = ('image',)
+
+    def __init__(self, *args, **kwargs):
+        super(JoinFinishForm, self).__init__(*args, **kwargs)
+
+        self.fields['image'].label = _("Upload a picture")
+
+    as_ul = as_ul_replacement
+

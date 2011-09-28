@@ -121,7 +121,16 @@ class ElementPreferencesAdmin(PreferencesAdmin):
     ]
 
 class MemberAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'first_name', 'last_name')
+    list_display = ('username', 'email', 'first_name', 'last_name', '_image')
+    search_fields = ['username', 'email']
+
+    def _image(self, obj):
+        # todo: use correct photologue scale
+        if obj.image:
+            return """<img src="%s" height="48" width="48" />""" % obj.image.url
+        return ""
+    _image.short_description = 'Image'
+    _image.allow_tags = True
 
 admin.site.register(MenuPreferences, MenuPreferenceAdmin)
 admin.site.register(NavbarPreferences, NavbarPreferenceAdmin)

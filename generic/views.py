@@ -6,8 +6,9 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
+from django.contrib.auth.decorators import login_required
 
-from generic.forms import JoinForm
+from generic.forms import JoinForm, JoinFinishForm
 
 from category.models import Category
 from jmbo.models import ModelBase
@@ -28,21 +29,39 @@ class CategoryURL(object):
         else:
             return self
 
+
 def join(request):
     """Surface join form"""
     if request.method == 'POST':
         form = JoinForm(request.POST, request.FILES) 
         if form.is_valid():
-            user = form.save()
+            member = form.save()
             backend = get_backends()[0]
-            user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
-            login(request, user)            
-            return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
+            member.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+            login(request, member)            
+            return HttpResponseRedirect(reverse('join-finish'))
+            #return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
     else:
         form = JoinForm() 
 
     extra = dict(form=form)
     return render_to_response('generic/join.html', extra, context_instance=RequestContext(request))
+
+
+@login_required
+def join_finish(request):
+    """Surface join finish form"""
+    if request.method == 'POST':
+        form = JoinFinishForm(request.POST, request.FILES, instance=request.user) 
+        if form.is_valid():
+            member = form.save()
+            return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
+    else:
+        form = JoinFinishForm(instance=request.user) 
+
+    extra = dict(form=form)
+    return render_to_response('generic/join_finish.html', extra, context_instance=RequestContext(request))
+
 
 class CategoryObjectDetailView(DetailView):
     model = ModelBase
@@ -60,6 +79,7 @@ class CategoryObjectDetailView(DetailView):
         context['category'] = self.category
         context['object'] = context['object'].as_leaf_class()
         return context
+
 
 class CategoryObjectListView(ListView):
     paginate_by = 5
