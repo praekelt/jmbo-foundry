@@ -1,6 +1,9 @@
 from django.conf.urls.defaults import patterns, url, include
 from django.views.generic import TemplateView
 from django.contrib.auth.views import login, logout
+from django.utils.translation import ugettext_lazy as _
+
+from preferences import preferences
 
 from generic.forms import LoginForm
 from generic.views import CategoryObjectDetailView, CategoryObjectListView
@@ -21,6 +24,7 @@ urlpatterns = patterns('',
         CategoryObjectDetailView.as_view(),
         name='category_object_detail'
     ),
+
     # Join, login, password reset            
     url(
         r'^join/$',
@@ -47,4 +51,34 @@ urlpatterns = patterns('',
         name='logout',
     ),
     (r'^auth/', include('django.contrib.auth.urls')),
+
+    # Pages defined in preferences
+    url(
+        r'^about-us/$',
+        'django.views.generic.simple.direct_to_template',
+        {
+            'template':'generic/static_page.html', 
+            'extra_context':{'content':lambda:preferences.GeneralPreferences.about_us, 'title':_("About us")}
+        },
+        name='about-us'
+    ),
+    url(
+        r'^terms-and-conditions/$',
+        'django.views.generic.simple.direct_to_template',
+        {
+            'template':'generic/static_page.html', 
+            'extra_context':{'content':lambda:preferences.GeneralPreferences.terms_and_conditions, 'title':_("Terms and conditions")}
+        },
+        name='terms-and-conditions'
+    ),
+    url(
+        r'^privacy-policy/$',
+        'django.views.generic.simple.direct_to_template',
+        {
+            'template':'generic/static_page.html', 
+            'extra_context':{'content':lambda:preferences.GeneralPreferences.privacy_policy, 'title':_("Privacy policy")}
+        },
+        name='privacy-policy'
+    ),
+
 )

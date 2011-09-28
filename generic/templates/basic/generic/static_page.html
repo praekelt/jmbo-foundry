@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% if title %}<div class="h2">{{ title }}</div>{% endif %}
+
+    {{ content|safe }}
+
+{% endblock %}
