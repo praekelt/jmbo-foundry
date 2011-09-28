@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from preferences.models import Preferences
 from snippetscream import resolve_to_name
+from photologue.models import ImageModel
 
 from generic.profile_models import AbstractAvatarProfile, AbstractSocialProfile
 from generic.templatetags import element_styles
@@ -234,3 +235,7 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile):
     def __unicode__(self):
         return self.username
 
+
+class DefaultAvatar(ImageModel):
+    """A set of avatars users can choose from"""
+    pass

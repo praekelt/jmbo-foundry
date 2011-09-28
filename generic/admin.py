@@ -8,7 +8,7 @@ from preferences.admin import PreferencesAdmin
 from generic.models import ElementOption, ElementPreferences, Link, \
         MenuLinkPosition, MenuPreferences, NavbarLinkPosition, \
         NavbarPreferences, GeneralPreferences, GeneralPreferences, \
-        RegistrationPreferences, LoginPreferences, Member
+        RegistrationPreferences, LoginPreferences, Member, DefaultAvatar
 from generic.widgets import SelectCommaWidget
 
 def build_view_names(url_patterns=None):
@@ -132,6 +132,19 @@ class MemberAdmin(admin.ModelAdmin):
     _image.short_description = 'Image'
     _image.allow_tags = True
 
+
+class DefaultAvatarAdmin(admin.ModelAdmin):
+    list_display = ('_image',)
+
+    def _image(self, obj):
+        # todo: use correct photologue scale
+        if obj.image:
+            return """<img src="%s" height="48" width="48" />""" % obj.image.url
+        return ""
+    _image.short_description = 'Image'
+    _image.allow_tags = True
+
+
 admin.site.register(MenuPreferences, MenuPreferenceAdmin)
 admin.site.register(NavbarPreferences, NavbarPreferenceAdmin)
 admin.site.register(Link, LinkAdmin)
@@ -140,5 +153,6 @@ admin.site.register(ElementPreferences, ElementPreferencesAdmin)
 admin.site.register(RegistrationPreferences, RegistrationPreferencesAdmin)
 admin.site.register(LoginPreferences, LoginPreferencesAdmin)
 admin.site.register(Member, MemberAdmin)
+admin.site.register(DefaultAvatar, DefaultAvatarAdmin)
 
 

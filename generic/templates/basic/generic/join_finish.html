@@ -8,7 +8,14 @@
         {% csrf_token %}
         <fieldset>
             <ul class="form-ul">
-            {{ form.as_ul }}
+                {{ form.as_ul }}
+                <li>
+                    <label for="pic-choose"><p>Or, choose from our selection:</p></label>
+                    {% for object in form.default_avatars %}
+                        <input type="radio" name="default_avatar_id" value="{{ object.id }}" />
+                        <img src="{{ object.image.url }}" width="32" height="32" class="pic-choose" />
+                    {% endfor %}
+                </li>
             </ul>
             <input type="submit" value="Finish" />
         </fieldset>
