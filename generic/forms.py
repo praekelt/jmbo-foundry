@@ -1,8 +1,13 @@
 from django.utils.translation import ugettext_lazy as _
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, \
+    PasswordResetForm as BasePasswordResetForm
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.models import get_current_site
+from django.template import Context, loader
+from django.utils.http import int_to_base36
 
 from preferences import preferences
 
@@ -40,7 +45,7 @@ class LoginForm(AuthenticationForm):
         label = None
         if v == 'email':
             label = _("Email address")
-        elif v == 'mobile':
+        elif v == 'mobile_number':
             label = _("Mobile number")
         elif v == 'username,email':
             label = _("Username or email address")
@@ -68,7 +73,7 @@ class JoinForm(UserCreationForm):
             value = self.cleaned_data.get(name, None)
             if value is not None:
                 di = {'%s__iexact' % name:value}
-                if User.objects.filter(**di):
+                if Member.objects.filter(**di).count() > 0:
                     pretty_name = self.fields[name].label.lower()
                     message =_("The %s is already in use. Please supply a different %s." % (pretty_name, pretty_name))
                     self._errors[name] = self.error_class([message])
@@ -138,6 +143,67 @@ class JoinFinishForm(forms.ModelForm):
                 instance.save()
 
         return instance
+
+    as_ul = as_ul_replacement
+
+
+class PasswordResetForm(BasePasswordResetForm):
+    """Custom form since we do not necessarily want to lookup the email
+    address"""
+    mobile_number = forms.CharField()
+
+    def clean_mobile_number(self):
+        """Clean method must have the same structure as clean_email in
+        BasePasswordResetForm"""
+        mobile_number = self.cleaned_data["mobile_number"]
+        self.users_cache = Member.objects.filter(
+            mobile_number__iexact=mobile_number,
+            is_active=True
+        )
+        if self.users_cache.count() == 0:
+            raise forms.ValidationError(_("The mobile number is not registered with the system."))
+        return mobile_number
+
+    def __init__(self, *args, **kwargs):
+        super(PasswordResetForm, self).__init__(*args, **kwargs)
+
+        v = preferences.PasswordResetPreferences.lookup_field
+        if v == 'email':
+            del self.fields['mobile_number']
+        else:
+            del self.fields['email']
+
+    def save(self, domain_override=None, email_template_name='registration/password_reset_email.html',
+             use_https=False, token_generator=default_token_generator, from_email=None, request=None):
+        """Override entire method. Due to the layout of the original method we
+        cannot do a super() call."""
+        from django.core.mail import send_mail
+        for user in self.users_cache:
+            if not domain_override:
+                current_site = get_current_site(request)
+                site_name = current_site.name
+                domain = current_site.domain
+            else:
+                site_name = domain = domain_override
+            t = loader.get_template(email_template_name)
+            c = {
+                'email': user.email,
+                'domain': domain,
+                'site_name': site_name,
+                'uid': int_to_base36(user.id),
+                'user': user,
+                'token': token_generator.make_token(user),
+                'protocol': use_https and 'https' or 'http',
+            }
+            content = t.render(Context(c))
+            if self.fields.has_key('email'):
+                send_mail(
+                    _("Password reset on %s") % site_name, 
+                    content, from_email, [user.email]
+                )
+            else:
+                # todo: send sms
+                pass
 
     as_ul = as_ul_replacement
 

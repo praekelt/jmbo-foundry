@@ -8,7 +8,8 @@ from preferences.admin import PreferencesAdmin
 from generic.models import ElementOption, ElementPreferences, Link, \
         MenuLinkPosition, MenuPreferences, NavbarLinkPosition, \
         NavbarPreferences, GeneralPreferences, GeneralPreferences, \
-        RegistrationPreferences, LoginPreferences, Member, DefaultAvatar
+        RegistrationPreferences, LoginPreferences, Member, DefaultAvatar, \
+        PasswordResetPreferences
 from generic.widgets import SelectCommaWidget
 
 def build_view_names(url_patterns=None):
@@ -112,6 +113,9 @@ class RegistrationPreferencesAdmin(PreferencesAdmin):
 class LoginPreferencesAdmin(PreferencesAdmin):
     pass
 
+class PasswordResetPreferencesAdmin(PreferencesAdmin):
+    pass
+
 class ElementOptionInline(admin.StackedInline):
     model = ElementOption
 
@@ -121,7 +125,10 @@ class ElementPreferencesAdmin(PreferencesAdmin):
     ]
 
 class MemberAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'first_name', 'last_name', '_image')
+    list_display = (
+        'username', 'email', 'mobile_number', 'first_name', 'last_name', 
+        '_image'
+    )
     search_fields = ['username', 'email']
 
     def _image(self, obj):
@@ -152,6 +159,7 @@ admin.site.register(GeneralPreferences, GeneralPreferencesAdmin)
 admin.site.register(ElementPreferences, ElementPreferencesAdmin)
 admin.site.register(RegistrationPreferences, RegistrationPreferencesAdmin)
 admin.site.register(LoginPreferences, LoginPreferencesAdmin)
+admin.site.register(PasswordResetPreferences, PasswordResetPreferencesAdmin)
 admin.site.register(Member, MemberAdmin)
 admin.site.register(DefaultAvatar, DefaultAvatarAdmin)
 

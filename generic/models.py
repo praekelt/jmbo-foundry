@@ -10,7 +10,8 @@ from preferences.models import Preferences
 from snippetscream import resolve_to_name
 from photologue.models import ImageModel
 
-from generic.profile_models import AbstractAvatarProfile, AbstractSocialProfile
+from generic.profile_models import AbstractAvatarProfile, \
+    AbstractSocialProfile, AbstractContactProfile
 from generic.templatetags import element_styles
 
 class Link(models.Model):
@@ -178,7 +179,7 @@ class LoginPreferences(Preferences):
         choices=(
             ('username', _('Username only')),
             ('email', _('Email address only')),
-            ('mobile', _('Mobile only')),
+            ('mobile_number', _('Mobile number only')),
             ('username,email', _('Username or email address')),
         ),
         help_text=_('Users may log in with more than one identifier.')
@@ -190,6 +191,23 @@ class LoginPreferences(Preferences):
     @property
     def login_fields(self):
         return self.raw_login_fields.split(',')
+
+
+class PasswordResetPreferences(Preferences):
+    __module__ = 'preferences.models'
+
+    lookup_field = models.CharField(
+        max_length=32, 
+        default='email',
+        choices=(
+            ('email', _('Email address')),
+            ('mobile_number', _('Mobile number')),
+        ),
+        help_text=_('The field a user must enter to retrieve his password.')
+    )
+
+    class Meta:
+        verbose_name_plural = 'Password Reset Preferences'
 
 
 class ElementPreferences(Preferences):
@@ -227,7 +245,7 @@ class ElementOption(models.Model):
     position = models.IntegerField()
 
 
-class Member(User, AbstractAvatarProfile, AbstractSocialProfile):
+class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractContactProfile):
     """Class that models the default user account. Subclassing is superior to profiles since 
     a site may conceivably have more than one type of user account, but the profile architecture 
     limits the entire site to a single type of profile."""

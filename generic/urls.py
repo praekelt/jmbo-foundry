@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from preferences import preferences
 
-from generic.forms import LoginForm
+from generic.forms import LoginForm, PasswordResetForm
 from generic.views import CategoryObjectDetailView, CategoryObjectListView
 
 urlpatterns = patterns('',
@@ -49,6 +49,14 @@ urlpatterns = patterns('',
         logout,
         {},
         name='logout',
+    ),
+    # Pre-empt password reset so we can use custom form
+    (
+        r'^auth/password_reset/$', 
+        'django.contrib.auth.views.password_reset', 
+        {
+            'password_reset_form':PasswordResetForm,
+        }
     ),
     (r'^auth/', include('django.contrib.auth.urls')),
 
