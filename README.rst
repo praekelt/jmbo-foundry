@@ -36,6 +36,10 @@ Installation
 
 #. ``jmbo-generic`` includes static media resources which you need to configure as described in `Django`s managing static files documentation <https://docs.djangoproject.com/en/dev/howto/static-files/>`_.
 
+#. Add ``generic.middleware.AgeGateway`` to your ``MIDDLEWARES`` setting after ``AuthenticationMiddleware``.
+
+#. Optionally add ``generic.middleware.VerboseRequestMeta`` to your ``MIDDLEWARES`` setting as the last entry. It adds more information to the request for easier debugging. 
+
 Models
 ------
 
