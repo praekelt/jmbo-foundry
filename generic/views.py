@@ -8,7 +8,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.contrib.auth.decorators import login_required
 
-from generic.forms import JoinForm, JoinFinishForm
+from generic.forms import JoinForm, JoinFinishForm, AgeGatewayForm
 
 from category.models import Category
 from jmbo.models import ModelBase
@@ -101,3 +101,18 @@ class CategoryObjectListView(ListView):
         context['category'] = self.category
         context['url_callable'] = self.get_url_callable()
         return context
+
+
+def age_gateway(request):
+    """Surface age gateway form"""
+    if request.method == 'POST':
+        form = AgeGatewayForm(request.POST) 
+        if form.is_valid():
+            # save returns a response
+            return form.save(request)
+    else:
+        form = AgeGatewayForm() 
+
+    extra = dict(form=form)
+    return render_to_response('generic/age_gateway.html', extra, context_instance=RequestContext(request))
+

@@ -89,4 +89,12 @@ urlpatterns = patterns('',
         name='privacy-policy'
     ),
 
+    # Age gateway
+    url(
+        r'^age-gateway/$',
+        'generic.views.age_gateway',
+        {},
+        name='age-gateway',
+    ),
+
 )

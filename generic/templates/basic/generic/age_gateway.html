@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="h2">Confirm your age</div>
+            
+    <form action="{% url age-gateway %}" method="POST" class="content-form">   
+        {% csrf_token %}
+        <fieldset>
+            <ul class="form-ul">
+            {{ form.as_ul }}
+            </ul>
+            <input type="submit" value="Confirm" />
+        </fieldset>
+    </form>
+
+{% endblock content %}

@@ -1,3 +1,5 @@
+import datetime
+
 from django.utils.translation import ugettext_lazy as _
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, \
@@ -8,10 +10,11 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.models import get_current_site
 from django.template import Context, loader
 from django.utils.http import int_to_base36
+from django.http import HttpResponseRedirect
 
 from preferences import preferences
 
-from generic.models import Member, DefaultAvatar
+from generic.models import Member, DefaultAvatar, Country
 
 def as_ul_replacement(form):
     """This formatter arranges label, widget, help text and error messages in a
@@ -207,3 +210,32 @@ class PasswordResetForm(BasePasswordResetForm):
 
     as_ul = as_ul_replacement
 
+
+class AgeGatewayForm(forms.Form):
+    country = forms.ModelChoiceField(queryset=Country.objects.all())
+    date_of_birth = forms.DateField() # todo: widget
+    remember_me = forms.BooleanField(required=False)
+
+    def clean(self):
+        cleaned_data = super(AgeGatewayForm, self).clean()
+
+        country = cleaned_data.get('country')
+        date_of_birth = cleaned_data.get('date_of_birth')
+        if country and date_of_birth:
+            today = datetime.date.today()
+            if date_of_birth > today.replace(today.year - country.minimum_age):
+                msg = "You must be at least %s years of age to use this site." \
+                    % country.minimum_age
+                raise forms.ValidationError(_(msg))
+
+        return cleaned_data
+
+    def save(self, request):
+        """Set cookie"""
+        expires = None
+        if self.cleaned_data['remember_me']:            
+            now = datetime.datetime.now()
+            expires = now.replace(year=now.year+10)
+        response = HttpResponseRedirect('/')        
+        response.set_cookie('age_gateway_passed', value=1, expires=expires)
+        return response

@@ -13,6 +13,7 @@ INSTALLED_APPS = (
     # This application
     'generic',
     'south',
+    'generate',
 
     # Jmbo minimum
 #    'photologue',

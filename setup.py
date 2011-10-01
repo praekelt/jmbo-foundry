@@ -17,6 +17,7 @@ setup(
         'django-ckeditor',
         'jmbo',
         'south',
+        'django-generate',
     ],
     include_package_data=True,
     tests_require=[

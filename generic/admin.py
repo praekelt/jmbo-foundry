@@ -9,7 +9,7 @@ from generic.models import ElementOption, ElementPreferences, Link, \
         MenuLinkPosition, MenuPreferences, NavbarLinkPosition, \
         NavbarPreferences, GeneralPreferences, GeneralPreferences, \
         RegistrationPreferences, LoginPreferences, Member, DefaultAvatar, \
-        PasswordResetPreferences
+        PasswordResetPreferences, Country
 from generic.widgets import SelectCommaWidget
 
 def build_view_names(url_patterns=None):
@@ -152,6 +152,10 @@ class DefaultAvatarAdmin(admin.ModelAdmin):
     _image.allow_tags = True
 
 
+class CountryAdmin(admin.ModelAdmin):
+    list_display = ('title', 'minimum_age')
+    list_editable = ('minimum_age',)
+
 admin.site.register(MenuPreferences, MenuPreferenceAdmin)
 admin.site.register(NavbarPreferences, NavbarPreferenceAdmin)
 admin.site.register(Link, LinkAdmin)
@@ -162,5 +166,5 @@ admin.site.register(LoginPreferences, LoginPreferencesAdmin)
 admin.site.register(PasswordResetPreferences, PasswordResetPreferencesAdmin)
 admin.site.register(Member, MemberAdmin)
 admin.site.register(DefaultAvatar, DefaultAvatarAdmin)
-
+admin.site.register(Country, CountryAdmin)
 

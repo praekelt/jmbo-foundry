@@ -9,6 +9,7 @@ from ckeditor.fields import RichTextField
 from preferences.models import Preferences
 from snippetscream import resolve_to_name
 from photologue.models import ImageModel
+from jmbo.utils import generate_slug
 
 from generic.profile_models import AbstractAvatarProfile, \
     AbstractSocialProfile, AbstractContactProfile
@@ -257,3 +258,26 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractContact
 class DefaultAvatar(ImageModel):
     """A set of avatars users can choose from"""
     pass
+
+
+class Country(models.Model):
+    title = models.CharField(max_length=32)
+    minimum_age = models.PositiveIntegerField(default=18)
+    slug = models.SlugField(
+        editable=False,
+        max_length=32,
+        db_index=True,
+        unique=True,
+    )
+
+    class Meta:
+        verbose_name_plural = 'Countries'
+        ordering = ('title',)
+
+    def __unicode__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):        
+        self.slug = generate_slug(self, self.title)
+        super(Country, self).save(*args, **kwargs)
+
