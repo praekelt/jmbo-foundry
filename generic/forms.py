@@ -38,6 +38,13 @@ class TermsCheckboxInput(forms.widgets.CheckboxInput):
         return result + """I accept the <a href="/terms-and-conditions" target="external">terms and conditions</a>"""
 
 
+class RememberMeCheckboxInput(forms.widgets.CheckboxInput):
+
+    def render(self, *args, **kwargs):
+        result = super(RememberMeCheckboxInput, self).render(*args, **kwargs)
+        return result + "Remember me"
+
+
 class LoginForm(AuthenticationForm):
 
     def __init__(self, *args, **kwargs):
@@ -214,7 +221,7 @@ class PasswordResetForm(BasePasswordResetForm):
 class AgeGatewayForm(forms.Form):
     country = forms.ModelChoiceField(queryset=Country.objects.all())
     date_of_birth = forms.DateField() # todo: widget
-    remember_me = forms.BooleanField(required=False)
+    remember_me = forms.BooleanField(required=False, label="", widget=RememberMeCheckboxInput)
 
     def clean(self):
         cleaned_data = super(AgeGatewayForm, self).clean()
@@ -230,6 +237,11 @@ class AgeGatewayForm(forms.Form):
 
         return cleaned_data
 
+    def __init__(self, *args, **kwargs):
+        super(AgeGatewayForm, self).__init__(*args, **kwargs)
+
+        self.fields['country'].label = _("Where do you live?")
+
     def save(self, request):
         """Set cookie"""
         expires = None
@@ -239,3 +251,6 @@ class AgeGatewayForm(forms.Form):
         response = HttpResponseRedirect('/')        
         response.set_cookie('age_gateway_passed', value=1, expires=expires)
         return response
+
+    as_ul = as_ul_replacement
+
