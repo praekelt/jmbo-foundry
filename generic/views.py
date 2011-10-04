@@ -25,7 +25,7 @@ class CategoryURL(object):
                 kwargs={'category_slug': self.category.slug, 'slug': obj.slug}
             )
         elif obj:
-            return obj.get_absolute_url()
+            return obj.as_leaf_class().get_absolute_url()
         else:
             return self
 
