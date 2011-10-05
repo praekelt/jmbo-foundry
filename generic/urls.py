@@ -2,13 +2,42 @@ from django.conf.urls.defaults import patterns, url, include
 from django.views.generic import TemplateView
 from django.contrib.auth.views import login, logout
 from django.utils.translation import ugettext_lazy as _
+from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.conf import settings
 
 from preferences import preferences
 
 from generic.forms import LoginForm, PasswordResetForm
 from generic.views import CategoryObjectDetailView, CategoryObjectListView
 
+admin.autodiscover()
+
+try:
+    import object_tools
+    object_tools.autodiscover()
+except ImportError:
+    pass
+
 urlpatterns = patterns('',
+    (r'^gallery/', include('gallery.urls')),
+    (r'^googlesearch/', include('googlesearch.urls')),
+    (r'^music/', include('music.urls')),
+    (r'^$', include('generic.urls')),
+    (r'^$', include('jmbo.urls')),
+    (r'^chart/', include('chart.urls')),
+    (r'^comments/', include('django.contrib.comments.urls')),
+    (r'^richcomments/', include('richcomments.urls')),
+    (r'^likes/', include('likes.urls')),
+    (r'^object-tools/', include(object_tools.tools.urls)),
+    (r'^show/', include('show.urls')),
+    (r'^event/', include('event.urls')),
+    (r'^competition/', include('competition.urls')),
+    (r'^ckeditor/', include('ckeditor.urls')),
+    (r'^contact/', include('contact.urls')),
+    
+    (r'^admin/', include(admin.site.urls)),
+
     url(
         r'^$',
         TemplateView.as_view(template_name="generic/home.html"),
@@ -96,5 +125,12 @@ urlpatterns = patterns('',
         {},
         name='age-gateway',
     ),
-
 )
+
+urlpatterns += staticfiles_urlpatterns()
+
+if settings.DEBUG:
+    urlpatterns += patterns('',
+    (r'^media/(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
+    )
