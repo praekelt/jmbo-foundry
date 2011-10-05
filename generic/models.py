@@ -261,6 +261,7 @@ class DefaultAvatar(ImageModel):
 
 
 class Country(models.Model):
+    """Countries used in the age gateway"""
     title = models.CharField(max_length=32)
     minimum_age = models.PositiveIntegerField(default=18)
     slug = models.SlugField(
