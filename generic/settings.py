@@ -14,7 +14,7 @@ BUILDOUT_PATH =  path.split(path.abspath(path.join(path.dirname(sys.argv[0]))))[
 
 PROJECT_MODULE = 'generic'
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
@@ -74,11 +74,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'generic.middleware.AgeGateway',                            # custom
+    'generic.middleware.AgeGateway',                            # custom - fix in paster
     'django.contrib.messages.middleware.MessageMiddleware',
     'likes.middleware.SecretBallotUserIpUseragentMiddleware',
-    'generic.middleware.VerboseRequestMeta',                    # custom
-    'django.middleware.transaction.TransactionMiddleware',      # custom
+    'generic.middleware.VerboseRequestMeta',                    # custom - fix in paster
+    'django.middleware.transaction.TransactionMiddleware',      # custom - fix in paster
 )
 
 # A tuple of callables that are used to populate the context in RequestContext. 
@@ -171,3 +171,4 @@ CKEDITOR_MEDIA_PREFIX = '/media/ckeditor/'
 # Make sure you have write permissions for the path, i.e/home/media/media.lawrence.com/uploads/
 CKEDITOR_UPLOAD_PATH = '%s/media/uploads/' % BUILDOUT_PATH
 
+# LASTFM_API_KEY = '' # custom - fix in paster

@@ -2,13 +2,13 @@
 
 {% block content %}
 
-    {% comment %}Below should be an h1{% endcomment %}
     <div class="h2">Sign Up</div>
-            
+
+    <!-- 
     <span>
         Sign up easily with Facebook or Twitter, or register a new account directly with us.
-        xxx: issues on mobile. Looks dumb when we hide this white bar.
     </span>
+    -->
 
     <form action="{% url join %}" method="POST" enctype="multipart/form-data" class="content-form">   
         {% csrf_token %}
