@@ -182,6 +182,7 @@ class LoginPreferences(Preferences):
             ('email', _('Email address only')),
             ('mobile_number', _('Mobile number only')),
             ('username,email', _('Username or email address')),
+            ('username,mobile_number', _('Username or mobile number')),
         ),
         help_text=_('Users may log in with more than one identifier.')
     )
