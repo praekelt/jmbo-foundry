@@ -64,3 +64,21 @@ site it is desirable to send a text. Choose between `Email address` or `Mobile
 number`. Note that a password reset request does not automatically generate a
 new password for the user since this may lead to malicious people disabling
 users' accounts.
+
+Navbar preferences
+******************
+
+The navigation bar typically contains a small amount of items since horizontal
+space is limited.  Each item in the navigation bar is represented as a `link`.
+Links are not just normal links, although they can be. A link has a title and
+may point either to a dynamic page already available in the site, a category or
+a normal URL.
+
+Menu preferences
+****************
+
+The site menu is exactly the same as the navigation bar, except it is rendered at 
+then bottom of the home page and has a vertical layout by default.
+
+Element preferences
+*******************
