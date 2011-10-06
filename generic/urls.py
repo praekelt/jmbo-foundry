@@ -34,7 +34,8 @@ urlpatterns = patterns('',
     (r'^competition/', include('competition.urls')),
     (r'^ckeditor/', include('ckeditor.urls')),
     (r'^contact/', include('contact.urls')),
-    
+    (r'^post/', include('post.urls')),	# todo: add to paster
+
     (r'^admin/', include(admin.site.urls)),
 
     url(
