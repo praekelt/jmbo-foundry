@@ -128,7 +128,7 @@ INSTALLED_APPS = (
     'secretballot',
     'richcomments',
     'publisher',
-    'social',
+#    'social',	# xxx: removed since can't download socialregistration-tokenstore tarball currently
     'category',
     'post',
     'likes',
@@ -142,6 +142,7 @@ INSTALLED_APPS = (
     'competition',
     'ckeditor',
     'contact',
+    'south', # custom - add to paster
     'django.contrib.auth',
     'django.contrib.comments',
     'django.contrib.contenttypes',

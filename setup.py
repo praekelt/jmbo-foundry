@@ -22,13 +22,13 @@ setup(
         'django-generate',
         'jmbo-calendar',
         'jmbo',
-        'django-photologue',
+#        'django-photologue',	# todo" remove from paster - causes version conflict
         'jmbo-chart',
         'django-recaptcha',
         'django-secretballot',
         'django-richcomments',
         'django-publisher',
-        'jmbo-social',
+#        'jmbo-social',	# xxx: can't download tarball currently
         'django-category',
         'jmbo-post',
         'django-likes',
