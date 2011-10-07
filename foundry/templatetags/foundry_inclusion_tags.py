@@ -2,12 +2,12 @@ from django import template
 
 from preferences import preferences
 
-from generic.templatetags import element_styles
+from foundry.templatetags import element_styles
 
 register = template.Library()
 
 
-@register.inclusion_tag('generic/inclusion_tags/menu.html')
+@register.inclusion_tag('foundry/inclusion_tags/menu.html')
 def menu():
     menu_preferences = preferences.MenuPreferences
     return {
@@ -16,7 +16,7 @@ def menu():
     }
 
 
-@register.inclusion_tag('generic/inclusion_tags/navbar.html', \
+@register.inclusion_tag('foundry/inclusion_tags/navbar.html', \
         takes_context=True)
 def navbar(context):
     navbar_preferences = preferences.NavbarPreferences

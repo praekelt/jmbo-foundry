@@ -1,14 +1,14 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='jmbo-generic',
+    name='jmbo-foundry',
     version='0.0.2',
-    description='Jmbo generic behaviour/templates app.',
+    description='Jmbo foundry behaviour/templates app.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
     author_email='dev@praekelt.com',
     license='BSD',
-    url='http://github.com/praekelt/jmbo-generic',
+    url='http://github.com/praekelt/jmbo-foundry',
     packages = find_packages(),
     install_requires = [
         # todo: eliminate dependencies handled by apps themselves
@@ -17,7 +17,7 @@ setup(
         'django-googlesearch',
         'jmbo-music',
         'django-export',
-        'jmbo-generic',
+#        'jmbo-foundry',
         'django-snippetscream',
         'django-generate',
         'jmbo-calendar',

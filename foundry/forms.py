@@ -14,7 +14,7 @@ from django.http import HttpResponseRedirect
 
 from preferences import preferences
 
-from generic.models import Member, DefaultAvatar, Country
+from foundry.models import Member, DefaultAvatar, Country
 
 def as_ul_replacement(form):
     """This formatter arranges label, widget, help text and error messages in a

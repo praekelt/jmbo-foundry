@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import patterns, url, include
-from django.views.generic import TemplateView
+from django.views.foundry import TemplateView
 from django.contrib.auth.views import login, logout
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin
@@ -8,8 +8,8 @@ from django.conf import settings
 
 from preferences import preferences
 
-from generic.forms import LoginForm, PasswordResetForm
-from generic.views import CategoryObjectDetailView, CategoryObjectListView
+from foundry.forms import LoginForm, PasswordResetForm
+from foundry.views import CategoryObjectDetailView, CategoryObjectListView
 
 admin.autodiscover()
 
@@ -40,7 +40,7 @@ urlpatterns = patterns('',
 
     url(
         r'^$',
-        TemplateView.as_view(template_name="generic/home.html"),
+        TemplateView.as_view(template_name="foundry/home.html"),
         name='home'
     ),
     url(
@@ -57,13 +57,13 @@ urlpatterns = patterns('',
     # Join, login, password reset            
     url(
         r'^join/$',
-        'generic.views.join',
+        'foundry.views.join',
         {},
         name='join',
     ),
     url(
         r'^join-finish/$',
-        'generic.views.join_finish',
+        'foundry.views.join_finish',
         {},
         name='join-finish',
     ),
@@ -92,27 +92,27 @@ urlpatterns = patterns('',
     # Pages defined in preferences
     url(
         r'^about-us/$',
-        'django.views.generic.simple.direct_to_template',
+        'django.views.foundry.simple.direct_to_template',
         {
-            'template':'generic/static_page.html', 
+            'template':'foundry/static_page.html', 
             'extra_context':{'content':lambda:preferences.GeneralPreferences.about_us, 'title':_("About us")}
         },
         name='about-us'
     ),
     url(
         r'^terms-and-conditions/$',
-        'django.views.generic.simple.direct_to_template',
+        'django.views.foundry.simple.direct_to_template',
         {
-            'template':'generic/static_page.html', 
+            'template':'foundry/static_page.html', 
             'extra_context':{'content':lambda:preferences.GeneralPreferences.terms_and_conditions, 'title':_("Terms and conditions")}
         },
         name='terms-and-conditions'
     ),
     url(
         r'^privacy-policy/$',
-        'django.views.generic.simple.direct_to_template',
+        'django.views.foundry.simple.direct_to_template',
         {
-            'template':'generic/static_page.html', 
+            'template':'foundry/static_page.html', 
             'extra_context':{'content':lambda:preferences.GeneralPreferences.privacy_policy, 'title':_("Privacy policy")}
         },
         name='privacy-policy'
@@ -121,7 +121,7 @@ urlpatterns = patterns('',
     # Age gateway
     url(
         r'^age-gateway/$',
-        'generic.views.age_gateway',
+        'foundry.views.age_gateway',
         {},
         name='age-gateway',
     ),

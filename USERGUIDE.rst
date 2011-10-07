@@ -1,17 +1,17 @@
-Jmbo Generic User Guide
+Jmbo Foundry User Guide
 =======================
 
 Initial configuration
 ---------------------
 
-`jmbo-generic` requires initial configuration before it is ready to serve your
+`jmbo-foundry` requires initial configuration before it is ready to serve your
 site.
 
 Sites
 *****
 
 Your web presence typically consists of a normal web site and a mobile site.
-There may be many more types of sites in future and `jmbo-generic` makes it
+There may be many more types of sites in future and `jmbo-foundry` makes it
 easy to configure them independently. If your main site is served on
 `www.mysite.com` then go to `Sites` in the admin interface and set `Domain
 name` and `Display name` accordingly. Then add a site entry for your mobile
@@ -20,7 +20,7 @@ site and set the values to `m.mysite.com`.
 Preferences
 -----------
 
-`jmbo-generic` strives for a high level of through the web configuration. Much
+`jmbo-foundry` strives for a high level of through the web configuration. Much
 of the site's behaviour is customizable through the admin interface.
 
 General preferences

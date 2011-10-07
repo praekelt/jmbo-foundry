@@ -2,10 +2,8 @@ from django.template.loader import render_to_string
 
 from jmbo import models
 
-#from generic import views
-
 class Promo(object):
-    template_name = 'generic/inclusion_tags/element_promo.html'
+    template_name = 'foundry/inclusion_tags/element_promo.html'
 
     def __init__(self, element):
         self.element = element
@@ -20,7 +18,7 @@ class Promo(object):
     
     def get_url_callable(self, *args, **kwargs):
         # Must put the import here to avoid circular import error
-        from generic import views
+        from foundry import views
         return views.CategoryURL(category=self.element.category)
     
     def get_context_data(self, *args, **kwargs):
@@ -34,5 +32,5 @@ class Promo(object):
         return render_to_string(self.template_name, self.get_context_data(context))
 
 class Listing(Promo):
-    template_name = 'generic/inclusion_tags/element_listing.html'
+    template_name = 'foundry/inclusion_tags/element_listing.html'
 

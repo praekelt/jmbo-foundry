@@ -7,11 +7,11 @@ DATABASES = {
     }
 }
 
-ROOT_URLCONF = 'generic.urls'
+ROOT_URLCONF = 'foundry.urls'
 
 INSTALLED_APPS = (
     # This application
-    'generic',
+    'foundry',
     'south',
     'generate',
 
@@ -32,13 +32,13 @@ INSTALLED_APPS = (
 )
 
 TEMPLATE_LOADERS = (
-    'generic.loaders.TypeLoader',
+    'foundry.loaders.TypeLoader',
     'django.template.loaders.filesystem.load_template_source',
     'django.template.loaders.app_directories.load_template_source',
 )
 
 AUTHENTICATION_BACKENDS = (
-    'generic.backends.MultiBackend',
+    'foundry.backends.MultiBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -49,4 +49,4 @@ CKEDITOR_MEDIA_PREFIX = '/media/ckeditor/'
 #LOGIN_REDIRECT_URL = '/'
 
 # Will be removed when django-profile gets refactored
-AUTH_PROFILE_MODULE = 'generic.Member'
+AUTH_PROFILE_MODULE = 'foundry.Member'

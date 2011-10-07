@@ -25,7 +25,7 @@ def generate():
             }
         },
         {
-            "model": "generic.Link",
+            "model": "foundry.Link",
             "fields": {
                 "title": "News",
                 "category": {
@@ -38,11 +38,11 @@ def generate():
             },
         },
         {
-            "model": "generic.NavbarLinkPosition",
+            "model": "foundry.NavbarLinkPosition",
             "fields": {
                 "position": 1,
                 "link": {
-                    "model": "generic.Link",
+                    "model": "foundry.Link",
                     "fields": {
                         "title": "Home",
                         "view_name": "home",
@@ -57,11 +57,11 @@ def generate():
             },
         },
         {
-            "model": "generic.NavbarLinkPosition",
+            "model": "foundry.NavbarLinkPosition",
             "fields": {
                 "position": 2,
                 "link": {
-                    "model": "generic.Link",
+                    "model": "foundry.Link",
                     "fields": {
                         "title": "News"
                     },
@@ -75,11 +75,11 @@ def generate():
             },
         },
         {
-            "model": "generic.MenuLinkPosition",
+            "model": "foundry.MenuLinkPosition",
             "fields": {
                 "position": 1,
                 "link": {
-                    "model": "generic.Link",
+                    "model": "foundry.Link",
                     "fields": {
                         "title": "Home",
                         "view_name": "home",
@@ -94,11 +94,11 @@ def generate():
             },
         },
         {
-            "model": "generic.MenuLinkPosition",
+            "model": "foundry.MenuLinkPosition",
             "fields": {
                 "position": 2,
                 "link": {
-                    "model": "generic.Link",
+                    "model": "foundry.Link",
                     "fields": {
                         "title": "News"
                     },
@@ -142,7 +142,7 @@ def generate():
         })
 
     objects.append({
-        "model": "generic.ElementOption",
+        "model": "foundry.ElementOption",
         "fields": {
             "title": "Promos",
             "style": "Promo",
@@ -166,7 +166,7 @@ def generate():
     })
 
     objects.append({
-        "model": "generic.ElementOption",
+        "model": "foundry.ElementOption",
         "fields": {
             "title": "Updates",
             "style": "Listing",

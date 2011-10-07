@@ -4,11 +4,11 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect 
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from django.views.generic.detail import DetailView
-from django.views.generic.list import ListView
+from django.views.foundry.detail import DetailView
+from django.views.foundry.list import ListView
 from django.contrib.auth.decorators import login_required
 
-from generic.forms import JoinForm, JoinFinishForm, AgeGatewayForm
+from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm
 
 from category.models import Category
 from jmbo.models import ModelBase
@@ -45,7 +45,7 @@ def join(request):
         form = JoinForm() 
 
     extra = dict(form=form)
-    return render_to_response('generic/join.html', extra, context_instance=RequestContext(request))
+    return render_to_response('foundry/join.html', extra, context_instance=RequestContext(request))
 
 
 @login_required
@@ -60,7 +60,7 @@ def join_finish(request):
         form = JoinFinishForm(instance=request.user) 
 
     extra = dict(form=form)
-    return render_to_response('generic/join_finish.html', extra, context_instance=RequestContext(request))
+    return render_to_response('foundry/join_finish.html', extra, context_instance=RequestContext(request))
 
 
 class CategoryObjectDetailView(DetailView):
@@ -114,5 +114,5 @@ def age_gateway(request):
         form = AgeGatewayForm() 
 
     extra = dict(form=form)
-    return render_to_response('generic/age_gateway.html', extra, context_instance=RequestContext(request))
+    return render_to_response('foundry/age_gateway.html', extra, context_instance=RequestContext(request))
 

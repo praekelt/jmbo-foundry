@@ -5,12 +5,12 @@ from django.conf import settings
 
 from preferences.admin import PreferencesAdmin
 
-from generic.models import ElementOption, ElementPreferences, Link, \
+from foundry.models import ElementOption, ElementPreferences, Link, \
         MenuLinkPosition, MenuPreferences, NavbarLinkPosition, \
         NavbarPreferences, GeneralPreferences, GeneralPreferences, \
         RegistrationPreferences, LoginPreferences, Member, DefaultAvatar, \
         PasswordResetPreferences, Country
-from generic.widgets import SelectCommaWidget
+from foundry.widgets import SelectCommaWidget
 
 def build_view_names(url_patterns=None):
     """

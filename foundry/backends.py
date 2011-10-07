@@ -5,7 +5,7 @@ from django.conf import settings
 
 from preferences import preferences
 
-from generic.models import Member
+from foundry.models import Member
 
 class MultiBackend(ModelBackend):
 

@@ -12,7 +12,7 @@ from os import path
 SCRIPT_PATH =  path.abspath(path.dirname(__file__))
 BUILDOUT_PATH =  path.split(path.abspath(path.join(path.dirname(sys.argv[0]))))[0]
 
-PROJECT_MODULE = 'generic'
+PROJECT_MODULE = 'foundry'
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -20,9 +20,9 @@ TEMPLATE_DEBUG = DEBUG
 DATABASES = {
     'default': {
         'ENGINE': 'mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'generic', # Or path to database file if using sqlite3.
-        'USER': 'generic', # Not used with sqlite3.
-        'PASSWORD': 'generic', # Not used with sqlite3.
+        'NAME': 'foundry', # Or path to database file if using sqlite3.
+        'USER': 'foundry', # Not used with sqlite3.
+        'PASSWORD': 'foundry', # Not used with sqlite3.
         'HOST': '', # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '', # Set to empty string for default. Not used with sqlite3.
     }
@@ -74,10 +74,10 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'generic.middleware.AgeGateway',                            # custom - fix in paster
+    'foundry.middleware.AgeGateway',                            # custom - fix in paster
     'django.contrib.messages.middleware.MessageMiddleware',
     'likes.middleware.SecretBallotUserIpUseragentMiddleware',
-    'generic.middleware.VerboseRequestMeta',                    # custom - fix in paster
+    'foundry.middleware.VerboseRequestMeta',                    # custom - fix in paster
     'django.middleware.transaction.TransactionMiddleware',      # custom - fix in paster
 )
 
@@ -98,7 +98,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.load_template_source',
     'django.template.loaders.app_directories.load_template_source',
-    'generic.loaders.TypeLoader',
+    'foundry.loaders.TypeLoader',
 )
 
 TEMPLATE_DIRS = (
@@ -108,16 +108,16 @@ TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), "templates"),
 )
 
-ROOT_URLCONF = 'generic.urls'
+ROOT_URLCONF = 'foundry.urls'
 
 INSTALLED_APPS = (
-    'generic',
+    'foundry',
     'section',
     'gallery',
     'googlesearch',
     'music',
     'export',
-    'generic',
+    'foundry',
     'snippetscream',
     'generate',
     'cal',

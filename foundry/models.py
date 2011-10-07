@@ -11,9 +11,9 @@ from snippetscream import resolve_to_name
 from photologue.models import ImageModel
 from jmbo.utils import generate_slug
 
-from generic.profile_models import AbstractAvatarProfile, \
+from foundry.profile_models import AbstractAvatarProfile, \
     AbstractSocialProfile, AbstractContactProfile
-from generic.templatetags import element_styles
+from foundry.templatetags import element_styles
 
 class Link(models.Model):
     title = models.CharField(
@@ -83,7 +83,7 @@ precedence over URL field below.",
 
 class MenuPreferences(Preferences):
     __module__ = 'preferences.models'
-    links = models.ManyToManyField(Link, through='generic.MenuLinkPosition')
+    links = models.ManyToManyField(Link, through='foundry.MenuLinkPosition')
 
     class Meta:
         verbose_name_plural = 'Menu Preferences'
@@ -91,7 +91,7 @@ class MenuPreferences(Preferences):
 
 class NavbarPreferences(Preferences):
     __module__ = 'preferences.models'
-    links = models.ManyToManyField(Link, through='generic.NavbarLinkPosition')
+    links = models.ManyToManyField(Link, through='foundry.NavbarLinkPosition')
 
     class Meta:
         verbose_name_plural = 'Navbar Preferences'
