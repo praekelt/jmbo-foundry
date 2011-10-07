@@ -4,8 +4,8 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect 
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from django.views.foundry.detail import DetailView
-from django.views.foundry.list import ListView
+from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
 from django.contrib.auth.decorators import login_required
 
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm

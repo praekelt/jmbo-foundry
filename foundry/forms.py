@@ -15,6 +15,7 @@ from django.http import HttpResponseRedirect
 from preferences import preferences
 
 from foundry.models import Member, DefaultAvatar, Country
+from foundry.widgets import OldSchoolDateWidget
 
 def as_ul_replacement(form):
     """This formatter arranges label, widget, help text and error messages in a
@@ -220,7 +221,7 @@ class PasswordResetForm(BasePasswordResetForm):
 
 class AgeGatewayForm(forms.Form):
     country = forms.ModelChoiceField(queryset=Country.objects.all())
-    date_of_birth = forms.DateField() # todo: widget
+    date_of_birth = forms.DateField(widget=OldSchoolDateWidget) # todo: widget
     remember_me = forms.BooleanField(required=False, label="", widget=RememberMeCheckboxInput)
 
     def clean(self):

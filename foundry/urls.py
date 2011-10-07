@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import patterns, url, include
-from django.views.foundry import TemplateView
+from django.views.generic import TemplateView
 from django.contrib.auth.views import login, logout
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin
@@ -92,7 +92,7 @@ urlpatterns = patterns('',
     # Pages defined in preferences
     url(
         r'^about-us/$',
-        'django.views.foundry.simple.direct_to_template',
+        'django.views.generic.simple.direct_to_template',
         {
             'template':'foundry/static_page.html', 
             'extra_context':{'content':lambda:preferences.GeneralPreferences.about_us, 'title':_("About us")}
@@ -101,7 +101,7 @@ urlpatterns = patterns('',
     ),
     url(
         r'^terms-and-conditions/$',
-        'django.views.foundry.simple.direct_to_template',
+        'django.views.generic.simple.direct_to_template',
         {
             'template':'foundry/static_page.html', 
             'extra_context':{'content':lambda:preferences.GeneralPreferences.terms_and_conditions, 'title':_("Terms and conditions")}
@@ -110,7 +110,7 @@ urlpatterns = patterns('',
     ),
     url(
         r'^privacy-policy/$',
-        'django.views.foundry.simple.direct_to_template',
+        'django.views.generic.simple.direct_to_template',
         {
             'template':'foundry/static_page.html', 
             'extra_context':{'content':lambda:preferences.GeneralPreferences.privacy_policy, 'title':_("Privacy policy")}
