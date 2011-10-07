@@ -35,6 +35,7 @@ urlpatterns = patterns('',
     (r'^ckeditor/', include('ckeditor.urls')),
     (r'^contact/', include('contact.urls')),
     (r'^post/', include('post.urls')),	# todo: add to paster
+    (r'^simple-autocomplete/', include('simple_autocomplete.urls')),
 
     (r'^admin/', include(admin.site.urls)),
 

@@ -43,6 +43,7 @@ setup(
         'django-ckeditor',
         'jmbo-contact',
         'django-debug-toolbar',
+        'django-simple-autocomplete',
         'south',
     ],
     include_package_data=True,

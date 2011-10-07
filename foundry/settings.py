@@ -142,6 +142,7 @@ INSTALLED_APPS = (
     'competition',
     'ckeditor',
     'contact',
+    'simple_autocomplete', # custom
     'south', # custom - add to paster
     'django.contrib.auth',
     'django.contrib.comments',
@@ -173,3 +174,5 @@ CKEDITOR_MEDIA_PREFIX = '/media/ckeditor/'
 CKEDITOR_UPLOAD_PATH = '%s/media/uploads/' % BUILDOUT_PATH
 
 # LASTFM_API_KEY = '' # custom - fix in paster
+
+SIMPLE_AUTOCOMPLETE_MODELS = ('auth.user',)
