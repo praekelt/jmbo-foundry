@@ -17,6 +17,12 @@ PROJECT_MODULE = 'foundry'
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+# For MySQL remember to first do from a MySQL shell:
+# CREATE database foundry;
+# GRANT ALL ON foundry.* TO 'foundry'@'localhost' IDENTIFIED BY 'foundry';
+# GRANT ALL ON test_foundry.* TO 'foundry'@'localhost' IDENTIFIED BY 'foundry';
+# FLUSH PRIVILEGES;
+
 DATABASES = {
     'default': {
         'ENGINE': 'mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
@@ -175,4 +181,7 @@ CKEDITOR_UPLOAD_PATH = '%s/media/uploads/' % BUILDOUT_PATH
 
 # LASTFM_API_KEY = '' # custom - fix in paster
 
-SIMPLE_AUTOCOMPLETE_MODELS = ('auth.user',)
+SIMPLE_AUTOCOMPLETE = {
+    'auth.user': {'threshold': 20},
+    'category.category': {'threshold':20}
+}
