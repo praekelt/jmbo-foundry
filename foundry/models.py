@@ -124,6 +124,10 @@ class GeneralPreferences(Preferences):
     about_us = RichTextField()
     terms_and_conditions = RichTextField()
     privacy_policy = RichTextField()
+    private_site = models.BooleanField(
+        default=False,
+        help_text=_("A private site requires a visitor to be logged in to view any content."),
+    )
     show_age_gateway = models.BooleanField(default=False)
 
     class Meta:

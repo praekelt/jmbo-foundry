@@ -80,11 +80,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'foundry.middleware.AgeGateway',                            # custom - fix in paster
+    'foundry.middleware.AgeGateway',                            
     'django.contrib.messages.middleware.MessageMiddleware',
     'likes.middleware.SecretBallotUserIpUseragentMiddleware',
-    'foundry.middleware.VerboseRequestMeta',                    # custom - fix in paster
-    'django.middleware.transaction.TransactionMiddleware',      # custom - fix in paster
+    'foundry.middleware.VerboseRequestMeta',                    
+    'django.middleware.transaction.TransactionMiddleware',
 )
 
 # A tuple of callables that are used to populate the context in RequestContext. 

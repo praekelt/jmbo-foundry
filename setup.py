@@ -22,7 +22,6 @@ setup(
         'django-generate',
         'jmbo-calendar',
         'jmbo',
-#        'django-photologue',	# todo" remove from paster - causes version conflict
         'jmbo-chart',
         'django-recaptcha',
         'django-secretballot',
