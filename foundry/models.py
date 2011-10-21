@@ -13,7 +13,7 @@ from jmbo.utils import generate_slug
 
 from foundry.profile_models import AbstractAvatarProfile, \
     AbstractSocialProfile, AbstractContactProfile
-from foundry.templatetags import element_styles
+from foundry.templatetags import page_block_styles
 
 class Link(models.Model):
     title = models.CharField(
@@ -216,15 +216,15 @@ class PasswordResetPreferences(Preferences):
         verbose_name_plural = 'Password Reset Preferences'
 
 
-class ElementPreferences(Preferences):
+class PageBlockPreferences(Preferences):
     __module__ = 'preferences.models'
     
     class Meta:
-        verbose_name_plural = 'Element preferences'
+        verbose_name_plural = 'Page Blocks'
 
 
-class ElementOption(models.Model):
-    preferences = models.ForeignKey('preferences.ElementPreferences')
+class PageBlock(models.Model):
+    preferences = models.ForeignKey('preferences.PageBlockPreferences')
     title = models.CharField(
         max_length=256,
         help_text='A short descriptive title.',
@@ -245,7 +245,7 @@ class ElementOption(models.Model):
         help_text="Number of content objects to display.",
     )
     style = models.CharField(
-        choices=((style[0], style[0]) for style in inspect.getmembers(element_styles, inspect.isclass)),
+        choices=((style[0], style[0]) for style in inspect.getmembers(page_block_styles, inspect.isclass)),
         max_length=64
     )
     position = models.IntegerField()

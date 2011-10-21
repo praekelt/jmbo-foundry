@@ -5,7 +5,7 @@ from django.conf import settings
 
 from preferences.admin import PreferencesAdmin
 
-from foundry.models import ElementOption, ElementPreferences, Link, \
+from foundry.models import PageBlock, PageBlockPreferences, Link, \
         MenuLinkPosition, MenuPreferences, NavbarLinkPosition, \
         NavbarPreferences, GeneralPreferences, GeneralPreferences, \
         RegistrationPreferences, LoginPreferences, Member, DefaultAvatar, \
@@ -106,6 +106,7 @@ class RegistrationPreferencesAdminForm(forms.ModelForm):
         choices = [(f.name, f.name) for f in Member._meta.fields if f.blank and (f.name not in protected_fields)]
         self.fields['raw_required_fields'].widget.choices = choices
 
+
 class RegistrationPreferencesAdmin(PreferencesAdmin):
     form = RegistrationPreferencesAdminForm
 
@@ -116,12 +117,12 @@ class LoginPreferencesAdmin(PreferencesAdmin):
 class PasswordResetPreferencesAdmin(PreferencesAdmin):
     pass
 
-class ElementOptionInline(admin.StackedInline):
-    model = ElementOption
+class PageBlockInline(admin.StackedInline):
+    model = PageBlock
 
-class ElementPreferencesAdmin(PreferencesAdmin):
+class PageBlockPreferencesAdmin(PreferencesAdmin):
     inlines = [
-        ElementOptionInline,
+        PageBlockInline,
     ]
 
 class MemberAdmin(admin.ModelAdmin):
@@ -160,7 +161,7 @@ admin.site.register(MenuPreferences, MenuPreferenceAdmin)
 admin.site.register(NavbarPreferences, NavbarPreferenceAdmin)
 admin.site.register(Link, LinkAdmin)
 admin.site.register(GeneralPreferences, GeneralPreferencesAdmin)
-admin.site.register(ElementPreferences, ElementPreferencesAdmin)
+admin.site.register(PageBlockPreferences, PageBlockPreferencesAdmin)
 admin.site.register(RegistrationPreferences, RegistrationPreferencesAdmin)
 admin.site.register(LoginPreferences, LoginPreferencesAdmin)
 admin.site.register(PasswordResetPreferences, PasswordResetPreferencesAdmin)

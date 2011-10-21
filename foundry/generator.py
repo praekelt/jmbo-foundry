@@ -142,7 +142,7 @@ def generate():
         })
 
     objects.append({
-        "model": "foundry.ElementOption",
+        "model": "foundry.PageBlock",
         "fields": {
             "title": "Promos",
             "style": "Promo",
@@ -157,7 +157,7 @@ def generate():
                 },
             ],
             "preferences": {
-                "model": "preferences.ElementPreferences",
+                "model": "preferences.PageBlockPreferences",
                 "fields": {
                     "sites": settings.SITE_ID,
                 },
@@ -166,14 +166,14 @@ def generate():
     })
 
     objects.append({
-        "model": "foundry.ElementOption",
+        "model": "foundry.PageBlock",
         "fields": {
             "title": "Updates",
             "style": "Listing",
             "count": 3,
             "position": 2,
             "preferences": {
-                "model": "preferences.ElementPreferences",
+                "model": "preferences.PageBlockPreferences",
                 "fields": {
                     "sites": settings.SITE_ID,
                 },

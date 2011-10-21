@@ -2,7 +2,7 @@ from django import template
 
 from preferences import preferences
 
-from foundry.templatetags import element_styles
+from foundry.templatetags import page_block_styles
 
 register = template.Library()
 
@@ -36,20 +36,20 @@ def navbar(context):
     }
 
 @register.tag
-def element(parser, token):
+def page_block(parser, token):
     try:
-        tag_name, element = token.split_contents()
+        tag_name, obj = token.split_contents()
     except ValueError:
         raise template.TemplateSyntaxError(
-            'element tag requires 1 argument (element), %s given' % \
+            'page_block tag requires 1 argument (page_block), %s given' % \
                     (len(token.split_contents()) - 1)
             )
-    return ElementNode(element)
+    return PageBlockNode(obj)
 
-class ElementNode(template.Node):
-    def __init__(self, element):
-        self.element = template.Variable(element)
+class PageBlockNode(template.Node):
+    def __init__(self, obj):
+        self.obj = template.Variable(obj)
 
     def render(self, context):
-        element = self.element.resolve(context)
-        return getattr(element_styles, element.style)(element).render(context)
+        obj = self.obj.resolve(context)
+        return getattr(page_block_styles, obj.style)(obj).render(context)

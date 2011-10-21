@@ -3,28 +3,28 @@ from django.template.loader import render_to_string
 from jmbo import models
 
 class Promo(object):
-    template_name = 'foundry/inclusion_tags/element_promo.html'
+    template_name = 'foundry/inclusion_tags/page_block_promo.html'
 
-    def __init__(self, element):
-        self.element = element
+    def __init__(self, page_block):
+        self.page_block = page_block
     
     def get_queryset(self):
-        queryset = self.element.content.all()
+        queryset = self.page_block.content.all()
         if not queryset:
             queryset = models.ModelBase.permitted.all()
-            if self.element.category:
-                queryset = queryset.filter(categories=self.element.category)
-        return queryset[:self.element.count]
+            if self.page_block.category:
+                queryset = queryset.filter(categories=self.page_block.category)
+        return queryset[:self.page_block.count]
     
     def get_url_callable(self, *args, **kwargs):
         # Must put the import here to avoid circular import error
         from foundry import views
-        return views.CategoryURL(category=self.element.category)
+        return views.CategoryURL(category=self.page_block.category)
     
     def get_context_data(self, *args, **kwargs):
         context = {}
         context['object_list'] = self.get_queryset()
-        context['element'] = self.element
+        context['page_block'] = self.page_block
         context['url_callable'] = self.get_url_callable()
         return context
 
@@ -32,5 +32,5 @@ class Promo(object):
         return render_to_string(self.template_name, self.get_context_data(context))
 
 class Listing(Promo):
-    template_name = 'foundry/inclusion_tags/element_listing.html'
+    template_name = 'foundry/inclusion_tags/page_block_listing.html'
 
