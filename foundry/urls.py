@@ -126,6 +126,15 @@ urlpatterns = patterns('',
         {},
         name='age-gateway',
     ),
+
+    # Admin
+    url(
+        r'^admin-tile-edit-ajax/(?P<page_id>\d+)/$',
+        'foundry.admin_views.tile_edit_ajax',
+        {},
+        name='admin-tile-edit-ajax',
+    ),
+
 )
 
 urlpatterns += staticfiles_urlpatterns()

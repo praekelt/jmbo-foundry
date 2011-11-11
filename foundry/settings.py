@@ -164,10 +164,10 @@ INSTALLED_APPS = (
 TEMPLATE_TYPE = "basic"
 
 # Your ReCaptcha provided public key.
-RECAPTCHA_PUBLIC_KEY = ''
+RECAPTCHA_PUBLIC_KEY = '6LccPr4SAAAAAJRDO8gKDYw2QodyRiRLdqBhrs0n'
 
 # Your ReCaptcha provided private key.
-RECAPTCHA_PRIVATE_KEY = ''
+RECAPTCHA_PRIVATE_KEY = '6LccPr4SAAAAAH5q006QCoql-RRrRs1TFCpoaOcw'
 
 # Module containing gizmo configuration
 ROOT_GIZMOCONF = '%s.gizmos' % PROJECT_MODULE

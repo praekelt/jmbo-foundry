@@ -9,7 +9,7 @@ from foundry.models import PageBlock, PageBlockPreferences, Link, \
         MenuLinkPosition, MenuPreferences, NavbarLinkPosition, \
         NavbarPreferences, GeneralPreferences, GeneralPreferences, \
         RegistrationPreferences, LoginPreferences, Member, DefaultAvatar, \
-        PasswordResetPreferences, Country
+        PasswordResetPreferences, Country, Page
 from foundry.widgets import SelectCommaWidget
 
 def build_view_names(url_patterns=None):
@@ -157,6 +157,16 @@ class CountryAdmin(admin.ModelAdmin):
     list_display = ('title', 'minimum_age')
     list_editable = ('minimum_age',)
 
+
+class PageAdmin(admin.ModelAdmin):
+    list_display = ('title', 'slug')
+
+    def response_add(self, request, obj, post_url_continue='../%s/'):
+        if '_addanother' not in request.POST and '_popup' not in request.POST:
+            request.POST['_continue'] = 1 
+        return super(PageAdmin, self).response_add(request, obj, post_url_continue)
+
+
 admin.site.register(MenuPreferences, MenuPreferenceAdmin)
 admin.site.register(NavbarPreferences, NavbarPreferenceAdmin)
 admin.site.register(Link, LinkAdmin)
@@ -168,4 +178,4 @@ admin.site.register(PasswordResetPreferences, PasswordResetPreferencesAdmin)
 admin.site.register(Member, MemberAdmin)
 admin.site.register(DefaultAvatar, DefaultAvatarAdmin)
 admin.site.register(Country, CountryAdmin)
-
+admin.site.register(Page, PageAdmin)

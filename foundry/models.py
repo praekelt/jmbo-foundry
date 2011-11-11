@@ -287,3 +287,49 @@ class Country(models.Model):
         self.slug = generate_slug(self, self.title)
         super(Country, self).save(*args, **kwargs)
 
+
+class Page(models.Model):
+    title = models.CharField(
+        max_length=200, help_text='A title that may appear in the browser window caption.',
+    )
+    sites = models.ManyToManyField(
+        'sites.Site',
+        blank=True,
+        null=True,
+        help_text='Sites that this page will appear on.',
+    )
+    slug = models.SlugField(
+        editable=False,
+        max_length=255,
+        db_index=True,
+        unique=True,
+    )
+
+    def save(self, *args, **kwargs):
+        self.slug = generate_slug(self, self.title)
+        super(Page, self).save(*args, **kwargs)
+
+    @property
+    def tiles(self):
+        return self.tile_set.all().order_by('row')
+
+    @property
+    def height(self):
+        """Height in pixels required to display all tiles on admin page."""
+        n = self.tiles.count()
+        return (n / 2 + n % 2) * 120
+
+
+class Tile(models.Model):
+    page = models.ForeignKey(Page)
+    column = models.PositiveIntegerField()
+    row = models.PositiveIntegerField()
+    width = models.PositiveIntegerField(default=0)
+    height = models.PositiveIntegerField(default=0, editable=False)
+    view_name = models.CharField(
+        max_length=200, help_text='A view to be rendered in this tile.',
+    )
+    enable_ajax = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return "%s: column #%s row #%s" % (self.page.title, self.column, self.row)

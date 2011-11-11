@@ -1,0 +1,123 @@
+{% extends "admin/change_form.html" %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <style type="text/css">
+        div#sortable-wrapper {
+            overflow: auto;
+            height: 428px;
+        }  
+        #sortable { 
+            list-style-type: none; 
+            margin: 0; 
+            padding: 0; 
+            width: 960px; 
+            height: 120px;
+            background-image: url(/static/admin/images/tile.png);
+        }
+        #sortable li { 
+            list-style-type: none; 
+            margin: 0; 
+            padding: 4px; 
+            float: left; 
+            width: 470px; 
+            height: 110px; 
+            cursor: move;
+        }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#sortable').sortable({
+                placeholder: 'ui-state-highlight',
+                forcePlaceholderSize: true,
+                opacity: 0.5,
+            }).disableSelection();
+
+            $('#new-tile').click(function(event){
+                event.preventDefault();
+                var el = $('#new-tile-template').clone(true);
+                el.removeAttr('id');
+                el.show();
+                var sortable = $('#sortable');
+                sortable.css('height', sortable.height()+120+'px');
+                sortable.append(el);                
+            });
+
+            {% if adminform.form.instance.id %}    
+            $('a.tile-edit-launcher').click(function(event){
+                event.preventDefault();
+                var popup = $('#tile-edit-dialog');
+                var li = $(this).parent();
+                $.ajax({
+                    url:'{% url admin-tile-edit-ajax adminform.form.instance.id %}',
+                    data:{tile_id:li.attr('tile_id'), column:li.index()},
+                    async: false,
+                    success: function(data){
+                        popup.html(data);
+                    } 
+                });
+                popup.dialog({title:'Edit tile', modal:true, resizable:false, width:640});
+            });
+            {% endif %}
+
+            $('a.tile-delete').click(function(event){
+                event.preventDefault();
+                if (window.confirm('Delete this tile?'))
+                    $(this).parent().remove();
+            });
+
+            // Intercept form submit
+            $('form#tile-edit-form').live('submit', function(event){
+                event.preventDefault();
+                var form = $(this);
+                var url = $(this).attr('action');
+                var data = $(this).serialize();
+                $.ajax({
+                    url: url,
+                    data: data,
+                    async: false,
+                    type: 'POST',
+                    cache: false,
+                    success: function(data){
+                        if (data.indexOf('{') == 0)
+                        {
+                            var obj = $.parseJSON(data);
+                            if (obj.status == 'success')
+                            {
+                                // Update tile dom element and close dialog
+                                alert('yay');
+                            }
+                        }
+                        else
+                            form.replaceWith(data);
+                    }
+                });
+            });
+
+        });
+    </script>
+{% endblock %}
+
+{% block after_related_objects %}
+{% if adminform.form.instance.id %}    
+    <li id="new-tile-template" class="ui-state-default" style="display: none;" tile_id="">
+        <label>Untitled tile</label></br>
+        &middot;<a href="#" class="tile-edit-launcher">Edit</a></br>
+        &middot;<a href="#" class="tile-delete">Delete</a></br>
+    </li>
+
+    <div id="tile-edit-dialog"></div>
+
+    <h2>Tiles</h2>
+    <a href="#" id="new-tile">New tile</a>
+    <ul id="sortable" style="height: {{ adminform.form.instance.height }}px;">
+        {% for tile in adminform.form.instance.tiles %}
+            <li class="ui-state-default" tile_id="{{ tile.id }}">
+                <label>{{ tile.view_name }}</label></br>
+                &middot;<a href="#" class="tile-edit-launcher">Edit</a></br>
+                &middot;<a href="#" class="tile-delete">Delete</a></br>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}
