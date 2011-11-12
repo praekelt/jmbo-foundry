@@ -25,6 +25,12 @@ class TileEditAjaxForm(forms.ModelForm):
         self.initial['row'] = 1
         self.fields['view_name'].widget.choices = get_view_choices()
 
+    def clean_width(self):
+        value = self.cleaned_data['width']
+        if (value < 1) or (value > 16):
+            raise forms.ValidationError('Width must be from 1 to 16.')
+        return value
+
     def clean(self):
         cleaned_data = super(TileEditAjaxForm, self).clean()
         # Compute row        

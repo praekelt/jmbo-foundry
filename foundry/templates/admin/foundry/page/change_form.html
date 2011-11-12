@@ -3,10 +3,6 @@
 {% block extrahead %}
     {{ block.super }}
     <style type="text/css">
-        div#sortable-wrapper {
-            overflow: auto;
-            height: 428px;
-        }  
         #sortable { 
             list-style-type: none; 
             margin: 0; 
@@ -14,22 +10,24 @@
             width: 960px; 
             height: 120px;
             background-image: url(/static/admin/images/tile.png);
+            border: none;
         }
         #sortable li { 
             list-style-type: none; 
             margin: 0; 
-            padding: 4px; 
+            padding: 0px; 
             float: left; 
-            width: 470px; 
-            height: 110px; 
+            width: 60px; 
+            height: 118px; 
             cursor: move;
+            border-collapse: collapse;
         }
     </style>
     <script type="text/javascript">
         $(document).ready(function(){
             $('#sortable').sortable({
                 placeholder: 'ui-state-highlight',
-                forcePlaceholderSize: true,
+                forcePlaceholderSize: false,
                 opacity: 0.5,
             }).disableSelection();
 
@@ -45,8 +43,8 @@
                     dataType:'json',
                     success: function(obj){
                         var el = $('#new-tile-template').clone(true);
+                        el.attr('id', 'tile-'+obj.id);
                         el.attr('tile_id', obj.id);
-                        $('label:first', el).attr('id', 'tile-' + obj.id + '-label');
                         el.show();
                         // todo: height setting is a bit brutal. Refine.
                         // We can get include size in json - easier to compute server side.
@@ -107,7 +105,9 @@
                         {
                             var obj = $.parseJSON(data);
                             // Update tile dom element and close dialog
-                            $('#tile-' + obj.id + '-label').html(obj.view_name);
+                            var tile = $('#tile-' + obj.id);
+                            $('label:first', tile).html(obj.view_name);
+                            tile.css('width', (obj.width*60-2) + 'px');
                             $('#tile-edit-dialog').dialog('close');
                         }
                         else
@@ -131,11 +131,16 @@
     <div id="tile-edit-dialog"></div>
 
     <h2>Tiles</h2>
+    <p class="help">
+        Organize the tiles into columns, like a page in a newspaper. You can
+        drag a tile around and adjust its width. Any change you make here is 
+        immediately saved to the database.
+    </p>
     <a href="#" id="new-tile">New tile</a>
     <ul id="sortable" style="height: {{ adminform.form.instance.height }}px;">
         {% for tile in adminform.form.instance.tiles %}
-            <li class="ui-state-default" tile_id="{{ tile.id }}">
-                <label id="tile-{{ tile.id }}-label">{{ tile.view_name|default:'Untitled tile' }}</label></br>
+            <li class="ui-state-default" id="tile-{{ tile.id }}" tile_id="{{ tile.id }}" style="width: {{ tile.width_in_pixels }}px;">
+                <label>{{ tile.view_name|default:'Untitled tile' }}</label></br>
                 &middot;<a href="#" class="tile-edit-launcher">Edit</a></br>
                 &middot;<a href="#" class="tile-delete">Delete</a></br>
             </li>

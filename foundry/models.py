@@ -324,7 +324,7 @@ class Tile(models.Model):
     page = models.ForeignKey(Page)
     column = models.PositiveIntegerField(default=0)
     row = models.PositiveIntegerField(default=0)
-    width = models.PositiveIntegerField(default=0, editable=False)
+    width = models.PositiveIntegerField(default=0)
     height = models.PositiveIntegerField(default=0, editable=False)
     view_name = models.CharField(
         max_length=200, help_text='A view to be rendered in this tile.',
@@ -333,3 +333,9 @@ class Tile(models.Model):
 
     def __unicode__(self):
         return "%s: column #%s row #%s" % (self.page.title, self.column, self.row)
+
+    @property
+    def width_in_pixels(self):
+        """Take border into account"""
+        return self.width * 60 - 2
+
