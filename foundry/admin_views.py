@@ -8,6 +8,13 @@ from foundry.models import Page, Tile
 from foundry.admin_forms import TileEditAjaxForm
 
 @staff_member_required
+def tile_create_ajax(request, page_id):
+    tile = Tile(page_id=int(page_id))
+    tile.save()
+    return HttpResponse(simplejson.dumps({'id':tile.id}))
+
+
+@staff_member_required
 def tile_edit_ajax(request, page_id):
     page = get_object_or_404(Page, id=int(page_id))
     instance = None
@@ -22,7 +29,6 @@ def tile_edit_ajax(request, page_id):
         if form.is_valid():
             tile = form.save()
             di = dict(
-                status='success', 
                 id=tile.id, 
                 view_name=tile.view_name,
                 width=tile.width,
@@ -34,4 +40,19 @@ def tile_edit_ajax(request, page_id):
         ) 
 
     extra = dict(form=form)
-    return render_to_response('admin/foundry/page/tile_edit_ajax.html', extra, context_instance=RequestContext(request))
+    return render_to_response(
+        'admin/foundry/page/tile_edit_ajax.html', 
+        extra, 
+        context_instance=RequestContext(request)
+    )
+
+
+@staff_member_required
+def tile_delete_ajax(request):
+    tile_id = request.REQUEST.get('tile_id')
+    tile = get_object_or_404(Tile, id=int(tile_id))
+    tile.delete()
+    di = dict(
+        status='success', 
+    )
+    return HttpResponse(simplejson.dumps(di))

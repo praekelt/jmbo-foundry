@@ -129,10 +129,22 @@ urlpatterns = patterns('',
 
     # Admin
     url(
+        r'^admin-tile-create-ajax/(?P<page_id>\d+)/$',
+        'foundry.admin_views.tile_create_ajax',
+        {},
+        name='admin-tile-create-ajax',
+    ),
+    url(
         r'^admin-tile-edit-ajax/(?P<page_id>\d+)/$',
         'foundry.admin_views.tile_edit_ajax',
         {},
         name='admin-tile-edit-ajax',
+    ),
+    url(
+        r'^admin-tile-delete-ajax/$',
+        'foundry.admin_views.tile_delete_ajax',
+        {},
+        name='admin-tile-delete-ajax',
     ),
 
 )

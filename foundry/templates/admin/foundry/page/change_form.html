@@ -33,16 +33,34 @@
                 opacity: 0.5,
             }).disableSelection();
 
+            // New tile
             $('#new-tile').click(function(event){
                 event.preventDefault();
-                var el = $('#new-tile-template').clone(true);
-                el.removeAttr('id');
-                el.show();
-                var sortable = $('#sortable');
-                sortable.css('height', sortable.height()+120+'px');
-                sortable.append(el);                
+                
+                // Create new tile. We need the id.
+                $.ajax({
+                    url:'{% url admin-tile-create-ajax adminform.form.instance.id %}',
+                    data:{},
+                    async:false,
+                    dataType:'json',
+                    success: function(obj){
+                        var el = $('#new-tile-template').clone(true);
+                        el.attr('tile_id', obj.id);
+                        $('label:first', el).attr('id', 'tile-' + obj.id + '-label');
+                        el.show();
+                        // todo: height setting is a bit brutal. Refine.
+                        // We can get include size in json - easier to compute server side.
+                        var sortable = $('#sortable');
+                        sortable.css('height', sortable.height()+120+'px');
+                        sortable.append(el);                
+                    },
+                    error: function(){
+                        alert('An error occurred. Please try again');
+                    }
+                });
             });
 
+            // Launch edit dialog 
             {% if adminform.form.instance.id %}    
             $('a.tile-edit-launcher').click(function(event){
                 event.preventDefault();
@@ -60,10 +78,16 @@
             });
             {% endif %}
 
+            // Delete tile
             $('a.tile-delete').click(function(event){
                 event.preventDefault();
                 if (window.confirm('Delete this tile?'))
+                {
+                    var tile_id = $(this).parent().attr('tile_id');
                     $(this).parent().remove();
+                    if (tile_id)
+                        $.get('{% url admin-tile-delete-ajax %}', {tile_id:tile_id});
+                }
             });
 
             // Intercept form submit
@@ -77,16 +101,14 @@
                     data: data,
                     async: false,
                     type: 'POST',
-                    cache: false,
+                    cache: false,                    
                     success: function(data){
                         if (data.indexOf('{') == 0)
                         {
                             var obj = $.parseJSON(data);
-                            if (obj.status == 'success')
-                            {
-                                // Update tile dom element and close dialog
-                                alert('yay');
-                            }
+                            // Update tile dom element and close dialog
+                            $('#tile-' + obj.id + '-label').html(obj.view_name);
+                            $('#tile-edit-dialog').dialog('close');
                         }
                         else
                             form.replaceWith(data);
@@ -113,7 +135,7 @@
     <ul id="sortable" style="height: {{ adminform.form.instance.height }}px;">
         {% for tile in adminform.form.instance.tiles %}
             <li class="ui-state-default" tile_id="{{ tile.id }}">
-                <label>{{ tile.view_name }}</label></br>
+                <label id="tile-{{ tile.id }}-label">{{ tile.view_name|default:'Untitled tile' }}</label></br>
                 &middot;<a href="#" class="tile-edit-launcher">Edit</a></br>
                 &middot;<a href="#" class="tile-delete">Delete</a></br>
             </li>

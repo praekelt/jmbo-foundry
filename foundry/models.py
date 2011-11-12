@@ -322,9 +322,9 @@ class Page(models.Model):
 
 class Tile(models.Model):
     page = models.ForeignKey(Page)
-    column = models.PositiveIntegerField()
-    row = models.PositiveIntegerField()
-    width = models.PositiveIntegerField(default=0)
+    column = models.PositiveIntegerField(default=0)
+    row = models.PositiveIntegerField(default=0)
+    width = models.PositiveIntegerField(default=0, editable=False)
     height = models.PositiveIntegerField(default=0, editable=False)
     view_name = models.CharField(
         max_length=200, help_text='A view to be rendered in this tile.',

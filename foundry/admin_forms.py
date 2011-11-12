@@ -1,6 +1,7 @@
 from django import forms
 
 from foundry.models import Tile
+from foundry.utils import get_view_choices
 
 
 class TileEditAjaxForm(forms.ModelForm):
@@ -12,6 +13,7 @@ class TileEditAjaxForm(forms.ModelForm):
             'page':forms.widgets.HiddenInput, 
             'column':forms.widgets.HiddenInput, 
             'row':forms.widgets.HiddenInput, 
+            'view_name':forms.widgets.Select
         }
 
     def __init__(self, *args, **kwargs):
@@ -21,6 +23,7 @@ class TileEditAjaxForm(forms.ModelForm):
         self.initial['page'] = page
         self.initial['column'] = column
         self.initial['row'] = 1
+        self.fields['view_name'].widget.choices = get_view_choices()
 
     def clean(self):
         cleaned_data = super(TileEditAjaxForm, self).clean()
