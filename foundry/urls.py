@@ -177,6 +177,12 @@ urlpatterns = patterns('',
         {},
         name='admin-tile-delete-ajax',
     ),
+    url(
+        r'^admin-persist-sort-ajax/$',
+        'foundry.admin_views.persist_sort_ajax',
+        {},
+        name='admin-persist-sort-ajax',
+    ),
 
 )
 

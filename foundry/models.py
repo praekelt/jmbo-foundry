@@ -322,6 +322,11 @@ class Row(models.Model):
     page = models.ForeignKey(Page)
     index = models.PositiveIntegerField(default=0, editable=False)
 
+    def save(self, *args, **kwargs):        
+        if not self.id:
+            self.index = self.page.row_set.count()
+        super(Row, self).save(*args, **kwargs)
+
     @property
     def columns(self):
         return self.column_set.all().order_by('index')
@@ -335,6 +340,11 @@ class Column(models.Model):
     row = models.ForeignKey(Row)
     index = models.PositiveIntegerField(default=0, editable=False)
     width = models.PositiveIntegerField(default=8)    
+
+    def save(self, *args, **kwargs):        
+        if not self.id:
+            self.index = self.row.column_set.count()
+        super(Column, self).save(*args, **kwargs)
 
     @property
     def tiles(self):
@@ -361,6 +371,11 @@ class Tile(models.Model):
         help_text='A CSS class that is applied to the tile.',
     )
     enable_ajax = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):        
+        if not self.id:
+            self.index = self.column.tile_set.count()
+        super(Tile, self).save(*args, **kwargs)
 
     @property
     def render_height(self):

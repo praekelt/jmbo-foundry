@@ -3,6 +3,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
 from django.utils import simplejson
+from django.db.models import get_model
 
 from foundry.models import Page, Row, Column, Tile
 from foundry.admin_forms import ColumnCreateAjaxForm, ColumnEditAjaxForm, TileEditAjaxForm
@@ -136,3 +137,24 @@ def tile_delete_ajax(request):
         status='success', 
     )
     return HttpResponse(simplejson.dumps(di))
+
+
+@staff_member_required
+def persist_sort_ajax(request):
+    # Yes, I am aware this code can be more efficient, but it does not execute 
+    # regularly.
+    model_name = request.REQUEST['model_name']
+    model = get_model('foundry', model_name)
+    obj = model.objects.get(id=int(request.REQUEST['id']))
+    if model_name == 'row':
+        objs = [o for o in obj.page.rows]
+    elif model_name == 'column':
+        objs = [o for o in obj.row.columns]
+    elif model_name == 'tile':
+        objs = [o for o in obj.column.tiles]
+    objs.insert(int(request.REQUEST['index']), objs.pop(objs.index(obj)))
+    for n, obj in enumerate(objs):
+        obj.index = n
+        obj.save()
+    return HttpResponse('')
+

@@ -46,7 +46,7 @@ class TileEditAjaxForm(forms.ModelForm):
 
     class Meta:
         model = Tile
-        fields = ('column', 'view_name', 'enable_ajax')
+        fields = ('column', 'view_name', 'class_name', 'enable_ajax')
         widgets = {
             'column':forms.widgets.HiddenInput, 
             'view_name':forms.widgets.Select

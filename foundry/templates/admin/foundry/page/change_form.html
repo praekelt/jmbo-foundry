@@ -45,9 +45,35 @@
     <script type="text/javascript">
         $(document).ready(function(){
             $('ul.sortable').sortable({
-                placeholder: 'ui-state-highlight',
-                forcePlaceholderSize: false,
                 opacity: 0.5,
+                update: function(event, ui) {
+                    // Persist the sort
+                    if (ui.item.attr('tile_id'))
+                    {
+                        id = ui.item.attr('tile_id');
+                        model_name = 'tile';
+                    }
+                    else if (ui.item.attr('column_id'))
+                    {
+                        id = ui.item.attr('column_id');
+                        model_name = 'column';
+                    }
+                    else if (ui.item.attr('row_id'))
+                    {
+                        id = ui.item.attr('row_id');
+                        model_name = 'row';
+                    }
+                    else
+                    {
+                        alert("What did you drag?");
+                    };
+                    var data = {
+                        'id':id, 
+                        'model_name':model_name,
+                        'index':ui.item.prevAll().length
+                    };
+                    $.get('{% url admin-persist-sort-ajax %}', data);
+                }
             }).disableSelection();
 
             // New row. No dialog.
@@ -322,7 +348,7 @@
         {% for row in adminform.form.instance.rows %}
             <li class="ui-state-default" id="row-{{ row.id }}" row_id="{{ row.id }}" style="height: {{ row.render_height }}px;">
                 &middot;<a href="#" class="new-column">New column</a><br />
-                &middot;<a href="#" class="row-delete">Delete row</a></br>
+                &middot;<a href="#" class="row-delete">Delete row {{ row.index }}</a></br>
 
                 <ul class="sortable columns">
                 {% for column in row.columns %}
