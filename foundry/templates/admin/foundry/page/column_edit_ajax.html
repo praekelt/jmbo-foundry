@@ -1,6 +1,6 @@
-<form id="tile-edit-form" action="{% url admin-tile-edit-ajax %}">
+<form id="column-edit-form" action="{% url admin-column-edit-ajax %}" method="POST">
     {% csrf_token %}
-    <input type="hidden" name="tile_id" value="{{ form.instance.id|default_if_none:'' }}" />
+    <input type="hidden" name="column_id" value="{{ form.instance.id|default_if_none:'' }}" />
     <fieldset class="module aligned">
         <table style="width: 100%;">
             {{ form.as_table }}

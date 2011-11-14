@@ -3,54 +3,69 @@
 {% block extrahead %}
     {{ block.super }}
     <style type="text/css">
-        #sortable { 
+        ul#rows { 
             list-style-type: none; 
             margin: 0; 
             padding: 0; 
-            width: 960px; 
-            height: 120px;
-            background-image: url(/static/admin/images/tile.png);
+            width: 992px; 
             border: none;
         }
-        #sortable li { 
+        ul#rows li { 
             list-style-type: none; 
-            margin: 0; 
+            margin: 0 0 20px 0; 
             padding: 0px; 
-            float: left; 
-            width: 60px; 
-            height: 118px; 
+            width: 100%; 
             cursor: move;
-            border-collapse: collapse;
+            border: solid 1px red;            
+        }
+        ul.columns {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        ul.columns li{
+            margin: 4px !important;
+            float: left;
+            border: solid 1px green !important;            
+        }
+        ul.tiles {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        ul.tiles li{
+            width: auto !important;
+            height: 60px !important;
+            float: none !important;
+            border: solid 1px blue !important;            
         }
     </style>
     <script type="text/javascript">
         $(document).ready(function(){
-            $('#sortable').sortable({
+            $('ul.sortable').sortable({
                 placeholder: 'ui-state-highlight',
                 forcePlaceholderSize: false,
                 opacity: 0.5,
             }).disableSelection();
 
-            // New tile
-            $('#new-tile').click(function(event){
+            // New row. No dialog.
+            $('a#new-row').click(function(event){
                 event.preventDefault();
-                
-                // Create new tile. We need the id.
                 $.ajax({
-                    url:'{% url admin-tile-create-ajax adminform.form.instance.id %}',
+                    url:'{% url admin-row-create-ajax adminform.form.instance.id %}',
                     data:{},
                     async:false,
                     dataType:'json',
                     success: function(obj){
-                        var el = $('#new-tile-template').clone(true);
-                        el.attr('id', 'tile-'+obj.id);
-                        el.attr('tile_id', obj.id);
+                        var el = $('#new-row-template').clone(true);
+                        el.attr('id', 'row-'+obj.id);
+                        el.attr('row_id', obj.id);
                         el.show();
-                        // todo: height setting is a bit brutal. Refine.
-                        // We can get include size in json - easier to compute server side.
-                        var sortable = $('#sortable');
-                        sortable.css('height', sortable.height()+120+'px');
-                        sortable.append(el);                
+                        var rows = $('#rows');
+                        rows.css('height', obj.page_render_height+'px');
+                        rows.append(el);                
                     },
                     error: function(){
                         alert('An error occurred. Please try again');
@@ -58,15 +73,78 @@
                 });
             });
 
-            // Launch edit dialog 
-            {% if adminform.form.instance.id %}    
-            $('a.tile-edit-launcher').click(function(event){
+            // New column. Launch dialog.
+            $('a.new-column').click(function(event){
                 event.preventDefault();
-                var popup = $('#tile-edit-dialog');
+                var row = $(this).parent();
+                // Create new column. We need the id.
+                var popup = $('#edit-dialog');
                 var li = $(this).parent();
                 $.ajax({
-                    url:'{% url admin-tile-edit-ajax adminform.form.instance.id %}',
-                    data:{tile_id:li.attr('tile_id'), column:li.index()},
+                    url:'{% url admin-column-create-ajax %}',
+                    data:{row_id:row.attr('row_id')},
+                    async: false,
+                    success: function(data){
+                        popup.html(data);
+                    } 
+                });
+                popup.dialog({title:'New column', modal:true, resizable:false, width:640});
+            });
+
+            // New tile. No dialog. Yet.
+            $('a.new-tile').click(function(event){
+                event.preventDefault();
+                var column = $(this).parent();
+                $.ajax({
+                    url:'{% url admin-tile-create-ajax %}',
+                    data:{column_id:column.attr('column_id')},
+                    async:false,
+                    dataType:'json',
+                    success: function(obj){
+                        var el = $('#new-tile-template').clone(true);
+                        el.attr('id', 'tile-'+obj.id);
+                        el.attr('tile_id', obj.id);
+                        el.show();
+                        var rows = $('#rows');
+                        rows.css('height', obj.page_render_height+'px');
+                        var row = $('#row-' + obj.row_id);
+                        row.css('height', obj.row_render_height+'px');
+                        var column = $('#column-' + obj.column_id);
+                        column.css('height', obj.column_render_height+'px');
+                        var ul = $('ul:first', column);                        
+                        ul.append(el);                
+                    },
+                    error: function(){
+                        alert('An error occurred. Please try again');
+                    }
+                });
+            });
+
+            {% if adminform.form.instance.id %}    
+            // Edit column. Launch dialog.
+            $('a.column-edit-launcher').click(function(event){
+                event.preventDefault();
+                var popup = $('#edit-dialog');
+                var li = $(this).parent();
+                $.ajax({
+                    url:'{% url admin-column-edit-ajax %}',
+                    data:{column_id:li.attr('column_id')},
+                    async: false,
+                    success: function(data){
+                        popup.html(data);
+                    } 
+                });
+                popup.dialog({title:'Edit column', modal:true, resizable:false, width:640});
+            });
+
+            // Edit tile. Launch dialog.
+            $('a.tile-edit-launcher').click(function(event){
+                event.preventDefault();
+                var popup = $('#edit-dialog');
+                var li = $(this).parent();
+                $.ajax({
+                    url:'{% url admin-tile-edit-ajax %}',
+                    data:{tile_id:li.attr('tile_id')},
                     async: false,
                     success: function(data){
                         popup.html(data);
@@ -75,6 +153,30 @@
                 popup.dialog({title:'Edit tile', modal:true, resizable:false, width:640});
             });
             {% endif %}
+
+            // Delete row
+            $('a.row-delete').click(function(event){
+                event.preventDefault();
+                if (window.confirm('Delete this row?'))
+                {
+                    var row_id = $(this).parent().attr('row_id');
+                    $(this).parent().remove();
+                    if (row_id)
+                        $.get('{% url admin-row-delete-ajax %}', {row_id:row_id});
+                }
+            });
+
+            // Delete column
+            $('a.column-delete').click(function(event){
+                event.preventDefault();
+                if (window.confirm('Delete this column?'))
+                {
+                    var column_id = $(this).parent().attr('column_id');
+                    $(this).parent().remove();
+                    if (column_id)
+                        $.get('{% url admin-column-delete-ajax %}', {column_id:column_id});
+                }
+            });
 
             // Delete tile
             $('a.tile-delete').click(function(event){
@@ -88,7 +190,69 @@
                 }
             });
 
-            // Intercept form submit
+            // Intercept column create form submit
+            $('form#column-create-form').live('submit', function(event){
+                event.preventDefault();
+                var form = $(this);
+                var url = $(this).attr('action');
+                var data = $(this).serialize();
+                $.ajax({
+                    url: url,
+                    data: data,
+                    async: false,
+                    type: 'POST',
+                    cache: false,                    
+                    success: function(data){
+                        if (data.indexOf('{') == 0)
+                        {
+                            var obj = $.parseJSON(data);
+                            var el = $('#new-column-template').clone(true);
+                            el.attr('id', 'column-'+obj.id);
+                            el.attr('column_id', obj.id);
+                            el.css('width', (obj.width*60-2) + 'px');
+                            el.show();
+                            var rows = $('#rows');
+                            rows.css('height', obj.page_render_height+'px');
+                            var row = $('#row-' + obj.row_id);
+                            row.css('height', obj.row_render_height+'px');
+                            var ul = $('ul:first', row);
+                            ul.append(el);                
+                            $('#edit-dialog').dialog('close');
+                        }
+                        else
+                            form.replaceWith(data);
+                    }
+                });
+            });
+
+            // Intercept column edit form submit
+            $('form#column-edit-form').live('submit', function(event){
+                event.preventDefault();
+                var form = $(this);
+                var url = $(this).attr('action');
+                var data = $(this).serialize();
+                $.ajax({
+                    url: url,
+                    data: data,
+                    async: false,
+                    type: 'POST',
+                    cache: false,                    
+                    success: function(data){
+                        if (data.indexOf('{') == 0)
+                        {
+                            var obj = $.parseJSON(data);
+                            // Update column dom element and close dialog
+                            var column = $('#column-' + obj.id);
+                            column.css('width', (obj.width*60-2) + 'px');
+                            $('#edit-dialog').dialog('close');
+                        }
+                        else
+                            form.replaceWith(data);
+                    }
+                });
+            });
+
+            // Intercept tile edit form submit
             $('form#tile-edit-form').live('submit', function(event){
                 event.preventDefault();
                 var form = $(this);
@@ -107,8 +271,8 @@
                             // Update tile dom element and close dialog
                             var tile = $('#tile-' + obj.id);
                             $('label:first', tile).html(obj.view_name);
-                            tile.css('width', (obj.width*60-2) + 'px');
-                            $('#tile-edit-dialog').dialog('close');
+                            tile.css('width', (obj.columns*60-2) + 'px');
+                            $('#edit-dialog').dialog('close');
                         }
                         else
                             form.replaceWith(data);
@@ -122,29 +286,68 @@
 
 {% block after_related_objects %}
 {% if adminform.form.instance.id %}    
-    <li id="new-tile-template" class="ui-state-default" style="display: none;" tile_id="">
-        <label>Untitled tile</label></br>
-        &middot;<a href="#" class="tile-edit-launcher">Edit</a></br>
-        &middot;<a href="#" class="tile-delete">Delete</a></br>
+    <li id="new-row-template" class="ui-state-default" style="display: none;" row_id="">
+        &middot;<a href="#" class="new-column">New column</a><br />
+        &middot;<a href="#" class="row-delete">Delete row</a></br>
+        <ul class="sortable columns">
+        </ul>
     </li>
 
-    <div id="tile-edit-dialog"></div>
+    <li id="new-column-template" class="ui-state-default" style="display: none;" column_id="">
+        &middot;<a href="#" class="new-tile">New tile</a><br />
+        &middot;<a href="#" class="column-edit-launcher">Edit column</a></br>
+        &middot;<a href="#" class="column-delete">Delete column</a></br>
+        <ul class="sortable tiles">
+        </ul>
+    </li>
 
-    <h2>Tiles</h2>
+    <li id="new-tile-template" class="ui-state-default" style="display: none;" tile_id="">
+        <label>Untitled tile</label></br>
+        &middot;<a href="#" class="tile-edit-launcher">Edit tile</a></br>
+        &middot;<a href="#" class="tile-delete">Delete tile</a></br>
+    </li>
+
+    <div id="edit-dialog"></div>
+
+    <h2>Layout</h2>
     <p class="help">
-        Organize the tiles into columns, like a page in a newspaper. You can
-        drag a tile around and adjust its width. Any change you make here is 
+        A page contains horizontal rows. A row contains vertical columns. A column 
+        contains vertical tiles.
+        Any change you make here is 
         immediately saved to the database.
     </p>
-    <a href="#" id="new-tile">New tile</a>
-    <ul id="sortable" style="height: {{ adminform.form.instance.height }}px;">
-        {% for tile in adminform.form.instance.tiles %}
-            <li class="ui-state-default" id="tile-{{ tile.id }}" tile_id="{{ tile.id }}" style="width: {{ tile.width_in_pixels }}px;">
-                <label>{{ tile.view_name|default:'Untitled tile' }}</label></br>
-                &middot;<a href="#" class="tile-edit-launcher">Edit</a></br>
-                &middot;<a href="#" class="tile-delete">Delete</a></br>
+
+    <a href="#" id="new-row">New row</a>
+    <ul id="rows" class="sortable" style="height: {{ adminform.form.instance.render_height }}px;">
+        {% for row in adminform.form.instance.rows %}
+            <li class="ui-state-default" id="row-{{ row.id }}" row_id="{{ row.id }}" style="height: {{ row.render_height }}px;">
+                &middot;<a href="#" class="new-column">New column</a><br />
+                &middot;<a href="#" class="row-delete">Delete row</a></br>
+
+                <ul class="sortable columns">
+                {% for column in row.columns %}
+                    <li class="ui-state-default" id="column-{{ column.id }}" column_id="{{ column.id }}" style="width: {{ column.render_width }}px; height: {{ column.render_height }}px;">
+                        &middot;<a href="#" class="new-tile">New tile</a><br />
+                        &middot;<a href="#" class="column-edit-launcher">Edit column</a></br>
+                        &middot;<a href="#" class="column-delete">Delete column</a></br>
+
+                        <ul class="sortable tiles">
+                        {% for tile in column.tiles %}
+                            <li class="ui-state-default" id="tile-{{ tile.id }}" tile_id="{{ tile.id }}" style="height: {{ tile.render_height }}px;">
+                                <label>{{ tile.view_name|default:'Untitled tile' }}</label></br>
+                                &middot;<a href="#" class="tile-edit-launcher">Edit tile</a></br>
+                                &middot;<a href="#" class="tile-delete">Delete tile</a></br>
+                            </li>
+                        {% endfor %}
+                        </ul>
+
+                    </li>
+                {% endfor %}
+                </ul>
+
             </li>
         {% endfor %}
     </ul>
+
 {% endif %}
 {% endblock %}

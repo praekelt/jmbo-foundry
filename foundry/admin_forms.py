@@ -1,38 +1,58 @@
 from django import forms
+from django.db.models.aggregates import Sum
 
-from foundry.models import Tile
+from foundry.models import Column, Tile
 from foundry.utils import get_view_choices
+
+
+class ColumnCreateAjaxForm(forms.ModelForm):
+
+    class Meta:
+        model = Column
+        fields = ('row', 'width')
+        widgets = {
+            'row':forms.widgets.HiddenInput, 
+        }
+
+    def clean_width(self):
+        """Check that width does not exceed maximum for the row"""        
+        value = self.cleaned_data['width']
+        row = self.cleaned_data['row']
+        total_width = row.column_set.all().aggregate(Sum('width'))['width__sum'] or 0
+        max_width = 16 - total_width       
+        min_width = min(max_width, 1)
+        if (value < min_width) or (value > max_width):
+            raise forms.ValidationError('Width must be a value from %s to %s.' % (min_width, max_width))
+        return value   
+
+
+class ColumnEditAjaxForm(forms.ModelForm):
+
+    class Meta:
+        model = Column
+        fields = ('row', 'width')
+        widgets = {
+            'row':forms.widgets.HiddenInput, 
+        }
+
+    def clean_width(self):
+        value = self.cleaned_data['width']
+        if (value < 1) or (value > 16):
+            raise forms.ValidationError('Width must be a value from 1 to 16.')
+        return value   
 
 
 class TileEditAjaxForm(forms.ModelForm):
 
     class Meta:
         model = Tile
-        fields = ('page', 'column', 'row', 'width', 'view_name', 'enable_ajax')
+        fields = ('column', 'view_name', 'enable_ajax')
         widgets = {
-            'page':forms.widgets.HiddenInput, 
             'column':forms.widgets.HiddenInput, 
-            'row':forms.widgets.HiddenInput, 
             'view_name':forms.widgets.Select
         }
 
     def __init__(self, *args, **kwargs):
-        page = kwargs.pop('page')
-        column = kwargs.pop('column')
         super(TileEditAjaxForm, self).__init__(*args, **kwargs)
-        self.initial['page'] = page
-        self.initial['column'] = column
-        self.initial['row'] = 1
         self.fields['view_name'].widget.choices = get_view_choices()
 
-    def clean_width(self):
-        value = self.cleaned_data['width']
-        if (value < 1) or (value > 16):
-            raise forms.ValidationError('Width must be from 1 to 16.')
-        return value
-
-    def clean(self):
-        cleaned_data = super(TileEditAjaxForm, self).clean()
-        # Compute row        
-        cleaned_data['row'] = 1
-        return cleaned_data

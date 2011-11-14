@@ -129,16 +129,47 @@ urlpatterns = patterns('',
 
     # Admin
     url(
-        r'^admin-tile-create-ajax/(?P<page_id>\d+)/$',
+        r'^admin-row-create-ajax/(?P<page_id>\d+)/$',
+        'foundry.admin_views.row_create_ajax',
+        {},
+        name='admin-row-create-ajax',
+    ),
+    url(
+        r'^admin-column-create-ajax/$',
+        'foundry.admin_views.column_create_ajax',
+        {},
+        name='admin-column-create-ajax',
+    ),
+    url(
+        r'^admin-tile-create-ajax/$',
         'foundry.admin_views.tile_create_ajax',
         {},
         name='admin-tile-create-ajax',
     ),
     url(
-        r'^admin-tile-edit-ajax/(?P<page_id>\d+)/$',
+        r'^admin-column-edit-ajax/$',
+        'foundry.admin_views.column_edit_ajax',
+        {},
+        name='admin-column-edit-ajax',
+    ),
+
+    url(
+        r'^admin-tile-edit-ajax/$',
         'foundry.admin_views.tile_edit_ajax',
         {},
         name='admin-tile-edit-ajax',
+    ),
+    url(
+        r'^admin-row-delete-ajax/$',
+        'foundry.admin_views.row_delete_ajax',
+        {},
+        name='admin-row-delete-ajax',
+    ),
+    url(
+        r'^admin-column-delete-ajax/$',
+        'foundry.admin_views.column_delete_ajax',
+        {},
+        name='admin-column-delete-ajax',
     ),
     url(
         r'^admin-tile-delete-ajax/$',

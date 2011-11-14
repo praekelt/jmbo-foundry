@@ -310,32 +310,58 @@ class Page(models.Model):
         super(Page, self).save(*args, **kwargs)
 
     @property
-    def tiles(self):
-        return self.tile_set.all().order_by('row')
+    def rows(self):
+        return self.row_set.all().order_by('index')
 
     @property
-    def height(self):
-        """Height in pixels required to display all tiles on admin page."""
-        n = self.tiles.count()
-        return (n / 2 + n % 2) * 120
+    def render_height(self):
+        return sum([o.render_height+20 for o in self.rows])
 
 
-class Tile(models.Model):
+class Row(models.Model):
     page = models.ForeignKey(Page)
-    column = models.PositiveIntegerField(default=0)
-    row = models.PositiveIntegerField(default=0)
-    width = models.PositiveIntegerField(default=0)
-    height = models.PositiveIntegerField(default=0, editable=False)
-    view_name = models.CharField(
-        max_length=200, help_text='A view to be rendered in this tile.',
-    )
-    enable_ajax = models.BooleanField(default=False)
-
-    def __unicode__(self):
-        return "%s: column #%s row #%s" % (self.page.title, self.column, self.row)
+    index = models.PositiveIntegerField(default=0, editable=False)
 
     @property
-    def width_in_pixels(self):
+    def columns(self):
+        return self.column_set.all().order_by('index')
+
+    @property
+    def render_height(self):
+        return max([o.render_height+8 for o in self.columns] + [0]) + 30
+
+
+class Column(models.Model):
+    row = models.ForeignKey(Row)
+    index = models.PositiveIntegerField(default=0, editable=False)
+    width = models.PositiveIntegerField(default=8)    
+
+    @property
+    def tiles(self):
+        return self.tile_set.all().order_by('index')
+
+    @property
+    def render_width(self):
         """Take border into account"""
         return self.width * 60 - 2
 
+    @property
+    def render_height(self):
+        return sum([o.render_height+8 for o in self.tiles]) + 40
+
+
+class Tile(models.Model):
+    column = models.ForeignKey(Column)
+    index = models.PositiveIntegerField(default=0, editable=False)
+    view_name = models.CharField(
+        max_length=200, help_text='A view to be rendered in this tile.',
+    )
+    class_name = models.CharField(
+        max_length=200, null=True, blank=True,
+        help_text='A CSS class that is applied to the tile.',
+    )
+    enable_ajax = models.BooleanField(default=False)
+
+    @property
+    def render_height(self):
+        return 60
