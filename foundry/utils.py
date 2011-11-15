@@ -1,5 +1,6 @@
 from django.conf import settings
 
+_foundry_utils_cache = {}
 
 def _build_view_names_recurse(url_patterns=None):
     """
@@ -13,12 +14,12 @@ def _build_view_names_recurse(url_patterns=None):
     result = []
     for pattern in url_patterns:
         try:
-            #result.append((pattern.name, pattern.name.title().replace('_', \
-            #        ' ')))
+            # Rules: (1) named patterns (2) may not contain arguments.
             if pattern.name is not None:
-                result.append((pattern.name, pattern.name))
+                if pattern.regex.pattern.find('<') == -1:
+                    result.append((pattern.name, pattern.name))
         except AttributeError:
-            # If the pattern itself is an include, recurively fetch it
+            # If the pattern itself is an include, recursively fetch its
             # patterns. Ignore admin patterns.
             if not pattern.regex.pattern.startswith('^admin'):
                 try:
@@ -29,7 +30,10 @@ def _build_view_names_recurse(url_patterns=None):
 
 
 def get_view_choices():
-    result = _build_view_names_recurse()
-    result.sort()
-    return result
-
+    # Implement a simple module level cache. The result never changes 
+    # for the duration of the Django process life.
+    if not _foundry_utils_cache.has_key('get_view_choices'):
+        result = _build_view_names_recurse()
+        result.sort()
+        _foundry_utils_cache['get_view_choices'] = result
+    return _foundry_utils_cache['get_view_choices']
