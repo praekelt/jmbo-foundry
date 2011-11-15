@@ -9,11 +9,12 @@
             <div class="foundry-page-column foundry-page-column-{{ column.width }}">
                 {% for tile in column.tiles %}
                     {% if tile.view_name %}
-                        <div class="foundry-page-tile {{ tile.class_name }} {% if tile.enable_ajax %}foundry-enable-ajax{% endif %}">
+                        <div class="foundry-page-tile {{ tile.class_name }} {% if tile.enable_ajax %}foundry-enable-ajax{% endif %}"
+                             original_url="{% view_url tile.view_name %}">
                             {% render_view tile.view_name %}
                         </div>
                     {% endif %}
-                {% endfor %}
+                {% endfor %}                
             </div>
         {% endfor %}
     </div>

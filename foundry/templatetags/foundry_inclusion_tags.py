@@ -98,3 +98,29 @@ class RenderViewNode(template.Node):
 
         # No content div found
         return html
+
+
+@register.tag
+def view_url(parser, token):
+    """Return the Url for a given view. Very similar to the {% url %} template tag, 
+    but can accept a variable as first parameter."""
+    try:
+        tag_name, view_name = token.split_contents()
+    except ValueError:
+        raise template.TemplateSyntaxError(
+            'render_view tag requires argument view_name'
+        )
+    return ViewUrlNode(view_name)
+
+
+class ViewUrlNode(template.Node):
+    def __init__(self, view_name):
+        self.view_name = template.Variable(view_name)
+
+    def render(self, context):
+        view_name = self.view_name.resolve(context)
+        try:
+            return reverse(view_name)        
+        except NoReverseMatch:
+            return ""
+        view, args, kwargs = resolve(url)
