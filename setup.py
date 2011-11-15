@@ -44,6 +44,7 @@ setup(
         'django-debug-toolbar',
         'django-simple-autocomplete',
         'south',
+        'BeautifulSoup',
     ],
     include_package_data=True,
     tests_require=[

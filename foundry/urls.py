@@ -135,6 +135,16 @@ urlpatterns = patterns('',
         name='render-page'
     ),
 
+    # Lorem ipsum
+    url(
+        r'^lorem-ipsum/$',
+        'django.views.generic.simple.direct_to_template',
+        {
+            'template':'foundry/lorem_ipsum.html', 
+        },
+        name='lorem-ipsum'
+    ),
+
     # Admin
     url(
         r'^admin-row-create-ajax/(?P<page_id>\d+)/$',

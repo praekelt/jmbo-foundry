@@ -92,3 +92,68 @@ img.pic-choose { display: inline }
 
 /* Structure - Search */
 #search-form { margin: 3px 0 }
+
+/* Tile start */
+div.foundry-page-row {
+}    
+div.foundry-page-column {
+    margin-left: 1%;
+    margin-bottom: 4px;
+    display: inline-block;
+}    
+div.foundry-page-column-1 {
+    width: 6%;
+}    
+div.foundry-page-column-2 {
+    width: 12%;
+}    
+div.foundry-page-column-3 {
+    width: 18%;
+}    
+div.foundry-page-column-4 {
+    width: 24%;
+}    
+div.foundry-page-column-5 {
+    width: 30;
+}    
+div.foundry-page-column-6 {
+    width: 36%;
+}    
+div.foundry-page-column-7 {
+    width: 42%;
+}    
+div.foundry-page-column-8 {
+    width: 48%;
+}    
+div.foundry-page-column-9 {
+    width: 54%;
+}    
+div.foundry-page-column-10 {
+    width: 60%;
+}    
+div.foundry-page-column-11 {
+    width: 66%;
+}    
+div.foundry-page-column-12 {
+    width: 72%;
+}    
+div.foundry-page-column-13 {
+    width: 78%;
+}    
+div.foundry-page-column-14 {
+    width: 84%;
+}    
+div.foundry-page-column-15 {
+    width: 90%;
+}    
+div.foundry-page-column-16 {
+    width: 96%;
+}    
+div.foundry-page-tile {
+    padding: 4px;
+    border: solid 1px #dddddd;
+    -webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}    
+/* Tile end %/

@@ -1,3 +1,5 @@
+from BeautifulSoup import BeautifulSoup
+
 from django import template
 from django.core.urlresolvers import reverse, resolve, NoReverseMatch
 
@@ -83,6 +85,16 @@ class RenderViewNode(template.Node):
         except NoReverseMatch:
             return "No reverse match for %s" % view_name
         view, args, kwargs = resolve(url)
-        print args, kwargs
+
         # Call the view. Let any error propagate.
-        return view(context['request'], *args, **kwargs)
+        html = view(context['request'], *args, **kwargs).content
+
+        # Extract content div. Currently there is no way to instruct a 
+        # view to render only the content block, hence this.
+        soup = BeautifulSoup(html)
+        content = soup.find('div', id='content')
+        if content:
+            return content
+
+        # No content div found
+        return html
