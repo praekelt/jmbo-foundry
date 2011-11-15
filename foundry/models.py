@@ -364,11 +364,14 @@ class Tile(models.Model):
     column = models.ForeignKey(Column)
     index = models.PositiveIntegerField(default=0, editable=False)
     view_name = models.CharField(
-        max_length=200, help_text='A view to be rendered in this tile.',
+        max_length=200, 
+        help_text="""A view to be rendered in this tile. This view is \
+typically a snippet of a larger page. If you are unsure test and see if \
+it works - you cannot break anything.""",
     )
     class_name = models.CharField(
         max_length=200, null=True, blank=True,
-        help_text='A CSS class that is applied to the tile.',
+        help_text="A CSS class that is applied to the tile.",
     )
     enable_ajax = models.BooleanField(default=False)
 

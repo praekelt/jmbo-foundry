@@ -9,7 +9,7 @@
             <div class="foundry-page-column">
                 {% for tile in column.tiles %}
                     {% if tile.view_name %}
-                        <div class="foundry-page-tile {{ tile.class_name }}">
+                        <div class="foundry-page-tile {{ tile.class_name }} {% if tile.enable_ajax %}foundry-enable-ajax{% endif %}">
                             {% render_view tile.view_name %}
                         </div>
                     {% endif %}
