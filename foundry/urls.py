@@ -127,6 +127,14 @@ urlpatterns = patterns('',
         name='age-gateway',
     ),
 
+    # Render a page 
+    url(
+        r'^page/(?P<slug>[\w-]+)/$',
+        'foundry.views.render_page',
+        {},
+        name='render-page'
+    ),
+
     # Admin
     url(
         r'^admin-row-create-ajax/(?P<page_id>\d+)/$',

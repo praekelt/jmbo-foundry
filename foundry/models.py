@@ -380,3 +380,6 @@ class Tile(models.Model):
     @property
     def render_height(self):
         return 60
+
+    def render(self):
+        return 'xxx'

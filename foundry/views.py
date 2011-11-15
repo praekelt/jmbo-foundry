@@ -8,10 +8,11 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.contrib.auth.decorators import login_required
 
-from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm
-
 from category.models import Category
 from jmbo.models import ModelBase
+
+from foundry.models import Page
+from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm
 
 class CategoryURL(object):
 
@@ -116,3 +117,10 @@ def age_gateway(request):
     extra = dict(form=form)
     return render_to_response('foundry/age_gateway.html', extra, context_instance=RequestContext(request))
 
+
+def render_page(request, slug):
+    """Render a page by iterating over rows, columns and tiles."""
+    page = get_object_or_404(Page, slug=slug)
+    extra = {}
+    extra['object'] = page
+    return render_to_response('foundry/page_detail.html', extra, context_instance=RequestContext(request))

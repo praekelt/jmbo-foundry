@@ -1,4 +1,5 @@
 from django import template
+from django.core.urlresolvers import reverse, resolve, NoReverseMatch
 
 from preferences import preferences
 
@@ -53,3 +54,35 @@ class PageBlockNode(template.Node):
     def render(self, context):
         obj = self.obj.resolve(context)
         return getattr(page_block_styles, obj.style)(obj).render(context)
+
+
+@register.tag
+def render_view(parser, token):
+    try:
+        tag_name, view_name = token.split_contents()
+    except ValueError:
+        raise template.TemplateSyntaxError(
+            'render_view tag requires argument view_name'
+        )
+    return RenderViewNode(view_name)
+
+
+class RenderViewNode(template.Node):
+    def __init__(self, view_name):
+        self.view_name = template.Variable(view_name)
+
+    def render(self, context):
+        view_name = self.view_name.resolve(context)
+        # Resolve view name to a function or object
+        # xxx: this is slow because there is no way to get the view 
+        # function / object directly from the view name - you have to pass 
+        # through the url. But since the result is consistent while the 
+        # Django process is running it is a good candidate for caching.
+        try:
+            url = reverse(view_name)        
+        except NoReverseMatch:
+            return "No reverse match for %s" % view_name
+        view, args, kwargs = resolve(url)
+        print args, kwargs
+        # Call the view. Let any error propagate.
+        return view(context['request'], *args, **kwargs)

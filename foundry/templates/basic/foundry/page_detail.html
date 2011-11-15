@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load foundry_inclusion_tags %}
+
+{% block content %}
+
+{% for row in object.rows %}
+    <div class="foundry-page-row">
+        {% for column in row.columns %}
+            <div class="foundry-page-column">
+                {% for tile in column.tiles %}
+                    {% if tile.view_name %}
+                        <div class="foundry-page-tile {{ tile.class_name }}">
+                            {% render_view tile.view_name %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+{% endfor %}
+
+{% endblock content %}
