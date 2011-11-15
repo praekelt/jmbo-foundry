@@ -92,9 +92,9 @@ class RenderViewNode(template.Node):
         # Extract content div. Currently there is no way to instruct a 
         # view to render only the content block, hence this.
         soup = BeautifulSoup(html)
-        content = soup.find('div', id='content')
+        content = soup.find('div', id='content')        
         if content:
-            return content
+            return content.renderContents()
 
         # No content div found
         return html
