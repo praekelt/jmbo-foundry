@@ -16,7 +16,11 @@
             padding: 0px; 
             width: 100%; 
             cursor: move;
-            border: solid 1px red;            
+            border: solid 1px #b0b9ec;
+            background-color: #e8ebf2;
+            -webkit-border-radius: 3px;
+        	-moz-border-radius: 3px;
+        	border-radius: 3px;
         }
         ul.columns {
             width: 100%;
@@ -27,7 +31,8 @@
         ul.columns li{
             margin: 4px !important;
             float: left;
-            border: solid 1px green !important;            
+            border: solid 1px #ecb430 !important;                       
+            background-color: #f2df78 !important;
         }
         ul.tiles {
             width: 100%;
@@ -39,7 +44,8 @@
             width: auto !important;
             height: 60px !important;
             float: none !important;
-            border: solid 1px blue !important;            
+            border: solid 1px #cccccc !important;                       
+            background-color: white !important;
         }
     </style>
     <script type="text/javascript">
@@ -316,14 +322,14 @@
 
 {% block after_related_objects %}
 {% if adminform.form.instance.id %}    
-    <li id="new-row-template" class="ui-state-default" style="display: none;" row_id="">
+    <li id="new-row-template" class="xui-state-default" style="display: none;" row_id="">
         &middot;<a href="#" class="new-column">New column</a><br />
         &middot;<a href="#" class="row-delete">Delete row</a></br>
         <ul class="sortable columns">
         </ul>
     </li>
 
-    <li id="new-column-template" class="ui-state-default" style="display: none;" column_id="">
+    <li id="new-column-template" class="xui-state-default" style="display: none;" column_id="">
         &middot;<a href="#" class="new-tile">New tile</a><br />
         &middot;<a href="#" class="column-edit-launcher">Edit column</a></br>
         &middot;<a href="#" class="column-delete">Delete column</a></br>
@@ -331,7 +337,7 @@
         </ul>
     </li>
 
-    <li id="new-tile-template" class="ui-state-default" style="display: none;" tile_id="">
+    <li id="new-tile-template" class="xui-state-default" style="display: none;" tile_id="">
         <label>Untitled tile</label></br>
         &middot;<a href="#" class="tile-edit-launcher">Edit tile</a></br>
         &middot;<a href="#" class="tile-delete">Delete tile</a></br>
@@ -350,20 +356,20 @@
     <a href="#" id="new-row">New row</a>
     <ul id="rows" class="sortable" style="height: {{ adminform.form.instance.render_height }}px;">
         {% for row in adminform.form.instance.rows %}
-            <li class="ui-state-default" id="row-{{ row.id }}" row_id="{{ row.id }}" style="height: {{ row.render_height }}px;">
+            <li class="xui-state-default" id="row-{{ row.id }}" row_id="{{ row.id }}" style="height: {{ row.render_height }}px;">
                 &middot;<a href="#" class="new-column">New column</a><br />
                 &middot;<a href="#" class="row-delete">Delete row {{ row.index }}</a></br>
 
                 <ul class="sortable columns">
                 {% for column in row.columns %}
-                    <li class="ui-state-default" id="column-{{ column.id }}" column_id="{{ column.id }}" style="width: {{ column.render_width }}px; height: {{ column.render_height }}px;">
+                    <li class="xui-state-default" id="column-{{ column.id }}" column_id="{{ column.id }}" style="width: {{ column.render_width }}px; height: {{ column.render_height }}px;">
                         &middot;<a href="#" class="new-tile">New tile</a><br />
                         &middot;<a href="#" class="column-edit-launcher">Edit column</a></br>
                         &middot;<a href="#" class="column-delete">Delete column</a></br>
 
                         <ul class="sortable tiles">
                         {% for tile in column.tiles %}
-                            <li class="ui-state-default" id="tile-{{ tile.id }}" tile_id="{{ tile.id }}" style="height: {{ tile.render_height }}px;">
+                            <li class="xui-state-default" id="tile-{{ tile.id }}" tile_id="{{ tile.id }}" style="height: {{ tile.render_height }}px;">
                                 <label>{{ tile.view_name|default:'Untitled tile' }}</label></br>
                                 &middot;<a href="#" class="tile-edit-launcher">Edit tile</a></br>
                                 &middot;<a href="#" class="tile-delete">Delete tile</a></br>

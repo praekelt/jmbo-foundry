@@ -357,7 +357,7 @@ class Column(models.Model):
 
     @property
     def render_height(self):
-        return sum([o.render_height+8 for o in self.tiles]) + 40
+        return sum([o.render_height+8 for o in self.tiles]) + 44
 
 
 class Tile(models.Model):
