@@ -374,6 +374,8 @@ it works - you cannot break anything.""",
         help_text="A CSS class that is applied to the tile.",
     )
     enable_ajax = models.BooleanField(default=False)
+    # todo
+    # condition = models.CharField(help_text='A python expression. Request is available.')
 
     def save(self, *args, **kwargs):        
         if not self.id:

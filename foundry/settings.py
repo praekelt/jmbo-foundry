@@ -181,6 +181,10 @@ CKEDITOR_UPLOAD_PATH = '%s/media/uploads/' % BUILDOUT_PATH
 
 # LASTFM_API_KEY = '' # custom - fix in paster
 
+LOGIN_URL = '/login'        # check if in paster
+
+LOGIN_REDIRECT_URL = '/'    # check if inpaster
+
 SIMPLE_AUTOCOMPLETE = {
     'auth.user': {'threshold': 20},
     'category.category': {'threshold':20}

@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import authenticate, login, get_backends
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect 
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.views.generic.detail import DetailView
@@ -12,7 +12,7 @@ from category.models import Category
 from jmbo.models import ModelBase
 
 from foundry.models import Page
-from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm
+from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm
 
 class CategoryURL(object):
 
@@ -124,3 +124,29 @@ def render_page(request, slug):
     extra = {}
     extra['object'] = page
     return render_to_response('foundry/page_detail.html', extra, context_instance=RequestContext(request))
+
+
+# Views for testing
+def test_plain_response(request):
+    if request.method == 'POST':
+        form = TestForm(request.POST) 
+        if form.is_valid():
+            return HttpResponse('Success')
+    else:
+        form = TestForm() 
+
+    extra = dict(title='Plain', form=form)
+    return render_to_response('foundry/test_form.html', extra, context_instance=RequestContext(request))
+
+
+def test_redirect(request):
+    if request.method == 'POST':
+        form = TestForm(request.POST) 
+        if form.is_valid():
+            return HttpResponseRedirect('/lorem-ipsum')
+    else:
+        form = TestForm() 
+
+    extra = dict(title='Redirect', form=form)
+    return render_to_response('foundry/test_form.html', extra, context_instance=RequestContext(request))
+

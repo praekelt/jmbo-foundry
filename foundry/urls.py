@@ -145,6 +145,21 @@ urlpatterns = patterns('',
         name='lorem-ipsum'
     ),
 
+    # Test views
+    url(
+        r'^test-plain-response/$',
+        'foundry.views.test_plain_response',
+        {},
+        name='test-plain-response'
+    ),
+    url(
+        r'^test-redirect/$',
+        'foundry.views.test_redirect',
+        {},
+        name='test-redirect'
+    ),
+
+
     # Admin
     url(
         r'^admin-row-create-ajax/(?P<page_id>\d+)/$',

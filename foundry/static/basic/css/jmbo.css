@@ -98,9 +98,6 @@ table.foundry-page-row {
     width: 100%;
     margin-bottom: 4px;
 }    
-table.last {
-    margin-bottom: 8px;
-}    
 table.foundry-page-row tr {
     height: 100%;
 }
@@ -157,11 +154,10 @@ td.foundry-page-column-16 {
     width: 96%;
 }    
 
-
-
 div.foundry-page-tile {
-    height: 100%;
+    /*height: 100%;*/
     padding: 4px;
+    margin-bottom: 4px;
     border: solid 1px #dddddd;
     -webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
