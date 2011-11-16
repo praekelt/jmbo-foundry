@@ -157,7 +157,10 @@
                     data:{column_id:li.attr('column_id')},
                     async: false,
                     success: function(data){
-                        popup.html(data);
+                        // Chrome is being weird in this case. It strips away my form tag. 
+                        // Two-liner gets around it.
+                        popup.html('');
+                        popup.append(data);
                     } 
                 });
                 popup.dialog({title:'Edit column', modal:true, resizable:false, width:640});
@@ -218,6 +221,7 @@
 
             // Intercept column create form submit
             $('form#column-create-form').live('submit', function(event){
+                alert('aaa');
                 event.preventDefault();
                 var form = $(this);
                 var url = $(this).attr('action');
