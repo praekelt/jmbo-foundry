@@ -4,6 +4,8 @@ from django.core.urlresolvers import reverse, Resolver404
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 
 from ckeditor.fields import RichTextField
 from preferences.models import Preferences
@@ -363,8 +365,15 @@ class Column(models.Model):
 class Tile(models.Model):
     column = models.ForeignKey(Column)
     index = models.PositiveIntegerField(default=0, editable=False)
+
+    target_content_type = models.ForeignKey(ContentType, null=True, related_name='tile_target_content_type')
+    target_object_id = models.PositiveIntegerField(null=True)
+    target = generic.GenericForeignKey('target_content_type', 'target_object_id')
+
     view_name = models.CharField(
         max_length=200, 
+        null=True,
+        blank=True,
         help_text="""A view to be rendered in this tile. This view is \
 typically a snippet of a larger page. If you are unsure test and see if \
 it works - you cannot break anything.""",
@@ -374,8 +383,12 @@ it works - you cannot break anything.""",
         help_text="A CSS class that is applied to the tile.",
     )
     enable_ajax = models.BooleanField(default=False)
-    # todo
-    # condition = models.CharField(help_text='A python expression. Request is available.')
+    condition_expression = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text='A python expression. Variable request is in scope.'
+    )
 
     def save(self, *args, **kwargs):        
         if not self.id:

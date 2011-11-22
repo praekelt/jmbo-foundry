@@ -162,7 +162,7 @@ urlpatterns = patterns('',
 
     # Admin
     url(
-        r'^admin-row-create-ajax/(?P<page_id>\d+)/$',
+        r'^admin-row-create-ajax/$',
         'foundry.admin_views.row_create_ajax',
         {},
         name='admin-row-create-ajax',

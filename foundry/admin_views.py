@@ -10,8 +10,8 @@ from foundry.admin_forms import ColumnCreateAjaxForm, ColumnEditAjaxForm, TileEd
 
 
 @staff_member_required
-def row_create_ajax(request, page_id):
-    row = Row(page_id=page_id)
+def row_create_ajax(request):
+    row = Row(page_id=int(request.REQUEST['page_id']))
     row.save()
     di = dict(
         id=row.id,
@@ -113,7 +113,8 @@ def tile_edit_ajax(request):
         if form.is_valid():
             tile = form.save()
             di = dict(
-                id=tile.id, 
+                id=tile.id,
+                target=str(tile.target),
                 view_name=tile.view_name,
             )
             return HttpResponse(simplejson.dumps(di))

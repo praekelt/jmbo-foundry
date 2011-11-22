@@ -82,12 +82,13 @@
                 }
             }).disableSelection();
 
+            {% if adminform.form.instance.id %}    
             // New row. No dialog.
             $('a#new-row').click(function(event){
                 event.preventDefault();
                 $.ajax({
-                    url:'{% url admin-row-create-ajax adminform.form.instance.id %}',
-                    data:{},
+                    url:'{% url admin-row-create-ajax %}',
+                    data:{page_id: {{ adminform.form.instance.id }}},
                     async:false,
                     dataType:'json',
                     success: function(obj){
@@ -104,6 +105,7 @@
                     }
                 });
             });
+            {% endif %}
 
             // New column. Launch dialog.
             $('a.new-column').click(function(event){
@@ -117,7 +119,8 @@
                     data:{row_id:row.attr('row_id')},
                     async: false,
                     success: function(data){
-                        popup.html(data);
+                        popup.html('');
+                        popup.append(data);
                     } 
                 });
                 popup.dialog({title:'New column', modal:true, resizable:false, width:640});
@@ -182,7 +185,8 @@
                     data:{tile_id:li.attr('tile_id')},
                     async: false,
                     success: function(data){
-                        popup.html(data);
+                        popup.html('');
+                        popup.append(data);
                     } 
                 });
                 popup.dialog({title:'Edit tile', modal:true, resizable:false, width:640});
@@ -227,7 +231,6 @@
 
             // Intercept column create form submit
             $('form#column-create-form').live('submit', function(event){
-                alert('aaa');
                 event.preventDefault();
                 var form = $(this);
                 var url = $(this).attr('action');
