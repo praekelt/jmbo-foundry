@@ -5,11 +5,10 @@ from django.conf import settings
 
 from preferences.admin import PreferencesAdmin
 
-from foundry.models import PageBlock, PageBlockPreferences, Link, \
-        MenuLinkPosition, MenuPreferences, NavbarLinkPosition, \
-        NavbarPreferences, GeneralPreferences, GeneralPreferences, \
-        RegistrationPreferences, LoginPreferences, Member, DefaultAvatar, \
-        PasswordResetPreferences, Country, Page
+from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
+    NavbarLinkPosition, Navbar, GeneralPreferences, GeneralPreferences, \
+    RegistrationPreferences, LoginPreferences, Member, DefaultAvatar, \
+    PasswordResetPreferences, Country, Page
 from foundry.widgets import SelectCommaWidget
 from foundry.utils import get_view_choices
 
@@ -28,34 +27,34 @@ precedence over url field below.",
         """
         Set view_name choices to url pattern names
         """
-        self.declared_fields['view_name'].choices = [('', '---------'), ] + \
+        self.declared_fields['view_name'].choices = [('', '-- Select --'), ] + \
                 get_view_choices()
 
         super(LinkAdminForm, self).__init__(*args, **kwargs)
+
+
+class LinkAdmin(admin.ModelAdmin):
+    form = LinkAdminForm
 
 
 class MenuLinkPositionInline(admin.StackedInline):
     model = MenuLinkPosition
 
 
+class MenuAdmin(admin.ModelAdmin):
+    inlines = [MenuLinkPositionInline]
+    
+
 class NavbarLinkPositionInline(admin.StackedInline):
     model = NavbarLinkPosition
 
 
-class MenuPreferenceAdmin(PreferencesAdmin):
-    inlines = [
-        MenuLinkPositionInline,
-    ]
+class NavbarAdmin(admin.ModelAdmin):
+    inlines = [NavbarLinkPositionInline]
 
 
-class NavbarPreferenceAdmin(PreferencesAdmin):
-    inlines = [
-        NavbarLinkPositionInline,
-    ]
-
-
-class LinkAdmin(admin.ModelAdmin):
-    form = LinkAdminForm
+class ListingAdmin(admin.ModelAdmin):
+    model = Listing
 
 
 class GeneralPreferencesAdmin(PreferencesAdmin):
@@ -90,16 +89,10 @@ class RegistrationPreferencesAdmin(PreferencesAdmin):
 class LoginPreferencesAdmin(PreferencesAdmin):
     pass
 
+
 class PasswordResetPreferencesAdmin(PreferencesAdmin):
     pass
 
-class PageBlockInline(admin.StackedInline):
-    model = PageBlock
-
-class PageBlockPreferencesAdmin(PreferencesAdmin):
-    inlines = [
-        PageBlockInline,
-    ]
 
 class MemberAdmin(admin.ModelAdmin):
     list_display = (
@@ -143,11 +136,12 @@ class PageAdmin(admin.ModelAdmin):
         return super(PageAdmin, self).response_add(request, obj, post_url_continue)
 
 
-admin.site.register(MenuPreferences, MenuPreferenceAdmin)
-admin.site.register(NavbarPreferences, NavbarPreferenceAdmin)
+
 admin.site.register(Link, LinkAdmin)
+admin.site.register(Menu, MenuAdmin)
+admin.site.register(Navbar, NavbarAdmin)
+admin.site.register(Listing, ListingAdmin)
 admin.site.register(GeneralPreferences, GeneralPreferencesAdmin)
-admin.site.register(PageBlockPreferences, PageBlockPreferencesAdmin)
 admin.site.register(RegistrationPreferences, RegistrationPreferencesAdmin)
 admin.site.register(LoginPreferences, LoginPreferencesAdmin)
 admin.site.register(PasswordResetPreferences, PasswordResetPreferencesAdmin)

@@ -2,7 +2,9 @@
 {% load foundry_inclusion_tags %}
 
 {% block content %}
+    {% comment %}
     {% for item in preferences.PageBlockPreferences.pageblock_set.all %}
-        {% page_block item %}
+        {% listing item %}
     {% endfor %}
+    {% endcomment %}
 {% endblock %}

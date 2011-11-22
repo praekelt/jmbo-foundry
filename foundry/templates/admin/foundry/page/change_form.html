@@ -309,7 +309,7 @@
                             var obj = $.parseJSON(data);
                             // Update tile dom element and close dialog
                             var tile = $('#tile-' + obj.id);
-                            $('label:first', tile).html(obj.view_name);
+                            $('label:first', tile).html(obj.label);
                             tile.css('width', (obj.columns*60-2) + 'px');
                             $('#edit-dialog').dialog('close');
                         }
@@ -373,7 +373,7 @@
                         <ul class="sortable tiles">
                         {% for tile in column.tiles %}
                             <li class="xui-state-default" id="tile-{{ tile.id }}" tile_id="{{ tile.id }}" style="height: {{ tile.render_height }}px;">
-                                <label>{{ tile.view_name|default:'Untitled tile' }}</label></br>
+                                <label>{{ tile.label|default:'Untitled tile' }}</label></br>
                                 &middot;<a href="#" class="tile-edit-launcher">Edit tile</a></br>
                                 &middot;<a href="#" class="tile-delete">Delete tile</a></br>
                             </li>

@@ -2,7 +2,7 @@ from django import forms
 from django.db.models.aggregates import Sum
 from django.contrib.contenttypes.models import ContentType
 
-from foundry.models import Column, Tile
+from foundry.models import Menu, Navbar, Listing, Column, Tile
 from foundry.utils import get_view_choices
 
 
@@ -66,10 +66,10 @@ class TileEditAjaxForm(forms.ModelForm):
         super(TileEditAjaxForm, self).__init__(*args, **kwargs)
         
         # Target choices
-        #choices= [('%s_%s' % (o.id, o.id), '%s: %s' % (o.class_name, o.title)) for o in ContentType.objects.filter(app_label='foundry', model__in=('row',))]
-        from foundry.models import Row
-        ctid = ContentType.objects.get(app_label='foundry', model='row').id
-        choices= [('%s_%s' % (ctid, o.id), 'Row: %s' % o.id) for o in Row.objects.all()]
+        choices = []
+        for klass in (Menu, Navbar, Listing):
+            ctid = ContentType.objects.get(app_label='foundry', model=klass.__name__.lower()).id
+            choices.extend( [('%s_%s' % (ctid, o.id), '%s: %s' % (klass.__name__, o.title)) for o in klass.objects.all()] )
         self.fields['target'].choices = [('', '-- Select --')] + choices
 
         # Initial target
@@ -84,11 +84,11 @@ class TileEditAjaxForm(forms.ModelForm):
 
         # One of target and view_name is required
         if not (cleaned_data['target'] or cleaned_data['view_name']):
-            raise forms.ValidationError("Select either target or view_name.")
+            raise forms.ValidationError("Select either Target or View Name.")
 
         # target and view_name are mutually exclusive
         if cleaned_data['target'] and cleaned_data['view_name']:
-            raise forms.ValidationError("Select either target or view_name, not both.")
+            raise forms.ValidationError("Select either Target or View Name, not both.")
         return cleaned_data
 
 

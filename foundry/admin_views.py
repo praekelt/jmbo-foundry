@@ -114,8 +114,7 @@ def tile_edit_ajax(request):
             tile = form.save()
             di = dict(
                 id=tile.id,
-                target=str(tile.target),
-                view_name=tile.view_name,
+                label=tile.label
             )
             return HttpResponse(simplejson.dumps(di))
     else:

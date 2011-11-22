@@ -15,7 +15,7 @@ from jmbo.utils import generate_slug
 
 from foundry.profile_models import AbstractAvatarProfile, \
     AbstractSocialProfile, AbstractContactProfile
-from foundry.templatetags import page_block_styles
+from foundry.templatetags import listing_styles
 
 class Link(models.Model):
     title = models.CharField(
@@ -38,7 +38,7 @@ precedence over URL field below.",
     )
     url = models.CharField(
         max_length=256,
-        help_text='URL to which this menu link will redirect.',
+        help_text='URL to which this link will redirect.',
         blank=True,
         null=True,
     )
@@ -83,23 +83,53 @@ precedence over URL field below.",
         return self.title
 
 
-class MenuPreferences(Preferences):
-    __module__ = 'preferences.models'
-    links = models.ManyToManyField(Link, through='foundry.MenuLinkPosition')
+class Menu(models.Model):
+    """A tile menu contains ordered links"""
+    title = models.CharField(max_length=255)
 
-    class Meta:
-        verbose_name_plural = 'Menu Preferences'
-
-
-class NavbarPreferences(Preferences):
-    __module__ = 'preferences.models'
-    links = models.ManyToManyField(Link, through='foundry.NavbarLinkPosition')
-
-    class Meta:
-        verbose_name_plural = 'Navbar Preferences'
+    def __unicode__(self):
+        return self.title
 
 
-class LinkPosition(models.Model):
+class Navbar(models.Model):
+    """A tile navbar contains ordered links"""
+    title = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return self.title
+
+
+class Listing(models.Model):
+    """A themed, ordered collection of items"""
+    title = models.CharField(
+        max_length=256,
+        help_text='A short descriptive title.',
+    )
+    content = models.ManyToManyField(
+        'jmbo.ModelBase',
+        help_text="Content to display, takes preference over Category field.",
+        blank=True,
+        null=True,
+    )
+    category = models.ForeignKey(
+        'category.Category',
+        help_text="Category for which to collect objects.",
+        blank=True,
+        null=True,
+    )
+    count = models.IntegerField(
+        help_text="Number of content objects to display.",
+    )
+    style = models.CharField(
+        choices=((style[0], style[0]) for style in inspect.getmembers(listing_styles, inspect.isclass)),
+        max_length=64
+    )
+
+    def __unicode__(self):
+        return self.title
+
+
+class AbstractLinkPosition(models.Model):
     link = models.ForeignKey(Link)
     position = models.IntegerField()
 
@@ -112,12 +142,12 @@ class LinkPosition(models.Model):
                 self.position)
 
 
-class MenuLinkPosition(LinkPosition):
-    preferences = models.ForeignKey(MenuPreferences)
+class MenuLinkPosition(AbstractLinkPosition):
+    menu = models.ForeignKey(Menu)
 
 
-class NavbarLinkPosition(LinkPosition):
-    preferences = models.ForeignKey(NavbarPreferences)
+class NavbarLinkPosition(AbstractLinkPosition):
+    navbar = models.ForeignKey(Navbar)
 
 
 class GeneralPreferences(Preferences):
@@ -216,41 +246,6 @@ class PasswordResetPreferences(Preferences):
 
     class Meta:
         verbose_name_plural = 'Password Reset Preferences'
-
-
-class PageBlockPreferences(Preferences):
-    __module__ = 'preferences.models'
-    
-    class Meta:
-        verbose_name_plural = 'Page Blocks'
-
-
-class PageBlock(models.Model):
-    preferences = models.ForeignKey('preferences.PageBlockPreferences')
-    title = models.CharField(
-        max_length=256,
-        help_text='A short descriptive title.',
-    )
-    content = models.ManyToManyField(
-        'jmbo.ModelBase',
-        help_text="Content to display, takes preference over Category field.",
-        blank=True,
-        null=True,
-    )
-    category = models.ForeignKey(
-        'category.Category',
-        help_text="Category for which to collect objects.",
-        blank=True,
-        null=True,
-    )
-    count = models.IntegerField(
-        help_text="Number of content objects to display.",
-    )
-    style = models.CharField(
-        choices=((style[0], style[0]) for style in inspect.getmembers(page_block_styles, inspect.isclass)),
-        max_length=64
-    )
-    position = models.IntegerField()
 
 
 class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractContactProfile):
@@ -398,3 +393,7 @@ it works - you cannot break anything.""",
     @property
     def render_height(self):
         return 60
+
+    @property
+    def label(self):
+        return str(self.target or self.view_name)

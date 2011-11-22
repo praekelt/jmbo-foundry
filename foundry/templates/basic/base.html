@@ -35,7 +35,7 @@
     {% endblock %}
 
     {% block navbar %}
-        {% navbar %}
+        {% navbar 1 %}
     {% endblock %}
 
     {% block message %}
@@ -47,12 +47,13 @@
         {% block content %}
         {% endblock %}
     </div>
-    
+
+    {% comment %}  
     {% block menu %}
         {% menu %}
     {% endblock %}
-
-    
+    {% endcomment %}
+   
     {% block search %}
         <a name="searchdl" id="searchdl"></a>
         <div id="search" class="last">
