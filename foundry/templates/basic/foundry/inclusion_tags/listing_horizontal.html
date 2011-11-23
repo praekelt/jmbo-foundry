@@ -1,8 +1,15 @@
 {% if object_list %}
-    <div id="promo">
+    <div class="h2">{{ listing.title }}</div>
+
+    <div class="listing-horizontal">            
         {% for object in object_list %}
-            <img src="{{ object.get_promo_basic_url }}" alt="{{ object.title }}" />
-            <div id="promotxt"><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></div>
+            <div class="image">
+                <a href="{{ object.get_absolute_url }}">
+                    <img src="{{ object.get_listing_horizontal_basic_url }}" alt="{{ object.title }}">
+                </a>
+                1k+<br />Likes</div>
         {% endfor %}
-    </div>        
+        <div class="clear"></div>                
+    </div>
+
 {% endif %}

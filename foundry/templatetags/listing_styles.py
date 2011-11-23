@@ -2,8 +2,7 @@ from django.template.loader import render_to_string
 
 from jmbo import models
 
-class Horizontal(object):
-    template_name = 'foundry/inclusion_tags/listing_horizontal.html'
+class AbstractBaseStyle(object):
 
     def __init__(self, listing):
         self.listing = listing
@@ -32,6 +31,13 @@ class Horizontal(object):
         return render_to_string(self.template_name, self.get_context_data(context))
 
 
-class Vertical(Horizontal):
+class Horizontal(AbstractBaseStyle):
+    template_name = 'foundry/inclusion_tags/listing_horizontal.html'
+
+
+class Vertical(AbstractBaseStyle):
     template_name = 'foundry/inclusion_tags/listing_vertical.html'
 
+
+class Promo(AbstractBaseStyle):
+    template_name = 'foundry/inclusion_tags/listing_promo.html'

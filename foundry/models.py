@@ -121,7 +121,7 @@ class Listing(models.Model):
         help_text="Number of content objects to display.",
     )
     style = models.CharField(
-        choices=((style[0], style[0]) for style in inspect.getmembers(listing_styles, inspect.isclass)),
+        choices=((style[0], style[0]) for style in inspect.getmembers(listing_styles, inspect.isclass) if style[0] != 'AbstractBaseStyle'),
         max_length=64
     )
 

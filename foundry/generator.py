@@ -9,7 +9,7 @@ def generate():
         {
             "model": "photologue.PhotoSize",
             "fields": {
-                "name": "promo_basic",
+                "name": "listing_promo_basic",
                 "height": 200,
                 "pre_cache": True,
             }
@@ -17,7 +17,7 @@ def generate():
         {
             "model": "photologue.PhotoSize",
             "fields": {
-                "name": "thumbnail_basic",
+                "name": "listing_vertical_basic",
                 "width": 50,
                 "height": 50,
                 "pre_cache": True,

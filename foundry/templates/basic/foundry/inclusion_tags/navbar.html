@@ -1,8 +1,7 @@
 {% if object_list %}
-    <div id="topnav">
+    <div class="navbar">
         {% for link in object_list %}
             <span {% ifequal link active_link%}class="active"{% endifequal %}><a href="{{ link.get_absolute_url }}">{{ link.title }}</a></span>/
         {% endfor %}
-        <span><a href="#menu-dl">More</a></span>
     </div>
 {% endif %}
