@@ -10,14 +10,14 @@ def generate():
             "model": "photologue.PhotoSize",
             "fields": {
                 "name": "listing_promo_basic",
-                "height": 200,
+                "height": 100,
                 "pre_cache": True,
             }
         },
         {
             "model": "photologue.PhotoSize",
             "fields": {
-                "name": "listing_vertical_basic",
+                "name": "listing_vertical_thumbnail_basic",
                 "width": 50,
                 "height": 50,
                 "pre_cache": True,
@@ -25,91 +25,14 @@ def generate():
             }
         },
         {
-            "model": "foundry.Link",
+            "model": "photologue.PhotoSize",
             "fields": {
-                "title": "News",
-                "category": {
-                    "model": "category.Category",
-                    "fields": {
-                        "title": "News",
-                        "slug": "news",
-                    },
-                },
-            },
-        },
-        {
-            "model": "foundry.NavbarLinkPosition",
-            "fields": {
-                "position": 1,
-                "link": {
-                    "model": "foundry.Link",
-                    "fields": {
-                        "title": "Home",
-                        "view_name": "home",
-                    },
-                },
-                "preferences": {
-                    "model": "preferences.NavbarPreferences",
-                    "fields": {
-                        "sites": settings.SITE_ID,
-                    },
-                },
-            },
-        },
-        {
-            "model": "foundry.NavbarLinkPosition",
-            "fields": {
-                "position": 2,
-                "link": {
-                    "model": "foundry.Link",
-                    "fields": {
-                        "title": "News"
-                    },
-                },
-                "preferences": {
-                    "model": "preferences.NavbarPreferences",
-                    "fields": {
-                        "sites": settings.SITE_ID,
-                    },
-                },
-            },
-        },
-        {
-            "model": "foundry.MenuLinkPosition",
-            "fields": {
-                "position": 1,
-                "link": {
-                    "model": "foundry.Link",
-                    "fields": {
-                        "title": "Home",
-                        "view_name": "home",
-                    },
-                },
-                "preferences": {
-                    "model": "preferences.MenuPreferences",
-                    "fields": {
-                        "sites": settings.SITE_ID,
-                    },
-                },
-            },
-        },
-        {
-            "model": "foundry.MenuLinkPosition",
-            "fields": {
-                "position": 2,
-                "link": {
-                    "model": "foundry.Link",
-                    "fields": {
-                        "title": "News"
-                    },
-                },
-                "preferences": {
-                    "model": "preferences.MenuPreferences",
-                    "fields": {
-                        "sites": settings.SITE_ID,
-                    },
-                },
-            },
+                "name": "listing_horizontal_basic",
+                "width": 50,
+                "height": 50,
+                "pre_cache": True,
+                "crop": True,
+            }
         },
     ] 
 
@@ -140,46 +63,6 @@ def generate():
                 },
             },
         })
-
-    objects.append({
-        "model": "foundry.PageBlock",
-        "fields": {
-            "title": "Promos",
-            "style": "Promo",
-            "position": 1,
-            "count": "3",
-            "content": [
-                { 
-                    "model": "post.Post",
-                    "fields": {
-                        "title": "News Post 1",
-                    },
-                },
-            ],
-            "preferences": {
-                "model": "preferences.PageBlockPreferences",
-                "fields": {
-                    "sites": settings.SITE_ID,
-                },
-            },
-        },
-    })
-
-    objects.append({
-        "model": "foundry.PageBlock",
-        "fields": {
-            "title": "Updates",
-            "style": "Listing",
-            "count": 3,
-            "position": 2,
-            "preferences": {
-                "model": "preferences.PageBlockPreferences",
-                "fields": {
-                    "sites": settings.SITE_ID,
-                },
-            },
-        },
-    })
     
     objects.append({
         "model": "jmbo.Pin",
