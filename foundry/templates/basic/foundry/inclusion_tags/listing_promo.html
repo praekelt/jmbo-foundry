@@ -1,8 +1,12 @@
 {% if object_list %}
-    <div class="listing-promo">
+    <div class="foundry-listing-promo">
         {% for object in object_list %}
-            <img src="{{ object.get_listing_promo_basic_url }}" alt="{{ object.title }}" />
-            <div id="promotxt"><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></div>
+            <div class="item">
+                <img src="{{ object.get_listing_promo_basic_url }}" alt="{{ object.title }}" />
+                <div class="link">
+                    <a href="{{ object.get_absolute_url }}">{{ object.title }}</a>
+                </div>
+            </div>
         {% endfor %}
     </div>        
 {% endif %}

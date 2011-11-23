@@ -3,12 +3,20 @@
 {% load jmbo_inclusion_tags %}
 
 {% block content %}
-    <div class="h2">{{ category.title }} Updates</div>
-    {% for object in pinned_object_list %}
-        {% render_object object "pinned_list_item" %}
-    {% endfor %}
-    {% for object in object_list %}
-        {% render_object object "list_item" %}
-    {% endfor %}
-    {% pager page_obj %}
+    <div class="foundry-category-list">
+        <div class="h2">{{ category.title }} Updates</div>    
+        <div class="pinned">
+        {% for object in pinned_object_list %}
+            <div class="item">
+                {% render_object object "pinned_list_item" %}
+            </div>
+        {% endfor %}
+        </div>
+        {% for object in object_list %}
+            <div class="item">
+                {% render_object object "list_item" %}
+            </div>
+        {% endfor %}
+        {% pager page_obj %}
+    </div>
 {% endblock %}

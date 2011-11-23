@@ -1,7 +1,9 @@
 {% if object_list %}
-    <div class="navbar">
+    <div class="foundry-navbar">
         {% for link in object_list %}
-            <span {% ifequal link active_link%}class="active"{% endifequal %}><a href="{{ link.get_absolute_url }}">{{ link.title }}</a></span>/
+            <div class="item {% ifequal link active_link%}active{% endifequal %}">
+                <a href="{{ link.get_absolute_url }}">{{ link.title }}</a>
+            </div>/
         {% endfor %}
     </div>
 {% endif %}

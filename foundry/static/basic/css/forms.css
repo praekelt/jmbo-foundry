@@ -1,3 +1,13 @@
+form { margin: 0; padding: 0 }
+form.content-form { background-color: #f9f9f9; border: 1px solid #e5e5e5; padding: 5px; margin: 0.5em 0 }
+form.content-form span { display: block }
+label { display: block }
+input.txt-b,input.btn { display: block }
+input.btn { margin: 6px 0 0 0 }
+fieldset{ margin: 0; padding: 0; border: none; background: none }
+textarea { width: 90% }
+
+
 ul.form-ul {
     margin-top: 0;
 }

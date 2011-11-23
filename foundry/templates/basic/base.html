@@ -21,8 +21,8 @@
 <body>
     {% block header %}
     	<div id="header">
-            <img src="{{ STATIC_URL }}basic/pics/logo.jpg" alt="Jmbo" />
-            <div id="signin-button">
+            <a href="/"><img src="{{ STATIC_URL }}basic/pics/logo.jpg" alt="Jmbo" /></a>
+            <div class="buttons">
               {% if request.user.is_authenticated %}
                 <span><a href="{% url logout %}">Sign Out</a></span>
               {% endif %}
@@ -48,15 +48,12 @@
         {% endblock %}
     </div>
 
-    {% comment %}  
     {% block menu %}
-        {% menu %}
+        {% menu 1 %}
     {% endblock %}
-    {% endcomment %}
    
     {% block search %}
-        <a name="searchdl" id="searchdl"></a>
-        <div id="search" class="last">
+        <div id="search">
 	        <form name="search-form" action="search-results.html" method="get"><fieldset><input type="text" name="search" class="txt" /><input type="submit" name="search-btn" value="Search" /></fieldset></form>
         </div>
     {% endblock %}

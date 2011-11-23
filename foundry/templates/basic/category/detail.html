@@ -2,15 +2,18 @@
 {% load jmbo_template_tags %}
 
 {% block content %}
-    <div class="h2">{{ category.title }} Updates</div>
+    <div class="foundry-category-detail">
+        <div class="h2 title">{{ category.title }} Updates</div>
         
-    <div class="img-article last feature">
-        <img src="{{ object.get_thumbnail_basic_url }}" alt="{{ object.title }}" class="left" />
-        <span class="byline news">{% humanize_time_diff object.created 'ago' 'lower' %}</span>
-        <div class="h3">{{ object.title }}</div>
+        <div class="intro">
+            <img src="{{ object.get_thumbnail_basic_url }}" alt="{{ object.title }}" class="left" />
+            <span class="byline news">{% humanize_time_diff object.created 'ago' 'lower' %}</span>
+            <div class="h3">{{ object.title }}</div>
+        </div>
+        
+        {{ object.content|safe }}
+        
+        <div class="more"><a href="{% url category_object_list category.slug %}">More {{ category.title }} Updates</a></div>    
+
     </div>
-        
-    {{ object.content|safe }}
-        
-    <div class="page-controls"><a href="{% url category_object_list category.slug %}">More {{ category.title }} Updates</a></div>    
 {% endblock %}

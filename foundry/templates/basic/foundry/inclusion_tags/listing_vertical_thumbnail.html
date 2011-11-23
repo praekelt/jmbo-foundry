@@ -3,9 +3,9 @@
 {% if object_list %}
     <div class="h2">{{ listing.title }}</div>
 
-    <div class="listing-vertical-thumbnail">
+    <div class="foundry-listing-vertical-thumbnail">
     {% for object in object_list %}
-        <div class="img-article">
+        <div class="item">
 
             <img src="{{ object.get_listing_vertical_thumbnail_basic_url }}" alt="{{ object.title }}" class="left" />
 
