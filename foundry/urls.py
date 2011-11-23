@@ -1,5 +1,4 @@
 from django.conf.urls.defaults import patterns, url, include
-from django.views.generic import TemplateView
 from django.contrib.auth.views import login, logout
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin
@@ -41,9 +40,11 @@ urlpatterns = patterns('',
 
     url(
         r'^$',
-        TemplateView.as_view(template_name="foundry/home.html"),
+        'foundry.views.home_resolver',
+        {},
         name='home'
     ),
+
     url(
         r'^category/(?P<category_slug>[\w-]+)/$',
         CategoryObjectListView.as_view(),

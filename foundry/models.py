@@ -289,6 +289,7 @@ class Page(models.Model):
     title = models.CharField(
         max_length=200, help_text='A title that may appear in the browser window caption.',
     )
+    is_homepage = models.BooleanField(default=False, help_text="Tick if you want this page to be the site's homepage.")
     sites = models.ManyToManyField(
         'sites.Site',
         blank=True,
@@ -301,6 +302,9 @@ class Page(models.Model):
         db_index=True,
         unique=True,
     )
+
+    def __unicode__(self):
+        return self.title
 
     def save(self, *args, **kwargs):
         self.slug = generate_slug(self, self.title)

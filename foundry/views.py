@@ -14,6 +14,7 @@ from jmbo.models import ModelBase
 from foundry.models import Page
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm
 
+
 class CategoryURL(object):
 
     def __init__(self, category=None):
@@ -124,6 +125,20 @@ def render_page(request, slug):
     extra = {}
     extra['object'] = page
     return render_to_response('foundry/page_detail.html', extra, context_instance=RequestContext(request))
+
+
+# todo: caching
+def home_resolver(request):
+    """If there is a Page that is set to be home then render and return, else
+    render and return home.html."""
+    pages = Page.objects.filter(is_homepage=True)
+    if pages.count():
+        page = pages[0]
+        extra = {}
+        extra['object'] = page
+        return render_to_response('foundry/page_detail.html', extra, context_instance=RequestContext(request))
+
+    return render_to_response('foundry/home.html', {}, context_instance=RequestContext(request))
 
 
 # Views for testing

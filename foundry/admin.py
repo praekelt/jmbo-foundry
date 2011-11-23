@@ -128,7 +128,7 @@ class CountryAdmin(admin.ModelAdmin):
 
 
 class PageAdmin(admin.ModelAdmin):
-    list_display = ('title', 'slug')
+    list_display = ('title', 'slug', 'is_homepage')
 
     def response_add(self, request, obj, post_url_continue='../%s/'):
         if '_addanother' not in request.POST and '_popup' not in request.POST:
