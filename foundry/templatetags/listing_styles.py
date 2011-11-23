@@ -3,7 +3,7 @@ from django.template.loader import render_to_string
 from jmbo import models
 
 class Horizontal(object):
-    template_name = 'foundry/inclusion_tags/listing_horozontal.html'
+    template_name = 'foundry/inclusion_tags/listing_horizontal.html'
 
     def __init__(self, listing):
         self.listing = listing
