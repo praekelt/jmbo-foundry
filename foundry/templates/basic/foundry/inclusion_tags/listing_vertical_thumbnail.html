@@ -1,0 +1,20 @@
+{% load jmbo_template_tags jmbo_inclusion_tags %}
+
+{% if object_list %}
+    <div class="h2">{{ listing.title }}</div>
+
+    <div class="listing-vertical-thumbnail">
+    {% for object in object_list %}
+        <div class="img-article">
+
+            <img src="{{ object.get_listing_vertical_thumbnail_basic_url }}" alt="{{ object.title }}" class="left" />
+
+            <div class="h3">
+                <a href="{{ object.get_absolute_url }}">{{ object.title }}</a>
+            </div>
+            <span class="byline">15:35 - 23 Likes</span>
+        </div>
+    {% endfor %}
+    </div<
+
+{% endif %}
