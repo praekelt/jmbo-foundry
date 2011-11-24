@@ -3,6 +3,7 @@ from BeautifulSoup import BeautifulSoup
 from django import template
 from django.core.urlresolvers import reverse, resolve, NoReverseMatch
 from django.template.loader import render_to_string
+from django.conf import settings
 
 from preferences import preferences
 
@@ -155,7 +156,12 @@ class TileNode(template.Node):
         if tile.target:
             # Use convention to lookup node
             node = globals().get('%sNode' % tile.target.__class__.__name__)
-            return node(str(tile.target.id)).render(context)
+            try:
+                return node(str(tile.target.id)).render(context)
+            except:
+                if settings.DEBUG:
+                    raise
+                return "A render error has occurred"
 
 
 @register.tag
