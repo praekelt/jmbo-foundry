@@ -7,6 +7,7 @@ from django.conf import settings
 
 from preferences import preferences
 
+from foundry.models import Page
 from foundry.forms import LoginForm, PasswordResetForm
 from foundry.views import CategoryObjectDetailView, CategoryObjectListView
 
@@ -131,9 +132,9 @@ urlpatterns = patterns('',
     # Render a page 
     url(
         r'^page/(?P<slug>[\w-]+)/$',
-        'foundry.views.render_page',
+        'foundry.views.page_detail',
         {},
-        name='render-page'
+        name='page-detail'
     ),
 
     # Lorem ipsum
@@ -159,7 +160,12 @@ urlpatterns = patterns('',
         {},
         name='test-redirect'
     ),
-
+    url(
+        r'^pages/$',
+        'django.views.generic.list_detail.object_list',
+        {'queryset':Page.objects.all().order_by('title')},
+        'page-list'
+    ),
 
     # Admin
     url(

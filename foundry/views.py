@@ -119,7 +119,7 @@ def age_gateway(request):
     return render_to_response('foundry/age_gateway.html', extra, context_instance=RequestContext(request))
 
 
-def render_page(request, slug):
+def page_detail(request, slug):
     """Render a page by iterating over rows, columns and tiles."""
     page = get_object_or_404(Page, slug=slug)
     extra = {}
