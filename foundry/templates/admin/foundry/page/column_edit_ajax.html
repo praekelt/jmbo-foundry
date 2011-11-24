@@ -1,4 +1,5 @@
 <form id="column-edit-form" action="{% url admin-column-edit-ajax %}" method="POST">
+    <p>The total column widths in a row may not exceed 16.</p>
     {% csrf_token %}
     <input type="hidden" name="column_id" value="{{ form.instance.id|default_if_none:'' }}" />
     <fieldset class="module aligned">

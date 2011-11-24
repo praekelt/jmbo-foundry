@@ -1,4 +1,5 @@
 <form id="tile-edit-form" action="{% url admin-tile-edit-ajax %}" method="POST">
+    <p>You must set either <i>Target</i> or <i>View name</i>.</p>
     {% csrf_token %}
     <input type="hidden" name="tile_id" value="{{ form.instance.id|default_if_none:'' }}" />
     <fieldset class="module aligned">
