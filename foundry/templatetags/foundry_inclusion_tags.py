@@ -188,6 +188,9 @@ class TileUrlNode(template.Node):
                 return reverse(tile.view_name)        
             except NoReverseMatch:
                 return ''
-        else:
-            return ''
-        view, args, kwargs = resolve(url)
+
+        if tile.target:
+            # xxx: not strictly correct since target may be menu or navbar. 
+            # No harm done for now.
+            url = reverse('listing-detail', args=[tile.target.id])
+            return url
