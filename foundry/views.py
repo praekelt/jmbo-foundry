@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from category.models import Category
 from jmbo.models import ModelBase
 
-from foundry.models import Page
+from foundry.models import Listing, Page
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm
 
 
@@ -117,6 +117,14 @@ def age_gateway(request):
 
     extra = dict(form=form)
     return render_to_response('foundry/age_gateway.html', extra, context_instance=RequestContext(request))
+
+
+def listing_detail(request, id):
+    """Render a page by iterating over rows, columns and tiles."""
+    listing = get_object_or_404(Listing, id=id)
+    extra = {}
+    extra['object'] = listing
+    return render_to_response('foundry/listing_detail.html', extra, context_instance=RequestContext(request))
 
 
 def page_detail(request, slug):

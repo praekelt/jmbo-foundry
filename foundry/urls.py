@@ -129,7 +129,15 @@ urlpatterns = patterns('',
         name='age-gateway',
     ),
 
-    # Render a page 
+    # Listing
+    url(
+        r'^listing/(?P<id>\d+)/$',
+        'foundry.views.listing_detail',
+        {},
+        name='listing-detail'
+    ),
+
+    # Page detail
     url(
         r'^page/(?P<slug>[\w-]+)/$',
         'foundry.views.page_detail',

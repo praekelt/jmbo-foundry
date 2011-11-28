@@ -379,7 +379,7 @@ it works - you cannot break anything.""",
     )
     class_name = models.CharField(
         max_length=200, null=True, blank=True,
-        help_text="A CSS class that is applied to the tile.",
+        help_text="One or more CSS classes that are applied to the tile.",
     )
     enable_ajax = models.BooleanField(default=False)
     condition_expression = models.CharField(
