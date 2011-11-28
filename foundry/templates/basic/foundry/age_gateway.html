@@ -4,14 +4,14 @@
 
     <div class="h2">Confirm your age</div>
             
-    <form action="{% url age-gateway %}" method="POST" class="content-form">   
+    <form action="{% url age-gateway %}" method="POST" class="foundry-form">   
         {% csrf_token %}
-        <fieldset>
-            <ul class="form-ul">
+        <ul class="form-ul">
             {{ form.as_ul }}
-            </ul>
+        </ul>
+        <div class="buttons">
             <input type="submit" value="Confirm" />
-        </fieldset>
+        </div>
     </form>
 
 {% endblock content %}

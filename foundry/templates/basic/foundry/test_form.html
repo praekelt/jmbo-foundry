@@ -1,3 +1,7 @@
+{% extends "base.html" %}
+
+{% block content %}
+
 {{ title }}
 <p>This form demonstrates HTTP POST.</p>
 <form method="POST" action=".">
@@ -7,3 +11,5 @@
     </ul>
     <input type="submit" value="Submit" />
 </form>
+
+{% endblock %}

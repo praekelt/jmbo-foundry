@@ -6,17 +6,17 @@
     {% comment %}Below should be an h1{% endcomment %}
     <div class="h2">Sign In</div>
 
-    <form action="{% url login %}" method="POST" class="content-form">
+    <form action="{% url login %}" method="POST" class="foundry-form">
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ request.REQUEST.next }}" />
-        <fieldset>
-            <ul class="form-ul">
-                {{ form.as_ul }}
-            </ul>
+        <ul class="form-ul">
+            {{ form.as_ul }}
+        </ul>
+        <div class="buttons">
         	<input type="submit" value="Sign In" />
-            <span><a href="/auth/password_reset">{% blocktrans %}Forgot your password?{% endblocktrans %}</a></span>
-            <span>Not registered? <a href="{% url join %}">Sign up here</a></span>
-        </fieldset>
+        </div>
+        <span><a href="/auth/password_reset">{% blocktrans %}Forgot your password?{% endblocktrans %}</a></span>
+        <span>Not registered? <a href="{% url join %}">Sign up here</a></span>
     </form>
 
 {% endblock %}

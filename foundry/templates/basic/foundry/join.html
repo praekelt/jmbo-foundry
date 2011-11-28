@@ -10,14 +10,14 @@
     </span>
     -->
 
-    <form action="{% url join %}" method="POST" enctype="multipart/form-data" class="content-form">   
+    <form action="{% url join %}" method="POST" enctype="multipart/form-data" class="foundry-form">   
         {% csrf_token %}
-        <fieldset>
-            <ul class="form-ul">
+        <ul class="form-ul">
             {{ form.as_ul }}
-            </ul>
+        </ul>
+        <div class="buttons">
             <input type="submit" value="Sign Up" />
-        </fieldset>
+        </div>
     </form>
 
 {% endblock content %}
