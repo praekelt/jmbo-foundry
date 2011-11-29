@@ -125,6 +125,8 @@ class Listing(models.Model):
         choices=((style[0], style[0]) for style in inspect.getmembers(listing_styles, inspect.isclass) if style[0] != 'AbstractBaseStyle'),
         max_length=64
     )
+    display_primary_category = models.BooleanField(default=True)
+    display_likes = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.title
