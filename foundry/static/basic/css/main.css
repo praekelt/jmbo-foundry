@@ -88,6 +88,9 @@ div#search form {
 .foundry-navbar div.active a { 
     color: #323232 ;
 }
+.foundry-navbar div.delimited {
+    border-right: solid 1px #cccccc;
+}
 
 /* Menu */
 .foundry-menu { 

@@ -1,9 +1,9 @@
 {% if object_list %}
     <div class="foundry-navbar">
         {% for link in object_list %}
-            <div class="item {% ifequal link active_link%}active{% endifequal %}">
+            <div class="item {% ifequal link active_link%}active{% endifequal %} {% if not forloop.last %}delimited{% endif %}">
                 <a href="{{ link.get_absolute_url }}">{{ link.title }}</a>
-            </div>/
+            </div>                       
         {% endfor %}
     </div>
 {% endif %}

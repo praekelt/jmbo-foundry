@@ -41,7 +41,7 @@ precedence over URL field below.",
         help_text='URL to which this link will redirect.',
         blank=True,
         null=True,
-    )
+    )    
 
     def get_absolute_url(self):
         """
@@ -86,6 +86,7 @@ precedence over URL field below.",
 class Menu(models.Model):
     """A tile menu contains ordered links"""
     title = models.CharField(max_length=255)
+    display_title = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.title
