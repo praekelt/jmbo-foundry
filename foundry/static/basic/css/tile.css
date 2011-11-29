@@ -1,0 +1,64 @@
+table.foundry-page-row {
+    width: 100%;
+    margin: 0px 0px 4px 0px;
+}    
+table.foundry-page-row tr {
+    height: 100%;
+}
+td.foundry-page-column {
+    height: 100%;
+    vertical-align: top;
+}    
+td.foundry-page-column-1 {
+    width: 6%;
+}    
+td.foundry-page-column-2 {
+    width: 12%;
+}    
+td.foundry-page-column-3 {
+    width: 18%;
+}    
+td.foundry-page-column-4 {
+    width: 24%;
+}    
+td.foundry-page-column-5 {
+    width: 30;
+}    
+td.foundry-page-column-6 {
+    width: 36%;
+}    
+td.foundry-page-column-7 {
+    width: 42%;
+}    
+td.foundry-page-column-8 {
+    width: 48%;
+}    
+td.foundry-page-column-9 {
+    width: 54%;
+}    
+td.foundry-page-column-10 {
+    width: 60%;
+}    
+td.foundry-page-column-11 {
+    width: 66%;
+}    
+td.foundry-page-column-12 {
+    width: 72%;
+}    
+td.foundry-page-column-13 {
+    width: 78%;
+}    
+td.foundry-page-column-14 {
+    width: 84%;
+}    
+td.foundry-page-column-15 {
+    width: 90%;
+}    
+td.foundry-page-column-16 {
+    width: 96%;
+}    
+
+div.foundry-page-tile {
+    padding: 0px;
+    margin-bottom: 4px;
+}    

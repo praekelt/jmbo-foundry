@@ -4,7 +4,7 @@
 {% block content %}
 
 {% for row in object.rows %}
-    <table class="foundry-page-row">
+    <table class="foundry-page-row" cellspacing="0">
         <tr>
         {% for column in row.columns %}
             <td class="foundry-page-column foundry-page-column-{{ column.width }}">
