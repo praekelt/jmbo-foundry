@@ -1,6 +1,6 @@
 {% load jmbo_template_tags jmbo_inclusion_tags %}
 
-{% if object_list %}
+{% if object_list.count %}
     <div class="foundry-listing-vertical">
         <div class="h2 title">{{ listing.title }}</div>
         {% for object in object_list %}
