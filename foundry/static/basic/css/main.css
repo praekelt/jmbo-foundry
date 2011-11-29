@@ -188,38 +188,3 @@ div#search form {
 /* todo: Fix these below */
 .byline { font-size: smaller; display:block; color:#666 }
 img.left { float: left; margin-right: 5px }
-
-/*
-.article-tools { background-color: #f1f1f1; padding: 3px; margin: 0.5em 0; clear: both }
-.article-tools img { display: inline; margin-right: 3px; vertical-align: middle }
-*/
-
-/*.page-controls { background-color: #f9f9f9; padding: 3px; margin: 0.5em 0; clear: both }*/
-
-/*
-.commentor { color: #666 }
-.comment-item { background-color: #fff; margin-bottom: 7px; border: 1px solid #e5e5e5 }
-.comment-item .article-tools { margin-bottom: 0 }
-.comment-alt { background-color: #f9f9f9; margin-bottom: 5px; border: 1px solid #e5e5e5 }
-.comment-item p.comment { margin: 5px 3px }
-.comment-item span.byline, .comment-alt span.byline { padding: 3px; background-color: #e5e5e5 }
-.gallery-pic { width: 100% }
-.play-button { padding: 3px 6px; -webkit-border-radius: 3px; background-color: #323232; float: left; font-size: smaller; margin-top: 3px  }
-.play-button a { color: #fff }
-.social-signin { margin: 0.5em 0 }
-.social-signin img { display: inline }
-.tag { display: inline-block; padding: 0 3px 0 0; font-size: 0.9em }
-.likes { display: inline-block; padding: 0 3px 0 0; font-size: 0.9em }
-.posts { display: inline-block; padding: 0 3px 0 0; font-size: 0.9em }
-.viral { display: inline-block; padding: 0 3px 0 0; font-size: 0.9em }
-img.pic-choose { display: inline }
-*/
-
-
-/*
-.success { padding: 6px 3px 6px 22px; margin: 3px 0 0 0; background: #390 url(../../media/images/accept.png) 3px center no-repeat; color: #fff }
-.warning { padding: 6px 3px 6px 22px; margin: 3px 0 0 0; background: #c00 url(../../media/images/warning.png) 3px center no-repeat; color: #fff }
-.success a,.warning a { color: #fff; text-decoration: underline }
-.label-error { color: #fff; background-color: #c00; padding: 3px 6px }
-.instruction { margin: 0.5em 0 }
-*/
