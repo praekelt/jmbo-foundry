@@ -9,7 +9,7 @@ class AbstractBaseStyle(object):
     
     def get_queryset(self):
         queryset = self.listing.content.all()
-        if not queryset.count():
+        if not queryset.exists():
             queryset = models.ModelBase.permitted.all()
             if self.listing.category:
                 queryset = queryset.filter(categories=self.listing.category)

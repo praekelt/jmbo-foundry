@@ -1,6 +1,6 @@
 {% load jmbo_template_tags jmbo_inclusion_tags %}
 
-{% if object_list.count %}
+{% if object_list.exists %}
     <div class="h2">{{ listing.title }}</div>
 
     <div class="foundry-listing-vertical-thumbnail">

@@ -214,8 +214,8 @@ img.pic-choose { display: inline }
 
 
 /*
-.success { padding: 6px 3px 6px 22px; margin: 3px 0 0 0; background: #390 url(../../media/pics/accept.png) 3px center no-repeat; color: #fff }
-.warning { padding: 6px 3px 6px 22px; margin: 3px 0 0 0; background: #c00 url(../../media/pics/warning.png) 3px center no-repeat; color: #fff }
+.success { padding: 6px 3px 6px 22px; margin: 3px 0 0 0; background: #390 url(../../media/images/accept.png) 3px center no-repeat; color: #fff }
+.warning { padding: 6px 3px 6px 22px; margin: 3px 0 0 0; background: #c00 url(../../media/images/warning.png) 3px center no-repeat; color: #fff }
 .success a,.warning a { color: #fff; text-decoration: underline }
 .label-error { color: #fff; background-color: #c00; padding: 3px 6px }
 .instruction { margin: 0.5em 0 }
