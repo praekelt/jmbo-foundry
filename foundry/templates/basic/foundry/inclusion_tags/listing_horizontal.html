@@ -1,7 +1,7 @@
 {% if object_list.exists %}
-    <div class="h2">{{ listing.title }}</div>
-
-    <div class="foundry-listing-horizontal">            
+    <div class="foundry-container foundry-listing-horizontal">
+        <div class="title">{{ listing.title }}</div>
+        <div class="items">
         {% for object in object_list %}
             <div class="item">
                 <a href="{{ object.get_absolute_url }}">
@@ -10,6 +10,7 @@
                 1k+<br />Likes
             </div>
         {% endfor %}
+        </div>
         <div class="clear"></div>                
     </div>
 

@@ -1,12 +1,14 @@
 {% load jmbo_template_tags jmbo_inclusion_tags %}
 
 {% if object_list.exists %}
-    <div class="foundry-listing-vertical">
-        <div class="h2 title">{{ listing.title }}</div>
+    <div class="foundry-container foundry-listing-vertical">
+        <div class="title">{{ listing.title }}</div>
+        <div class="items">
         {% for object in object_list %}
             <div class="item">
                 {% render_object object "list_item" %}
             </div>
         {% endfor %}
+        </div>
     </div>
 {% endif %}

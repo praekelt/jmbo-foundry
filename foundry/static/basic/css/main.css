@@ -68,6 +68,9 @@ div#search form {
     border: 0;
 }
 
+/* Container class for navbar, menu, listin */
+.foundry-container div.title { background-color: #f1f1f1; padding: 3px; border-bottom: 1px solid #ddd; margin-bottom: 3px; clear: both }
+
 /* Navbar */
 .foundry-navbar { 
     background-color: #000; 
@@ -95,7 +98,7 @@ div#search form {
 /* Menu */
 .foundry-menu { 
     clear: both; 
-    padding: 0 3px; 
+    padding: 0px; 
 }
 .foundry-menu div.title { 
     margin: 0 !important;

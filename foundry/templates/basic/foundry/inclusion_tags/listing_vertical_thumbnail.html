@@ -1,9 +1,9 @@
 {% load jmbo_template_tags jmbo_inclusion_tags %}
 
 {% if object_list.exists %}
-    <div class="h2">{{ listing.title }}</div>
-
-    <div class="foundry-listing-vertical-thumbnail">
+    <div class="foundry-container foundry-listing-vertical-thumbnail">
+    <div class="title">{{ listing.title }}</div>
+    <div class="items">
     {% for object in object_list %}
         <div class="item">
 
@@ -19,5 +19,5 @@
         </div>
     {% endfor %}
     </div>
-
+    </div>
 {% endif %}

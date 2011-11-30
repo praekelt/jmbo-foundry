@@ -1,5 +1,6 @@
 {% if object_list.exists %}
-    <div class="foundry-listing-promo">
+    <div class="foundry-container foundry-listing-promo">
+        <div class="items">
         {% for object in object_list %}
             <div class="item">
                 <img src="{{ object.get_listing_promo_basic_url }}" alt="{{ object.title }}" />
@@ -8,5 +9,6 @@
                 </div>
             </div>
         {% endfor %}
+        </div>
     </div>        
 {% endif %}
