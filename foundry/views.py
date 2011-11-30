@@ -119,9 +119,9 @@ def age_gateway(request):
     return render_to_response('foundry/age_gateway.html', extra, context_instance=RequestContext(request))
 
 
-def listing_detail(request, id):
+def listing_detail(request, slug):
     """Render a page by iterating over rows, columns and tiles."""
-    listing = get_object_or_404(Listing, id=id)
+    listing = get_object_or_404(Listing, slug=slug)
     extra = {}
     extra['object'] = listing
     return render_to_response('foundry/listing_detail.html', extra, context_instance=RequestContext(request))

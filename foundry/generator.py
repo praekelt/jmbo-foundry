@@ -5,37 +5,8 @@ from django.conf import settings
 from generate import IMAGES
 
 def generate():
-    objects = [
-        {
-            "model": "photologue.PhotoSize",
-            "fields": {
-                "name": "listing_promo_basic",
-                "height": 100,
-                "pre_cache": True,
-            }
-        },
-        {
-            "model": "photologue.PhotoSize",
-            "fields": {
-                "name": "listing_vertical_thumbnail_basic",
-                "width": 50,
-                "height": 50,
-                "pre_cache": True,
-                "crop": True,
-            }
-        },
-        {
-            "model": "photologue.PhotoSize",
-            "fields": {
-                "name": "listing_horizontal_basic",
-                "width": 50,
-                "height": 50,
-                "pre_cache": True,
-                "crop": True,
-            }
-        },
-    ] 
-
+    objects = []
+     
     for i in range(1, 14):
         objects.append({
             "model": "post.Post",
@@ -51,7 +22,7 @@ def generate():
                         "model": "category.Category",
                         "fields": {
                             "title": "News",
-                            "slug": "news",
+                            "slug": "anews",
                         }
                     },
                 ],

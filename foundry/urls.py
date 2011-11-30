@@ -131,7 +131,7 @@ urlpatterns = patterns('',
 
     # Listing
     url(
-        r'^listing/(?P<id>\d+)/$',
+        r'^listing/(?P<slug>[\w-]+)/$',
         'foundry.views.listing_detail',
         {},
         name='listing-detail'

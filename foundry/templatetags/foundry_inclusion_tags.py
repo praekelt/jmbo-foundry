@@ -16,23 +16,23 @@ register = template.Library()
 @register.tag
 def menu(parser, token):
     try:
-        tag_name, id = token.split_contents()
+        tag_name, slug = token.split_contents()
     except ValueError:
         raise template.TemplateSyntaxError(
-            'menu tag requires argument id'
+            'menu tag requires argument slug'
         )
-    return MenuNode(id)
+    return MenuNode(slug)
 
 
 class MenuNode(template.Node):
 
-    def __init__(self, id):
-        self.id = template.Variable(id)
+    def __init__(self, slug):
+        self.slug = template.Variable(slug)
 
     def render(self, context):       
-        id = self.id.resolve(context)
+        slug = self.slug.resolve(context)
         try:
-            obj = Menu.objects.get(id=id)
+            obj = Menu.objects.get(slug=slug)
         except Menu.DoesNotExist:
             return ''
 
@@ -48,23 +48,23 @@ class MenuNode(template.Node):
 @register.tag
 def navbar(parser, token):
     try:
-        tag_name, id = token.split_contents()
+        tag_name, slug = token.split_contents()
     except ValueError:
         raise template.TemplateSyntaxError(
-            'navbar tag requires argument id'
+            'navbar tag requires argument slug'
         )
-    return NavbarNode(id)
+    return NavbarNode(slug)
 
 
 class NavbarNode(template.Node):
 
-    def __init__(self, id):
-        self.id = template.Variable(id)        
+    def __init__(self, slug):
+        self.slug = template.Variable(slug)        
 
-    def render(self, context):       
-        id = self.id.resolve(context)
+    def render(self, context):
+        slug = self.slug.resolve(context)
         try:
-            obj = Navbar.objects.get(id=id)
+            obj = Navbar.objects.get(slug=slug)
         except Navbar.DoesNotExist:
             return ''
 
@@ -87,23 +87,23 @@ class NavbarNode(template.Node):
 @register.tag
 def listing(parser, token):
     try:
-        tag_name, obj = token.split_contents()
+        tag_name, slug = token.split_contents()
     except ValueError:
         raise template.TemplateSyntaxError(
-            'listing tag requires argument id'
+            'listing tag requires argument slug'
         )
-    return ListingNode(obj)
+    return ListingNode(slug)
 
 
 class ListingNode(template.Node):
 
-    def __init__(self, id):
-        self.id = template.Variable(id)
+    def __init__(self, slug):
+        self.slug = template.Variable(slug)
 
     def render(self, context):
-        id = self.id.resolve(context)
+        slug = self.slug.resolve(context)
         try:
-            obj = Listing.objects.get(id=id)
+            obj = Listing.objects.get(slug=slug)
         except Listing.DoesNotExist:
             return ''
 
@@ -157,7 +157,7 @@ class TileNode(template.Node):
             # Use convention to lookup node
             node = globals().get('%sNode' % tile.target.__class__.__name__)
             try:
-                return node(str(tile.target.id)).render(context)
+                return node('"'+tile.target.slug+'"').render(context)
             except:
                 if settings.DEBUG:
                     raise
@@ -192,5 +192,5 @@ class TileUrlNode(template.Node):
         if tile.target:
             # xxx: not strictly correct since target may be menu or navbar. 
             # No harm done for now.
-            url = reverse('listing-detail', args=[tile.target.id])
+            url = reverse('listing-detail', args=[tile.target.slug])
             return url

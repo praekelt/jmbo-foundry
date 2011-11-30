@@ -17,6 +17,20 @@ from foundry.profile_models import AbstractAvatarProfile, \
     AbstractSocialProfile, AbstractContactProfile
 from foundry.templatetags import listing_styles
 
+
+class AbstractSlugBase(models.Model):
+
+    class Meta:
+        abstract = True
+
+    slug = models.SlugField(
+        editable=True,
+        max_length=32,
+        db_index=True,
+        unique=True,
+    )
+
+
 class Link(models.Model):
     title = models.CharField(
         max_length=256,
@@ -83,7 +97,7 @@ precedence over URL field below.",
         return self.title
 
 
-class Menu(models.Model):
+class Menu(AbstractSlugBase):
     """A tile menu contains ordered links"""
     title = models.CharField(max_length=255)
     display_title = models.BooleanField(default=True)
@@ -92,7 +106,7 @@ class Menu(models.Model):
         return self.title
 
 
-class Navbar(models.Model):
+class Navbar(AbstractSlugBase):
     """A tile navbar contains ordered links"""
     title = models.CharField(max_length=255)
 
@@ -100,7 +114,7 @@ class Navbar(models.Model):
         return self.title
 
 
-class Listing(models.Model):
+class Listing(AbstractSlugBase):
     """A themed, ordered collection of items"""
     title = models.CharField(
         max_length=256,
@@ -265,16 +279,10 @@ class DefaultAvatar(ImageModel):
     pass
 
 
-class Country(models.Model):
+class Country(AbstractSlugBase):
     """Countries used in the age gateway"""
     title = models.CharField(max_length=32)
     minimum_age = models.PositiveIntegerField(default=18)
-    slug = models.SlugField(
-        editable=False,
-        max_length=32,
-        db_index=True,
-        unique=True,
-    )
 
     class Meta:
         verbose_name_plural = 'Countries'
@@ -283,12 +291,8 @@ class Country(models.Model):
     def __unicode__(self):
         return self.title
 
-    def save(self, *args, **kwargs):        
-        self.slug = generate_slug(self, self.title)
-        super(Country, self).save(*args, **kwargs)
 
-
-class Page(models.Model):
+class Page(AbstractSlugBase, models.Model):
     title = models.CharField(
         max_length=200, help_text='A title that may appear in the browser window caption.',
     )
@@ -299,19 +303,9 @@ class Page(models.Model):
         null=True,
         help_text='Sites that this page will appear on.',
     )
-    slug = models.SlugField(
-        editable=False,
-        max_length=255,
-        db_index=True,
-        unique=True,
-    )
 
     def __unicode__(self):
         return self.title
-
-    def save(self, *args, **kwargs):
-        self.slug = generate_slug(self, self.title)
-        super(Page, self).save(*args, **kwargs)
 
     @property
     def rows(self):

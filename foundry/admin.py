@@ -42,6 +42,7 @@ class MenuLinkPositionInline(admin.StackedInline):
 
 
 class MenuAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('title',)}
     inlines = [MenuLinkPositionInline]
     
 
@@ -50,12 +51,12 @@ class NavbarLinkPositionInline(admin.StackedInline):
 
 
 class NavbarAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('title',)}
     inlines = [NavbarLinkPositionInline]
 
 
 class ListingAdmin(admin.ModelAdmin):
-    model = Listing
-
+    prepopulated_fields = {'slug': ('title',)}
 
 class GeneralPreferencesAdmin(PreferencesAdmin):
     pass
@@ -125,6 +126,7 @@ class DefaultAvatarAdmin(admin.ModelAdmin):
 class CountryAdmin(admin.ModelAdmin):
     list_display = ('title', 'minimum_age')
     list_editable = ('minimum_age',)
+    prepopulated_fields = {'slug': ('title',)}
 
 
 class PageAdmin(admin.ModelAdmin):
