@@ -3,16 +3,20 @@
 
 {% block content %}
     <div class="foundry-category-detail">
-        <div class="h2 title">{{ category.title }} Updates</div>
-        
-        <div class="intro">
-            <img src="{{ object.get_thumbnail_basic_url }}" alt="{{ object.title }}" class="left" />
-            <span class="byline news">{% humanize_time_diff object.created 'ago' 'lower' %}</span>
-            <div class="h3">{{ object.title }}</div>
+        <div class="category-title">{{ category.title }} Updates</div>
+       
+        <div class="item">
+           <div class="intro">
+                <img src="{{ object.get_thumbnail_basic_url }}" alt="{{ object.title }}" class="left" />
+                <div class="byline">{% humanize_time_diff object.created 'ago' 'lower' %}</div>
+                <div class="title">{{ object.title }}</div>
+            </div>
+       
+            <div class="content">
+                {{ object.content|safe }}
+            </div>
         </div>
-        
-        {{ object.content|safe }}
-        
+
         <div class="more"><a href="{% url category_object_list category.slug %}">More {{ category.title }} Updates</a></div>    
 
     </div>

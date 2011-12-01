@@ -4,19 +4,24 @@
 
 {% block content %}
     <div class="foundry-category-list">
-        <div class="h2">{{ category.title }} Updates</div>    
-        <div class="pinned">
-        {% for object in pinned_object_list %}
-            <div class="item">
-                {% render_object object "pinned_list_item" %}
-            </div>
-        {% endfor %}
+        <div class="category-title">{{ category.title }} Updates</div>
+
+        <div class="pinned-items">
+            {% for object in pinned_object_list %}
+                <div class="item">
+                    {% render_object object "pinned_list_item" %}
+                </div>
+            {% endfor %}
         </div>
+
+        <div class="items">
         {% for object in object_list %}
             <div class="item">
                 {% render_object object "list_item" %}
             </div>
         {% endfor %}
+        </div>
+
         {% pager page_obj %}
     </div>
 {% endblock %}

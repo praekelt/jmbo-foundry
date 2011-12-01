@@ -73,6 +73,7 @@ class CategoryObjectDetailView(DetailView):
         return super(CategoryObjectDetailView, self).get_queryset()
 
     def get_template_names(self):
+        # todo: explain name resolution in documentation
         return ['category/%s_detail.html' % self.category.slug, 'category/detail.html'] + super(CategoryObjectDetailView, self).get_template_names()
     
     def get_context_data(self, **kwargs):

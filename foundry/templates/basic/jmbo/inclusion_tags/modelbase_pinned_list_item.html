@@ -1,5 +1,6 @@
 {% load jmbo_template_tags %}
 
+fix this
 <img src="{{ object.get_thumbnail_basic_url }}" alt="{{ object.title }}" class="left" />
 <span class="byline">{% humanize_time_diff object.created 'ago' 'lower' %}</span>
 <div class="h3"><a href="{% smart_url url_callable object %}">{{ object.title|truncatewords_html:10 }}</a></div>

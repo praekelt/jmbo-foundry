@@ -12,6 +12,7 @@ from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
 from foundry.widgets import SelectCommaWidget
 from foundry.utils import get_view_choices
 
+
 class LinkAdminForm(forms.ModelForm):
     view_name = forms.ChoiceField(
         label='View Name',
@@ -57,6 +58,7 @@ class NavbarAdmin(admin.ModelAdmin):
 
 class ListingAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
+
 
 class GeneralPreferencesAdmin(PreferencesAdmin):
     pass
@@ -128,10 +130,14 @@ class CountryAdmin(admin.ModelAdmin):
     list_editable = ('minimum_age',)
     prepopulated_fields = {'slug': ('title',)}
 
+    def __init__(self, model, admin_site):
+        model._meta.fields.insert(2, model._meta.fields.pop(1))
+        super(CountryAdmin, self).__init__(model, admin_site)
+
 
 class PageAdmin(admin.ModelAdmin):
     list_display = ('title', 'slug', 'is_homepage')
-
+    
     def response_add(self, request, obj, post_url_continue='../%s/'):
         if '_addanother' not in request.POST and '_popup' not in request.POST:
             request.POST['_continue'] = 1 
