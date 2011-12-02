@@ -1,5 +1,4 @@
 {% load jmbo_template_tags %}
 
-fix this
-<div class="h3"><a href="{% smart_url url_callable object %}">{{ object.title }}</a></div>
-<span class="byline {{ category.title.lower }}">{% humanize_time_diff object.created 'ago' 'lower' %}</span>
+<div class="title"><a href="{% smart_url url_callable object %}">{{ object.title }}</a></div>
+<div class="byline">{% humanize_time_diff object.created 'ago' 'lower' %}</div>
