@@ -110,7 +110,6 @@ class JoinForm(UserCreationForm):
                 field.required = True
 
         # Make some messages and labels more reassuring
-        self.fields['username'].label = _("Display Name")
         self.fields['username'].help_text = _("This name is visible to other users on the site.")
         self.fields['password1'].help_text = _("We never store your password in its original form.")
         if self.fields.has_key('email'):

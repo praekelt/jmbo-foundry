@@ -1,5 +1,4 @@
 from django.conf.urls.defaults import patterns, url, include
-from django.contrib.auth.views import login, logout
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -72,14 +71,14 @@ urlpatterns = patterns('',
     ),
     url(
         r'^login/$',
-        login,
+        'django.contrib.auth.views.login',
         {'authentication_form':LoginForm},
         name='login',
     ),
     url(
         r'^logout/$',
-        logout,
-        {},
+        'django.contrib.auth.views.logout',
+        {'next_page':'/'},
         name='logout',
     ),
     # Pre-empt password reset so we can use custom form

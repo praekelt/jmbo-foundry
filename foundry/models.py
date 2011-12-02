@@ -222,6 +222,21 @@ class RegistrationPreferences(Preferences):
     def unique_fields(self):
         return self.raw_unique_fields.split(',')
 
+    def save(self, *args, **kwargs):
+        # Unique fields must be unique! Check the existing members for possible
+        # duplicate values. For example, if mobile number was not a unique
+        # field before but it is now, then there may not be two members with
+        # the same mobile number.
+        for fieldname in self.unique_fields:
+            values = Member.objects.all().values_list(fieldname, flat=True)
+            # set removes duplicates from a list
+            if len(values) != len(set(values)):
+                raise RuntimeError(
+                    "Cannot set %s to be unique since there is more than one \
+                        member with the same %s." % (fieldname, fieldname)
+                )
+        super(RegistrationPreferences, self).save(*args, **kwargs)
+
 
 class LoginPreferences(Preferences):
     __module__ = 'preferences.models'
