@@ -185,6 +185,12 @@ LOGIN_URL = '/login'        # check if in paster
 
 LOGIN_REDIRECT_URL = '/'    # check if inpaster
 
+# todo: add setting to foundry paster
+AUTHENTICATION_BACKENDS = (
+    'foundry.backends.MultiBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 SIMPLE_AUTOCOMPLETE = {
     'auth.user': {'threshold': 20},
     'category.category': {'threshold':20}

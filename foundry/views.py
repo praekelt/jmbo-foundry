@@ -42,7 +42,6 @@ def join(request):
             member.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
             login(request, member)            
             return HttpResponseRedirect(reverse('join-finish'))
-            #return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
     else:
         form = JoinForm() 
 

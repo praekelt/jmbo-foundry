@@ -130,7 +130,7 @@ class JoinFinishForm(forms.ModelForm):
         super(JoinFinishForm, self).__init__(*args, **kwargs)
 
         self.fields['image'].label = _("Upload a picture")
-        self.fields['image'].help_text = _("JPG,GIF or PNG accepted. Square is best. Keep it under 1mb.")
+        self.fields['image'].help_text = _("JPG, GIF or PNG accepted. Square is best. Keep it under 1MB.")
 
     @property
     def default_avatars(self):
