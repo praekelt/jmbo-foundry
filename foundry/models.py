@@ -149,6 +149,12 @@ class Listing(AbstractSlugBase):
 class AbstractLinkPosition(models.Model):
     link = models.ForeignKey(Link)
     position = models.IntegerField()
+    condition_expression = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text='A python expression. Variable request is in scope.'
+    )
 
     class Meta():
         abstract = True
@@ -157,6 +163,11 @@ class AbstractLinkPosition(models.Model):
     def __unicode__(self):
         return "Link titled %s in position %s." % (self.link.title, \
                 self.position)
+
+    def condition_expression_result(self, request):
+        if not self.condition_expression:
+            return True
+        return eval(self.condition_expression)
 
 
 class MenuLinkPosition(AbstractLinkPosition):
@@ -438,5 +449,4 @@ it works - you cannot break anything.""",
     def condition_expression_result(self, request):
         if not self.condition_expression:
             return True
-
         return eval(self.condition_expression)
