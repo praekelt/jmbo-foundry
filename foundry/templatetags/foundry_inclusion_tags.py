@@ -128,6 +128,10 @@ class TileNode(template.Node):
     def render(self, context):
         tile = self.tile.resolve(context)
 
+        # Evaluate condition
+        if not tile.condition_expression_result(context['request']):
+            return ''
+
         if tile.view_name:
             # Resolve view name to a function or object
             # xxx: this is slow because there is no way to get the view 

@@ -434,3 +434,9 @@ it works - you cannot break anything.""",
     @property
     def label(self):
         return str(self.target or self.view_name)
+
+    def condition_expression_result(self, request):
+        if not self.condition_expression:
+            return True
+
+        return eval(self.condition_expression)
