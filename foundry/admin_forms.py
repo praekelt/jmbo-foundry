@@ -2,8 +2,15 @@ from django import forms
 from django.db.models.aggregates import Sum
 from django.contrib.contenttypes.models import ContentType
 
-from foundry.models import Menu, Navbar, Listing, Column, Tile
+from foundry.models import Menu, Navbar, Listing, Row, Column, Tile
 from foundry.utils import get_view_choices
+
+
+class RowEditAjaxForm(forms.ModelForm):
+
+    class Meta:
+        model = Row
+        fields = ('block_name',)
 
 
 class ColumnCreateAjaxForm(forms.ModelForm):

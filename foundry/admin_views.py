@@ -6,7 +6,8 @@ from django.utils import simplejson
 from django.db.models import get_model
 
 from foundry.models import Page, Row, Column, Tile
-from foundry.admin_forms import ColumnCreateAjaxForm, ColumnEditAjaxForm, TileEditAjaxForm
+from foundry.admin_forms import RowEditAjaxForm, ColumnCreateAjaxForm, \
+    ColumnEditAjaxForm, TileEditAjaxForm
 
 
 @staff_member_required
@@ -15,9 +16,33 @@ def row_create_ajax(request):
     row.save()
     di = dict(
         id=row.id,
-        page_render_height=row.page.render_height
+        page_render_height=row.page.render_height,
+        block_name=row.block_name
     )
     return HttpResponse(simplejson.dumps(di))
+
+
+@staff_member_required
+def row_edit_ajax(request):
+    instance = get_object_or_404(Row, id=int(request.REQUEST.get('row_id')))
+    if request.method == 'POST':
+        form = RowEditAjaxForm(request.POST, instance=instance)      
+        if form.is_valid():
+            row = form.save()
+            di = dict(
+                id=row.id, 
+                block_name=row.block_name,
+            )
+            return HttpResponse(simplejson.dumps(di))
+    else:
+        form = RowEditAjaxForm(instance=instance) 
+
+    extra = dict(form=form)
+    return render_to_response(
+        'admin/foundry/page/row_edit_ajax.html', 
+        extra, 
+        context_instance=RequestContext(request)
+    )
 
 
 @staff_member_required

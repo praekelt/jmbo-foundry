@@ -1,0 +1,12 @@
+<form id="row-edit-form" action="{% url admin-row-edit-ajax %}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="row_id" value="{{ form.instance.id|default_if_none:'' }}" />
+    <fieldset class="module aligned">
+        <table style="width: 100%;">
+            {{ form.as_table }}
+        </table>
+    </fieldset>
+    <div class="submit-row">
+        <input type="submit" class="default" value="Save" />
+    </div>
+</form>

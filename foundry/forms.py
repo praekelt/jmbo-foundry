@@ -255,6 +255,12 @@ class AgeGatewayForm(forms.Form):
     as_ul = as_ul_replacement
 
 
+class SearchForm(forms.Form):
+    search_term = forms.CharField(max_length=64)
+
+    as_ul = as_ul_replacement
+
+
 # Form for testing
 class TestForm(forms.Form):
     title = forms.CharField(max_length=20)

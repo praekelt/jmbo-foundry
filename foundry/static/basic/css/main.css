@@ -55,6 +55,7 @@ p {
     padding: 2px;
 }
 
+
 /* Footer */
 #footer { 
     clear: both; 
@@ -68,8 +69,14 @@ div#search form {
     border: 0;
 }
 
-/* Container class for navbar, menu, listin */
-.foundry-container div.title { background-color: #f1f1f1; padding: 3px; border-bottom: 1px solid #ddd; margin-bottom: 3px; clear: both }
+/* Container class for navbar, menu, listing */
+.foundry-container div.title { 
+    background-color: #f1f1f1; 
+    padding: 3px; 
+    border-bottom: 1px solid #ddd; 
+    margin-bottom: 3px; 
+    clear: both; 
+ }
 
 /* Navbar */
 .foundry-navbar { 
@@ -176,7 +183,6 @@ div#search form {
     background-color: #f1f1f1; 
     padding: 0.5em 3px;
 }
-
 .foundry-category-list div.category-title { 
     background-color: #f1f1f1; 
     padding: 3px; 
@@ -195,7 +201,6 @@ div#search form {
     padding: 0.5em 3px;
     border: none;
 }
-
 .foundry-category-detail div.category-title { 
     background-color: #f1f1f1; 
     padding: 3px; 
@@ -203,6 +208,22 @@ div#search form {
     margin-bottom: 3px; 
     clear: both; 
 }
+
+/* Additional styles that can be applied to tiles */
+/* Softcoded tile-based header */
+.header .foundry-container {
+    height: 26px;    
+    background-color: #000; 
+    background-image: url(/static/basic/images/logo.jpg);
+    background-position: 3px 1px;
+    background-repeat: no-repeat;
+    padding: 1px 2px 1px 3px; 
+}
+.header div.items {
+    float: right;
+}
+
+
 
 /* todo: Fix these below */
 .byline { font-size: smaller; display:block; color:#666 }

@@ -1,23 +1,28 @@
 {% extends "base.html" %}
 {% load foundry_inclusion_tags %}
 
+{% block header %}
+    {% if object.is_homepage %}
+        {% with object.rows_by_block_name.header as rows %}
+            {% include "foundry/page_detail_inner.html" %}
+        {% endwith %}   
+    {% else %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
 {% block content %}
+    {% with object.rows_by_block_name.content as rows %}
+        {% include "foundry/page_detail_inner.html" %}
+    {% endwith %}
+{% endblock %}
 
-{% for row in object.rows %}
-    <table class="foundry-page-row" cellspacing="0">
-        <tr>
-        {% for column in row.columns %}
-            <td class="foundry-page-column foundry-page-column-{{ column.width }}">
-                {% for tile in column.tiles %}
-                    <div class="foundry-page-tile {{ tile.class_name }} {% if tile.enable_ajax %}foundry-enable-ajax{% endif %}"
-                         original_url="{% tile_url tile %}">
-                        {% tile tile %}
-                    </div>
-                {% endfor %}                
-            </td>
-        {% endfor %}
-        </tr>
-    </table>
-{% endfor %}
-
-{% endblock content %}
+{% block footer %}
+    {% if object.is_homepage %}
+        {% with object.rows_by_block_name.footer as rows %}
+            {% include "foundry/page_detail_inner.html" %}
+        {% endwith %}
+    {% else %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}

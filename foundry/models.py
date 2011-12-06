@@ -327,6 +327,15 @@ class Page(AbstractSlugBase, models.Model):
         return self.row_set.all().order_by('index')
 
     @property
+    def rows_by_block_name(self):
+        """Return rows grouped by block_name."""
+        result = {}
+        for row in self.rows:
+            result.setdefault(row.block_name, [])
+            result[row.block_name].append(row)
+        return result
+
+    @property
     def render_height(self):
         return sum([o.render_height+20 for o in self.rows])
 
@@ -334,6 +343,18 @@ class Page(AbstractSlugBase, models.Model):
 class Row(models.Model):
     page = models.ForeignKey(Page)
     index = models.PositiveIntegerField(default=0, editable=False)
+    block_name = models.CharField(
+        max_length=32, 
+        default='content',
+        choices=(
+            ('header', _('Header')),
+            ('content', _('Content')),
+            ('footer', _('Footer')),
+        ),        
+        help_text="The Django base template block that this row is rendered \
+            within. It is only applicable if the page is set to be the home \
+            page."
+    )
 
     def save(self, *args, **kwargs):        
         if not self.id:
@@ -346,7 +367,7 @@ class Row(models.Model):
 
     @property
     def render_height(self):
-        return max([o.render_height+8 for o in self.columns] + [0]) + 30
+        return max([o.render_height+8 for o in self.columns] + [0]) + 44
 
 
 class Column(models.Model):

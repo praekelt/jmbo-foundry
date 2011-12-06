@@ -22,6 +22,15 @@
         	-moz-border-radius: 3px;
         	border-radius: 3px;
         }
+        ul#rows li.block-header { 
+            border-right: solid 8px red;
+        }
+        ul#rows li.block-content { 
+            border-right: solid 8px green;
+        }
+        ul#rows li.block-footer { 
+            border-right: solid 8px blue;
+        }
         ul.columns {
             width: 100%;
             height: 100%;
@@ -50,6 +59,7 @@
     </style>
     <script type="text/javascript">
         $(document).ready(function(){
+
             $('ul.sortable').sortable({
                 opacity: 0.5,
                 update: function(event, ui) {
@@ -95,6 +105,7 @@
                         var el = $('#new-row-template').clone(true);
                         el.attr('id', 'row-'+obj.id);
                         el.attr('row_id', obj.id);
+                        el.addClass('block-' + obj.block_name);
                         el.show();
                         var rows = $('#rows');
                         rows.css('height', obj.page_render_height+'px');
@@ -156,6 +167,25 @@
             });
 
             {% if adminform.form.instance.id %}    
+            // Edit row. Launch dialog.
+            $('a.row-edit-launcher').click(function(event){
+                event.preventDefault();
+                var popup = $('#edit-dialog');
+                var li = $(this).parent();
+                $.ajax({
+                    url:'{% url admin-row-edit-ajax %}',
+                    data:{row_id:li.attr('row_id')},
+                    async: false,
+                    success: function(data){
+                        // Chrome is being weird in this case. It strips away my form tag. 
+                        // Two-liner gets around it.
+                        popup.html('');
+                        popup.append(data);
+                    } 
+                });
+                popup.dialog({title:'Edit row', modal:true, resizable:false, width:640});
+            });
+
             // Edit column. Launch dialog.
             $('a.column-edit-launcher').click(function(event){
                 event.preventDefault();
@@ -227,6 +257,36 @@
                     if (tile_id)
                         $.get('{% url admin-tile-delete-ajax %}', {tile_id:tile_id});
                 }
+            });
+
+            // Intercept row edit form submit
+            $('form#row-edit-form').live('submit', function(event){
+                event.preventDefault();
+                var form = $(this);
+                var url = $(this).attr('action');
+                var data = $(this).serialize();
+                $.ajax({
+                    url: url,
+                    data: data,
+                    async: false,
+                    type: 'POST',
+                    cache: false,                    
+                    success: function(data){
+                        if (data.indexOf('{') == 0)
+                        {
+                            var obj = $.parseJSON(data);
+                            // Update row dom element and close dialog
+                            var row = $('#row-' + obj.id);
+                            row.removeClass('block-header');
+                            row.removeClass('block-content');
+                            row.removeClass('block-footer');
+                            row.addClass('block-' + obj.block_name);
+                            $('#edit-dialog').dialog('close');
+                        }
+                        else
+                            form.replaceWith(data);
+                    }
+                });
             });
 
             // Intercept column create form submit
@@ -327,6 +387,7 @@
 {% if adminform.form.instance.id %}    
     <li id="new-row-template" class="xui-state-default" style="display: none;" row_id="">
         &middot;<a href="#" class="new-column">New column</a><br />
+        &middot;<a href="#" class="row-edit-launcher">Edit row</a></br>
         &middot;<a href="#" class="row-delete">Delete row</a></br>
         <ul class="sortable columns">
         </ul>
@@ -356,11 +417,22 @@
         immediately saved to the database.
     </p>
 
+    <p class="help">
+        A row may logically belong to a certain section on the home page. In Django termonology 
+        such a section is called a block. You only have to be concerned with setting the blocks 
+        if this page is the homepage. For example, you probably want login and logout links at the 
+        top of every page. The row that contains these tiles must have its block name set to <i>Header</i>.
+        <div style="width: 12px; height: 12px; background-color: red; display: inline-block;"></div> Header
+        <div style="width: 12px; height: 12px; background-color: green; display: inline-block;"></div> Content
+        <div style="width: 12px; height: 12px; background-color: blue; display: inline-block;"></div> Footer
+    </p>
+
     <a href="#" id="new-row">New row</a>
     <ul id="rows" class="sortable" style="height: {{ adminform.form.instance.render_height }}px;">
         {% for row in adminform.form.instance.rows %}
-            <li class="xui-state-default" id="row-{{ row.id }}" row_id="{{ row.id }}" style="height: {{ row.render_height }}px;">
+            <li class="xui-state-default block-{{row.block_name }}" id="row-{{ row.id }}" row_id="{{ row.id }}" style="height: {{ row.render_height }}px;">
                 &middot;<a href="#" class="new-column">New column</a><br />
+                &middot;<a href="#" class="row-edit-launcher">Edit row</a></br>
                 &middot;<a href="#" class="row-delete">Delete row {{ row.index }}</a></br>
 
                 <ul class="sortable columns">

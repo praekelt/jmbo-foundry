@@ -1,0 +1,20 @@
+{% comment %}This sucks. I want macros.{% endcomment %}
+
+{% load foundry_inclusion_tags %}
+
+{% for row in rows %}
+    <table class="foundry-page-row" cellspacing="0">
+        <tr>
+        {% for column in row.columns %}
+            <td class="foundry-page-column foundry-page-column-{{ column.width }}">
+                {% for tile in column.tiles %}
+                    <div class="foundry-page-tile {{ tile.class_name }} {% if tile.enable_ajax %}foundry-enable-ajax{% endif %}"
+                         original_url="{% tile_url tile %}">
+                        {% tile tile %}
+                    </div>
+                {% endfor %}                
+            </td>
+        {% endfor %}
+        </tr>
+    </table>
+{% endfor %}

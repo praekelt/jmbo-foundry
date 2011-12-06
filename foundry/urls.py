@@ -154,6 +154,14 @@ urlpatterns = patterns('',
         name='lorem-ipsum'
     ),
 
+    # Search
+    url(
+        r'^search/$',
+        'foundry.views.search',
+        {},
+        name='search'
+    ),
+
     # Test views
     url(
         r'^test-plain-response/$',
@@ -194,12 +202,17 @@ urlpatterns = patterns('',
         name='admin-tile-create-ajax',
     ),
     url(
+        r'^admin-row-edit-ajax/$',
+        'foundry.admin_views.row_edit_ajax',
+        {},
+        name='admin-row-edit-ajax',
+    ),
+    url(
         r'^admin-column-edit-ajax/$',
         'foundry.admin_views.column_edit_ajax',
         {},
         name='admin-column-edit-ajax',
     ),
-
     url(
         r'^admin-tile-edit-ajax/$',
         'foundry.admin_views.tile_edit_ajax',

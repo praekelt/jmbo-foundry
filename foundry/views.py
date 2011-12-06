@@ -12,7 +12,8 @@ from category.models import Category
 from jmbo.models import ModelBase
 
 from foundry.models import Listing, Page
-from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm
+from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
+    SearchForm
 
 
 class CategoryURL(object):
@@ -147,6 +148,18 @@ def home_resolver(request):
         return render_to_response('foundry/page_detail.html', extra, context_instance=RequestContext(request))
 
     return render_to_response('foundry/home.html', {}, context_instance=RequestContext(request))
+
+
+def search(request):
+    if request.method == 'POST':
+        form = SearchForm(request.POST) 
+        if form.is_valid():
+            return HttpResponseRedirect('/')
+    else:
+        form = SearchForm() 
+
+    extra = dict(form=form)
+    return render_to_response('foundry/search.html', extra, context_instance=RequestContext(request))
 
 
 # Views for testing
