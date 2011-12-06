@@ -7,7 +7,7 @@ from django.conf import settings
 
 from preferences import preferences
 
-from foundry.models import Menu, Navbar, Listing
+from foundry.models import Menu, Navbar, Listing, Page
 from foundry.templatetags import listing_styles
 
 register = template.Library()
@@ -109,6 +109,40 @@ class ListingNode(template.Node):
             return ''
 
         return getattr(listing_styles, obj.style)(obj).render(context)
+
+
+@register.tag
+def rows(parser, token):
+    try:
+        tag_name, block_name = token.split_contents()
+    except ValueError:
+        raise template.TemplateSyntaxError(
+            'rows tag requires argument block_name'
+        )
+    return RowsNode(block_name)
+
+
+class RowsNode(template.Node):
+    def __init__(self, block_name):
+        self.block_name = template.Variable(block_name)
+
+    def render(self, context):
+        block_name = self.block_name.resolve(context)
+
+        pages = Page.objects.filter(is_homepage=True)
+        if pages.count():
+            page = pages[0]
+            rows = page.rows_by_block_name.get(block_name, [])
+            if rows:
+                # We have customized rows for the block. Use them.
+                return render_to_string(
+                    'foundry/inclusion_tags/rows.html', {'rows':rows}, context
+                )
+
+        # Default rendering
+        return render_to_string(
+            'foundry/inclusion_tags/%s.html' % block_name, {}, context
+        )
 
 
 @register.tag

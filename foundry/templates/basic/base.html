@@ -20,21 +20,9 @@
 </head>
 
 <body>
-    {% block header %}
-    	<div id="header">
-            <a href="/"><img src="{{ STATIC_URL }}basic/images/logo.jpg" alt="Jmbo" /></a>
-            <div class="buttons">
-              {% if request.user.is_authenticated %}
-                <span><a href="{% url logout %}">Sign Out</a></span>
-              {% endif %}
-              {% if request.user.is_anonymous %}
-                  <span><a href="{% url login %}">Sign In</a></span>
-                  <span><a href="{% url join %}">Join</a></span>
-              {% endif %}
-          	</div>
-        </div>
 
-        {% navbar 'main' %}
+    {% block header %}
+        {% rows 'header' %}
     {% endblock %}
 
     {% block message %}
@@ -44,19 +32,12 @@
    
     <div id="content">
         {% block content %}
+            {% rows 'content' %}
         {% endblock %}
     </div>
 
     {% block footer %}
-        {% menu 'main' %}
-   
-        <div id="search">
-	        <form name="search-form" action="search-results.html" method="get" class="foundry-form-inline"><input type="text" name="search" class="txt" /><input type="submit" name="search-btn" value="Search" /></form>
-        </div>
-
-        <div id="footer">
-        	<span><a href="{% url about-us %}">About Us</a></span> - <span><a href="{% url site_contact %}">Contact Us</a></span> - <span><a href="{% url terms-and-conditions %}">Terms</a></span><br />&copy; Praekelt Digital 2011 - <a href="http://prototypes.praekelt.co.za/panya/mobile-web/advanced/">Touch Site</a> - <a href="http://www.facebook.com">Facebook</a> - <a href="http://www.twitter.com">Twitter</a></span>
-        </div>
+        {% rows 'footer' %}
     {% endblock %}
 
 </body>

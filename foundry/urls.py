@@ -40,11 +40,12 @@ urlpatterns = patterns('',
 
     url(
         r'^$',
-        'foundry.views.home_resolver',
-        {},
+        'django.views.generic.simple.direct_to_template',
+        {
+            'template':'base.html', 
+        },
         name='home'
     ),
-
     url(
         r'^category/(?P<category_slug>[\w-]+)/$',
         CategoryObjectListView.as_view(),

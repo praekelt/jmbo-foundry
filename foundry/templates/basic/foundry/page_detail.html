@@ -1,28 +1,8 @@
 {% extends "base.html" %}
 {% load foundry_inclusion_tags %}
 
-{% block header %}
-    {% if object.is_homepage %}
-        {% with object.rows_by_block_name.header as rows %}
-            {% include "foundry/page_detail_inner.html" %}
-        {% endwith %}   
-    {% else %}
-        {{ block.super }}
-    {% endif %}
-{% endblock %}
-
 {% block content %}
     {% with object.rows_by_block_name.content as rows %}
-        {% include "foundry/page_detail_inner.html" %}
+        {% include "foundry/inclusion_tags/rows.html" %}
     {% endwith %}
-{% endblock %}
-
-{% block footer %}
-    {% if object.is_homepage %}
-        {% with object.rows_by_block_name.footer as rows %}
-            {% include "foundry/page_detail_inner.html" %}
-        {% endwith %}
-    {% else %}
-        {{ block.super }}
-    {% endif %}
 {% endblock %}
