@@ -132,7 +132,7 @@ INSTALLED_APPS = (
     'chart',
     'captcha',
     'secretballot',
-    'richcomments',
+#    'richcomments', # re-evaluate this product. It needs to degrade to non-ajax as well.
     'publisher',
 #    'social',	# xxx: removed since can't download socialregistration-tokenstore tarball currently
     'category',

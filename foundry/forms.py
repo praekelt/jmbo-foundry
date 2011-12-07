@@ -263,7 +263,7 @@ class SearchForm(forms.Form):
 
 
 class CommentForm(BaseCommentForm):
-    in_reply_to = forms.ModelChoiceField(queryset=FoundryComment.objects.all(), required=False)
+    in_reply_to = forms.CharField(max_length=10, required=False, widget=forms.widgets.HiddenInput)
 
     def __init__(self, *args, **kwargs):
         super(CommentForm, self).__init__(*args, **kwargs)
@@ -283,10 +283,10 @@ class CommentForm(BaseCommentForm):
 
     def get_comment_create_data(self):
         data = super(CommentForm, self).get_comment_create_data()
-        data['in_reply_to'] = self.cleaned_data['in_reply_to']
+        data['in_reply_to_id'] = self.cleaned_data['in_reply_to']
         return data
+   
 
-    
 # Form for testing
 class TestForm(forms.Form):
     title = forms.CharField(max_length=20)

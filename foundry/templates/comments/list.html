@@ -1,0 +1,26 @@
+<script type="text/javascript">
+$(document).ready(function(){
+    $('a.comment-reply').live('click', function(event){
+        event.preventDefault();
+        // Update hidden input, focus comment form
+        var form = $(this).parents('div.object-comments:first form');
+        $('input[name="in_reply_to"]', form).val($(this).attr('comment_id'));
+        var area = $('textarea', form);        
+        //area.val('@:');
+        area.focus();
+    });
+});
+</script>
+
+<dl class="foundry-comment-list">
+    {% for comment in comment_list %}
+    <dt id="c{{ comment.id }}">
+        {{ comment.submit_date }} - {{ comment.name }}
+    </dt>
+    <dd>
+        <p>{{ comment.comment }}</p>
+        <!-- todo: Need can comment test -->
+        <a href="#" class="comment-reply" comment_id="{{ comment.id }}">Reply</a>
+    </dd>
+    {% endfor %}
+</dl>
