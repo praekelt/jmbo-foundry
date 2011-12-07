@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.contrib.comments.models import Comment as BaseComment
 
 from ckeditor.fields import RichTextField
 from preferences.models import Preferences
@@ -450,3 +451,31 @@ it works - you cannot break anything.""",
         if not self.condition_expression:
             return True
         return eval(self.condition_expression)
+
+
+class FoundryComment(BaseComment):
+    """Custom comment class"""
+    in_reply_to = models.ForeignKey('self', null=True, blank=True)
+
+    @property
+    def replies(self):
+        return FoundryComment.objects.filter(in_reply_to=self).order_by('id')
+
+    '''
+    def can_vote(self, request):
+        """Play along with Panya API"""
+        return True, 'can_vote'
+
+    def likes_enabled(self):
+        """Play along with Panya API"""
+        return True
+
+    @property
+    def as_leaf_class(self):
+        """Play along with Panya API"""
+        return {'content_type':'foundrycomment'}
+    '''        
+
+    @property
+    def creator(self):
+        return User.objects.get(id=self.user_id)

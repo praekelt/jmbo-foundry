@@ -191,6 +191,8 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+COMMENTS_APP = 'foundry'
+
 SIMPLE_AUTOCOMPLETE = {
     'auth.user': {'threshold': 20},
     'category.category': {'threshold':20}

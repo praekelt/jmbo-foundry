@@ -11,10 +11,11 @@ from django.contrib.sites.models import get_current_site
 from django.template import Context, loader
 from django.utils.http import int_to_base36
 from django.http import HttpResponseRedirect
+from django.contrib.comments.forms import CommentForm as BaseCommentForm
 
 from preferences import preferences
 
-from foundry.models import Member, DefaultAvatar, Country
+from foundry.models import Member, DefaultAvatar, Country, FoundryComment
 from foundry.widgets import OldSchoolDateWidget
 
 def as_ul_replacement(form):
@@ -261,6 +262,31 @@ class SearchForm(forms.Form):
     as_ul = as_ul_replacement
 
 
+class CommentForm(BaseCommentForm):
+    in_reply_to = forms.ModelChoiceField(queryset=FoundryComment.objects.all(), required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(CommentForm, self).__init__(*args, **kwargs)
+
+        self.fields['name'].widget = forms.widgets.HiddenInput()
+        self.fields['email'].widget = forms.widgets.HiddenInput()
+        self.fields['url'].widget = forms.widgets.HiddenInput()
+
+        # Set to anonymous values since we do not have either the request or a
+        # user object to use at this stage. We don't care about these values 
+        # if user is set on a comment object.
+        self.fields['name'].initial = 'Anonymous'
+        self.fields['email'].initial = 'anonymous@jmbo.org'
+
+    def get_comment_model(self):
+        return FoundryComment
+
+    def get_comment_create_data(self):
+        data = super(CommentForm, self).get_comment_create_data()
+        data['in_reply_to'] = self.cleaned_data['in_reply_to']
+        return data
+
+    
 # Form for testing
 class TestForm(forms.Form):
     title = forms.CharField(max_length=20)
