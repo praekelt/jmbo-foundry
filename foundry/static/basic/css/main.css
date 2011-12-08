@@ -223,7 +223,14 @@ div#search form {
     float: right;
 }
 
-
+/* Commenting. Naming convention is not from jmbo-foundry but jmbo. */
+.object-comments form label {
+    display: block;
+}
+.object-comments form textarea {
+}
+.object-comments form p.submit {
+}
 
 /* todo: Fix these below */
 .byline { font-size: smaller; display:block; color:#666 }

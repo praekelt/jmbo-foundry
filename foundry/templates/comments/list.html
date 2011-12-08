@@ -16,42 +16,50 @@ $(document).ready(function(){
 
 Auto Update: {% if request.GET.comment_auto_update %}On{% else %}Turn Off{% endif %}
 
-{% if request.GET.my_messages %}
-    <a href=".">All Messages</a>
-    My Messages
-{% else %}
-    All Messages
-    <a href="?my_messages=1">My Messages</a>
-{% endif %}
+<div class="foundry-navbar foundry-comments-messages-navbar">
+    <div class="items">
+        <div class="item first {% if not request.GET.my_messages %}active{% endif %}">
+            <a href=".">All Messages</a>
+        </div>
+        <div class="item last {% if request.GET.my_messages %}active{% endif %}">
+            <a href="?my_messages=1">My Messages</a>
+        </div>
+    </div>
+</div>
 
 {% with request.GET.paginate_by|default:2|add:0 as paginate_by %}
 
-    Show
-    {% with '2 3 4'|as_list:'int' as li %}
-        {% for n in li %}
-            {% if paginate_by == n %}
-                {{ n }}
-            {% else %}
-                <a href="?paginate_by={{ n }}{% if request.GET.my_messages %}&my_messages=1{% endif %}">{{ n }}</a>
-            {% endif %}
-        {% endfor %}
-    {% endwith %}
+    <div class="foundry-navbar foundry-comments-pages-navbar">
+        <div class="items">
+            <div class="item first">Show</div>
+            {% with '2 3 4'|as_list:'int' as li %}
+                {% for n in li %}
+                    <div class="item {% if paginate_by == n %}active{% endif %} {% if forloop.last %}last{% endif %}">
+                        <a href="?paginate_by={{ n }}{% if request.GET.my_messages %}&my_messages=1{% endif %}">{{ n }}</a>
+                    </div>
+                {% endfor %}
+            {% endwith %}
+        </div>
+    </div>
 
-    <dl class="foundry-comment-list">
+    <div class="foundry-container foundry-comments-list">
     
         {% autopaginate comment_list paginate_by %}
         {% for comment in comment_list %}
-            <dt id="c{{ comment.id }}">
+            <div id="c{{ comment.id }}" class="title">
                 {{ comment.submit_date }} - {{ comment.name }}
-            </dt>
-            <dd>
-                <p>{{ comment.comment }}</p>
-                <!-- todo: Need can comment test -->
-                <a href="#" class="comment-reply" comment_id="{{ comment.id }}">Reply</a>
-            </dd>
+            </div>
+            <div class="items">
+                <div class="item">
+                    {{ comment.comment }}
+                    <br />
+                    <!-- todo: Need can comment test -->
+                    <a href="#" class="comment-reply" comment_id="{{ comment.id }}">Reply</a>
+                </div>
+            </div>
         {% endfor %}
         {% paginate %}
 
-    </dl>
+    </div>
 
 {% endwith %}
