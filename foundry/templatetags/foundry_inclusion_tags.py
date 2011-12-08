@@ -20,6 +20,7 @@ def as_list(value, coerce=None):
         li = [int(l) for l in li]
     return li
 
+
 @register.tag
 def menu(parser, token):
     try:

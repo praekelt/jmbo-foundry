@@ -16,7 +16,13 @@ $(document).ready(function(){
 
 Auto Update: {% if request.GET.comment_auto_update %}On{% else %}Turn Off{% endif %}
 
-All Messages My Messages
+{% if request.GET.my_messages %}
+    <a href=".">All Messages</a>
+    My Messages
+{% else %}
+    All Messages
+    <a href="?my_messages=1">My Messages</a>
+{% endif %}
 
 {% with request.GET.paginate_by|default:2|add:0 as paginate_by %}
 
@@ -26,7 +32,7 @@ All Messages My Messages
             {% if paginate_by == n %}
                 {{ n }}
             {% else %}
-                <a href="?paginate_by={{ n }}">{{ n }}</a>
+                <a href="?paginate_by={{ n }}{% if request.GET.my_messages %}&my_messages=1{% endif %}">{{ n }}</a>
             {% endif %}
         {% endfor %}
     {% endwith %}

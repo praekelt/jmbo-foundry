@@ -1,5 +1,3 @@
-import monkey
-
 def get_model():
     from foundry.models import FoundryComment
     return FoundryComment

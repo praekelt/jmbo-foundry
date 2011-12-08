@@ -17,7 +17,7 @@ from jmbo.utils import generate_slug
 from foundry.profile_models import AbstractAvatarProfile, \
     AbstractSocialProfile, AbstractContactProfile
 from foundry.templatetags import listing_styles
-
+import foundry.monkey
 
 class AbstractSlugBase(models.Model):
 
