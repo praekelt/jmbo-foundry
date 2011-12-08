@@ -83,6 +83,7 @@ MIDDLEWARE_CLASSES = (
     'foundry.middleware.AgeGateway',                            
     'django.contrib.messages.middleware.MessageMiddleware',
     'likes.middleware.SecretBallotUserIpUseragentMiddleware',
+    'foundry.middleware.PaginationMiddleware',
     'foundry.middleware.VerboseRequestMeta',                    
     'django.middleware.transaction.TransactionMiddleware',
 )
@@ -149,6 +150,7 @@ INSTALLED_APPS = (
     'ckeditor',
     'contact',
     'simple_autocomplete', # custom
+    'pagination', # custom
     'south', # custom - add to paster
     'django.contrib.auth',
     'django.contrib.comments',

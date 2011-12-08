@@ -455,7 +455,7 @@ it works - you cannot break anything.""",
 
 class FoundryComment(BaseComment):
     """Custom comment class"""
-    in_reply_to = models.ForeignKey('self', null=True, blank=True)
+    in_reply_to = models.ForeignKey('self', null=True, blank=True, db_index=True)
 
     @property
     def replies(self):

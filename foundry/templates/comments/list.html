@@ -1,3 +1,5 @@
+{% load pagination_tags %}
+
 <script type="text/javascript">
 $(document).ready(function(){
     $('a.comment-reply').live('click', function(event){
@@ -12,7 +14,15 @@ $(document).ready(function(){
 });
 </script>
 
+Auto Update: {% if request.GET.comment_auto_update %}On{% else %}Turn Off{% endif %}
+
+All Messages My Messages
+
+Batching
+Show 10 20 50
+
 <dl class="foundry-comment-list">
+    {% autopaginate comment_list 2 %}
     {% for comment in comment_list %}
     <dt id="c{{ comment.id }}">
         {{ comment.submit_date }} - {{ comment.name }}
@@ -23,4 +33,5 @@ $(document).ready(function(){
         <a href="#" class="comment-reply" comment_id="{{ comment.id }}">Reply</a>
     </dd>
     {% endfor %}
+    {% paginate %}
 </dl>

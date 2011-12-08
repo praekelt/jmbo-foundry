@@ -6,6 +6,7 @@ from django.conf import settings
 
 from preferences import preferences
 
+
 class VerboseRequestMeta:
     """Add metadata to request so repr(request) prints more information. Runs
     as one of the last middleware."""
@@ -14,6 +15,7 @@ class VerboseRequestMeta:
         user = getattr(request, 'user', None)
         if user is not None:
             request.META['AUTHENTICATED_USER'] = str(user)
+
 
 class AgeGateway:
     """Redirect if age gateway is enabled and user is anonymous. Must run after
@@ -39,3 +41,17 @@ class AgeGateway:
             return HttpResponseRedirect(exempted_urls[0])
 
         return response            
+
+
+class PaginationMiddleware:
+    """Our replacement for django-pagination PaginationMiddleware. It defaults
+    to the last page if no page is set on the request. A monkey patch in
+    monkey.py handles the negative page number."""
+
+    def process_request(self, request):       
+        page = -1
+        try:
+            page = int(request.REQUEST['page'])
+        except (KeyError, ValueError, TypeError):
+            pass
+        request.__class__.page = page

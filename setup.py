@@ -43,6 +43,7 @@ setup(
         'jmbo-contact',
         'django-debug-toolbar',
         'django-simple-autocomplete',
+        'django-pagination',
         'south',
         'BeautifulSoup',
     ],
