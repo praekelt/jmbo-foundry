@@ -1,4 +1,4 @@
-{% load pagination_tags %}
+{% load pagination_tags foundry_inclusion_tags %}
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -18,20 +18,34 @@ Auto Update: {% if request.GET.comment_auto_update %}On{% else %}Turn Off{% endi
 
 All Messages My Messages
 
-Batching
-Show 10 20 50
+{% with request.GET.paginate_by|default:2|add:0 as paginate_by %}
 
-<dl class="foundry-comment-list">
-    {% autopaginate comment_list 2 %}
-    {% for comment in comment_list %}
-    <dt id="c{{ comment.id }}">
-        {{ comment.submit_date }} - {{ comment.name }}
-    </dt>
-    <dd>
-        <p>{{ comment.comment }}</p>
-        <!-- todo: Need can comment test -->
-        <a href="#" class="comment-reply" comment_id="{{ comment.id }}">Reply</a>
-    </dd>
-    {% endfor %}
-    {% paginate %}
-</dl>
+    Show
+    {% with '2 3 4'|as_list:'int' as li %}
+        {% for n in li %}
+            {% if paginate_by == n %}
+                {{ n }}
+            {% else %}
+                <a href="?paginate_by={{ n }}">{{ n }}</a>
+            {% endif %}
+        {% endfor %}
+    {% endwith %}
+
+    <dl class="foundry-comment-list">
+    
+        {% autopaginate comment_list paginate_by %}
+        {% for comment in comment_list %}
+            <dt id="c{{ comment.id }}">
+                {{ comment.submit_date }} - {{ comment.name }}
+            </dt>
+            <dd>
+                <p>{{ comment.comment }}</p>
+                <!-- todo: Need can comment test -->
+                <a href="#" class="comment-reply" comment_id="{{ comment.id }}">Reply</a>
+            </dd>
+        {% endfor %}
+        {% paginate %}
+
+    </dl>
+
+{% endwith %}

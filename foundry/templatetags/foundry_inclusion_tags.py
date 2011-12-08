@@ -13,6 +13,13 @@ from foundry.templatetags import listing_styles
 register = template.Library()
 
 
+@register.filter(name='as_list')
+def as_list(value, coerce=None):
+    li = value.split()
+    if coerce == 'int':
+        li = [int(l) for l in li]
+    return li
+
 @register.tag
 def menu(parser, token):
     try:
