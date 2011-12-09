@@ -10,7 +10,7 @@
             <img src="{{ object.get_listing_vertical_thumbnail_basic_url }}" alt="{{ object.title }}" class="left" />
 
             <div class="h3">
-                {% if listing.display_primary_category %}<span class="category">{{ object.primary_category }}:</span>{% endif %}
+                {% if listing.display_category %}<span class="category">{{ object.category }}:</span>{% endif %}
                 <a href="{{ object.get_absolute_url }}">{{ object.title }}</a>
             </div>
             {% if listing.display_likes %}
