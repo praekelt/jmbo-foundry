@@ -1,4 +1,4 @@
-{% load jmbo_template_tags jmbo_inclusion_tags %}
+{% load jmbo_template_tags jmbo_inclusion_tags foundry_inclusion_tags %}
 
 {% if object_list.exists %}
     <div class="foundry-container foundry-listing-vertical-thumbnail">
@@ -10,7 +10,7 @@
             <img src="{{ object.get_listing_vertical_thumbnail_basic_url }}" alt="{{ object.title }}" class="left" />
 
             <div class="h3">
-                {% if listing.display_category %}<span class="category">{{ object.category }}:</span>{% endif %}
+                {% if object.categories.all.count %}<span class="category">{{ object.categories.all|join_titles }}:</span>{% endif %}
                 <a href="{{ object.get_absolute_url }}">{{ object.title }}</a>
             </div>
             {% if listing.display_likes %}

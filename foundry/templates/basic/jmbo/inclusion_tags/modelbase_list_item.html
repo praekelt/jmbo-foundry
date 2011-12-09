@@ -1,4 +1,7 @@
-{% load jmbo_template_tags %}
+{% load jmbo_template_tags foundry_inclusion_tags %}
 
-<div class="title"><a href="{% smart_url url_callable object %}">{{ object.title }}</a></div>
+<div class="title">
+    {% if object.categories.all.count %}<span class="category">{{ object.categories.all|join_titles }}:</span>{% endif %}
+    <a href="{% smart_url url_callable object %}">{{ object.title }}</a>
+</div>
 <div class="byline">{% humanize_time_diff object.created 'ago' 'lower' %}</div>

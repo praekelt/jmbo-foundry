@@ -21,6 +21,11 @@ def as_list(value, coerce=None):
     return li
 
 
+@register.filter(name='join_titles')
+def join_titles(value, delimiter=', '):
+    return delimiter.join([v.title for v in value])
+
+
 @register.tag
 def menu(parser, token):
     try:
