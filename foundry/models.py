@@ -224,15 +224,15 @@ class RegistrationPreferences(Preferences):
 
     @property
     def display_fields(self):
-        return self.raw_display_fields.split(',')
+        return [s for s in self.raw_display_fields.split(',') if s]
 
     @property
     def required_fields(self):
-        return self.raw_required_fields.split(',')
+        return [s for s in self.raw_required_fields.split(',') if s]
 
     @property
     def unique_fields(self):
-        return self.raw_unique_fields.split(',')
+        return [s for s in self.raw_unique_fields.split(',') if s]
 
     def save(self, *args, **kwargs):
         # Unique fields must be unique! Check the existing members for possible
