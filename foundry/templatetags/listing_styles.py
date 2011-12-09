@@ -12,7 +12,7 @@ class AbstractBaseStyle(object):
         if not queryset.exists():
             queryset = models.ModelBase.permitted.all()
             if self.listing.category:
-                queryset = queryset.filter(categories=self.listing.category)
+                queryset = queryset.filter(primary_category=self.listing.category)
         return queryset[:self.listing.count]
     
     def get_url_callable(self, *args, **kwargs):
