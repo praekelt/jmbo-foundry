@@ -19,18 +19,6 @@ from foundry.profile_models import AbstractAvatarProfile, \
 from foundry.templatetags import listing_styles
 import foundry.monkey
 
-class AbstractSlugBase(models.Model):
-
-    class Meta:
-        abstract = True
-
-    slug = models.SlugField(
-        editable=True,
-        max_length=32,
-        db_index=True,
-        unique=True,
-    )
-
 
 class Link(models.Model):
     title = models.CharField(
@@ -98,28 +86,46 @@ precedence over URL field below.",
         return self.title
 
 
-class Menu(AbstractSlugBase):
+class Menu(models.Model):
     """A tile menu contains ordered links"""
     title = models.CharField(max_length=255)
+    slug = models.SlugField(
+        editable=True,
+        max_length=32,
+        db_index=True,
+        unique=True,
+    )
     display_title = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.title
 
 
-class Navbar(AbstractSlugBase):
+class Navbar(models.Model):
     """A tile navbar contains ordered links"""
     title = models.CharField(max_length=255)
+    slug = models.SlugField(
+        editable=True,
+        max_length=32,
+        db_index=True,
+        unique=True,
+    )
 
     def __unicode__(self):
         return self.title
 
 
-class Listing(AbstractSlugBase):
+class Listing(models.Model):
     """A themed, ordered collection of items"""
     title = models.CharField(
         max_length=256,
         help_text='A short descriptive title.',
+    )
+    slug = models.SlugField(
+        editable=True,
+        max_length=32,
+        db_index=True,
+        unique=True,
     )
     content = models.ManyToManyField(
         'jmbo.ModelBase',
@@ -305,9 +311,15 @@ class DefaultAvatar(ImageModel):
     pass
 
 
-class Country(AbstractSlugBase):
+class Country(models.Model):
     """Countries used in the age gateway"""
     title = models.CharField(max_length=32)
+    slug = models.SlugField(
+        editable=True,
+        max_length=32,
+        db_index=True,
+        unique=True,
+    )
     minimum_age = models.PositiveIntegerField(default=18)
 
     class Meta:
@@ -318,9 +330,15 @@ class Country(AbstractSlugBase):
         return self.title
 
 
-class Page(AbstractSlugBase, models.Model):
+class Page(models.Model):
     title = models.CharField(
         max_length=200, help_text='A title that may appear in the browser window caption.',
+    )
+    slug = models.SlugField(
+        editable=True,
+        max_length=32,
+        db_index=True,
+        unique=True,
     )
     is_homepage = models.BooleanField(default=False, help_text="Tick if you want this page to be the site's homepage.")
     sites = models.ManyToManyField(
