@@ -7,6 +7,7 @@ from django.template import RequestContext
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 from category.models import Category
 from jmbo.models import ModelBase
@@ -89,7 +90,7 @@ class CategoryObjectListView(ListView):
 
     def get_queryset(self):
         self.category = get_object_or_404(Category, slug__iexact=self.kwargs['category_slug'])
-        return ModelBase.permitted.filter(primary_category=self.category).exclude(pin__category=self.category)
+        return ModelBase.permitted.filter(Q(primary_category=self.category)|Q(categories=self.category)).exclude(pin__category=self.category)
         
     def get_template_names(self):
         return ['category/%s_list.html' % self.category.slug, 'category/list.html'] + super(CategoryObjectListView, self).get_template_names()

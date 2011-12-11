@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.template.loader import render_to_string
 
 from jmbo import models
@@ -12,7 +13,7 @@ class AbstractBaseStyle(object):
         if not queryset.exists():
             queryset = models.ModelBase.permitted.all()
             if self.listing.category:
-                queryset = queryset.filter(primary_category=self.listing.category)
+                queryset = queryset.filter(Q(primary_category=self.listing.category)|Q(categories=self.listing.category))
         return queryset[:self.listing.count]
     
     def get_url_callable(self, *args, **kwargs):
