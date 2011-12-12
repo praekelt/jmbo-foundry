@@ -61,6 +61,8 @@ class LoginForm(AuthenticationForm):
             label = _("Mobile number")
         elif v == 'username,email':
             label = _("Username or email address")
+        elif v == 'username,mobile_number':
+            label = _("Username or mobile number")
         if label is not None:
             self.fields['username'].label = label
 
