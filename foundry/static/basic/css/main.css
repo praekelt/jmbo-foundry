@@ -70,7 +70,7 @@ div#search form {
 }
 
 /* Container class for navbar, menu, listing */
-.foundry-container div.title { 
+.foundry-container > div.title { 
     background-color: #f1f1f1; 
     padding: 3px; 
     border-bottom: 1px solid #ddd; 
@@ -182,7 +182,7 @@ div#search form {
     background-color: #f1f1f1; 
     padding: 0.5em 3px;
 }
-.foundry-category-list div.category-title { 
+.foundry-category-list > div.title { 
     background-color: #f1f1f1; 
     padding: 3px; 
     border-bottom: 1px solid #ddd; 
@@ -191,7 +191,7 @@ div#search form {
 }
 
 /* Category detail */
-.foundry-category-detail div.intro {
+.foundry-category-detail > div.intro {
     border-bottom: 1px solid #e9e9e9; 
     clear: left; 
     padding: 0.5em 0;
@@ -200,7 +200,7 @@ div#search form {
     padding: 0.5em 3px;
     border: none;
 }
-.foundry-category-detail div.category-title { 
+.foundry-category-detail > div.title { 
     background-color: #f1f1f1; 
     padding: 3px; 
     border-bottom: 1px solid #ddd; 
