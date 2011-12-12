@@ -28,7 +28,7 @@ class AgeGateway:
 
         exempted_urls = (
             reverse('age-gateway'), reverse('join'), reverse('login'), 
-            '/password_reset',
+            '/password_reset', '/static'
         )
 
         # On an exempted url
