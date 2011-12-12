@@ -130,10 +130,6 @@ class CountryAdmin(admin.ModelAdmin):
     list_editable = ('minimum_age',)
     prepopulated_fields = {'slug': ('title',)}
 
-    def __init__(self, model, admin_site):
-        model._meta.fields.insert(2, model._meta.fields.pop(1))
-        super(CountryAdmin, self).__init__(model, admin_site)
-
 
 class PageAdmin(admin.ModelAdmin):
     list_display = ('title', 'slug', 'is_homepage')

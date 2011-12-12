@@ -1,3 +1,5 @@
+import datetime
+
 from django.conf import settings
 from django.contrib.auth import authenticate, login, get_backends
 from django.core.urlresolvers import reverse
@@ -36,16 +38,26 @@ class CategoryURL(object):
 
 def join(request):
     """Surface join form"""
+    show_age_gateway = not request.COOKIES.get('age_gateway_passed')
     if request.method == 'POST':
-        form = JoinForm(request.POST, request.FILES) 
+        form = JoinForm(request.POST, request.FILES, show_age_gateway=show_age_gateway) 
         if form.is_valid():
             member = form.save()
             backend = get_backends()[0]
             member.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
             login(request, member)            
-            return HttpResponseRedirect(reverse('join-finish'))
+            response = HttpResponseRedirect(reverse('join-finish'))
+
+            # Set cookie if age gateway applicable. Can't delegate to form :(
+            if show_age_gateway:
+                now = datetime.datetime.now()
+                expires = now.replace(year=now.year+10)
+                response.set_cookie('age_gateway_passed', value=1, expires=expires)
+
+            return response
+
     else:
-        form = JoinForm() 
+        form = JoinForm(show_age_gateway=show_age_gateway) 
 
     extra = dict(form=form)
     return render_to_response('foundry/join.html', extra, context_instance=RequestContext(request))
@@ -112,7 +124,7 @@ def age_gateway(request):
     if request.method == 'POST':
         form = AgeGatewayForm(request.POST) 
         if form.is_valid():
-            # save returns a response
+            # Method save returns a response
             return form.save(request)
     else:
         form = AgeGatewayForm() 

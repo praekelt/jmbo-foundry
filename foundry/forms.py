@@ -73,6 +73,8 @@ class LoginForm(AuthenticationForm):
     
 class JoinForm(UserCreationForm):
     """Custom join form"""
+    country = forms.ModelChoiceField(queryset=Country.objects.all())
+    date_of_birth = forms.DateField(widget=OldSchoolDateWidget) # todo: widget
     accept_terms = forms.BooleanField(required=True, label="", widget=TermsCheckboxInput)
 
     class Meta:
@@ -92,12 +94,26 @@ class JoinForm(UserCreationForm):
                     message =_("The %s is already in use. Please supply a different %s." % (pretty_name, pretty_name))
                     self._errors[name] = self.error_class([message])
 
+        # Age gateway fields
+        if self.show_age_gateway:
+            country = cleaned_data.get('country')
+            date_of_birth = cleaned_data.get('date_of_birth')
+            if country and date_of_birth:
+                today = datetime.date.today()
+                if date_of_birth > today.replace(today.year - country.minimum_age):
+                    msg = "You must be at least %s years of age to use this site." \
+                        % country.minimum_age
+                    raise forms.ValidationError(_(msg))
+
         return cleaned_data
 
     def __init__(self, *args, **kwargs):
+        self.show_age_gateway = kwargs.pop('show_age_gateway')
         super(JoinForm, self).__init__(*args, **kwargs)
         
         display_fields = preferences.RegistrationPreferences.display_fields
+        if self.show_age_gateway:
+            display_fields += ['country', 'date_of_birth']
         for name, field in self.fields.items():
             # Skip over protected fields
             if name in ('id', 'username', 'password1', 'password2', 'accept_terms'):
