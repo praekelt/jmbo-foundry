@@ -478,21 +478,13 @@ class FoundryComment(BaseComment):
     def replies(self):
         return FoundryComment.objects.filter(in_reply_to=self).order_by('id')
 
-    '''
-    def can_vote(self, request):
-        """Play along with Panya API"""
-        return True, 'can_vote'
-
-    def likes_enabled(self):
-        """Play along with Panya API"""
-        return True
-
-    @property
-    def as_leaf_class(self):
-        """Play along with Panya API"""
-        return {'content_type':'foundrycomment'}
-    '''        
-
     @property
     def creator(self):
-        return User.objects.get(id=self.user_id)
+        """Attempt to return member object"""
+        if not self.user:
+            return None
+        try:
+            return Member.objects.get(id=self.user_id)
+        except Member.DoesNotExist:
+            # Happens when comment is not made by a member
+            return None

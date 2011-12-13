@@ -1,4 +1,4 @@
-{% load pagination_tags foundry_inclusion_tags %}
+{% load pagination_tags jmbo_template_tags foundry_inclusion_tags %}
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -7,8 +7,12 @@ $(document).ready(function(){
         // Update hidden input, focus comment form
         var form = $(this).parents('div.object-comments:first form');
         $('input[name="in_reply_to"]', form).val($(this).attr('comment_id'));
-        var area = $('textarea', form);        
-        //area.val('@:');
+        var area = $('textarea', form);       
+        var creator = $(this).attr('creator');
+        if (creator)
+            area.val('@' + creator + ': ');
+        else
+            area.val('');
         area.focus();
     });
 });
@@ -27,12 +31,12 @@ Auto Update: {% if request.GET.comment_auto_update %}On{% else %}Turn Off{% endi
     </div>
 </div>
 
-{% with request.GET.paginate_by|default:2|add:0 as paginate_by %}
+{% with request.GET.paginate_by|default:20|add:0 as paginate_by %}
 
     <div class="foundry-navbar foundry-comments-pages-navbar">
         <div class="items">
             <div class="item first">Show</div>
-            {% with '2 3 4'|as_list:'int' as li %}
+            {% with '20 30 50'|as_list:'int' as li %}
                 {% for n in li %}
                     <div class="item {% if paginate_by == n %}active{% endif %} {% if forloop.last %}last{% endif %}">
                         <a href="?paginate_by={{ n }}{% if request.GET.my_messages %}&my_messages=1{% endif %}">{{ n }}</a>
@@ -45,19 +49,28 @@ Auto Update: {% if request.GET.comment_auto_update %}On{% else %}Turn Off{% endi
     <div class="foundry-container foundry-comments-list">
     
         {% autopaginate comment_list paginate_by %}
+        <div class="items">
         {% for comment in comment_list %}
-            <div id="c{{ comment.id }}" class="title">
-                {{ comment.submit_date }} - {{ comment.name }}
-            </div>
-            <div class="items">
-                <div class="item">
-                    {{ comment.comment }}
-                    <br />
+            <div id="c{{ comment.id }}" class="item">
+                <div class="byline">
+                    {% humanize_time_diff comment.submit_date 'ago' %}
                     <!-- todo: Need can comment test -->
-                    <a href="#" class="comment-reply" comment_id="{{ comment.id }}">Reply</a>
+                    <a href="#" class="comment-reply" comment_id="{{ comment.id }}" creator="{{ comment.creator.username }}">Reply</a>
+                </div>
+                <div class="creator">
+                    {% if comment.creator %}
+                        <img src="{{ comment.creator.get_thumbnail_basic_url }}" />
+                    {% else %}
+                        <img src="{{ STATIC_URL }}/basic/images/anonymous.png" />
+                    {% endif %}
+                    {{ comment.user.username|default:comment.name }}:
+                </div>
+                <div class="comment">
+                    {{ comment.comment }}
                 </div>
             </div>
         {% endfor %}
+        </div>
         {% paginate %}
 
     </div>

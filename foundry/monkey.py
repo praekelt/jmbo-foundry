@@ -48,7 +48,6 @@ def get_query_set(self, context):
     if context['request'].REQUEST.get('my_messages'):
         user = context['request'].user
         if user.is_authenticated():
-            #qs = qs.filter()
             q1 = Q(user=user)
             q2 = Q(in_reply_to__user=user)
             qs = qs.filter(q1 | q2)

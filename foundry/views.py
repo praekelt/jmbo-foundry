@@ -13,6 +13,7 @@ from django.db.models import Q
 
 from category.models import Category
 from jmbo.models import ModelBase
+from preferences import preferences
 
 from foundry.models import Listing, Page
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
@@ -38,7 +39,8 @@ class CategoryURL(object):
 
 def join(request):
     """Surface join form"""
-    show_age_gateway = not request.COOKIES.get('age_gateway_passed')
+    show_age_gateway = preferences.GeneralPreferences.show_age_gateway \
+        and not request.COOKIES.get('age_gateway_passed')
     if request.method == 'POST':
         form = JoinForm(request.POST, request.FILES, show_age_gateway=show_age_gateway) 
         if form.is_valid():
