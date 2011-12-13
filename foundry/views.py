@@ -10,6 +10,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.contrib.contenttypes.models import ContentType
 
 from category.models import Category
 from jmbo.models import ModelBase
@@ -175,6 +176,14 @@ def search(request):
 
     extra = dict(form=form)
     return render_to_response('foundry/search.html', extra, context_instance=RequestContext(request))
+
+
+def comment_reply_form(request):
+    obj = ContentType.objects.get(
+        id=request.GET['content_type_id']
+    ).get_object_for_this_type(id=request.GET['oid'])
+    extra = {'object': obj, 'next': request.GET['path_info']}
+    return render_to_response('foundry/comment_reply_form.html', extra, context_instance=RequestContext(request))
 
 
 # Views for testing

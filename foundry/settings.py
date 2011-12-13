@@ -199,3 +199,8 @@ SIMPLE_AUTOCOMPLETE = {
     'auth.user': {'threshold': 20},
     'category.category': {'threshold':20}
 }
+
+FOUNDRY = {
+    'has_javascript': True,
+    'has_ajax': True
+}

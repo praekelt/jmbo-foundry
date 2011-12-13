@@ -163,6 +163,14 @@ urlpatterns = patterns('',
         name='search'
     ),
 
+    # Comment reply form in case of no javascript
+    url(
+        r'^comment-reply-form/$',
+        'foundry.views.comment_reply_form',
+        {},
+        name='comment-reply-form'
+    ),
+
     # Test views
     url(
         r'^test-plain-response/$',

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% comment %}
+A form used to reply to other comments when the browser does not support
+javascript.
+{% endcomment %}
+
+{% load comments %}
+
+{% block content %}
+
+    {% render_comment_form for object %}
+
+{% endblock %}
