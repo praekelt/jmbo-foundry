@@ -488,3 +488,16 @@ class FoundryComment(BaseComment):
         except Member.DoesNotExist:
             # Happens when comment is not made by a member
             return None
+
+
+class ChatRoom(models.Model):
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(
+        editable=True,
+        max_length=32,
+        db_index=True,
+        unique=True,
+    )
+
+    def __unicode__(self):
+        return self.title

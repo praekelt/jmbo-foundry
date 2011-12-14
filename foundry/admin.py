@@ -8,7 +8,7 @@ from preferences.admin import PreferencesAdmin
 from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
     NavbarLinkPosition, Navbar, GeneralPreferences, GeneralPreferences, \
     RegistrationPreferences, LoginPreferences, Member, DefaultAvatar, \
-    PasswordResetPreferences, Country, Page
+    PasswordResetPreferences, Country, Page, ChatRoom
 from foundry.widgets import SelectCommaWidget
 from foundry.utils import get_view_choices
 
@@ -141,6 +141,9 @@ class PageAdmin(admin.ModelAdmin):
         return super(PageAdmin, self).response_add(request, obj, post_url_continue)
 
 
+class ChatRoomAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('title',)}
+
 
 admin.site.register(Link, LinkAdmin)
 admin.site.register(Menu, MenuAdmin)
@@ -154,3 +157,5 @@ admin.site.register(Member, MemberAdmin)
 admin.site.register(DefaultAvatar, DefaultAvatarAdmin)
 admin.site.register(Country, CountryAdmin)
 admin.site.register(Page, PageAdmin)
+admin.site.register(ChatRoom, ChatRoomAdmin)
+
