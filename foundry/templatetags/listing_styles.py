@@ -1,4 +1,3 @@
-from django.db.models import Q
 from django.template.loader import render_to_string
 
 from jmbo import models
@@ -13,6 +12,9 @@ class AbstractBaseStyle(object):
         if not queryset.exists():
             queryset = models.ModelBase.permitted.all()
             if self.listing.category:
+                # Import here since there is code that inspects this module and
+                # it picks up Q. todo: fix
+                from django.db.models import Q
                 queryset = queryset.filter(Q(primary_category=self.listing.category)|Q(categories=self.listing.category))
         return queryset[:self.listing.count]
     
