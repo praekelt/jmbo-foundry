@@ -152,20 +152,6 @@ def page_detail(request, slug):
     return render_to_response('foundry/page_detail.html', extra, context_instance=RequestContext(request))
 
 
-# todo: caching
-def home_resolver(request):
-    """If there is a Page that is set to be home then render and return, else
-    render and return home.html."""
-    pages = Page.objects.filter(is_homepage=True)
-    if pages.count():
-        page = pages[0]
-        extra = {}
-        extra['object'] = page
-        return render_to_response('foundry/page_detail.html', extra, context_instance=RequestContext(request))
-
-    return render_to_response('foundry/home.html', {}, context_instance=RequestContext(request))
-
-
 def search(request):
     if request.method == 'POST':
         form = SearchForm(request.POST) 
