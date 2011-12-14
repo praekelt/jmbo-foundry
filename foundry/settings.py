@@ -100,6 +100,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.static",
     "django.core.context_processors.request",
     'preferences.context_processors.preferences_cp',
+    'foundry.context_processors.foundry',
 )
 
 TEMPLATE_LOADERS = (

@@ -1,0 +1,1 @@
+1. Show posted comment if on different batch (ie. clobber page variable)

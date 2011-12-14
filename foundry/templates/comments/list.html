@@ -1,5 +1,6 @@
 {% load pagination_tags jmbo_template_tags foundry_inclusion_tags %}
 
+{% if FOUNDRY.has_javascript %}
 <script type="text/javascript">
 $(document).ready(function(){
     $('a.comment-reply').live('click', function(event){
@@ -17,6 +18,7 @@ $(document).ready(function(){
     });
 });
 </script>
+{% endif %}
 
 Auto Update: {% if request.GET.comment_auto_update %}On{% else %}Turn Off{% endif %}
 
