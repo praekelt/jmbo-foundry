@@ -16,7 +16,7 @@ from category.models import Category
 from jmbo.models import ModelBase
 from preferences import preferences
 
-from foundry.models import Listing, Page
+from foundry.models import Listing, Page, ChatRoom
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
     SearchForm
 
@@ -170,6 +170,14 @@ def comment_reply_form(request):
     ).get_object_for_this_type(id=request.GET['oid'])
     extra = {'object': obj, 'next': request.GET['path_info']}
     return render_to_response('foundry/comment_reply_form.html', extra, context_instance=RequestContext(request))
+
+
+def chatroom_detail(request, slug):
+    """Render a page by iterating over rows, columns and tiles."""
+    chatroom = get_object_or_404(ChatRoom, slug=slug)
+    extra = {}
+    extra['object'] = chatroom
+    return render_to_response('foundry/chatroom_detail.html', extra, context_instance=RequestContext(request))
 
 
 # Views for testing

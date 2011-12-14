@@ -171,6 +171,14 @@ urlpatterns = patterns('',
         name='comment-reply-form'
     ),
 
+    # Chatroom detail
+    url(
+        r'^chatroom/(?P<slug>[\w-]+)/$',
+        'foundry.views.chatroom_detail',
+        {},
+        name='chatroom-detail'
+    ),
+
     # Test views
     url(
         r'^test-plain-response/$',
