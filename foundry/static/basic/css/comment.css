@@ -1,0 +1,54 @@
+.object-comments form label {
+    display: block;
+}
+.object-comments form textarea {
+}
+.object-comments form p.submit {
+}
+
+.foundry-comments-messages-navbar { 
+    background-color: #000; 
+    color: #555; 
+    padding: 3px 3px 5px 3px; 
+    clear: both;
+}
+.foundry-comments-messages-navbar a { 
+    color: #fff ;
+}
+.foundry-comments-messages-navbar div.item { 
+    display: inline;
+    padding: 0 2px ;
+}
+.foundry-comments-messages-navbar div.active { 
+    background-color: #fff;
+}
+.foundry-comments-messages-navbar div.active a { 
+    color: #323232 ;
+}
+.foundry-comments-messages-navbar div.delimited {
+    border-right: solid 1px #cccccc;
+}
+
+.foundry-comments-pages-navbar { 
+    background-color: #000; 
+    color: #555; 
+    padding: 3px 3px 5px 3px; 
+    clear: both;
+}
+.foundry-comments-pages-navbar a { 
+    color: #fff ;
+}
+.foundry-comments-pages-navbar div.item { 
+    display: inline;
+    padding: 0 2px ;
+}
+.foundry-comments-pages-navbar div.active { 
+    background-color: #fff;
+}
+.foundry-comments-pages-navbar div.active a { 
+    color: #323232 ;
+}
+.foundry-comments-pages-navbar div.delimited {
+    border-right: solid 1px #cccccc;
+}
+
