@@ -2,7 +2,7 @@
 
 {% load comments i18n %}
 <form action="{% comment_form_target %}" method="post">{% csrf_token %}
-  <input type="hidden" name="next" value="{{ next|default:request.META.PATH_INFO }}?paginate_by={{ request.GET.paginate_by }}&my_messages={{ request.GET.my_messages }}" />
+  <input type="text" name="next" value="{{ next|default:request.META.PATH_INFO }}?paginate_by={{ request.GET.paginate_by }}&my_messages={{ request.GET.my_messages }}" />
 
   {% for field in form %}
     {% if field.is_hidden %}

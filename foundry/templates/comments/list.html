@@ -57,7 +57,7 @@ Auto Update: {% if request.GET.comment_auto_update %}On{% else %}Turn Off{% endi
                 <div class="byline">
                     {% humanize_time_diff comment.submit_date 'ago' %}
                     <!-- todo: Need can comment test -->
-                    <a href="{% url comment-reply-form %}?content_type_id={{ comment.content_type_id }}&oid={{ comment.object_pk }}&path_info={{ request.META.PATH_INFO }}" 
+                    <a href="{% url comment-reply-form %}?content_type_id={{ comment.content_type_id }}&oid={{ comment.object_pk }}&path_info={{ request.META.PATH_INFO }}&my_messages={{ request.GET.my_messages }}&paginate_by={{ request.GET.paginate_by }}" 
                        class="comment-reply" 
                        comment_id="{{ comment.id }}" 
                        creator="{{ comment.creator.username }}">Reply
