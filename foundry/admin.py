@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 
 from preferences.admin import PreferencesAdmin
+from jmbo.admin import ModelBaseAdmin
 
 from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
     NavbarLinkPosition, Navbar, GeneralPreferences, GeneralPreferences, \
@@ -141,8 +142,8 @@ class PageAdmin(admin.ModelAdmin):
         return super(PageAdmin, self).response_add(request, obj, post_url_continue)
 
 
-class ChatRoomAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ('title',)}
+class ChatRoomAdmin(ModelBaseAdmin):
+    pass
 
 
 admin.site.register(Link, LinkAdmin)
@@ -158,4 +159,3 @@ admin.site.register(DefaultAvatar, DefaultAvatarAdmin)
 admin.site.register(Country, CountryAdmin)
 admin.site.register(Page, PageAdmin)
 admin.site.register(ChatRoom, ChatRoomAdmin)
-

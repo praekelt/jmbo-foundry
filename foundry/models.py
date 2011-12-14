@@ -13,6 +13,7 @@ from preferences.models import Preferences
 from snippetscream import resolve_to_name
 from photologue.models import ImageModel
 from jmbo.utils import generate_slug
+from jmbo.models import ModelBase
 
 from foundry.profile_models import AbstractAvatarProfile, \
     AbstractSocialProfile, AbstractContactProfile
@@ -490,14 +491,5 @@ class FoundryComment(BaseComment):
             return None
 
 
-class ChatRoom(models.Model):
-    title = models.CharField(max_length=255)
-    slug = models.SlugField(
-        editable=True,
-        max_length=32,
-        db_index=True,
-        unique=True,
-    )
-
-    def __unicode__(self):
-        return self.title
+class ChatRoom(ModelBase):
+    pass
