@@ -179,6 +179,14 @@ urlpatterns = patterns('',
         name='chatroom-detail'
     ),
 
+    # Create blogpost
+    url(
+        r'^create-blogpost/$',
+        'foundry.views.create_blogpost',
+        {},
+        name='create-blogpost',
+    ),
+
     # Test views
     url(
         r'^test-plain-response/$',

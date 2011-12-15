@@ -12,6 +12,7 @@ from ckeditor.fields import RichTextField
 from preferences.models import Preferences
 from snippetscream import resolve_to_name
 from photologue.models import ImageModel
+from south.modelsinspector import add_introspection_rules
 from jmbo.utils import generate_slug
 from jmbo.models import ModelBase
 
@@ -493,3 +494,10 @@ class FoundryComment(BaseComment):
 
 class ChatRoom(ModelBase):
     pass
+
+
+class BlogPost(ModelBase):
+    content = RichTextField()
+
+# Custom fields to be handled by south
+add_introspection_rules([], ["^ckeditor\.fields\.RichTextField"])

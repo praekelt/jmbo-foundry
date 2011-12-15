@@ -11,6 +11,7 @@ from django.views.generic.list import ListView
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
+from django.utils.translation import ugettext_lazy as _
 
 from category.models import Category
 from jmbo.models import ModelBase
@@ -18,7 +19,7 @@ from preferences import preferences
 
 from foundry.models import Listing, Page, ChatRoom
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
-    SearchForm
+    SearchForm, CreateBlogPostForm
 
 
 class CategoryURL(object):
@@ -178,6 +179,21 @@ def chatroom_detail(request, slug):
     extra = {}
     extra['object'] = chatroom
     return render_to_response('foundry/chatroom_detail.html', extra, context_instance=RequestContext(request))
+
+
+@login_required
+def create_blogpost(request):
+    if request.method == 'POST':
+        form = CreateBlogPostForm(request.POST, user=request.user) 
+        if form.is_valid():
+            form.save()
+            request.user.message_set.create(message=_("The blog post has been saved"))
+            return HttpResponseRedirect('/')
+    else:
+        form = CreateBlogPostForm(user=request.user) 
+
+    extra = dict(form=form)
+    return render_to_response('foundry/create_blogpost.html', extra, context_instance=RequestContext(request))
 
 
 # Views for testing

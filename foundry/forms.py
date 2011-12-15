@@ -15,7 +15,8 @@ from django.contrib.comments.forms import CommentForm as BaseCommentForm
 
 from preferences import preferences
 
-from foundry.models import Member, DefaultAvatar, Country, FoundryComment
+from foundry.models import Member, DefaultAvatar, Country, FoundryComment, \
+    BlogPost
 from foundry.widgets import OldSchoolDateWidget
 
 def as_ul_replacement(form):
@@ -303,7 +304,27 @@ class CommentForm(BaseCommentForm):
         data = super(CommentForm, self).get_comment_create_data()
         data['in_reply_to_id'] = self.cleaned_data['in_reply_to']
         return data
-   
+
+
+class CreateBlogPostForm(forms.ModelForm):
+
+    class Meta:
+        model = BlogPost
+        fields = ('title', 'content')
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        super(CreateBlogPostForm, self).__init__(*args, **kwargs)
+
+    def save(self, commit=True):    
+        instance = super(CreateBlogPostForm, self).save(commit=commit)
+        instance.owner = self.user
+        if commit:
+            instance.save()
+        return instance            
+
+    as_ul = as_ul_replacement
+
 
 # Form for testing
 class TestForm(forms.Form):
