@@ -11,7 +11,7 @@ from django.views.generic.list import ListView
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as _
 
 from category.models import Category
 from jmbo.models import ModelBase
@@ -186,8 +186,8 @@ def create_blogpost(request):
     if request.method == 'POST':
         form = CreateBlogPostForm(request.POST, user=request.user) 
         if form.is_valid():
-            form.save()
-            request.user.message_set.create(message=_("The blog post has been saved"))
+            instance = form.save()
+            request.user.message_set.create(message=_("The blog post %s has been saved") % instance.title)
             return HttpResponseRedirect('/')
     else:
         form = CreateBlogPostForm(user=request.user) 

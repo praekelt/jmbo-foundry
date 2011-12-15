@@ -27,12 +27,17 @@
         {% rows 'header' %}
     {% endblock %}
 
+    <div id="message">        
     {% block message %}
-        <!--<div class="success">This is a success message</div>
-        <div class="warning">This is a warning message</div>-->
+        {% if messages %}
+            <ul class="messagelist">
+                {% for message in messages %}<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>{% endfor %}
+            </ul>
+        {% endif %}
     {% endblock %}
+    </div>
    
-    <div id="content">
+    <div id="content">        
         {% block content %}
             {% rows 'content' %}
         {% endblock %}
