@@ -12,6 +12,7 @@ from django.template import Context, loader
 from django.utils.http import int_to_base36
 from django.http import HttpResponseRedirect
 from django.contrib.comments.forms import CommentForm as BaseCommentForm
+from django.contrib.sites.models import Site
 
 from preferences import preferences
 
@@ -318,7 +319,10 @@ class CreateBlogPostForm(forms.ModelForm):
 
     def save(self, commit=True):    
         instance = super(CreateBlogPostForm, self).save(commit=commit)
+        # Set owner, publish to all sites
         instance.owner = self.user
+        instance.sites = Site.objects.all()
+        instance.state = 'published'
         if commit:
             instance.save()
         return instance            

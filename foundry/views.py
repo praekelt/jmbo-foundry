@@ -15,9 +15,11 @@ from django.utils.translation import ugettext as _
 
 from category.models import Category
 from jmbo.models import ModelBase
+from jmbo.generic.views import GenericObjectDetail, GenericObjectList
+from jmbo.view_modifiers import DefaultViewModifier
 from preferences import preferences
 
-from foundry.models import Listing, Page, ChatRoom
+from foundry.models import Listing, Page, ChatRoom, BlogPost
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
     SearchForm, CreateBlogPostForm
 
@@ -194,6 +196,31 @@ def create_blogpost(request):
 
     extra = dict(form=form)
     return render_to_response('foundry/create_blogpost.html', extra, context_instance=RequestContext(request))
+
+
+class BlogPostObjectList(GenericObjectList):
+
+    def get_queryset(self, *args, **kwargs):
+        return BlogPost.permitted.all()
+
+    def get_extra_context(self, *args, **kwargs):
+        return {'title': 'Blog Posts'}
+
+    def get_view_modifier(self, request, *args, **kwargs):
+        return DefaultViewModifier(request, *args, **kwargs)
+
+blogpost_object_list = BlogPostObjectList()
+
+
+class BlogPostObjectDetail(GenericObjectDetail):
+
+    def get_queryset(self, *args, **kwargs):
+        return BlogPost.permitted.all()
+
+    def get_extra_context(self, *args, **kwargs):
+        return {'title': 'Blog Posts'}
+
+blogpost_object_detail = BlogPostObjectDetail()
 
 
 # Views for testing

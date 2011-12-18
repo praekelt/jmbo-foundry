@@ -498,6 +498,7 @@ class ChatRoom(ModelBase):
 
 class BlogPost(ModelBase):
     content = RichTextField()
+    
 
 # Custom fields to be handled by south
 add_introspection_rules([], ["^ckeditor\.fields\.RichTextField"])

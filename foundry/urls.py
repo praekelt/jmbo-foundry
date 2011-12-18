@@ -187,6 +187,22 @@ urlpatterns = patterns('',
         name='create-blogpost',
     ),
 
+    # Blogpost list
+    url(
+        r'^blogposts/$', 
+        'foundry.views.blogpost_object_list', 
+        {},
+        name='blogpost_object_list'
+    ),
+    
+    # Blogpost detail
+    url(
+        r'^blogpost/(?P<slug>[\w-]+)/$', 
+        'foundry.views.blogpost_object_detail', 
+        {},
+        name='blogpost_object_detail'
+    ),
+
     # Test views
     url(
         r'^test-plain-response/$',
