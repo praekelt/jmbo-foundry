@@ -91,6 +91,7 @@ div#search form {
 .foundry-navbar div.item { 
     display: inline;
     padding: 0 2px ;
+    border-right: solid 1px #cccccc;
 }
 .foundry-navbar div.active { 
     background-color: #fff;
@@ -98,8 +99,8 @@ div#search form {
 .foundry-navbar div.active a { 
     color: #323232 ;
 }
-.foundry-navbar div.delimited {
-    border-right: solid 1px #cccccc;
+.foundry-navbar div.last {
+    border-right: none;
 }
 
 /* Menu */

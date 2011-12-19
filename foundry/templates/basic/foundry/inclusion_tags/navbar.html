@@ -2,7 +2,7 @@
     <div class="foundry-container foundry-navbar">
         <div class="items">
         {% for link in object_list %}
-            <div class="item {% ifequal link active_link%}active{% endifequal %} {% if not forloop.last %}delimited{% endif %}">
+            <div class="item {% ifequal link active_link%}active{% endifequal %} {% if forloop.first %}first{% endif %} {% if forloop.last %}last{% endif %}">
                 <a href="{{ link.get_absolute_url }}">{{ link.title }}</a>
             </div>                       
         {% endfor %}

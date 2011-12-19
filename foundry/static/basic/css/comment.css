@@ -25,9 +25,6 @@
 .foundry-comments-messages-navbar div.active a { 
     color: #323232 ;
 }
-.foundry-comments-messages-navbar div.delimited {
-    border-right: solid 1px #cccccc;
-}
 
 .foundry-comments-pages-navbar { 
     background-color: #000; 
@@ -48,7 +45,3 @@
 .foundry-comments-pages-navbar div.active a { 
     color: #323232 ;
 }
-.foundry-comments-pages-navbar div.delimited {
-    border-right: solid 1px #cccccc;
-}
-
