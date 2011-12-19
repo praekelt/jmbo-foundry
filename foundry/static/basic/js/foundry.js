@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
-    // Ajaxify tile paging
-    $('div.foundry-enable-ajax div.pagination a').live('click', function(e){
+    // Ajaxify tile paging, view modifier
+    $('div.foundry-enable-ajax div.pagination a, div.foundry-enable-ajax div.jmbo-view-modifier a').live('click', function(e){
         e.preventDefault();
         var target = $(this).parents('div.foundry-enable-ajax:first');
         var url = target.attr('original_url');
