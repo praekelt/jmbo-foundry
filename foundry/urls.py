@@ -34,6 +34,7 @@ urlpatterns = patterns('',
     (r'^ckeditor/', include('ckeditor.urls')),
     (r'^contact/', include('contact.urls')),
     (r'^post/', include('post.urls')),	# todo: add to paster
+    (r'^poll/', include('poll.urls')),	# todo: add to paster
     (r'^simple-autocomplete/', include('simple_autocomplete.urls')),
 
     (r'^admin/', include(admin.site.urls)),
@@ -221,7 +222,7 @@ urlpatterns = patterns('',
         'django.views.generic.list_detail.object_list',
         {'queryset':Page.objects.all().order_by('title')},
         'page-list'
-    ),
+    ),    
 
     # Admin
     url(

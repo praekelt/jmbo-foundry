@@ -150,6 +150,7 @@ INSTALLED_APPS = (
     'competition',
     'ckeditor',
     'contact',
+    'poll', # add to paster
     'simple_autocomplete', # custom
     'pagination', # custom
     'south', # custom - add to paster

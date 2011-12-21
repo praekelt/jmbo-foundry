@@ -41,6 +41,7 @@ setup(
         'jmbo-competition',
         'django-ckeditor',
         'jmbo-contact',
+        'jmbo-poll',
         'django-debug-toolbar',
         'django-simple-autocomplete',
         'django-pagination',
