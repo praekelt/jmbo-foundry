@@ -104,9 +104,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 TEMPLATE_LOADERS = (
+    'foundry.loaders.TypeLoader',
     'django.template.loaders.filesystem.load_template_source',
     'django.template.loaders.app_directories.load_template_source',
-    'foundry.loaders.TypeLoader',
 )
 
 TEMPLATE_DIRS = (
