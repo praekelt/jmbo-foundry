@@ -49,3 +49,6 @@ class Promo(AbstractBaseStyle):
 class VerticalThumbnail(AbstractBaseStyle):
     template_name = 'foundry/inclusion_tags/listing_vertical_thumbnail.html'
 
+
+class Widget(AbstractBaseStyle):
+    template_name = 'foundry/inclusion_tags/listing_widget.html'
