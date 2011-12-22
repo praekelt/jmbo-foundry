@@ -38,7 +38,6 @@ $(document).ready(function(){
             type: 'POST',
             cache: false,                    
             success: function(data){
-                //alert(data);
                 if (data.indexOf('{') == 0)
                 {
                     var obj = $.parseJSON(data);
