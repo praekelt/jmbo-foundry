@@ -2,8 +2,10 @@ from django import forms
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 
 from preferences.admin import PreferencesAdmin
+from jmbo.models import ModelBase
 from jmbo.admin import ModelBaseAdmin
 
 from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
@@ -57,7 +59,46 @@ class NavbarAdmin(admin.ModelAdmin):
     inlines = [NavbarLinkPositionInline]
 
 
+class ListingAdminForm(forms.ModelForm):
+    #content_type = forms.MultipleChoiceField()
+
+    class Meta:
+        model = Listing
+        fields = (
+            'title', 'slug', 'content_type', 'content', 'category', 'style',
+            'count', 'display_likes'
+        )       
+
+    def __init__(self, *args, **kwargs):
+        super(ListingAdminForm, self).__init__(*args, **kwargs)
+
+        # Limit content_type vocabulary. Cannot do it with limit_choices_to.
+        ids = []
+        for obj in ContentType.objects.all():       
+            if issubclass(obj.model_class(), ModelBase):
+               print obj
+               ids.append(obj.id) 
+        self.fields['content_type']._set_queryset(ContentType.objects.filter(id__in=ids).order_by('name'))
+
+        # Order
+        field = self.fields['content']
+        field._set_queryset(field._queryset.order_by('title'))
+
+    def clean(self):
+        cleaned_data = super(ListingAdminForm, self).clean()
+        n = 0
+        for fieldname in ('content_type', 'content', 'category'):
+            if cleaned_data[fieldname]:
+                if n:
+                    raise forms.ValidationError(
+                        "You may set at most one of content type, content or category."
+                    )
+                n += 1
+        return cleaned_data
+
+
 class ListingAdmin(admin.ModelAdmin):
+    form = ListingAdminForm
     prepopulated_fields = {'slug': ('title',)}
 
 

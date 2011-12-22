@@ -129,20 +129,26 @@ class Listing(models.Model):
         db_index=True,
         unique=True,
     )
+    content_type = models.ManyToManyField(
+        ContentType,
+        help_text="Content types to display, eg. post or gallery.",
+        blank=True,
+        null=True,
+    )
     content = models.ManyToManyField(
         'jmbo.ModelBase',
-        help_text="Content to display, takes preference over Category field.",
+        help_text="Individual items to display.",
         blank=True,
         null=True,
     )
     category = models.ForeignKey(
         'category.Category',
-        help_text="Category for which to collect objects.",
+        help_text="Category for which to collect items.",
         blank=True,
         null=True,
     )
     count = models.IntegerField(
-        help_text="Number of content objects to display.",
+        help_text="Number of items to display.",
     )
     style = models.CharField(
         choices=((style[0], style[0]) for style in inspect.getmembers(listing_styles, inspect.isclass) if style[0] != 'AbstractBaseStyle'),

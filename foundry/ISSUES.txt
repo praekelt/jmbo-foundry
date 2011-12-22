@@ -1,2 +1,2 @@
-1. Figure out why some templates under /basic do not work
 2. Ajaxify general paging. Fix with auto reload.
+3. Listing must be able to point to any jmbo content types.
