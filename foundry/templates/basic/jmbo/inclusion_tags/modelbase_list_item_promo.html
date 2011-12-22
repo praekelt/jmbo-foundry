@@ -1,0 +1,6 @@
+{% load jmbo_template_tags foundry_tags %}
+
+<img src="{{ object.get_listing_promo_basic_url }}" alt="{{ object.title }}" />
+<div class="link">
+    <a href="{{ object.get_absolute_url }}">{{ object.title }}</a>
+</div>

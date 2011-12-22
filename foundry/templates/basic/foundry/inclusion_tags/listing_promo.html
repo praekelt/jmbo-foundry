@@ -3,10 +3,7 @@
         <div class="items">
         {% for object in object_list %}
             <div class="item {% if forloop.first %}first{% endif %} {% if forloop.last %}last{% endif %}">
-                <img src="{{ object.get_listing_promo_basic_url }}" alt="{{ object.title }}" />
-                <div class="link">
-                    <a href="{{ object.get_absolute_url }}">{{ object.title }}</a>
-                </div>
+                {% render_object object.as_leaf_class "list_item_promo" %}
             </div>
         {% endfor %}
         </div>
