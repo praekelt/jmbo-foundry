@@ -8,10 +8,13 @@ class AbstractBaseStyle(object):
         self.listing = listing
     
     def get_queryset(self):
+        # todo: performance investigation required
         queryset = self.listing.content.all()
         if not queryset.exists():
             queryset = models.ModelBase.permitted.all()
-            if self.listing.category:
+            if self.listing.content_type:
+                queryset = queryset.filter(content_type__in=self.listing.content_type.all())
+            elif self.listing.category:
                 # Import here since there is code that inspects this module and
                 # it picks up Q. todo: fix
                 from django.db.models import Q

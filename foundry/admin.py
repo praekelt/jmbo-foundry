@@ -65,7 +65,7 @@ class ListingAdminForm(forms.ModelForm):
     class Meta:
         model = Listing
         fields = (
-            'title', 'slug', 'content_type', 'content', 'category', 'style',
+            'title', 'slug', 'content_type', 'category', 'content', 'style',
             'count', 'display_likes'
         )       
 
