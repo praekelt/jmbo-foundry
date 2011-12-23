@@ -209,6 +209,20 @@ div#search form {
     clear: both; 
 }
 
+/* Poll */
+table.poll-results td.bar {
+    width: 150px;
+}
+table.poll-results tr.poll-result-1 td.bar > div {
+    background-color: red;
+}    
+table.poll-results tr.poll-result-2 td.bar > div {
+    background-color: green;
+}    
+table.poll-results tr.poll-result-3 td.bar > div {
+    background-color: blue;
+}    
+
 /* Additional styles that can be applied to tiles */
 /* Softcoded tile-based header */
 .header .foundry-container {
