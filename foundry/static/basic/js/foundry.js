@@ -23,14 +23,13 @@ $(document).ready(function(){
         );
     });
 
-    // Intercept tile form submit
-    $('div.foundry-enable-ajax form').live('submit', function(event){
+    var _submit_intercept_common = function(sender, event, target){
+        // Common functionality
         event.preventDefault();
-        var target = $(this).parents('div.foundry-enable-ajax:first');
-        var url = $(this).attr('action');
+        var url = $(sender).attr('action');
         if ((!url) || (url == '.'))
             url = target.attr('original_url');
-        var data = $(this).serialize();
+        var data = $(sender).serialize();
         $.ajax({
             url: url,
             data: data,
@@ -41,7 +40,8 @@ $(document).ready(function(){
                 if (data.indexOf('{') == 0)
                 {
                     var obj = $.parseJSON(data);
-                    $('#edit-dialog').dialog('close');
+                    $(obj.render_target).html(obj.html);
+                    // messages todo
                 }
                 else
                     if (data.search('id="content"') != -1)
@@ -54,7 +54,22 @@ $(document).ready(function(){
                     else
                         target.html(data);
             }
-        });
+        })
+    };
+
+    // Intercept tile form submit for contained items (eg. a listing). The heading must be preserved.
+    // An example is a tile containing a listing of polls.
+    $('div.foundry-enable-ajax .foundry-container form').live('submit', function(event){
+        event.stopImmediatePropagation();
+        var target = $(this).parents('div.item:first');
+        _submit_intercept_common(this, event, target);
+    });
+
+    // Intercept tile form submit for views with a form. 
+    // An example is a normal standalone form like site_contact.
+    $('div.foundry-enable-ajax form').live('submit', function(event){
+        var target = $(this).parents('div.foundry-enable-ajax:first');
+        _submit_intercept_common(this, event, target);
     });
 
 });
