@@ -1,2 +1,4 @@
 2. Ajaxify general paging. Fix with auto reload.
-3. Listing must be able to point to any jmbo content types.
+3. Unify category url, absolute url mechanism with what is currently in jmbo core.
+4. Clean up modelbase_* and inclusion template mess in jmbo.
+5. See jmbo get_absolute_url for comments.

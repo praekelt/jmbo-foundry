@@ -76,7 +76,6 @@ class ListingAdminForm(forms.ModelForm):
         ids = []
         for obj in ContentType.objects.all():       
             if issubclass(obj.model_class(), ModelBase):
-               print obj
                ids.append(obj.id) 
         self.fields['content_type']._set_queryset(ContentType.objects.filter(id__in=ids).order_by('name'))
 
