@@ -1,8 +1,17 @@
-{% load jmbo_template_tags foundry_tags %}
+{% load jmbo_template_tags foundry_tags i18n %}
 
 <img src="{{ object.get_listing_vertical_thumbnail_basic_url }}" alt="{{ object.title }}" class="left" />
 
-<div class="h3">
+<div class="title">
     {% if object.categories.all.count %}<span class="category">{{ object.categories.all|join_titles }}:</span>{% endif %}
     <a href="{{ object.get_absolute_url }}">{{ object.title }}</a>
+</div>
+
+<div class="byline">
+    {% humanize_time_diff object.created 'ago' 'lower' %}   
+    {% if object.comments_enabled %}
+        {% with object.comment_count as total %}
+            ({{ total }} {% blocktrans %}comment{% endblocktrans %}{{ total|pluralize }})
+        {% endwith %}
+    {% endif %}
 </div>
