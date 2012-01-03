@@ -22,7 +22,7 @@ urlpatterns = patterns('',
     (r'^gallery/', include('gallery.urls')),
     (r'^googlesearch/', include('googlesearch.urls')),
     (r'^music/', include('music.urls')),
-    (r'^$', include('jmbo.urls')),
+    (r'^jmbo/', include('jmbo.urls')),  # todo: paster makes this r'^$ which does not work
     (r'^chart/', include('chart.urls')),
     (r'^comments/', include('django.contrib.comments.urls')),
 #    (r'^richcomments/', include('richcomments.urls')), # re-evaluate this product. It needs to degrade to non-ajax as well.
