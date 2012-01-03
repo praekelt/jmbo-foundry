@@ -66,7 +66,7 @@ class ListingAdminForm(forms.ModelForm):
         model = Listing
         fields = (
             'title', 'slug', 'content_type', 'category', 'content', 'style',
-            'count', 'display_likes'
+            'count', 'display_likes', 'items_per_page'
         )       
 
     def __init__(self, *args, **kwargs):

@@ -1,18 +1,20 @@
-{% load jmbo_template_tags jmbo_inclusion_tags foundry_tags %}
+{% load jmbo_template_tags jmbo_inclusion_tags foundry_tags pagination_tags %}
 
 {% if object_list.exists %}
     <div class="foundry-container foundry-listing-vertical-thumbnail">
-    <div class="title">{{ listing.title }}</div>
-    <div class="items">
-    {% for object in object_list %}
-        <div class="item {% if forloop.first %}first{% endif %} {% if forloop.last %}last{% endif %}">
-            {% render_object object.as_leaf_class "list_item_thumbnail" %}
+        <div class="title">{{ listing.title }}</div>
+        <div class="items">
+        {% autopaginate object_list items_per_page %}
+        {% for object in object_list %}
+            <div class="item {% if forloop.first %}first{% endif %} {% if forloop.last %}last{% endif %}">
+                {% render_object object.as_leaf_class "list_item_thumbnail" %}
 
-            {% if listing.display_likes %}
-                <div class="likes">15:35 - 23 Likes</div>
-            {% endif %}
+                {% if listing.display_likes %}
+                    <div class="likes">15:35 - 23 Likes</div>
+                {% endif %}
+            </div>
+        {% endfor %}
         </div>
-    {% endfor %}
-    </div>
+    {% paginate %}
     </div>
 {% endif %}

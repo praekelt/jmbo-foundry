@@ -3,8 +3,14 @@ django-autopaginate does not allow us to do this so a monkey-patch is
 required."""
 
 from django.core.paginator import Paginator, InvalidPage
+from django.conf import settings
 
 from pagination.templatetags.pagination_tags import AutoPaginateNode
+
+INVALID_PAGE_RAISES_404 = getattr(
+    settings,'PAGINATION_INVALID_PAGE_RAISES_404', False
+)
+
 
 def render(self, context):
     key = self.queryset_var.var
