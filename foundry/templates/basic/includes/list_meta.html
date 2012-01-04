@@ -1,0 +1,21 @@
+{% comment %}
+Metadata suitable for display in listings
+{% endcomment %}
+
+{% load jmbo_template_tags i18n %}
+
+<div class="meta">
+
+    <div class="byline">
+        {% humanize_time_diff object.created 'ago' 'lower' %}   
+    </div>
+
+    {% if object.comments_enabled %}
+    <div class="comments">
+        {% with object.comment_count as total %}
+            ({{ total }} {% blocktrans %}comment{% endblocktrans %}{{ total|pluralize }})
+        {% endwith %}
+    </div>
+    {% endif %}
+
+</div>

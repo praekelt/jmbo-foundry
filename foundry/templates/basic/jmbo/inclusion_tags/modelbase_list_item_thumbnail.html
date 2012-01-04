@@ -7,11 +7,4 @@
     <a href="{{ object.get_absolute_url }}">{{ object.title }}</a>
 </div>
 
-<div class="byline">
-    {% humanize_time_diff object.created 'ago' 'lower' %}   
-    {% if object.comments_enabled %}
-        {% with object.comment_count as total %}
-            ({{ total }} {% blocktrans %}comment{% endblocktrans %}{{ total|pluralize }})
-        {% endwith %}
-    {% endif %}
-</div>
+{% include "includes/list_meta.html" %}

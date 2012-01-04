@@ -22,8 +22,8 @@ a:visited { color: #09F; text-decoration: none }
 a:hover { color: #36f ; text-decoration: none }
 a:active { color: #09F; text-decoration: none }
 
-div.h2 { background-color: #f1f1f1; padding: 3px; border-bottom: 1px solid #ddd; margin-bottom: 3px; clear: both }
-div.h4 { margin: 0.5em 0; font-weight: bold }
+div.h2, div.title, div#content > h1{ background-color: #f1f1f1; padding: 3px; border-bottom: 1px solid #ddd; margin-bottom: 3px; clear: both }
+
 p { 
     margin: 1em 0; 
     line-height: 1.2em;
@@ -77,6 +77,14 @@ div#search form {
     margin-bottom: 3px; 
     clear: both; 
  }
+
+/* Clear title styling introduced by div.title for listings */
+.foundry-container div.items div.title {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
 
 /* Navbar */
 .foundry-navbar { 
@@ -238,5 +246,5 @@ table.poll-results tr.poll-result-3 td.bar > div {
 }
 
 /* todo: Fix these below */
-.byline { font-size: smaller; display:block; color:#666 }
+.meta { font-size: smaller; display:block; color:#666 }
 img.left { float: left; margin-right: 5px }
