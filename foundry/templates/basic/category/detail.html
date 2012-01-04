@@ -8,8 +8,7 @@
         <div class="item">
            <div class="intro">
                 <img src="{{ object.get_thumbnail_basic_url }}" alt="{{ object.title }}" class="left" />
-                <div class="meta"><div class="byline">{% humanize_time_diff object.created 'ago' 'lower' %}</div></div>
-                <div class="title">{{ object.title }}</div>
+                {% object_header object %}
             </div>
        
             <div class="content">
