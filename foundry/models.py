@@ -2,7 +2,7 @@ import inspect
 
 from django.core.urlresolvers import reverse, Resolver404
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
@@ -317,7 +317,23 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractContact
     def __unicode__(self):
         return self.username
 
+    def save(self, *args, **kwargs):        
+        super(Member, self).save(*args, **kwargs)
 
+        # Create / clear notifications on imcomplete / complete fields
+        link, dc = Link.objects.get_or_create(
+            title=_("Set your profile picture"), view_name='join-finish'
+        )
+        if not self.image:
+            Notification.objects.get_or_create(member=self, link=link)
+        else:
+            try:
+                notification = Notification.objects.get(member=self, link=link)
+                notification.delete()
+            except Notification.DoesNotExist:
+                pass
+
+   
 class DefaultAvatar(ImageModel):
     """A set of avatars users can choose from"""
     pass
