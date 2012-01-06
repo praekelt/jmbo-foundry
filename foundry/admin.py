@@ -11,7 +11,7 @@ from jmbo.admin import ModelBaseAdmin
 from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
     NavbarLinkPosition, Navbar, GeneralPreferences, GeneralPreferences, \
     RegistrationPreferences, LoginPreferences, Member, DefaultAvatar, \
-    PasswordResetPreferences, Country, Page, ChatRoom, BlogPost
+    PasswordResetPreferences, Country, Page, ChatRoom, BlogPost, Notification
 from foundry.widgets import SelectCommaWidget
 from foundry.utils import get_view_choices
 
@@ -190,6 +190,10 @@ class BlogPostAdmin(ModelBaseAdmin):
     list_display = ('title', 'owner')
 
 
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('id', 'member', 'link', 'created')
+
+
 admin.site.register(Link, LinkAdmin)
 admin.site.register(Menu, MenuAdmin)
 admin.site.register(Navbar, NavbarAdmin)
@@ -204,3 +208,4 @@ admin.site.register(Country, CountryAdmin)
 admin.site.register(Page, PageAdmin)
 admin.site.register(ChatRoom, ChatRoomAdmin)
 admin.site.register(BlogPost, BlogPostAdmin)
+admin.site.register(Notification, NotificationAdmin)

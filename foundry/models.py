@@ -510,5 +510,14 @@ class BlogPost(ModelBase):
     content = RichTextField()
     
 
+class Notification(models.Model):
+    member = models.ForeignKey(Member)
+    link = models.ForeignKey(Link)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return str(self.id)
+
+
 # Custom fields to be handled by south
 add_introspection_rules([], ["^ckeditor\.fields\.RichTextField"])
