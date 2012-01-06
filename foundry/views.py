@@ -19,7 +19,7 @@ from jmbo.generic.views import GenericObjectDetail, GenericObjectList
 from jmbo.view_modifiers import DefaultViewModifier
 from preferences import preferences
 
-from foundry.models import Listing, Page, ChatRoom, BlogPost
+from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
     SearchForm, CreateBlogPostForm
 
@@ -175,8 +175,7 @@ def comment_reply_form(request):
     return render_to_response('foundry/comment_reply_form.html', extra, context_instance=RequestContext(request))
 
 
-def chatroom_detail(request, slug):
-    """Render a page by iterating over rows, columns and tiles."""
+def chatroom_detail(request, slug):    
     chatroom = get_object_or_404(ChatRoom, slug=slug)
     extra = {}
     extra['object'] = chatroom
@@ -221,6 +220,14 @@ class BlogPostObjectDetail(GenericObjectDetail):
         return {'title': 'Blog Posts'}
 
 blogpost_object_detail = BlogPostObjectDetail()
+
+
+@login_required
+def member_notifications(request):
+    """Page listing notifications for authenticated member"""
+    extra = {}
+    extra['object_list'] = Notification.objects.filter(member=request.user).order_by('-created')
+    return render_to_response('foundry/member_notifications.html', extra, context_instance=RequestContext(request))
 
 
 # Views for testing

@@ -204,6 +204,14 @@ urlpatterns = patterns('',
         name='blogpost_object_detail'
     ),
 
+    # Member notifications
+    url(
+        r'^member-notifications/$', 
+        'foundry.views.member_notifications', 
+        {},
+        name='member-notifications'
+    ),
+
     # Test views
     url(
         r'^test-plain-response/$',
