@@ -12,7 +12,7 @@ class AbstractBaseStyle(object):
         queryset = self.listing.content.all()
         if not queryset.exists():
             queryset = models.ModelBase.permitted.all()
-            if self.listing.content_type:
+            if self.listing.content_type.exists():
                 queryset = queryset.filter(content_type__in=self.listing.content_type.all())
             elif self.listing.category:
                 # Import here since there is code that inspects this module and
