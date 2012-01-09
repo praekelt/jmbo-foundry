@@ -76,7 +76,12 @@ class TileEditAjaxForm(forms.ModelForm):
         choices = []
         for klass in (Menu, Navbar, Listing):
             ctid = ContentType.objects.get(app_label='foundry', model=klass.__name__.lower()).id
-            choices.extend( [('%s_%s' % (ctid, o.id), '%s: %s' % (klass.__name__, o.title)) for o in klass.objects.all()] )
+            for o in klass.objects.all():
+                title = o.title
+                subtitle = getattr(o, 'subtitle', None)
+                if subtitle:
+                    title = '%s (%s)' % (title, subtitle)
+                choices.append( ('%s_%s' % (ctid, o.id), '%s: %s' % (klass.__name__, title)) )
         self.fields['target'].choices = [('', '-- Select --')] + choices
 
         # Initial target

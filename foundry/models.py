@@ -123,6 +123,12 @@ class Listing(models.Model):
         max_length=256,
         help_text='A short descriptive title.',
     )
+    subtitle = models.CharField(
+        max_length=256,
+        blank=True,
+        null=True,
+        help_text='Some titles may be the same. A subtitle makes a distinction. It is not displayed on the site.',
+    )
     slug = models.SlugField(
         editable=True,
         max_length=32,

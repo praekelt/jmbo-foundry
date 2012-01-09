@@ -65,8 +65,8 @@ class ListingAdminForm(forms.ModelForm):
     class Meta:
         model = Listing
         fields = (
-            'title', 'slug', 'content_type', 'category', 'content', 'style',
-            'count', 'display_likes', 'items_per_page'
+            'title', 'slug', 'subtitle', 'content_type', 'category', 'content', 
+            'style', 'count', 'display_likes', 'items_per_page'
         )       
 
     def __init__(self, *args, **kwargs):
@@ -99,6 +99,7 @@ class ListingAdminForm(forms.ModelForm):
 class ListingAdmin(admin.ModelAdmin):
     form = ListingAdminForm
     prepopulated_fields = {'slug': ('title',)}
+    list_display = ('title', 'subtitle')
 
 
 class GeneralPreferencesAdmin(PreferencesAdmin):
