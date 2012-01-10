@@ -22,13 +22,14 @@ def generate():
                         "model": "category.Category",
                         "fields": {
                             "title": "News",
-                            "slug": "anews",
+                            "slug": "news",
                         }
                     },
                 ],
                 "primary_category": {
                     "model": "category.Category",
                     "fields": {
+                        "title": "News",
                         "slug": "news",
                     },
                 },
