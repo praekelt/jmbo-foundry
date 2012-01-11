@@ -1,3 +1,20 @@
+ul.errorlist {
+    margin: 0 0 12px -3.1em;
+}    
+
+ul.errorlist li {
+    margin: 0;
+    color: red;
+}
+
+div.errorlist {
+    margin-bottom: 12px;
+}    
+
+div.errorlist div.error {
+    color: red;
+}
+
 form.foundry-form { 
     margin: 0; 
     padding: 0;
@@ -25,14 +42,9 @@ ul.form-ul li {
     list-style: none;
 }
 
-ul.form-ul ul.errorlist {
-    margin-left: -3.1em;
-}    
-
-ul.form-ul ul.errorlist li {
+ul.form-ul ul.errorlist, ul.form-ul div.errorlist {
     margin: 0;
-    color: red;
-}
+}    
 
 ul.form-ul label {
     display: block;
@@ -45,7 +57,30 @@ ul.form-ul .helptext {
     color: #7e7e7e;
 }    
 
-li.required label {
+div.field {
+    margin-bottom: 6px;
+}
+
+div.field ul.errorlist {
+    margin: 0 0 0 -3.1em;
+}    
+
+div.field div.errorlist {
+    margin: 0;
+}    
+
+div.field label {
+    display: block;
+    margin-bottom: 2px;
+}    
+
+div.field .helptext {
+    display: block;
+    margin-bottom: 2px;
+    color: #7e7e7e;
+}    
+
+li.required label, div.required label {
     background-image: url('/static/basic/images/red-asterisk.png');
     background-position: left center;
     background-repeat: no-repeat;

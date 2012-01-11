@@ -60,3 +60,21 @@ def get_query_set(self, context):
     return qs
 
 CommentListNode.get_query_set = get_query_set
+
+
+"""Django forms displays errors in a <ul> tag and provides no easy mechanism to
+override this behaviour. Patch the __unicode__ method to use <div> tags."""
+
+from django.utils.html import conditional_escape
+from django.utils.encoding import force_unicode
+from django.utils.safestring import mark_safe
+from django.forms.util import ErrorList
+
+def errorlist_as_div(self):
+    if not self: return u''
+    return mark_safe(
+        u'<div class="errorlist">%s</div>' \
+            % ''.join([u'<div class="error">%s</div>' % conditional_escape(force_unicode(e)) for e in self])
+    )
+
+ErrorList.__unicode__ = errorlist_as_div
