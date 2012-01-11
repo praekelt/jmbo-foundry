@@ -86,6 +86,7 @@ class LoginForm(AuthenticationForm):
         # todo: customize error messages
 
     as_ul = as_ul_replacement
+    as_div = as_div
     
     
 class JoinForm(UserCreationForm):
@@ -192,6 +193,7 @@ class JoinFinishForm(forms.ModelForm):
         return instance
 
     as_ul = as_ul_replacement
+    as_div = as_div
 
 
 class PasswordResetForm(BasePasswordResetForm):
@@ -253,6 +255,7 @@ class PasswordResetForm(BasePasswordResetForm):
                 pass
 
     as_ul = as_ul_replacement
+    as_div = as_div
 
 
 class AgeGatewayForm(forms.Form):
@@ -290,12 +293,14 @@ class AgeGatewayForm(forms.Form):
         return response
 
     as_ul = as_ul_replacement
+    as_div = as_div
 
 
 class SearchForm(forms.Form):
     search_term = forms.CharField(max_length=64)
 
     as_ul = as_ul_replacement
+    as_div = as_div
 
 
 class CommentForm(BaseCommentForm):
@@ -344,6 +349,7 @@ class CreateBlogPostForm(forms.ModelForm):
         return instance            
 
     as_ul = as_ul_replacement
+    as_div = as_div
 
 
 # Form for testing
@@ -351,4 +357,5 @@ class TestForm(forms.Form):
     title = forms.CharField(max_length=20)
 
     as_ul = as_ul_replacement
+    as_div = as_div
 

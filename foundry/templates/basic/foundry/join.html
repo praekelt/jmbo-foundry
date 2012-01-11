@@ -12,7 +12,7 @@
 
     <form action="{% url join %}" method="POST" enctype="multipart/form-data" class="foundry-form">   
         {% csrf_token %}
-            {{ form.as_div }}
+        {{ form.as_div }}
         <div class="buttons">
             <input type="submit" value="Sign Up" />
         </div>
