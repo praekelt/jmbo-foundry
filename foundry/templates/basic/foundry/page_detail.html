@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load foundry_tags %}
 
-{% block content %}
+{% block page_content %}
     {% with object.rows_by_block_name.content as rows %}
         {% include "foundry/inclusion_tags/rows.html" %}
     {% endwith %}

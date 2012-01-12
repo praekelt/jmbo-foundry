@@ -36,10 +36,14 @@
         {% endif %}
     {% endblock %}
     </div>
-   
+
     <div id="content">        
         {% block content %}
+        <div id="page-content">        
+        {% block page_content %}
             {% rows 'content' %}
+        {% endblock %}
+        </div>
         {% endblock %}
     </div>
 

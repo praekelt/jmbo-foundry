@@ -135,7 +135,14 @@ div#search form {
 }
 
 /* Structure - Content */
-#content { 
+#content {
+    margin: 4px;
+}
+
+/* Page detail may not have any margin. Undo the above for them. Due to */
+/* Django's use of blocks there is no better solution. */
+#page-content {
+    margin: -4px;
 }
 
 /* Listing promo */
