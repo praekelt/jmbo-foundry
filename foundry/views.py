@@ -208,6 +208,9 @@ class BlogPostObjectList(GenericObjectList):
     def get_view_modifier(self, request, *args, **kwargs):
         return DefaultViewModifier(request, *args, **kwargs)
 
+    def get_paginate_by(self, *args, **kwargs):
+        return 10
+
 blogpost_object_list = BlogPostObjectList()
 
 

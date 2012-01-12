@@ -9,8 +9,9 @@ from post.models import Post
 
 from foundry.models import BlogPost
 
-NUMBER_OF_POSTS = 50
-NUMBER_OF_BLOGPOSTS = 50
+NUMBER_OF_POSTS = 5000
+NUMBER_OF_BLOGPOSTS = 5000
+NUMBER_OF_COMMENTS = 10000
 
 POST_ID_START = (Post.objects.aggregate(Max('id'))['id__max'] or 0) + 1
 BLOGPOST_ID_START = (BlogPost.objects.aggregate(Max('id'))['id__max'] or 0) + 1
@@ -112,7 +113,7 @@ def generate():
 
     # Comments
     ctids = [ContentType.objects.get_for_model(Post).id, ContentType.objects.get_for_model(BlogPost).id]
-    for i in range(1, 100):
+    for i in range(0, NUMBER_OF_COMMENTS):
         if random.randint(0, 1) == 0:
             ctid = ctids[0]
             pk = random.randint(POST_ID_START, POST_ID_START+NUMBER_OF_POSTS+1)
