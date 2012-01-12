@@ -1,7 +1,7 @@
 {% load foundry_tags i18n %}
 
 <div id="header">
-    <a href="/"><img src="{{ STATIC_URL }}basic/images/logo.jpg" alt="Jmbo" /></a>
+    <a href="/"><img src="{{ STATIC_URL }}basic/images/logo.png" alt="" /></a>
     <div class="buttons">
       {% if request.user.is_authenticated %}
         <span><a href="{% url logout %}">Sign Out</a></span>
