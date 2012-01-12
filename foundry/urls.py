@@ -56,6 +56,14 @@ urlpatterns = patterns('',
         name='logo'
     ),
     url(
+        r'^header/$',
+        'django.views.generic.simple.direct_to_template',
+        {
+            'template':'foundry/inclusion_tags/header.html', 
+        },
+        name='header'
+    ),
+    url(
         r'^category/(?P<category_slug>[\w-]+)/$',
         CategoryObjectListView.as_view(),
         name='category_object_list'
