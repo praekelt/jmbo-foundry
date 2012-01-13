@@ -54,6 +54,13 @@ $(document).ready(function(){
         <div class="items">
         {% for comment in comment_list %}
             <div id="c{{ comment.id }}" class="item">
+                <div class="image">
+                    {% if comment.creator %}
+                        <img src="{{ comment.creator.get_thumbnail_basic_url }}" />
+                    {% else %}
+                        <img src="{{ STATIC_URL }}/basic/images/anonymous.png" />
+                    {% endif %}
+                </div>
                 <div class="meta">
                     <div class="byline">{% humanize_time_diff comment.submit_date 'ago' %}</div>
                     <!-- todo: Need can comment test -->
@@ -63,16 +70,8 @@ $(document).ready(function(){
                        creator="{{ comment.creator.username }}">Reply
                     </a>
                 </div>
-                <div class="creator">
-                    {% if comment.creator %}
-                        <img src="{{ comment.creator.get_thumbnail_basic_url }}" />
-                    {% else %}
-                        <img src="{{ STATIC_URL }}/basic/images/anonymous.png" />
-                    {% endif %}
-                    {{ comment.user.username|default:comment.name }}:
-                </div>
                 <div class="comment">
-                    {{ comment.comment }}
+                    {{ comment.user.username|default:comment.name }}: {{ comment.comment }}
                 </div>
             </div>
         {% endfor %}
