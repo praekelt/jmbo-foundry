@@ -18,4 +18,10 @@ Metadata suitable for display in listings
     </div>
     {% endif %}
 
+    {% if object.description %}
+    <div class="description">
+        {{ object.description|truncatewords:10 }}
+    </div>
+    {% endif %}
+
 </div>

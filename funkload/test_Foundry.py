@@ -30,12 +30,11 @@ class Foundry(FunkLoadTestCase):
         # The description should be set in the configuration file
         server_url = self.server_url
         # begin of test ---------------------------------------------
-        self.get(server_url + "/blogposts/",
-            description="Get /blogposts/")
+        #self.get(server_url + "/blogposts/",
+        #    description="Get /blogposts/")
         #self.get(server_url + "/listing/listing-large-set/",
         #    description="Get /listing/listing-large-set/")
 
-        '''
         # Login
         self.get(server_url + "/login/",
             description="Get /login/")
@@ -121,7 +120,6 @@ class Foundry(FunkLoadTestCase):
         # Logout
         self.get(server_url + "/logout/",
             description="Get /logout/")       
-        '''
 
         # end of test -----------------------------------------------
 
