@@ -208,7 +208,7 @@ urlpatterns = patterns('',
     url(
         r'^blogposts/$', 
         'foundry.views.blogpost_object_list', 
-        {},
+        {'limit': 300},
         name='blogpost_object_list'
     ),
     
