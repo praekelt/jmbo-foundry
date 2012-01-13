@@ -1,0 +1,11 @@
+# $Id: groups.txt 00001 2008-10-22 07:36:28Z hedley.roos $
+#
+
+# The Zope admin group
+AdminZope:admin
+
+# CPS Test groups
+Member_Group:alice,bob,charlie
+#FL_Member:fl_member_01,fl_member_02,fl_member_03,fl_member_04,fl_member_05
+#Zope_Group:graham_astley@hotmail.com
+#Zope_Group:freaky_nikki@hotmail.com
