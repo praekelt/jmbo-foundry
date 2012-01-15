@@ -1,4 +1,5 @@
 import datetime
+import re
 
 from django.utils.translation import ugettext_lazy as _
 from django import forms
@@ -98,6 +99,12 @@ class JoinForm(UserCreationForm):
     class Meta:
         model = Member
 
+    def clean_mobile_number(self):
+        mobile_number = self.cleaned_data["mobile_number"]
+        if not re.match(r'[\+]?[0-9]*$', mobile_number):
+            raise forms.ValidationError(_("Please enter a valid number"))
+        return mobile_number
+
     def clean(self):
         cleaned_data = super(JoinForm, self).clean()
 
@@ -151,6 +158,8 @@ class JoinForm(UserCreationForm):
         self.fields['password1'].help_text = _("We never store your password in its original form.")
         if self.fields.has_key('email'):
             self.fields['email'].help_text = _("Your email address is required in case you lose your password.")
+        if self.fields.has_key('mobile_number'):
+            self.fields['mobile_number'].help_text = _("The number may start with a + sign. All other characters must be numbers. No spaces allowed.")
 
     as_ul = as_ul_replacement
     as_div = as_div
