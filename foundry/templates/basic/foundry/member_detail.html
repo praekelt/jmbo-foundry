@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="member-detail">
+
+    <div class="title">{{ object.username }}</div>
+
+    <table>
+        <tr>
+            <th>{% blocktrans %}Comments{% endblocktrans %}</th>            
+            <td>{{ object.number_of_comments }}</td>
+        </tr>
+    </table>
+
+</div>
+{% endblock content %}

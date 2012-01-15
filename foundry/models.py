@@ -339,7 +339,12 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractContact
             except Notification.DoesNotExist:
                 pass
 
-   
+    @property
+    def number_of_comments(self):
+        """Return number of comments made by the member"""
+        return FoundryComment.objects.filter(user=self).count()
+
+
 class DefaultAvatar(ImageModel):
     """A set of avatars users can choose from"""
     pass

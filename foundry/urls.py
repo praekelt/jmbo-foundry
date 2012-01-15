@@ -228,6 +228,22 @@ urlpatterns = patterns('',
         name='member-notifications'
     ),
 
+    # User detail page
+    url(
+        r'^users/(?P<username>[\w-]+)/$', 
+        'foundry.views.user_detail', 
+        {},
+        name='user-detail'
+    ),
+
+    # Member detail page
+    url(
+        r'^members/(?P<username>[\w-]+)/$', 
+        'foundry.views.member_detail', 
+        {},
+        name='member-detail'
+    ),
+
     # Test views
     url(
         r'^test-plain-response/$',

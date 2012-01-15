@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext as _
+from django.contrib.auth.models import User
 
 from category.models import Category
 from jmbo.models import ModelBase
@@ -19,7 +20,8 @@ from jmbo.generic.views import GenericObjectDetail, GenericObjectList
 from jmbo.view_modifiers import DefaultViewModifier
 from preferences import preferences
 
-from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification
+from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification, \
+    Member
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
     SearchForm, CreateBlogPostForm
 
@@ -231,6 +233,27 @@ def member_notifications(request):
     extra = {}
     extra['object_list'] = Notification.objects.filter(member=request.user).order_by('-created')
     return render_to_response('foundry/member_notifications.html', extra, context_instance=RequestContext(request))
+
+
+def user_detail(request, username):
+    # Check if user has a corresponding Member object. Use that if possible.
+    try:
+        obj = Member.objects.get(username=username)
+        template = 'foundry/member_detail.html'
+    except Member.DoesNotExist:
+        obj = get_object_or_404(User, username=username)
+        template = 'foundry/user_detail.html'
+
+    extra = {}
+    extra['object'] = obj
+    return render_to_response(template, extra, context_instance=RequestContext(request))
+
+
+def member_detail(request, username):
+    obj = get_object_or_404(Member, username=username)
+    extra = {}
+    extra['object'] = obj
+    return render_to_response('foundry/member_detail.html', extra, context_instance=RequestContext(request))
 
 
 # Views for testing
