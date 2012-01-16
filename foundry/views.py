@@ -13,6 +13,7 @@ from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
+from django.contrib import messages
 
 from category.models import Category
 from jmbo.models import ModelBase
@@ -61,6 +62,9 @@ def join(request):
                 now = datetime.datetime.now()
                 expires = now.replace(year=now.year+10)
                 response.set_cookie('age_gateway_passed', value=1, expires=expires)
+
+            msg = _("You have successfully signed up to the site.")
+            messages.success(request, msg, fail_silently=True)
 
             return response
 
