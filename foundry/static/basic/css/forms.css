@@ -80,7 +80,7 @@ div.field .helptext {
     color: #7e7e7e;
 }    
 
-li.required label, div.required label {
+li.required > label, div.required > label {
     background-image: url('/static/basic/images/red-asterisk.png');
     background-position: left center;
     background-repeat: no-repeat;
