@@ -231,13 +231,12 @@ class PasswordResetForm(BasePasswordResetForm):
                     content, from_email, [user.email]
                 )
             else:
-                msg = "xxx hai"
                 sms = AmbientSMS(
                     settings.FOUNDRY['sms_gateway_api_key'], 
                     settings.FOUNDRY['sms_gateway_password']
                 )
                 try:
-                    sms.sendmsg(msg, [self.cleaned_data['mobile_number']])
+                    sms.sendmsg(content, [self.cleaned_data['mobile_number']])
                 except AmbientSMSError:
                     pass
 
