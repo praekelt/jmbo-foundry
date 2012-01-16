@@ -16,39 +16,11 @@ from django.contrib.comments.forms import CommentForm as BaseCommentForm
 from django.contrib.sites.models import Site
 
 from preferences import preferences
+from jmbo.forms import as_div
 
 from foundry.models import Member, DefaultAvatar, Country, FoundryComment, \
     BlogPost
 from foundry.widgets import OldSchoolDateWidget
-
-def as_ul_replacement(form):
-    """This formatter arranges label, widget, help text and error messages in a
-    sane order. Apply to custom form classes, or use to monkey patch form
-    classes not under our direct control."""
-    # Yes, evil but the easiest way to set this property for all forms.
-    form.required_css_class = 'required'
- 
-    return form._html_output(  
-        normal_row = u'<li %(html_class_attr)s>%(label)s %(errors)s <div class="helptext">%(help_text)s</div> %(field)s</li>',
-        error_row = u'%s',
-        row_ender = '</li>',
-        help_text_html = u'%s',
-        errors_on_separate_row = False)
-
-
-def as_div(form):
-    """This formatter arranges label, widget, help text and error messages by
-    using divs.  Apply to custom form classes, or use to monkey patch form
-    classes not under our direct control."""
-    # Yes, evil but the easiest way to set this property for all forms.
-    form.required_css_class = 'required'
- 
-    return form._html_output(  
-        normal_row = u'<div class="field"><div %(html_class_attr)s>%(label)s %(errors)s <div class="helptext">%(help_text)s</div> %(field)s</div></div>',
-        error_row = u'%s',
-        row_ender = '</div>',
-        help_text_html = u'%s',
-        errors_on_separate_row = False)
 
 
 class TermsCheckboxInput(forms.widgets.CheckboxInput):
@@ -86,7 +58,6 @@ class LoginForm(AuthenticationForm):
 
         # todo: customize error messages
 
-    as_ul = as_ul_replacement
     as_div = as_div
     
     
@@ -161,7 +132,6 @@ class JoinForm(UserCreationForm):
         if self.fields.has_key('mobile_number'):
             self.fields['mobile_number'].help_text = _("The number may start with a + sign. All other characters must be numbers. No spaces allowed.")
 
-    as_ul = as_ul_replacement
     as_div = as_div
 
 
@@ -201,7 +171,6 @@ class JoinFinishForm(forms.ModelForm):
 
         return instance
 
-    as_ul = as_ul_replacement
     as_div = as_div
 
 
@@ -263,7 +232,6 @@ class PasswordResetForm(BasePasswordResetForm):
                 # todo: send sms
                 pass
 
-    as_ul = as_ul_replacement
     as_div = as_div
 
 
@@ -301,14 +269,12 @@ class AgeGatewayForm(forms.Form):
         response.set_cookie('age_gateway_passed', value=1, expires=expires)
         return response
 
-    as_ul = as_ul_replacement
     as_div = as_div
 
 
 class SearchForm(forms.Form):
     search_term = forms.CharField(max_length=64)
 
-    as_ul = as_ul_replacement
     as_div = as_div
 
 
@@ -357,7 +323,6 @@ class CreateBlogPostForm(forms.ModelForm):
             instance.save()
         return instance            
 
-    as_ul = as_ul_replacement
     as_div = as_div
 
 
@@ -365,7 +330,6 @@ class CreateBlogPostForm(forms.ModelForm):
 class TestForm(forms.Form):
     title = forms.CharField(max_length=20)
 
-    as_ul = as_ul_replacement
     as_div = as_div
 
 
