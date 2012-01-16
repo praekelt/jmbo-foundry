@@ -205,5 +205,7 @@ SIMPLE_AUTOCOMPLETE = {
 
 FOUNDRY = {
     'has_javascript': True,
-    'has_ajax': True
+    'has_ajax': True,
+    'sms_gateway_api_key': '',
+    'sms_gateway_password': ''
 }

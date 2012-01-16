@@ -14,6 +14,7 @@ from django.utils.http import int_to_base36
 from django.http import HttpResponseRedirect
 from django.contrib.comments.forms import CommentForm as BaseCommentForm
 from django.contrib.sites.models import Site
+from django.conf import settings
 
 from preferences import preferences
 from jmbo.forms import as_div
@@ -21,6 +22,7 @@ from jmbo.forms import as_div
 from foundry.models import Member, DefaultAvatar, Country, FoundryComment, \
     BlogPost
 from foundry.widgets import OldSchoolDateWidget
+from foundry.ambientmobile import AmbientSMS, AmbientSMSError
 
 
 class TermsCheckboxInput(forms.widgets.CheckboxInput):
@@ -229,15 +231,22 @@ class PasswordResetForm(BasePasswordResetForm):
                     content, from_email, [user.email]
                 )
             else:
-                # todo: send sms
-                pass
+                msg = "xxx hai"
+                sms = AmbientSMS(
+                    settings.FOUNDRY['sms_gateway_api_key'], 
+                    settings.FOUNDRY['sms_gateway_password']
+                )
+                try:
+                    sms.sendmsg(msg, [self.cleaned_data['mobile_number']])
+                except AmbientSMSError:
+                    pass
 
     as_div = as_div
 
 
 class AgeGatewayForm(forms.Form):
     country = forms.ModelChoiceField(queryset=Country.objects.all())
-    date_of_birth = forms.DateField(widget=OldSchoolDateWidget) # todo: widget
+    date_of_birth = forms.DateField(widget=OldSchoolDateWidget)
     remember_me = forms.BooleanField(required=False, label="", widget=RememberMeCheckboxInput)
 
     def clean(self):
