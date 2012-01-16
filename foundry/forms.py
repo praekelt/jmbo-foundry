@@ -368,3 +368,8 @@ class TestForm(forms.Form):
     as_ul = as_ul_replacement
     as_div = as_div
 
+
+# Monkey patch some methods. Cannot put in monkey.py due to circular imports.
+from contact.forms import SiteContactForm
+
+SiteContactForm.as_p = as_div
