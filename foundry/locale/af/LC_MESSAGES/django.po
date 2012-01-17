@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-17 03:36-0600\n"
+"POT-Creation-Date: 2012-01-17 04:10-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -153,7 +153,7 @@ msgstr ""
 msgid "Footer"
 msgstr ""
 
-#: urls.py:118
+#: urls.py:118 templates/basic/foundry/inclusion_tags/footer.html:10
 msgid "About us"
 msgstr "Meer oor ons"
 
@@ -206,6 +206,22 @@ msgstr "Pos"
 msgid "Preview"
 msgstr "Voorsmakie"
 
+#: templates/basic/comments/list.html:28
+msgid "All messages"
+msgstr "Alle boodskappe"
+
+#: templates/basic/comments/list.html:31
+msgid "My messages"
+msgstr "My boodskappe"
+
+#: templates/basic/comments/list.html:40
+msgid "Show"
+msgstr "Vertoon"
+
+#: templates/basic/comments/list.html:70
+msgid "Reply"
+msgstr "Antwoord"
+
 #: templates/basic/foundry/create_blogpost.html:6
 msgid "Create a blog post"
 msgstr "Skep 'n blog pos"
@@ -221,6 +237,32 @@ msgstr "Kennisgewings"
 #: templates/basic/foundry/user_detail.html:9
 msgid "This user does not have a public profile."
 msgstr "Hierdie gebruiker het nie 'n publieke profiel nie."
+
+#: templates/basic/foundry/inclusion_tags/footer.html:6
+msgid "Search"
+msgstr "Soek"
+
+#: templates/basic/foundry/inclusion_tags/footer.html:10
+msgid "Contact us"
+msgstr "Kontak ons"
+
+#: templates/basic/foundry/inclusion_tags/footer.html:10
+msgid "Terms"
+msgstr "Terme"
+
+#: templates/basic/foundry/inclusion_tags/header.html:7
+msgid "Sign out"
+msgstr ""
+
+#: templates/basic/foundry/inclusion_tags/header.html:10
+#, fuzzy
+msgid "Sign in"
+msgstr "Teken in"
+
+#: templates/basic/foundry/inclusion_tags/header.html:11
+#, fuzzy
+msgid "Join"
+msgstr "Sluit aan"
 
 #: templates/basic/includes/list_meta.html:16
 #: templates/basic/jmbo/inclusion_tags/object_header.html:21
@@ -279,7 +321,8 @@ msgid ""
 "Please enter your new password twice so we can verify you typed it in "
 "correctly."
 msgstr ""
-"Voer asseblief jou nuwe wagwoord twee maal in sodat ons kan bevestig dat jy dit korrek ingevoer het."
+"Voer asseblief jou nuwe wagwoord twee maal in sodat ons kan bevestig dat jy "
+"dit korrek ingevoer het."
 
 #: templates/basic/registration/password_reset_confirm.html:24
 msgid "New password:"
@@ -302,7 +345,8 @@ msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used.  Please request a new password reset."
 msgstr ""
-"Die herstel wagwoord skakel was ongeldig, moontlik omdat dit reeds gebruik is. Vra asseblief 'n nuwe herstel wagwoord aan."
+"Die herstel wagwoord skakel was ongeldig, moontlik omdat dit reeds gebruik "
+"is. Vra asseblief 'n nuwe herstel wagwoord aan."
 
 #: templates/basic/registration/password_reset_done.html:6
 #: templates/basic/registration/password_reset_done.html:10
@@ -314,11 +358,14 @@ msgid ""
 "We've sent you instructions for setting your password. You should be "
 "receiving it shortly."
 msgstr ""
-"Ons het instruksies vir die stel van jou wagwoord aan jou gestuur. Jy behoort dit binnekort te ontvang."
+"Ons het instruksies vir die stel van jou wagwoord aan jou gestuur. Jy "
+"behoort dit binnekort te ontvang."
 
 #: templates/basic/registration/password_reset_email.html:2
 msgid "You're receiving this message because you requested a password reset"
-msgstr "Jy ontvang hierdie boodskap omdat jy aangevra het dat jou wagwoord herstel word"
+msgstr ""
+"Jy ontvang hierdie boodskap omdat jy aangevra het dat jou wagwoord herstel "
+"word"
 
 #: templates/basic/registration/password_reset_email.html:3
 #, python-format
@@ -338,14 +385,16 @@ msgid ""
 "Forgotten your password? Enter your e-mail address below, and we'll e-mail "
 "instructions for setting a new one."
 msgstr ""
-"Jou wagwoord vergeet? Voer jou e-pos adres in en ons sal instruksies om 'n nuwe een te stel aan jou stuur."
+"Jou wagwoord vergeet? Voer jou e-pos adres in en ons sal instruksies om 'n "
+"nuwe een te stel aan jou stuur."
 
 #: templates/basic/registration/password_reset_form.html:16
 msgid ""
 "Forgotten your password? Enter your mobile number below, and we'll send "
 "instructions for setting a new one."
 msgstr ""
-"Jou wagwoord vergeet? Voer jou selfoon nommer in en ons sal instruksies om 'n nuwe een te stel aan jou stuur."
+"Jou wagwoord vergeet? Voer jou selfoon nommer in en ons sal instruksies om "
+"'n nuwe een te stel aan jou stuur."
 
 #: templates/basic/registration/password_reset_form.html:22
 msgid "Reset my password"

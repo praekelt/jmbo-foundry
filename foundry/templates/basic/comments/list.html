@@ -1,4 +1,4 @@
-{% load pagination_tags jmbo_template_tags foundry_tags %}
+{% load pagination_tags jmbo_template_tags foundry_tags i18n %}
 
 {% if FOUNDRY.has_javascript %}
 <script type="text/javascript">
@@ -25,10 +25,10 @@ $(document).ready(function(){
 <div class="foundry-comments-messages-navbar">
     <div class="items">
         <div class="item first {% if not request.GET.my_messages %}active{% endif %}">
-            <a href=".">All Messages</a>
+            <a href=".">{% trans "All messages" %}</a>
         </div>
         <div class="item last {% if request.GET.my_messages %}active{% endif %}">
-            <a href="?my_messages=1">My Messages</a>
+            <a href="?my_messages=1">{% trans "My messages" %}</a>
         </div>
     </div>
 </div>
@@ -37,7 +37,7 @@ $(document).ready(function(){
 
     <div class="foundry-comments-pages-navbar">
         <div class="items">
-            <div class="item first">Show</div>
+            <div class="item first">{% trans "Show" %}</div>
             {% with '20 30 50'|as_list:'int' as li %}
                 {% for n in li %}
                     <div class="item {% if paginate_by == n %}active{% endif %} {% if forloop.last %}last{% endif %}">
@@ -67,7 +67,7 @@ $(document).ready(function(){
                     <a href="{% url comment-reply-form %}?content_type_id={{ comment.content_type_id }}&oid={{ comment.object_pk }}&path_info={{ request.META.PATH_INFO }}&my_messages={{ request.GET.my_messages }}&paginate_by={{ request.GET.paginate_by }}" 
                        class="comment-reply" 
                        comment_id="{{ comment.id }}" 
-                       creator="{{ comment.creator.username }}">Reply
+                       creator="{{ comment.creator.username }}">{% trans "Reply" %}
                     </a>
                 </div>
                 <div class="comment">

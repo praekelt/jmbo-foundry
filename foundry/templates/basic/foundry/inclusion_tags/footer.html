@@ -1,11 +1,11 @@
-{% load foundry_tags %}
+{% load foundry_tags i18n %}
 
 {% menu 'main' %}
 
 <div id="search">
-    <form name="search-form" action="search-results.html" method="get" class="foundry-form-inline"><input type="text" name="search" class="txt" /><input type="submit" name="search-btn" value="Search" /></form>
+    <form name="search-form" action="search-results.html" method="get" class="foundry-form-inline"><input type="text" name="search" class="txt" /><input type="submit" name="search-btn" value="{% trans "Search" %}" /></form>
 </div>
 
 <div id="footer">
-	<span><a href="{% url about-us %}">About Us</a></span> - <span><a href="{% url site_contact %}">Contact Us</a></span> - <span><a href="{% url terms-and-conditions %}">Terms</a></span><br />&copy; Praekelt Digital {% now "Y" %}</span>
+	<span><a href="{% url about-us %}">{% trans "About us" %}</a></span> - <span><a href="{% url site_contact %}">{% trans "Contact us" %}</a></span> - <span><a href="{% url terms-and-conditions %}">{% trans "Terms" %}</a></span><br />&copy; Praekelt Digital {% now "Y" %}</span>
 </div>
