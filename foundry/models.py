@@ -241,7 +241,7 @@ class GeneralPreferences(Preferences):
         help_text=_("A private site requires a visitor to be logged in to view any content."),
     )
     show_age_gateway = models.BooleanField(default=False)
-    analytics_tags = models.TextField(null=True, blank=True)
+    #analytics_tags = models.TextField(null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'General Preferences'
