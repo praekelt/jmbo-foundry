@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-17 03:06-0600\n"
+"POT-Creation-Date: 2012-01-17 03:36-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,8 +21,8 @@ msgid ""
 "I accept the <a href=\"/terms-and-conditions\" target=\"external\">terms and "
 "conditions</a>"
 msgstr ""
-"Ek aanvaar die <a href=\"/terms-and-conditions\" target=\"external\">terme en "
-"voorwaardes</a>"
+"Ek aanvaar die <a href=\"/terms-and-conditions\" target=\"external\">terme "
+"en voorwaardes</a>"
 
 #: forms.py:51 models.py:308
 msgid "Email address"
@@ -69,7 +69,9 @@ msgstr "Jou e-pos adres is nog in die geval dat jy jou wagwoord verloor."
 msgid ""
 "The number may start with a + sign. All other characters must be numbers. No "
 "spaces allowed."
-msgstr "Die nommer mag begin met 'n + teken. Alle ander karakters moet nommers wees. Geen spasies word toegelaat nie."
+msgstr ""
+"Die nommer mag begin met 'n + teken. Alle ander karakters moet nommers wees. "
+"Geen spasies word toegelaat nie."
 
 #: forms.py:152
 msgid "Upload a picture"
@@ -77,7 +79,8 @@ msgstr "Laai 'n foto op"
 
 #: forms.py:153
 msgid "JPG, GIF or PNG accepted. Square is best. Keep it under 1MB."
-msgstr "JPG, GIF of PNG word aanvaar. Vierkantig is beste. Hou dit onder 1MB groot."
+msgstr ""
+"JPG, GIF of PNG word aanvaar. Vierkantig is beste. Hou dit onder 1MB groot."
 
 #: forms.py:163
 msgid "Please upload or select a picture."
@@ -193,55 +196,53 @@ msgstr ""
 #: templates/basic/registration/password_reset_done.html:4
 #: templates/basic/registration/password_reset_form.html:5
 msgid "Home"
-msgstr ""
+msgstr "Tuis"
 
 #: templates/basic/comments/form.html:21
 msgid "Post"
-msgstr ""
+msgstr "Pos"
 
 #: templates/basic/comments/form.html:22
 msgid "Preview"
-msgstr ""
+msgstr "Voorsmakie"
 
 #: templates/basic/foundry/create_blogpost.html:6
 msgid "Create a blog post"
-msgstr ""
+msgstr "Skep 'n blog pos"
 
 #: templates/basic/foundry/member_detail.html:11
 msgid "Comments"
-msgstr ""
+msgstr "Opmerkings"
 
 #: templates/basic/foundry/member_notifications.html:7
 msgid "Notifications"
-msgstr ""
+msgstr "Kennisgewings"
 
 #: templates/basic/foundry/user_detail.html:9
-msgid ""
-"\n"
-"        This user does not have a public profile.\n"
-"        "
-msgstr ""
+msgid "This user does not have a public profile."
+msgstr "Hierdie gebruiker het nie 'n publieke profiel nie."
 
 #: templates/basic/includes/list_meta.html:16
 #: templates/basic/jmbo/inclusion_tags/object_header.html:21
-msgid "comment"
-msgstr ""
+#, python-format
+msgid "comment%(total|pluralize)s)"
+msgstr "opmerkings%(total|pluralize)s)"
 
 #: templates/basic/jmbo/inclusion_tags/object_header.html:15
 msgid "By"
-msgstr ""
+msgstr "Deur"
 
 #: templates/basic/jmbo/inclusion_tags/object_header.html:15
 msgid "on"
-msgstr ""
+msgstr "op"
 
 #: templates/basic/registration/logged_out.html:6
 msgid "You are now logged out"
-msgstr ""
+msgstr "Jy het uitgeteken."
 
 #: templates/basic/registration/login.html:15
 msgid "Forgot your password?"
-msgstr ""
+msgstr "Jou wagwoord vergeet?"
 
 #: templates/basic/registration/password_reset_complete.html:4
 #: templates/basic/registration/password_reset_confirm.html:10
@@ -250,97 +251,102 @@ msgstr ""
 #: templates/basic/registration/password_reset_form.html:7
 #: templates/basic/registration/password_reset_form.html:10
 msgid "Password reset"
-msgstr ""
+msgstr "Herstel wagwoord"
 
 #: templates/basic/registration/password_reset_complete.html:6
 #: templates/basic/registration/password_reset_complete.html:10
 msgid "Password reset complete"
-msgstr ""
+msgstr "Herstel wagwoord voltooid"
 
 #: templates/basic/registration/password_reset_complete.html:12
-msgid "Your password has been set.  You may go ahead and log in now."
-msgstr ""
+msgid "Your password has been set. You may go ahead and log in now."
+msgstr "Jou wagwoord is gestel. Jy kan nou voortgaan en inteken."
 
 #: templates/basic/registration/password_reset_complete.html:14
 msgid "Log in"
-msgstr ""
+msgstr "Teken in"
 
 #: templates/basic/registration/password_reset_confirm.html:8
 msgid "Password reset confirmation"
-msgstr ""
+msgstr "Herstel wagwoord bevestiging"
 
 #: templates/basic/registration/password_reset_confirm.html:16
 msgid "Enter new password"
-msgstr ""
+msgstr "Voer nuwe wagwoord in"
 
 #: templates/basic/registration/password_reset_confirm.html:18
 msgid ""
 "Please enter your new password twice so we can verify you typed it in "
 "correctly."
 msgstr ""
+"Voer asseblief jou nuwe wagwoord twee maal in sodat ons kan bevestig dat jy dit korrek ingevoer het."
 
 #: templates/basic/registration/password_reset_confirm.html:24
 msgid "New password:"
-msgstr ""
+msgstr "Nuwe wagwoord:"
 
 #: templates/basic/registration/password_reset_confirm.html:30
 msgid "Confirm password:"
-msgstr ""
+msgstr "Bevestig wagwoord:"
 
 #: templates/basic/registration/password_reset_confirm.html:33
 msgid "Change my password"
-msgstr ""
+msgstr "Verander my wagwoord"
 
 #: templates/basic/registration/password_reset_confirm.html:38
 msgid "Password reset unsuccessful"
-msgstr ""
+msgstr "Herstel wagwoord onsuksesvol"
 
 #: templates/basic/registration/password_reset_confirm.html:40
 msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used.  Please request a new password reset."
 msgstr ""
+"Die herstel wagwoord skakel was ongeldig, moontlik omdat dit reeds gebruik is. Vra asseblief 'n nuwe herstel wagwoord aan."
 
 #: templates/basic/registration/password_reset_done.html:6
 #: templates/basic/registration/password_reset_done.html:10
 msgid "Password reset successful"
-msgstr ""
+msgstr "Herstel wagwoord suksesvol"
 
 #: templates/basic/registration/password_reset_done.html:12
 msgid ""
 "We've sent you instructions for setting your password. You should be "
 "receiving it shortly."
 msgstr ""
+"Ons het instruksies vir die stel van jou wagwoord aan jou gestuur. Jy behoort dit binnekort te ontvang."
 
 #: templates/basic/registration/password_reset_email.html:2
 msgid "You're receiving this message because you requested a password reset"
-msgstr ""
+msgstr "Jy ontvang hierdie boodskap omdat jy aangevra het dat jou wagwoord herstel word"
 
 #: templates/basic/registration/password_reset_email.html:3
 #, python-format
 msgid "for your user account at %(site_name)s"
-msgstr ""
+msgstr "vir jou profiel op %(site_name)s"
 
 #: templates/basic/registration/password_reset_email.html:5
 msgid "Please go to the following page and choose a new password:"
-msgstr ""
+msgstr "Gaan asseblief na die volgende bladsy en kies 'n nuwe wagwoord:"
 
 #: templates/basic/registration/password_reset_email.html:9
 msgid "Your username, in case you've forgotten:"
-msgstr ""
+msgstr "Jou gebruikersnaam in geval jy vergeet het:"
 
 #: templates/basic/registration/password_reset_form.html:13
 msgid ""
 "Forgotten your password? Enter your e-mail address below, and we'll e-mail "
 "instructions for setting a new one."
 msgstr ""
+"Jou wagwoord vergeet? Voer jou e-pos adres in en ons sal instruksies om 'n nuwe een te stel aan jou stuur."
 
 #: templates/basic/registration/password_reset_form.html:16
 msgid ""
 "Forgotten your password? Enter your mobile number below, and we'll send "
 "instructions for setting a new one."
 msgstr ""
+"Jou wagwoord vergeet? Voer jou selfoon nommer in en ons sal instruksies om 'n nuwe een te stel aan jou stuur."
 
 #: templates/basic/registration/password_reset_form.html:22
 msgid "Reset my password"
-msgstr ""
+msgstr "Herstel my wagwoord"

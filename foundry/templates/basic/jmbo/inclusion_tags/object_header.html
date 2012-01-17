@@ -18,7 +18,7 @@ Add social widgets from addthis.com
         {% if object.comments_enabled %}
         <div class="comments">
             {% with object.comment_count as total %}
-                ({{ total }} {% blocktrans %}comment{% endblocktrans %}{{ total|pluralize }}) 
+                ({{ total }} {% blocktrans %}comment{{ total|pluralize }}){% endblocktrans %} 
             {% endwith %}
         </div>
         {% endif %}
