@@ -1,7 +1,7 @@
 import datetime
 import re
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, \
     PasswordResetForm as BasePasswordResetForm
@@ -29,7 +29,7 @@ class TermsCheckboxInput(forms.widgets.CheckboxInput):
 
     def render(self, *args, **kwargs):
         result = super(TermsCheckboxInput, self).render(*args, **kwargs)
-        return result + """I accept the <a href="/terms-and-conditions" target="external">terms and conditions</a>"""
+        return result + ugettext("""I accept the <a href="/terms-and-conditions" target="external">terms and conditions</a>""")
 
 
 class RememberMeCheckboxInput(forms.widgets.CheckboxInput):
@@ -89,7 +89,9 @@ class JoinForm(UserCreationForm):
                 di = {'%s__iexact' % name:value}
                 if Member.objects.filter(**di).count() > 0:
                     pretty_name = self.fields[name].label.lower()
-                    message =_("The %s is already in use. Please supply a different %s." % (pretty_name, pretty_name))
+                    message =_("The %(pretty_name)s is already in use. \
+                        Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
+                    )
                     self._errors[name] = self.error_class([message])
 
         # Age gateway fields
