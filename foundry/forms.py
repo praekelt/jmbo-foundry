@@ -90,7 +90,7 @@ class JoinForm(UserCreationForm):
                 if Member.objects.filter(**di).count() > 0:
                     pretty_name = self.fields[name].label.lower()
                     message =_("The %(pretty_name)s is already in use. \
-                        Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
+Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
                     )
                     self._errors[name] = self.error_class([message])
 

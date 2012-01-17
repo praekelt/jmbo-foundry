@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-17 02:46-0600\n"
+"POT-Creation-Date: 2012-01-17 03:06-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,75 +16,85 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: forms.py:32
+msgid ""
+"I accept the <a href=\"/terms-and-conditions\" target=\"external\">terms and "
+"conditions</a>"
+msgstr ""
+"Ek aanvaar die <a href=\"/terms-and-conditions\" target=\"external\">terme en "
+"voorwaardes</a>"
+
 #: forms.py:51 models.py:308
 msgid "Email address"
-msgstr ""
+msgstr "E-pos adres"
 
 #: forms.py:53 models.py:309
 msgid "Mobile number"
-msgstr ""
+msgstr "Selfoon nommer"
 
 #: forms.py:55 models.py:287
 msgid "Username or email address"
-msgstr ""
+msgstr "Gebruikersnaam of e-pos adres"
 
 #: forms.py:57 models.py:288
 msgid "Username or mobile number"
-msgstr ""
+msgstr "Gebruikersnaam of selfoon nommer"
 
 #: forms.py:78
 msgid "Please enter a valid number"
-msgstr ""
+msgstr "Voer asseblief 'n geldige nommer in"
 
 #: forms.py:92
 #, python-format
 msgid ""
-"The %(pretty_name)s is already in use.                         Please supply "
-"a different %(pretty_name)s."
+"The %(pretty_name)s is already in use. Please supply a different %"
+"(pretty_name)s."
 msgstr ""
+"Die %(pretty_name)s is alreeds in gebruik. Verskaf asseblief 'n ander %"
+"(pretty_name)s."
 
 #: forms.py:132
 msgid "This name is visible to other users on the site."
-msgstr ""
+msgstr "Hierdie naam is sigbaar vir ander gebruikers op die webwerf."
 
 #: forms.py:133
 msgid "We never store your password in its original form."
-msgstr ""
+msgstr "Ons stoor nooit jou wagwoord in sy oorspronklike vorm nie."
 
 #: forms.py:135
 msgid "Your email address is required in case you lose your password."
-msgstr ""
+msgstr "Jou e-pos adres is nog in die geval dat jy jou wagwoord verloor."
 
 #: forms.py:137
 msgid ""
 "The number may start with a + sign. All other characters must be numbers. No "
 "spaces allowed."
-msgstr ""
+msgstr "Die nommer mag begin met 'n + teken. Alle ander karakters moet nommers wees. Geen spasies word toegelaat nie."
 
 #: forms.py:152
 msgid "Upload a picture"
-msgstr ""
+msgstr "Laai 'n foto op"
 
 #: forms.py:153
 msgid "JPG, GIF or PNG accepted. Square is best. Keep it under 1MB."
-msgstr ""
+msgstr "JPG, GIF of PNG word aanvaar. Vierkantig is beste. Hou dit onder 1MB groot."
 
 #: forms.py:163
 msgid "Please upload or select a picture."
-msgstr ""
+msgstr "Laai of kies asseblief 'n foto."
 
 #: forms.py:195
 msgid "The mobile number is not registered with the system."
-msgstr ""
+msgstr "Die selfoon nommer is nie geregistreer met die stelsel nie."
 
 #: forms.py:232
 #, python-format
 msgid "Password reset on %s"
-msgstr ""
+msgstr "Wagwoord herstel op %s"
 
 #: forms.py:270
 msgid "Where do you live?"
-msgstr ""
+msgstr "Waar woon jy?"
 
 #: models.py:213
 msgid "A private site requires a visitor to be logged in to view any content."
@@ -126,7 +136,7 @@ msgstr ""
 
 #: models.py:331
 msgid "Set your profile picture"
-msgstr ""
+msgstr "Stel jou profiel foto"
 
 #: models.py:418
 msgid "Header"
@@ -142,24 +152,24 @@ msgstr ""
 
 #: urls.py:118
 msgid "About us"
-msgstr ""
+msgstr "Meer oor ons"
 
 #: urls.py:127
 msgid "Terms and conditions"
-msgstr ""
+msgstr "Terme en voorwaardes"
 
 #: urls.py:136
 msgid "Privacy policy"
-msgstr ""
+msgstr "Privaatheid beleid"
 
 #: views.py:66
 msgid "You have successfully signed up to the site."
-msgstr ""
+msgstr "Jy het suksesvol ingeteken op die webwerf."
 
 #: views.py:197
 #, python-format
 msgid "The blog post %s has been saved"
-msgstr ""
+msgstr "Die blog pos %s is gestoor"
 
 #: templates/admin/base.html:33
 msgid "Welcome,"
