@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-17 04:10-0600\n"
+"POT-Creation-Date: 2012-01-17 04:51-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -145,9 +145,9 @@ msgstr "Stel jou profiel foto"
 msgid "Header"
 msgstr ""
 
-#: models.py:419
+#: models.py:419 models.py:537
 msgid "Content"
-msgstr ""
+msgstr "Inhoud"
 
 #: models.py:420
 msgid "Footer"
@@ -225,6 +225,10 @@ msgstr "Antwoord"
 #: templates/basic/foundry/create_blogpost.html:6
 msgid "Create a blog post"
 msgstr "Skep 'n blog pos"
+
+#: templates/basic/foundry/create_blogpost.html:12
+msgid "Save"
+msgstr "Stoor"
 
 #: templates/basic/foundry/member_detail.html:11
 msgid "Comments"
@@ -399,3 +403,7 @@ msgstr ""
 #: templates/basic/registration/password_reset_form.html:22
 msgid "Reset my password"
 msgstr "Herstel my wagwoord"
+
+#, fuzzy
+#~ msgid "Contentx"
+#~ msgstr "Inhoud"

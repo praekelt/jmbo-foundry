@@ -322,6 +322,9 @@ class CreateBlogPostForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
         super(CreateBlogPostForm, self).__init__(*args, **kwargs)
+        # There is somebug in Django that does not allow content's translation 
+        # to be applied. Workaround.
+        self.fields['content'].label = _("Content")
 
     def save(self, commit=True):    
         instance = super(CreateBlogPostForm, self).save(commit=commit)

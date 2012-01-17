@@ -534,7 +534,7 @@ class ChatRoom(ModelBase):
 
 
 class BlogPost(ModelBase):
-    content = RichTextField()
+    content = RichTextField(_("Content"))
     
 
 class Notification(models.Model):
