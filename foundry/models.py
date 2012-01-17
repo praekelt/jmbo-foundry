@@ -99,6 +99,15 @@ class Menu(models.Model):
         unique=True,
     )
     display_title = models.BooleanField(default=True)
+    sites = models.ManyToManyField(
+        'sites.Site',
+        blank=True,
+        null=True,
+        help_text='Sites that this page will appear on.',
+    )
+
+    objects = models.Manager()
+    permitted = PermittedManager()
 
     def __unicode__(self):
         return self.title
@@ -113,6 +122,15 @@ class Navbar(models.Model):
         db_index=True,
         unique=True,
     )
+    sites = models.ManyToManyField(
+        'sites.Site',
+        blank=True,
+        null=True,
+        help_text='Sites that this page will appear on.',
+    )
+
+    objects = models.Manager()
+    permitted = PermittedManager()
 
     def __unicode__(self):
         return self.title
@@ -166,6 +184,15 @@ class Listing(models.Model):
         default=0, 
         help_text="Number of items displayed on a page. Set to zero to disable paging."
     )
+    sites = models.ManyToManyField(
+        'sites.Site',
+        blank=True,
+        null=True,
+        help_text='Sites that this listing will appear on.',
+    )
+
+    objects = models.Manager()
+    permitted = PermittedManager()
 
     def __unicode__(self):
         return self.title
@@ -540,7 +567,7 @@ class ChatRoom(ModelBase):
 
 class BlogPost(ModelBase):
     content = RichTextField(_("Content"))
-    
+
 
 class Notification(models.Model):
     member = models.ForeignKey(Member)

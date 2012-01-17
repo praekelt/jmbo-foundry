@@ -45,7 +45,7 @@ class MenuNode(template.Node):
     def render(self, context):       
         slug = self.slug.resolve(context)
         try:
-            obj = Menu.objects.get(slug=slug)
+            obj = Menu.permitted.get(slug=slug)
         except Menu.DoesNotExist:
             return ''
 
@@ -78,7 +78,7 @@ class NavbarNode(template.Node):
     def render(self, context):
         slug = self.slug.resolve(context)
         try:
-            obj = Navbar.objects.get(slug=slug)
+            obj = Navbar.permitted.get(slug=slug)
         except Navbar.DoesNotExist:
             return ''
 
@@ -117,7 +117,7 @@ class ListingNode(template.Node):
     def render(self, context):
         slug = self.slug.resolve(context)
         try:
-            obj = Listing.objects.get(slug=slug)
+            obj = Listing.permitted.get(slug=slug)
         except Listing.DoesNotExist:
             return ''
 
