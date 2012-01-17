@@ -142,7 +142,7 @@ class RowsNode(template.Node):
     def render(self, context):
         block_name = self.block_name.resolve(context)
 
-        pages = Page.objects.filter(is_homepage=True)
+        pages = Page.permitted.filter(is_homepage=True)
         if pages.count():
             page = pages[0]
             rows = page.rows_by_block_name.get(block_name, [])

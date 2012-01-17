@@ -19,6 +19,7 @@ from jmbo.models import ModelBase
 from foundry.profile_models import AbstractAvatarProfile, \
     AbstractSocialProfile, AbstractContactProfile
 from foundry.templatetags import listing_styles
+from foundry.managers import PermittedManager
 import foundry.monkey
 
 
@@ -205,14 +206,15 @@ class NavbarLinkPosition(AbstractLinkPosition):
 class GeneralPreferences(Preferences):
     __module__ = 'preferences.models'
 
-    about_us = RichTextField()
-    terms_and_conditions = RichTextField()
-    privacy_policy = RichTextField()
+    about_us = RichTextField(null=True, blank=True)
+    terms_and_conditions = RichTextField(null=True, blank=True)
+    privacy_policy = RichTextField(null=True, blank=True)
     private_site = models.BooleanField(
         default=False,
         help_text=_("A private site requires a visitor to be logged in to view any content."),
     )
     show_age_gateway = models.BooleanField(default=False)
+    analytics_tags = models.TextField(null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'General Preferences'
@@ -386,6 +388,9 @@ class Page(models.Model):
         null=True,
         help_text='Sites that this page will appear on.',
     )
+
+    objects = models.Manager()
+    permitted = PermittedManager()
 
     def __unicode__(self):
         return self.title

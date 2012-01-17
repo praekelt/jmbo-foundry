@@ -260,7 +260,7 @@ urlpatterns = patterns('',
     url(
         r'^pages/$',
         'django.views.generic.list_detail.object_list',
-        {'queryset':Page.objects.all().order_by('title')},
+        {'queryset':Page.permitted.all().order_by('title')},
         'page-list'
     ),    
 
