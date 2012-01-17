@@ -134,7 +134,9 @@ Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
         if self.fields.has_key('email'):
             self.fields['email'].help_text = _("Your email address is required in case you lose your password.")
         if self.fields.has_key('mobile_number'):
-            self.fields['mobile_number'].help_text = _("The number may start with a + sign. All other characters must be numbers. No spaces allowed.")
+            self.fields['mobile_number'].help_text = _("The number must be in \
+international format and may start with a + sign. All other characters must \
+be numbers. No spaces allowed. An example is +27821234567.")
 
     as_div = as_div
 
