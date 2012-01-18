@@ -155,6 +155,7 @@ INSTALLED_APPS = (
     'simple_autocomplete', # custom
     'pagination', # custom
     'south', # custom - add to paster
+    'compressor', # custom - add to paster
     'django.contrib.auth',
     'django.contrib.comments',
     'django.contrib.contenttypes',
@@ -210,3 +211,9 @@ FOUNDRY = {
     'sms_gateway_api_key': '',
     'sms_gateway_password': ''
 }
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)

@@ -47,6 +47,7 @@ setup(
         'django-pagination',
         'south',
         'BeautifulSoup',
+        'django_compressor',
     ],
     include_package_data=True,
     tests_require=[
