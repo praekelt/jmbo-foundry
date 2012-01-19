@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-17 04:51-0600\n"
+"POT-Creation-Date: 2012-01-19 07:10-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,19 +24,19 @@ msgstr ""
 "Ek aanvaar die <a href=\"/terms-and-conditions\" target=\"external\">terme "
 "en voorwaardes</a>"
 
-#: forms.py:51 models.py:308
+#: forms.py:51 models.py:337
 msgid "Email address"
 msgstr "E-pos adres"
 
-#: forms.py:53 models.py:309
+#: forms.py:53 models.py:338
 msgid "Mobile number"
 msgstr "Selfoon nommer"
 
-#: forms.py:55 models.py:287
+#: forms.py:55 models.py:316
 msgid "Username or email address"
 msgstr "Gebruikersnaam of e-pos adres"
 
-#: forms.py:57 models.py:288
+#: forms.py:57 models.py:317
 msgid "Username or mobile number"
 msgstr "Gebruikersnaam of selfoon nommer"
 
@@ -66,90 +66,92 @@ msgid "Your email address is required in case you lose your password."
 msgstr "Jou e-pos adres is nog in die geval dat jy jou wagwoord verloor."
 
 #: forms.py:137
+#, fuzzy
 msgid ""
-"The number may start with a + sign. All other characters must be numbers. No "
-"spaces allowed."
+"The number must be in international format and may start with a + sign. All "
+"other characters must be numbers. No spaces allowed. An example is "
+"+27821234567."
 msgstr ""
 "Die nommer mag begin met 'n + teken. Alle ander karakters moet nommers wees. "
 "Geen spasies word toegelaat nie."
 
-#: forms.py:152
+#: forms.py:154
 msgid "Upload a picture"
 msgstr "Laai 'n foto op"
 
-#: forms.py:153
+#: forms.py:155
 msgid "JPG, GIF or PNG accepted. Square is best. Keep it under 1MB."
 msgstr ""
 "JPG, GIF of PNG word aanvaar. Vierkantig is beste. Hou dit onder 1MB groot."
 
-#: forms.py:163
+#: forms.py:165
 msgid "Please upload or select a picture."
 msgstr "Laai of kies asseblief 'n foto."
 
-#: forms.py:195
+#: forms.py:197
 msgid "The mobile number is not registered with the system."
 msgstr "Die selfoon nommer is nie geregistreer met die stelsel nie."
 
-#: forms.py:232
+#: forms.py:234
 #, python-format
 msgid "Password reset on %s"
 msgstr "Wagwoord herstel op %s"
 
-#: forms.py:270
+#: forms.py:272
 msgid "Where do you live?"
 msgstr "Waar woon jy?"
 
-#: models.py:213
+#: forms.py:329 models.py:451 models.py:569
+msgid "Content"
+msgstr "Inhoud"
+
+#: models.py:241
 msgid "A private site requires a visitor to be logged in to view any content."
 msgstr ""
 
-#: models.py:228
+#: models.py:257
 msgid "Fields to display on the registration form."
 msgstr ""
 
-#: models.py:235
+#: models.py:264
 msgid ""
 "Set fields which are not required by default as required on the registration "
 "form."
 msgstr ""
 
-#: models.py:242
+#: models.py:271
 msgid "Set fields which must be unique on the registration form."
 msgstr ""
 
-#: models.py:284
+#: models.py:313
 msgid "Username only"
 msgstr ""
 
-#: models.py:285
+#: models.py:314
 msgid "Email address only"
 msgstr ""
 
-#: models.py:286
+#: models.py:315
 msgid "Mobile number only"
 msgstr ""
 
-#: models.py:290
+#: models.py:319
 msgid "Users may log in with more than one identifier."
 msgstr ""
 
-#: models.py:311
+#: models.py:340
 msgid "The field a user must enter to retrieve his password."
 msgstr ""
 
-#: models.py:331
+#: models.py:360
 msgid "Set your profile picture"
 msgstr "Stel jou profiel foto"
 
-#: models.py:418
+#: models.py:450
 msgid "Header"
 msgstr ""
 
-#: models.py:419 models.py:537
-msgid "Content"
-msgstr "Inhoud"
-
-#: models.py:420
+#: models.py:452
 msgid "Footer"
 msgstr ""
 
@@ -268,11 +270,21 @@ msgstr "Teken in"
 msgid "Join"
 msgstr "Sluit aan"
 
+#: templates/basic/includes/list_meta.html:10
+msgid "ago"
+msgstr "gelede"
+
 #: templates/basic/includes/list_meta.html:16
 #: templates/basic/jmbo/inclusion_tags/object_header.html:21
-#, python-format
-msgid "comment%(total|pluralize)s)"
-msgstr "opmerkings%(total|pluralize)s)"
+#, fuzzy
+msgid "comment"
+msgstr "opmerking"
+
+#: templates/basic/includes/list_meta.html:16
+#: templates/basic/jmbo/inclusion_tags/object_header.html:21
+#, fuzzy
+msgid "comments"
+msgstr "opmerkings"
 
 #: templates/basic/jmbo/inclusion_tags/object_header.html:15
 msgid "By"
@@ -403,6 +415,9 @@ msgstr ""
 #: templates/basic/registration/password_reset_form.html:22
 msgid "Reset my password"
 msgstr "Herstel my wagwoord"
+
+#~ msgid "comment%(total|pluralize)s)"
+#~ msgstr "opmerkings%(total|pluralize)s)"
 
 #, fuzzy
 #~ msgid "Contentx"

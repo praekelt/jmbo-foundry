@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-18 02:55-0600\n"
+"POT-Creation-Date: 2012-01-19 07:10-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,8 +21,9 @@ msgstr ""
 msgid ""
 "I accept the <a href=\"/terms-and-conditions\" target=\"external\">terms and "
 "conditions</a>"
-msgstr  ""
-"J’accepte les <a href=\"/terms-and-conditions\" target=\"external\">conditions générales</a>"
+msgstr ""
+"J’accepte les <a href=\"/terms-and-conditions\" target=\"external"
+"\">conditions générales</a>"
 
 #: forms.py:51 models.py:337
 msgid "Email address"
@@ -57,11 +58,14 @@ msgstr "Noter que ce nom est visible aux autres utilisateurs de ce site."
 
 #: forms.py:133
 msgid "We never store your password in its original form."
-msgstr "Noter que nous ne gardons jamais un mot de passe dans sa forme originelle."
+msgstr ""
+"Noter que nous ne gardons jamais un mot de passe dans sa forme originelle."
 
 #: forms.py:135
 msgid "Your email address is required in case you lose your password."
-msgstr "On vous demande votre adresse électronique au cas où vous oubliez votre nom de passe."
+msgstr ""
+"On vous demande votre adresse électronique au cas où vous oubliez votre nom "
+"de passe."
 
 #: forms.py:137
 msgid ""
@@ -69,7 +73,9 @@ msgid ""
 "other characters must be numbers. No spaces allowed. An example is "
 "+27821234567."
 msgstr ""
-"On doit utiliser le nombre en format international et le nombre peut commencer avec +. Tous les autres caractères doivent être les numéros. Les espaces sont interdites.  A titre d’exemple un numéro peut être +27821234567."
+"On doit utiliser le nombre en format international et le nombre peut "
+"commencer avec +. Tous les autres caractères doivent être les numéros. Les "
+"espaces sont interdites.  A titre d’exemple un numéro peut être +27821234567."
 
 #: forms.py:154
 msgid "Upload a picture"
@@ -77,7 +83,8 @@ msgstr "Télécharger une image"
 
 #: forms.py:155
 msgid "JPG, GIF or PNG accepted. Square is best. Keep it under 1MB."
-msgstr "On accepte JPG, GIF et PNG. Une image carrée au maximum d’un MB est préférée."
+msgstr ""
+"On accepte JPG, GIF et PNG. Une image carrée au maximum d’un MB est préférée."
 
 #: forms.py:165
 msgid "Please upload or select a picture."
@@ -263,11 +270,20 @@ msgstr "Enregistrer"
 msgid "Join"
 msgstr "Vous engager"
 
+#: templates/basic/includes/list_meta.html:10
+msgid "ago"
+msgstr "Il ya"
+
 #: templates/basic/includes/list_meta.html:16
 #: templates/basic/jmbo/inclusion_tags/object_header.html:21
-#, python-format
-msgid "comment%(total|pluralize)s)"
-msgstr "commentaire%(total|pluralize)s)"
+msgid "comment"
+msgstr "commentaire"
+
+#: templates/basic/includes/list_meta.html:16
+#: templates/basic/jmbo/inclusion_tags/object_header.html:21
+#, fuzzy
+msgid "comments"
+msgstr "commentaires"
 
 #: templates/basic/jmbo/inclusion_tags/object_header.html:15
 msgid "By"
@@ -301,7 +317,9 @@ msgstr "Mot de passe remis complet"
 
 #: templates/basic/registration/password_reset_complete.html:12
 msgid "Your password has been set. You may go ahead and log in now."
-msgstr "On a crée votre mot de passe.  Vous pouvez maintenant continuer à enregistrer."
+msgstr ""
+"On a crée votre mot de passe.  Vous pouvez maintenant continuer à "
+"enregistrer."
 
 #: templates/basic/registration/password_reset_complete.html:14
 msgid "Log in"
@@ -319,8 +337,7 @@ msgstr "Entrer votre nouveau mot de passe"
 msgid ""
 "Please enter your new password twice so we can verify you typed it in "
 "correctly."
-msgstr ""
-"Entrer s.v.p deux fois votre nouveau mot de passe pour le vérifier."
+msgstr "Entrer s.v.p deux fois votre nouveau mot de passe pour le vérifier."
 
 #: templates/basic/registration/password_reset_confirm.html:24
 msgid "New password:"
@@ -343,7 +360,8 @@ msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used.  Please request a new password reset."
 msgstr ""
-"Mot de passe remis n’a pas réussi peut-être parce qu’on l’utilise déjà. Demander s.v.p un nouveau mot de passe remis."
+"Mot de passe remis n’a pas réussi peut-être parce qu’on l’utilise déjà. "
+"Demander s.v.p un nouveau mot de passe remis."
 
 #: templates/basic/registration/password_reset_done.html:6
 #: templates/basic/registration/password_reset_done.html:10
@@ -355,11 +373,14 @@ msgid ""
 "We've sent you instructions for setting your password. You should be "
 "receiving it shortly."
 msgstr ""
-"Nous vous avons envoyé les instructions pour créer votre mot de passe.  Vous devriez bientôt le recevoir."
+"Nous vous avons envoyé les instructions pour créer votre mot de passe.  Vous "
+"devriez bientôt le recevoir."
 
 #: templates/basic/registration/password_reset_email.html:2
 msgid "You're receiving this message because you requested a password reset"
-msgstr "Nous vous  envoyons ce message en réponse à votre demande que votre mot de passe de compte d’utilisateur"
+msgstr ""
+"Nous vous  envoyons ce message en réponse à votre demande que votre mot de "
+"passe de compte d’utilisateur"
 
 #: templates/basic/registration/password_reset_email.html:3
 #, python-format
@@ -379,14 +400,17 @@ msgid ""
 "Forgotten your password? Enter your e-mail address below, and we'll e-mail "
 "instructions for setting a new one."
 msgstr ""
-"Avez-vous oublié votre mot de passe ? Entrez votre adresse électronique et nous allons vous expliquer comment vous pouvez créer un nouveau mot de passe."
+"Avez-vous oublié votre mot de passe ? Entrez votre adresse électronique et "
+"nous allons vous expliquer comment vous pouvez créer un nouveau mot de passe."
 
 #: templates/basic/registration/password_reset_form.html:16
 msgid ""
 "Forgotten your password? Enter your mobile number below, and we'll send "
 "instructions for setting a new one."
 msgstr ""
-"Avez-vous oublié votre mot de passe? Composez maintenant votre numéro de mobile au-dessous et nous vous expliquerons comment vous pouvez en créer un nouveau mot de passe."
+"Avez-vous oublié votre mot de passe? Composez maintenant votre numéro de "
+"mobile au-dessous et nous vous expliquerons comment vous pouvez en créer un "
+"nouveau mot de passe."
 
 #: templates/basic/registration/password_reset_form.html:22
 msgid "Reset my password"

@@ -62,7 +62,7 @@ $(document).ready(function(){
                     {% endif %}
                 </div>
                 <div class="meta">
-                    <div class="byline">{% humanize_time_diff comment.submit_date 'ago' %}</div>
+                    <div class="byline">{% humanize_time_diff comment.submit_date _('ago') %}</div>
                     <!-- todo: Need can comment test -->
                     <a href="{% url comment-reply-form %}?content_type_id={{ comment.content_type_id }}&oid={{ comment.object_pk }}&path_info={{ request.META.PATH_INFO }}&my_messages={{ request.GET.my_messages }}&paginate_by={{ request.GET.paginate_by }}" 
                        class="comment-reply" 

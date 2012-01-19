@@ -7,13 +7,13 @@ Metadata suitable for display in listings
 <div class="meta">
 
     <div class="byline">
-        {% humanize_time_diff object.created 'ago' 'lower' %}   
+        {% humanize_time_diff object.created _('ago') 'lower' %}   
     </div>
 
     {% if object.comments_enabled %}
     <div class="comments">
         {% with object.comment_count as total %}
-            ({{ total }} {% blocktrans %}comment{{ total|pluralize }}){% endblocktrans %}
+            ({{ total }} {% if total == 1 %}{% trans "comment" %}{% else %}{% trans "comments" %}{% endif %})
         {% endwith %}
     </div>
     {% endif %}
