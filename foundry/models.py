@@ -2,7 +2,7 @@ import inspect
 
 from django.core.urlresolvers import reverse, Resolver404
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
@@ -357,7 +357,7 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractContact
 
         # Create / clear notifications on imcomplete / complete fields
         link, dc = Link.objects.get_or_create(
-            title=_("Set your profile picture"), view_name='join-finish'
+            title=ugettext("Set your profile picture"), view_name='join-finish'
         )
         if not self.image:
             Notification.objects.get_or_create(member=self, link=link)
