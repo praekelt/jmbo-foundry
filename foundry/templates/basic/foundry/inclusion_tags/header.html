@@ -4,11 +4,11 @@
     <a href="/"><img src="{{ STATIC_URL }}basic/images/logo.png" alt="" /></a>
     <div class="buttons">
       {% if request.user.is_authenticated %}
-        <span><a href="{% url logout %}">{% blocktrans %}Sign out{% endblocktrans %}</a></span>
+        <span><a href="{% url logout %}">{% trans "Sign out" %}</a></span>
       {% endif %}
       {% if request.user.is_anonymous %}
-          <span><a href="{% url login %}">{% blocktrans %}Sign in{% endblocktrans %}</a></span>
-          <span><a href="{% url join %}">{% blocktrans %}Join{% endblocktrans %}</a></span>
+          <span><a href="{% url login %}">{% trans "Sign in" %}</a></span>
+          <span><a href="{% url join %}">{% trans "Join" %}</a></span>
       {% endif %}
   	</div>
 </div>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-19 07:25-0600\n"
+"POT-Creation-Date: 2012-01-19 07:52-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -240,8 +240,7 @@ msgid "Save"
 msgstr "Garder"
 
 #: templates/basic/foundry/join.html:6 templates/basic/foundry/join.html:18
-#, fuzzy
-msgid "Sign Up"
+msgid "Sign up"
 msgstr "Enregistrer"
 
 #: templates/basic/foundry/member_detail.html:11
@@ -273,12 +272,14 @@ msgid "Sign out"
 msgstr "Fermer la session"
 
 #: templates/basic/foundry/inclusion_tags/header.html:10
+#: templates/basic/registration/login.html:6
+#: templates/basic/registration/login.html:13
 msgid "Sign in"
-msgstr "Enregistrer"
+msgstr "S’inscrire"
 
 #: templates/basic/foundry/inclusion_tags/header.html:11
 msgid "Join"
-msgstr "Vous engager"
+msgstr "S’enregistrer"
 
 #: templates/basic/includes/list_meta.html:16
 #: templates/basic/jmbo/inclusion_tags/object_header.html:21
@@ -287,7 +288,6 @@ msgstr "commentaire"
 
 #: templates/basic/includes/list_meta.html:16
 #: templates/basic/jmbo/inclusion_tags/object_header.html:21
-#, fuzzy
 msgid "comments"
 msgstr "commentaires"
 
@@ -303,12 +303,6 @@ msgstr ""
 msgid "You are now logged out"
 msgstr "Vous avez maintenant fermé la session"
 
-#: templates/basic/registration/login.html:6
-#: templates/basic/registration/login.html:13
-#, fuzzy
-msgid "Sign In"
-msgstr "Enregistrer"
-
 #: templates/basic/registration/login.html:15
 msgid "Forgot your password?"
 msgstr "Avez-vous oublié votre mot de passe?"
@@ -317,10 +311,9 @@ msgstr "Avez-vous oublié votre mot de passe?"
 msgid "Not registered?"
 msgstr "Pas encore inscrit?"
 
-#: templates/basic/registration/login.html:17
-#, fuzzy
+#: templates/basic/registration/login.html:16
 msgid "Sign up here"
-msgstr "Fermer la session"
+msgstr "Enregistrer"
 
 #: templates/basic/registration/password_reset_complete.html:4
 #: templates/basic/registration/password_reset_confirm.html:10
