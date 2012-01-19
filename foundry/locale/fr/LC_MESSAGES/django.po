@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-19 07:10-0600\n"
+"POT-Creation-Date: 2012-01-19 07:25-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,7 +29,7 @@ msgstr ""
 msgid "Email address"
 msgstr "Adresse électronique"
 
-#: forms.py:53 models.py:338
+#: forms.py:53 forms.py:186 models.py:338
 msgid "Mobile number"
 msgstr "Numéro de mobile"
 
@@ -222,6 +222,11 @@ msgstr "Mes messages"
 msgid "Show"
 msgstr "Présenter"
 
+#: templates/basic/comments/list.html:65
+#: templates/basic/includes/list_meta.html:10
+msgid "ago"
+msgstr "Il ya"
+
 #: templates/basic/comments/list.html:70
 msgid "Reply"
 msgstr "Répondre"
@@ -233,6 +238,11 @@ msgstr "Créer une poste de blog"
 #: templates/basic/foundry/create_blogpost.html:12
 msgid "Save"
 msgstr "Garder"
+
+#: templates/basic/foundry/join.html:6 templates/basic/foundry/join.html:18
+#, fuzzy
+msgid "Sign Up"
+msgstr "Enregistrer"
 
 #: templates/basic/foundry/member_detail.html:11
 msgid "Comments"
@@ -270,10 +280,6 @@ msgstr "Enregistrer"
 msgid "Join"
 msgstr "Vous engager"
 
-#: templates/basic/includes/list_meta.html:10
-msgid "ago"
-msgstr "Il ya"
-
 #: templates/basic/includes/list_meta.html:16
 #: templates/basic/jmbo/inclusion_tags/object_header.html:21
 msgid "comment"
@@ -297,9 +303,24 @@ msgstr ""
 msgid "You are now logged out"
 msgstr "Vous avez maintenant fermé la session"
 
+#: templates/basic/registration/login.html:6
+#: templates/basic/registration/login.html:13
+#, fuzzy
+msgid "Sign In"
+msgstr "Enregistrer"
+
 #: templates/basic/registration/login.html:15
 msgid "Forgot your password?"
 msgstr "Avez-vous oublié votre mot de passe?"
+
+#: templates/basic/registration/login.html:16
+msgid "Not registered?"
+msgstr "Pas encore inscrit?"
+
+#: templates/basic/registration/login.html:17
+#, fuzzy
+msgid "Sign up here"
+msgstr "Fermer la session"
 
 #: templates/basic/registration/password_reset_complete.html:4
 #: templates/basic/registration/password_reset_confirm.html:10

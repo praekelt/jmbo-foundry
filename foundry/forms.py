@@ -183,7 +183,7 @@ class JoinFinishForm(forms.ModelForm):
 class PasswordResetForm(BasePasswordResetForm):
     """Custom form since we do not necessarily want to lookup the email
     address"""
-    mobile_number = forms.CharField()
+    mobile_number = forms.CharField(label=_("Mobile number"))
 
     def clean_mobile_number(self):
         """Clean method must have the same structure as clean_email in

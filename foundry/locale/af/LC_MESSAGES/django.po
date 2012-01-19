@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-19 07:10-0600\n"
+"POT-Creation-Date: 2012-01-19 07:26-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgstr ""
 msgid "Email address"
 msgstr "E-pos adres"
 
-#: forms.py:53 models.py:338
+#: forms.py:53 forms.py:186 models.py:338
 msgid "Mobile number"
 msgstr "Selfoon nommer"
 
@@ -220,6 +220,11 @@ msgstr "My boodskappe"
 msgid "Show"
 msgstr "Vertoon"
 
+#: templates/basic/comments/list.html:65
+#: templates/basic/includes/list_meta.html:10
+msgid "ago"
+msgstr "gelede"
+
 #: templates/basic/comments/list.html:70
 msgid "Reply"
 msgstr "Antwoord"
@@ -231,6 +236,11 @@ msgstr "Skep 'n blog pos"
 #: templates/basic/foundry/create_blogpost.html:12
 msgid "Save"
 msgstr "Stoor"
+
+#: templates/basic/foundry/join.html:6 templates/basic/foundry/join.html:18
+#, fuzzy
+msgid "Sign Up"
+msgstr "Sluit aan"
 
 #: templates/basic/foundry/member_detail.html:11
 msgid "Comments"
@@ -270,10 +280,6 @@ msgstr "Teken in"
 msgid "Join"
 msgstr "Sluit aan"
 
-#: templates/basic/includes/list_meta.html:10
-msgid "ago"
-msgstr "gelede"
-
 #: templates/basic/includes/list_meta.html:16
 #: templates/basic/jmbo/inclusion_tags/object_header.html:21
 #, fuzzy
@@ -298,9 +304,23 @@ msgstr "op"
 msgid "You are now logged out"
 msgstr "Jy het uitgeteken."
 
+#: templates/basic/registration/login.html:6
+#: templates/basic/registration/login.html:13
+#, fuzzy
+msgid "Sign In"
+msgstr "Teken In"
+
 #: templates/basic/registration/login.html:15
 msgid "Forgot your password?"
 msgstr "Jou wagwoord vergeet?"
+
+#: templates/basic/registration/login.html:16
+msgid "Not registered?"
+msgstr "Nog nie aangesluit nie?"
+
+#: templates/basic/registration/login.html:16
+msgid "Sign up here"
+msgstr "Sluit aan"
 
 #: templates/basic/registration/password_reset_complete.html:4
 #: templates/basic/registration/password_reset_confirm.html:10

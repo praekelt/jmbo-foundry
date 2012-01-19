@@ -3,17 +3,17 @@
 
 {% block content %}
 
-    <div class="h2">Sign In</div>
+    <div class="h2">{% trans "Sign In" %}</div>
 
     <form action="{% url login %}" method="POST" class="foundry-form">
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ request.REQUEST.next }}" />
         {{ form.as_div }}
         <div class="buttons">
-        	<input type="submit" value="Sign In" />
+        	<input type="submit" value="{% trans "Sign In" %}" />
         </div>
         <span><a href="/auth/password_reset">{% blocktrans %}Forgot your password?{% endblocktrans %}</a></span>
-        <span>Not registered? <a href="{% url join %}">Sign up here</a></span>
+        <span>{% trans "Not registered?" %} <a href="{% url join %}">{% trans "Sign up here" %}</a></span>
     </form>
 
 {% endblock %}

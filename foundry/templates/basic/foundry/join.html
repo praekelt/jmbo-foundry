@@ -1,8 +1,9 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
 
-    <div class="h2">Sign Up</div>
+    <div class="h2">{% trans "Sign Up" %}</div>
 
     <!-- 
     <span>
@@ -14,7 +15,7 @@
         {% csrf_token %}
         {{ form.as_div }}
         <div class="buttons">
-            <input type="submit" value="Sign Up" />
+            <input type="submit" value="{% trans "Sign Up" %}" />
         </div>
     </form>
 
