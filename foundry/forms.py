@@ -67,7 +67,7 @@ class JoinForm(UserCreationForm):
     """Custom join form"""
     country = forms.ModelChoiceField(queryset=Country.objects.all())
     date_of_birth = forms.DateField(widget=OldSchoolDateWidget) # todo: widget
-    accept_terms = forms.BooleanField(required=True, label="", widget=TermsCheckboxInput)
+    #accept_terms = forms.BooleanField(required=True, label="", widget=TermsCheckboxInput)
 
     class Meta:
         model = Member
