@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-19 07:52-0600\n"
+"POT-Creation-Date: 2012-01-20 09:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,7 +29,7 @@ msgstr ""
 msgid "Email address"
 msgstr "Adresse électronique"
 
-#: forms.py:53 forms.py:186 models.py:338
+#: forms.py:53 forms.py:186 forms.py:211 models.py:338
 msgid "Mobile number"
 msgstr "Numéro de mobile"
 
@@ -94,16 +94,16 @@ msgstr "Télécharger ou choisir s’il vous plait une image."
 msgid "The mobile number is not registered with the system."
 msgstr "Ce numéro de portable n’est pas enregistré sur le système."
 
-#: forms.py:234
+#: forms.py:238
 #, python-format
 msgid "Password reset on %s"
 msgstr "Mot de passe remis %s"
 
-#: forms.py:272
+#: forms.py:276
 msgid "Where do you live?"
 msgstr "Où habitez-vous?"
 
-#: forms.py:329 models.py:451 models.py:569
+#: forms.py:333 models.py:451 models.py:569
 msgid "Content"
 msgstr ""
 
@@ -145,7 +145,7 @@ msgstr ""
 msgid "The field a user must enter to retrieve his password."
 msgstr ""
 
-#: models.py:360
+#: models.py:360 templates/basic/foundry/join_finish.html:6
 msgid "Set your profile picture"
 msgstr "Préparer votre image de profil"
 
@@ -178,6 +178,10 @@ msgstr "Vous vous êtes bien inscrit au site."
 msgid "The blog post %s has been saved"
 msgstr "La poste de blog %s a été enregistrée"
 
+#: views.py:212
+msgid "Blog Posts"
+msgstr "Poste"
+
 #: templates/admin/base.html:33
 msgid "Welcome,"
 msgstr "Bienvenu,"
@@ -201,6 +205,44 @@ msgstr ""
 #: templates/basic/registration/password_reset_form.html:5
 msgid "Home"
 msgstr "Accueil"
+
+#: templates/admin/index.html:23
+#, python-format
+msgid "Models available in the %(name)s application."
+msgstr ""
+
+#: templates/admin/index.html:24
+#, python-format
+msgid "%(name)s"
+msgstr ""
+
+#: templates/admin/index.html:34
+msgid "Add"
+msgstr ""
+
+#: templates/admin/index.html:40
+msgid "Change"
+msgstr ""
+
+#: templates/admin/index.html:50
+msgid "You don't have permission to edit anything."
+msgstr ""
+
+#: templates/admin/index.html:58
+msgid "Recent Actions"
+msgstr ""
+
+#: templates/admin/index.html:59
+msgid "My Actions"
+msgstr ""
+
+#: templates/admin/index.html:63
+msgid "None available"
+msgstr ""
+
+#: templates/admin/index.html:77
+msgid "Unknown content"
+msgstr ""
 
 #: templates/basic/comments/form.html:21
 msgid "Post"
@@ -242,6 +284,14 @@ msgstr "Garder"
 #: templates/basic/foundry/join.html:6 templates/basic/foundry/join.html:18
 msgid "Sign up"
 msgstr "Enregistrer"
+
+#: templates/basic/foundry/join_finish.html:12
+msgid "Or, choose from our selection"
+msgstr "Ou choisir un dossier de notre selection"
+
+#: templates/basic/foundry/join_finish.html:19
+msgid "Finish"
+msgstr "Finir"
 
 #: templates/basic/foundry/member_detail.html:11
 msgid "Comments"

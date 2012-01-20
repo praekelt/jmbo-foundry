@@ -209,7 +209,7 @@ class BlogPostObjectList(GenericObjectList):
         return BlogPost.permitted.all()
 
     def get_extra_context(self, *args, **kwargs):
-        return {'title': 'Blog Posts'}
+        return {'title': _('Blog Posts')}
 
     def get_view_modifier(self, request, *args, **kwargs):
         return DefaultViewModifier(request, *args, **kwargs)

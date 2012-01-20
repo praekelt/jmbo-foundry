@@ -134,6 +134,9 @@ Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
         if self.fields.has_key('email'):
             self.fields['email'].help_text = _("Your email address is required in case you lose your password.")
         if self.fields.has_key('mobile_number'):
+            # There is somebug in Django that does not allow translation to be
+            # applied. Workaround.
+            self.fields['mobile_number'].label = _("Mobile number")
             self.fields['mobile_number'].help_text = _("The number must be in \
 international format and may start with a + sign. All other characters must \
 be numbers. No spaces allowed. An example is +27821234567.")
@@ -205,7 +208,7 @@ class PasswordResetForm(BasePasswordResetForm):
             del self.fields['mobile_number']
         else:
             del self.fields['email']
-
+        
     def save(self, domain_override=None, email_template_name='registration/password_reset_email.html',
              use_https=False, token_generator=default_token_generator, from_email=None, request=None):
         """Override entire method. Due to the layout of the original method we
@@ -324,8 +327,8 @@ class CreateBlogPostForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
         super(CreateBlogPostForm, self).__init__(*args, **kwargs)
-        # There is somebug in Django that does not allow content's translation 
-        # to be applied. Workaround.
+        # There is some bug in Django that does not allow translation to be
+        # applied. Workaround.
         self.fields['content'].label = _("Content")
 
     def save(self, commit=True):    
