@@ -267,7 +267,7 @@ msgstr "Présenter"
 #: templates/basic/comments/list.html:65
 #: templates/basic/includes/list_meta.html:10
 msgid "ago"
-msgstr "Il ya"
+msgstr "il ya"
 
 #: templates/basic/comments/list.html:70
 msgid "Reply"

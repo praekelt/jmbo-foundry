@@ -272,4 +272,5 @@ div.header-logo {
 
 /* todo: Fix these below */
 .meta { font-size: smaller; display:block; color:#666 }
+.byline:first-letter { text-transform: capitalize; }
 img.left { float: left; margin-right: 5px }
