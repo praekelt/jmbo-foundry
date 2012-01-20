@@ -347,7 +347,7 @@ msgstr "De"
 
 #: templates/basic/jmbo/inclusion_tags/object_header.html:15
 msgid "on"
-msgstr ""
+msgstr "le"
 
 #: templates/basic/registration/logged_out.html:6
 msgid "You are now logged out"
