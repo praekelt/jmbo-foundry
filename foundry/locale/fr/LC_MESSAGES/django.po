@@ -22,7 +22,7 @@ msgid ""
 "I accept the <a href=\"/terms-and-conditions\" target=\"external\">terms and "
 "conditions</a>"
 msgstr ""
-"J’accepte les <a href=\"/terms-and-conditions\" target=\"external"
+"J'accepte les <a href=\"/terms-and-conditions\" target=\"external"
 "\">conditions générales</a>"
 
 #: forms.py:51 models.py:337
@@ -35,11 +35,11 @@ msgstr "Numéro de mobile"
 
 #: forms.py:55 models.py:316
 msgid "Username or email address"
-msgstr "Nom d’utilisateur ou adresse électronique"
+msgstr "Nom d'utilisateur ou adresse électronique"
 
 #: forms.py:57 models.py:317
 msgid "Username or mobile number"
-msgstr "Nom d’utilisateur ou numéro de mobile"
+msgstr "Nom d'utilisateur ou numéro de mobile"
 
 #: forms.py:78
 msgid "Please enter a valid number"
@@ -75,7 +75,7 @@ msgid ""
 msgstr ""
 "On doit utiliser le nombre en format international et le nombre peut "
 "commencer avec +. Tous les autres caractères doivent être les numéros. Les "
-"espaces sont interdites.  A titre d’exemple un numéro peut être +27821234567."
+"espaces sont interdites.  A titre d'exemple un numéro peut être +27821234567."
 
 #: forms.py:154
 msgid "Upload a picture"
@@ -84,15 +84,15 @@ msgstr "Télécharger une image"
 #: forms.py:155
 msgid "JPG, GIF or PNG accepted. Square is best. Keep it under 1MB."
 msgstr ""
-"On accepte JPG, GIF et PNG. Une image carrée au maximum d’un MB est préférée."
+"On accepte JPG, GIF et PNG. Une image carrée au maximum d'un MB est préférée."
 
 #: forms.py:165
 msgid "Please upload or select a picture."
-msgstr "Télécharger ou choisir s’il vous plait une image."
+msgstr "Télécharger ou choisir s'il vous plait une image."
 
 #: forms.py:197
 msgid "The mobile number is not registered with the system."
-msgstr "Ce numéro de portable n’est pas enregistré sur le système."
+msgstr "Ce numéro de portable n'est pas enregistré sur le système."
 
 #: forms.py:238
 #, python-format
@@ -303,7 +303,7 @@ msgstr "Notifications"
 
 #: templates/basic/foundry/user_detail.html:9
 msgid "This user does not have a public profile."
-msgstr "Cet utilisateur n’a pas de profil publique."
+msgstr "Cet utilisateur n'a pas de profil publique."
 
 #: templates/basic/foundry/inclusion_tags/footer.html:6
 msgid "Search"
@@ -325,11 +325,11 @@ msgstr "Fermer la session"
 #: templates/basic/registration/login.html:6
 #: templates/basic/registration/login.html:13
 msgid "Sign in"
-msgstr "S’inscrire"
+msgstr "S'inscrire"
 
 #: templates/basic/foundry/inclusion_tags/header.html:11
 msgid "Join"
-msgstr "S’enregistrer"
+msgstr "S'enregistrer"
 
 #: templates/basic/includes/list_meta.html:16
 #: templates/basic/jmbo/inclusion_tags/object_header.html:21
@@ -424,7 +424,7 @@ msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used.  Please request a new password reset."
 msgstr ""
-"Mot de passe remis n’a pas réussi peut-être parce qu’on l’utilise déjà. "
+"Mot de passe remis n'a pas réussi peut-être parce qu'on l'utilise déjà. "
 "Demander s.v.p un nouveau mot de passe remis."
 
 #: templates/basic/registration/password_reset_done.html:6
@@ -444,12 +444,12 @@ msgstr ""
 msgid "You're receiving this message because you requested a password reset"
 msgstr ""
 "Nous vous  envoyons ce message en réponse à votre demande que votre mot de "
-"passe de compte d’utilisateur"
+"passe de compte d'utilisateur"
 
 #: templates/basic/registration/password_reset_email.html:3
 #, python-format
 msgid "for your user account at %(site_name)s"
-msgstr "à %(site_name)s soit remis."
+msgstr "à %(site_name)s soit remis"
 
 #: templates/basic/registration/password_reset_email.html:5
 msgid "Please go to the following page and choose a new password:"
@@ -457,7 +457,7 @@ msgstr "Allez à la page suivante et choisissez un nouveau mot de passe:"
 
 #: templates/basic/registration/password_reset_email.html:9
 msgid "Your username, in case you've forgotten:"
-msgstr "Au cas où vous l’avez oublié, votre nom d’utilisateur est:"
+msgstr "Au cas où vous l'avez oublié, votre nom d'utilisateur est:"
 
 #: templates/basic/registration/password_reset_form.html:13
 msgid ""
