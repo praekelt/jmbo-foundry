@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<h1>{% trans "A system error has occurred" %}</h1>
+{% blocktrans %}The system has encountered an error. The relevant people have already been notified.{% endblocktrans %}
+
+{% endblock %}
