@@ -8,6 +8,14 @@ import os
 import sys
 from os import path
 
+FOUNDRY = {
+    'has_javascript': True,
+    'has_ajax': True,
+    'sms_gateway_api_key': '',
+    'sms_gateway_password': '',
+    'layers': ('basic',)
+}
+
 # Paths
 SCRIPT_PATH =  path.abspath(path.dirname(__file__))
 BUILDOUT_PATH =  path.split(path.abspath(path.join(path.dirname(sys.argv[0]))))[0]
@@ -104,18 +112,17 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'foundry.context_processors.foundry',
 )
 
+# AppDirectoriesTypeLoader must be after filesystem loader
 TEMPLATE_LOADERS = (
-    'foundry.loaders.TypeLoader',
     'django.template.loaders.filesystem.load_template_source',
+    'foundry.loaders.AppDirectoriesTypeLoader',
     'django.template.loaders.app_directories.load_template_source',
 )
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(os.path.dirname(__file__), "templates"),
-)
+TEMPLATE_DIRS = [
+    os.path.join(os.path.dirname(__file__), 'templates', layer) \
+        for layer in FOUNDRY['layers']
+]
 
 ROOT_URLCONF = 'foundry.urls'
 
@@ -166,9 +173,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
 )
 
-
-TEMPLATE_TYPE = "basic"
-
 # Your ReCaptcha provided public key.
 RECAPTCHA_PUBLIC_KEY = '6LccPr4SAAAAAJRDO8gKDYw2QodyRiRLdqBhrs0n'
 
@@ -203,13 +207,6 @@ SIMPLE_AUTOCOMPLETE = {
     'auth.user': {'threshold': 20},
     'category.category': {'threshold':20},
     'jmbo.modelbase': {'threshold':50}
-}
-
-FOUNDRY = {
-    'has_javascript': True,
-    'has_ajax': True,
-    'sms_gateway_api_key': '',
-    'sms_gateway_password': ''
 }
 
 STATICFILES_FINDERS = (
