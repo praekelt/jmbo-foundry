@@ -8,6 +8,11 @@ server {
         alias   ${media-root}/;
         expires 31d;
     }
+
+    location ^~ /static/ {
+        alias   ${static-root}/;
+        expires 31d;
+    }
     
     # fcgi    
     location / {
