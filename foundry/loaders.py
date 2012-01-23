@@ -9,8 +9,8 @@ class AppDirectoriesTypeLoader(Loader):
 
     def get_template_sources(self, template_name, template_dirs=None):
         """
-        Affixes the TEMPLATE_TYPE setting value to the template name thus
-        allowing for template switching.
+        Prefix template_name with layer in use thus enabling template 
+        switching.
         """     
         template_name = os.path.join(settings.FOUNDRY['layers'][0], template_name)
         return super(AppDirectoriesTypeLoader, self).get_template_sources(

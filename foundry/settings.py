@@ -119,11 +119,6 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.app_directories.load_template_source',
 )
 
-TEMPLATE_DIRS = [
-    os.path.join(os.path.dirname(__file__), 'templates', layer) \
-        for layer in FOUNDRY['layers']
-]
-
 ROOT_URLCONF = 'foundry.urls'
 
 INSTALLED_APPS = (
@@ -214,3 +209,29 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 )
+
+
+def compute_settings(sender):
+    """Settings computed from earlier values. Put in a function so other 
+    products can re-use it."""
+    module = sys.modules[__name__]
+
+    sender.TEMPLATE_DIRS = [
+        os.path.join(os.path.dirname(sender.__file__), 'templates', layer) \
+            for layer in sender.FOUNDRY['layers']
+    ]
+    for s in getattr(module, 'TEMPLATE_DIRS', []):
+        if s not in sender.TEMPLATE_DIRS:
+            sender.TEMPLATE_DIRS.append(s)
+
+    sender.STATICFILES_DIRS = [
+        os.path.join(os.path.dirname(sender.__file__), 'static', layer) \
+            for layer in sender.FOUNDRY['layers']
+    ] 
+    for s in getattr(module, 'STATICFILES_DIRS', []):
+        if s not in sender.STATICFILES_DIRS:
+            sender.STATICFILES_DIRS.append(s)
+
+
+# This exact line must be the last line if "inheriting" settings modules.
+compute_settings(sys.modules[__name__])    
