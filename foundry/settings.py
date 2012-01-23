@@ -233,5 +233,6 @@ def compute_settings(sender):
             sender.STATICFILES_DIRS.append(s)
 
 
-# This exact line must be the last line if "inheriting" settings modules.
+# An "inheriting" settings module must have this exact same line as the last
+# line in that module.
 compute_settings(sys.modules[__name__])    
