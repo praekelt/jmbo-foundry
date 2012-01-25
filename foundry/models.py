@@ -7,6 +7,9 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.contrib.comments.models import Comment as BaseComment
+from django.contrib.sites.models import Site
+from django.db.models.signals import m2m_changed
+from django.dispatch import receiver
 
 from ckeditor.fields import RichTextField
 from preferences.models import Preferences
@@ -92,11 +95,16 @@ precedence over URL field below.",
 class Menu(models.Model):
     """A tile menu contains ordered links"""
     title = models.CharField(max_length=255)
+    subtitle = models.CharField(
+        max_length=256,
+        blank=True,
+        null=True,
+        help_text='Some titles may be the same. A subtitle makes a distinction. It is not displayed on the site.',
+    )
     slug = models.SlugField(
         editable=True,
         max_length=32,
         db_index=True,
-        unique=True,
     )
     display_title = models.BooleanField(default=True)
     sites = models.ManyToManyField(
@@ -115,12 +123,17 @@ class Menu(models.Model):
 
 class Navbar(models.Model):
     """A tile navbar contains ordered links"""
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, help_text='This title is not displayed on the site.')
+    subtitle = models.CharField(
+        max_length=256,
+        blank=True,
+        null=True,
+        help_text='Some titles may be the same. A subtitle makes a distinction. It is not displayed on the site.',
+    )
     slug = models.SlugField(
         editable=True,
         max_length=32,
         db_index=True,
-        unique=True,
     )
     sites = models.ManyToManyField(
         'sites.Site',
@@ -152,7 +165,6 @@ class Listing(models.Model):
         editable=True,
         max_length=32,
         db_index=True,
-        unique=True,
     )
     content_type = models.ManyToManyField(
         ContentType,
@@ -386,7 +398,6 @@ class Country(models.Model):
         editable=True,
         max_length=32,
         db_index=True,
-        unique=True,
     )
     minimum_age = models.PositiveIntegerField(default=18)
 
@@ -401,6 +412,12 @@ class Country(models.Model):
 class Page(models.Model):
     title = models.CharField(
         max_length=200, help_text='A title that may appear in the browser window caption.',
+    )
+    subtitle = models.CharField(
+        max_length=256,
+        blank=True,
+        null=True,
+        help_text='Some titles may be the same. A subtitle makes a distinction. It is not displayed on the site.',
     )
     slug = models.SlugField(
         editable=True,
@@ -575,6 +592,19 @@ class Notification(models.Model):
 
     def __unicode__(self):
         return str(self.id)
+
+
+@receiver(m2m_changed)
+def check_slug(sender, **kwargs):
+    """Slug must be unique per site"""
+    instance = kwargs['instance']
+    if (kwargs['action'] == 'post_add') \
+        and sender.__name__.endswith('_sites') \
+        and isinstance(instance, (Navbar, Menu, Listing, Page)):
+        for site in instance.sites.all():
+            q = instance.__class__.objects.filter(slug=instance.slug, sites=site).exclude(id=instance.id)
+            if q.exists():
+                raise RuntimeError("The slug %s is already in use for site %s by %s" % (instance.slug, site.domain, q[0].title))
 
 
 # Custom fields to be handled by south
