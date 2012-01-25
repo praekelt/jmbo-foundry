@@ -49,7 +49,8 @@ class MenuLinkPositionInline(admin.StackedInline):
 class MenuAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     inlines = [MenuLinkPositionInline]
-    
+    list_display = ('title', 'subtitle')
+   
 
 class NavbarLinkPositionInline(admin.StackedInline):
     model = NavbarLinkPosition
@@ -58,6 +59,7 @@ class NavbarLinkPositionInline(admin.StackedInline):
 class NavbarAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     inlines = [NavbarLinkPositionInline]
+    list_display = ('title', 'subtitle')
 
 
 class ListingAdminForm(forms.ModelForm):
@@ -175,7 +177,7 @@ class CountryAdmin(admin.ModelAdmin):
 
 
 class PageAdmin(admin.ModelAdmin):
-    list_display = ('title', 'slug', 'is_homepage')
+    list_display = ('title', 'subtitle', 'slug', 'is_homepage')
     prepopulated_fields = {'slug': ('title',)}
    
     def response_add(self, request, obj, post_url_continue='../%s/'):
