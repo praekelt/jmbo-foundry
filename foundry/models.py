@@ -297,7 +297,7 @@ class RegistrationPreferences(Preferences):
             if len(values) != len(set(values)):
                 raise RuntimeError(
                     "Cannot set %s to be unique since there is more than one \
-                        member with the same %s." % (fieldname, fieldname)
+member with the same %s." % (fieldname, fieldname)
                 )
         super(RegistrationPreferences, self).save(*args, **kwargs)
 
@@ -406,7 +406,6 @@ class Page(models.Model):
         editable=True,
         max_length=32,
         db_index=True,
-        unique=True,
     )
     is_homepage = models.BooleanField(default=False, help_text="Tick if you want this page to be the site's homepage.")
     sites = models.ManyToManyField(
