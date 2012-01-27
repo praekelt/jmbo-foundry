@@ -78,3 +78,41 @@ def errorlist_as_div(self):
     )
 
 ErrorList.__unicode__ = errorlist_as_div
+
+
+"""Patch photologue so PhotoSizeCache is layer aware"""
+from django.conf import settings
+
+import photologue
+from photologue.models import PhotoSize
+
+class LayerAwareSizes(dict):
+    
+    def get(self, key):
+        result = None
+        if key.endswith('_LAYER'):
+            prefix = key.replace('LAYER', '') 
+            for layer in settings.FOUNDRY['layers']:
+                result = super(LayerAwareSizes, self).get(prefix + layer)
+                if result is not None:
+                    break
+        else:
+            result = super(LayerAwareSizes, self).get(key)
+
+        return result
+
+
+class PhotoSizeCache(object):
+    __state = {"sizes": LayerAwareSizes()}
+
+    def __init__(self):
+        self.__dict__ = self.__state
+        if not len(self.sizes):
+            sizes = PhotoSize.objects.all()
+            for size in sizes:
+                self.sizes[size.name] = size
+
+    def reset(self):
+        self.sizes = {}
+
+photologue.models.PhotoSizeCache = PhotoSizeCache
