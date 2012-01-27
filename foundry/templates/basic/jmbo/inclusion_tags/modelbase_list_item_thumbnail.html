@@ -2,7 +2,7 @@
 
 CAROUSEL
 
-<img src="{{ object.get_listing_vertical_thumbnail_basic_url }}" alt="{{ object.title }}" class="left" />
+<img src="{{ object.get_listing_vertical_thumbnail_LAYER_url }}" alt="{{ object.title }}" class="left" />
 
 <div class="title">
     {% if object.categories.all.count %}<span class="category">{{ object.categories.all|join_titles }}:</span>{% endif %}
