@@ -64,5 +64,5 @@ class Widget(AbstractBaseStyle):
     template_name = 'foundry/inclusion_tags/listing_widget.html'
 
 
-class Carousel(AbstractBaseStyle):
-    template_name = 'foundry/inclusion_tags/listing_carousel.html'
+#class Carousel(AbstractBaseStyle):
+#    template_name = 'foundry/inclusion_tags/listing_carousel.html'
