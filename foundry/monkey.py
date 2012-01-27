@@ -81,10 +81,35 @@ ErrorList.__unicode__ = errorlist_as_div
 
 
 """Patch photologue so PhotoSizeCache is layer aware"""
+from django.utils.functional import curry
 from django.conf import settings
 
 import photologue
-from photologue.models import PhotoSize
+from photologue.models import PhotoSize, ImageModel
+
+def add_accessor_methods(self, *args, **kwargs):
+    for size in PhotoSizeCache().sizes.keys():
+        setattr(self, 'get_%s_size' % size,
+                curry(self._get_SIZE_size, size=size))
+        setattr(self, 'get_%s_photosize' % size,
+                curry(self._get_SIZE_photosize, size=size))
+        setattr(self, 'get_%s_url' % size,
+                curry(self._get_SIZE_url, size=size))
+        setattr(self, 'get_%s_filename' % size,
+                curry(self._get_SIZE_filename, size=size))
+
+        layer_size = '_'.join(size.split('_')[:-1]) + '_LAYER'
+        setattr(self, 'get_%s_size' % layer_size,
+                curry(self._get_SIZE_size, size=layer_size))
+        setattr(self, 'get_%s_photosize' % layer_size,
+                curry(self._get_SIZE_photosize, size=layer_size))
+        setattr(self, 'get_%s_url' % layer_size,
+                curry(self._get_SIZE_url, size=layer_size))
+        setattr(self, 'get_%s_filename' % layer_size,
+                curry(self._get_SIZE_filename, size=layer_size))
+
+ImageModel.add_accessor_methods = add_accessor_methods
+
 
 class LayerAwareSizes(dict):
     
