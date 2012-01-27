@@ -3,7 +3,7 @@ import datetime
 from django.conf import settings
 from django.contrib.auth import authenticate, login, get_backends
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.views.generic.detail import DetailView
@@ -148,7 +148,10 @@ def age_gateway(request):
 
 def listing_detail(request, slug):
     """Render a page by iterating over rows, columns and tiles."""
-    listing = get_object_or_404(Listing, slug=slug)
+    try:
+        listing = Listing.permitted.get(slug=slug)
+    except Listing.DoesNotExist:
+        raise Http404('No listing matches the given query.')
     extra = {}
     extra['object'] = listing
     return render_to_response('foundry/listing_detail.html', extra, context_instance=RequestContext(request))
@@ -156,7 +159,10 @@ def listing_detail(request, slug):
 
 def page_detail(request, slug):
     """Render a page by iterating over rows, columns and tiles."""
-    page = get_object_or_404(Page, slug=slug)
+    try:
+        page = Page.permitted.get(slug=slug)
+    except Page.DoesNotExist:
+        raise Http404('No page matches the given query.')
     extra = {}
     extra['object'] = page
     return render_to_response('foundry/page_detail.html', extra, context_instance=RequestContext(request))
