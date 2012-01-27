@@ -55,6 +55,8 @@
         {% rows 'footer' %}
     {% endblock %}
 
-    {{ ANALYTICS_TAGS|safe }}
+    {% if ANALYTICS_TAGS %}
+        {{ ANALYTICS_TAGS|safe }}
+    {% endif %}
 </body>
 </html>
