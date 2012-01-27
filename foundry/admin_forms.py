@@ -76,7 +76,7 @@ class TileEditAjaxForm(forms.ModelForm):
         choices = []
         for klass in (Menu, Navbar, Listing):
             ctid = ContentType.objects.get(app_label='foundry', model=klass.__name__.lower()).id
-            for o in klass.objects.filter(sites__in=kwargs['instance'].column.row.page.sites.all()):
+            for o in klass.objects.filter(sites__in=kwargs['instance'].column.row.page.sites.all()).distinct():
                 title = o.title
                 subtitle = getattr(o, 'subtitle', None)
                 if subtitle:
