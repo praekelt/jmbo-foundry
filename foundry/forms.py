@@ -326,6 +326,7 @@ class CreateBlogPostForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
+        self.site = kwargs.pop('site')
         super(CreateBlogPostForm, self).__init__(*args, **kwargs)
         # There is some bug in Django that does not allow translation to be
         # applied. Workaround.
@@ -333,9 +334,9 @@ class CreateBlogPostForm(forms.ModelForm):
 
     def save(self, commit=True):    
         instance = super(CreateBlogPostForm, self).save(commit=commit)
-        # Set owner, publish to all sites
+        # Set owner, publish to current site
         instance.owner = self.user
-        instance.sites = Site.objects.all()
+        instance.sites = [self.site]
         instance.state = 'published'
         if commit:
             instance.save()

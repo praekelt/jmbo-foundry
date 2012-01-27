@@ -14,6 +14,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.sites.models import get_current_site
 
 from category.models import Category
 from jmbo.models import ModelBase
@@ -191,13 +192,13 @@ def chatroom_detail(request, slug):
 @login_required
 def create_blogpost(request):
     if request.method == 'POST':
-        form = CreateBlogPostForm(request.POST, user=request.user) 
+        form = CreateBlogPostForm(request.POST, user=request.user, site=get_current_site(request)) 
         if form.is_valid():
             instance = form.save()
             request.user.message_set.create(message=_("The blog post %s has been saved") % instance.title)
             return HttpResponseRedirect('/')
     else:
-        form = CreateBlogPostForm(user=request.user) 
+        form = CreateBlogPostForm(user=request.user, site=get_current_site(request)) 
 
     extra = dict(form=form)
     return render_to_response('foundry/create_blogpost.html', extra, context_instance=RequestContext(request))
