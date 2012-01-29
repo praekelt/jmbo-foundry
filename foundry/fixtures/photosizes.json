@@ -11,7 +11,7 @@
             "height": 50, 
             "width": 50, 
             "upscale": false, 
-            "pre_cache": false, 
+            "pre_cache": true, 
             "quality": 90
         }
     }, 
@@ -27,7 +27,7 @@
             "height": 100, 
             "width": 0, 
             "upscale": false, 
-            "pre_cache": false, 
+            "pre_cache": true, 
             "quality": 90
         }
     }, 
@@ -43,7 +43,7 @@
             "height": 50, 
             "width": 50, 
             "upscale": false, 
-            "pre_cache": false, 
+            "pre_cache": true, 
             "quality": 90
         }
     }, 
@@ -59,7 +59,7 @@
             "height": 50, 
             "width": 50, 
             "upscale": false, 
-            "pre_cache": false, 
+            "pre_cache": true, 
             "quality": 90
         }
     },
@@ -75,7 +75,7 @@
             "height": 400, 
             "width": 0, 
             "upscale": false, 
-            "pre_cache": false, 
+            "pre_cache": true, 
             "quality": 90
         }
     },
@@ -91,8 +91,24 @@
             "height": 337, 
             "width": 600, 
             "upscale": true, 
-            "pre_cache": false, 
+            "pre_cache": true, 
             "quality": 90
+        }
+    },
+    {
+        "pk": null, 
+        "model": "photologue.photosize", 
+        "fields": {
+            "name": "post_large", 
+            "watermark": null, 
+            "increment_count": false, 
+            "effect": null, 
+            "crop": true, 
+            "height": 151, 
+            "width": 269, 
+            "upscale": true, 
+            "pre_cache": true, 
+            "quality": 70
         }
     }
 ]
