@@ -78,5 +78,21 @@
             "pre_cache": false, 
             "quality": 90
         }
+    },
+    {
+        "pk": null, 
+        "model": "photologue.photosize", 
+        "fields": {
+            "name": "listing_promo_web", 
+            "watermark": null, 
+            "increment_count": false, 
+            "effect": null, 
+            "crop": true, 
+            "height": 337, 
+            "width": 598, 
+            "upscale": true, 
+            "pre_cache": false, 
+            "quality": 90
+        }
     }
 ]

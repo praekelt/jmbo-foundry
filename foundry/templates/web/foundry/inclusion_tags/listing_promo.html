@@ -1,0 +1,20 @@
+{% load jmbo_inclusion_tags foundry_tags %}
+
+{% if object_list.exists %}
+    <div class="foundry-container foundry-listing-promo">
+        <div class="items">
+        <ul id="slider">
+        {% for object in object_list %}
+            <li>
+                <img src="{{ object.get_listing_promo_LAYER_url }}" alt="{{ object.title }}" alt="{{ object.title }}" />
+                <div class="info">
+                    {% if object.categories.all.count %}<div class="subtitle">{{ object.categories.all|join_titles }}:</div>{% endif %}
+                    <div class="title"><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></div>
+                    <div class="description">{{ object.description }}</div>
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+        </div>
+    </div>        
+{% endif %}
