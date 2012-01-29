@@ -9,7 +9,7 @@
   SET DEFAULT DIMENSIONS HERE
  *****************************/
 
-#slider { width: 598px; height: 378px; list-style: none; overflow-y: auto; overflow-x: hidden; }
+#slider { width: 600px; height: 378px; list-style: none; overflow-y: auto; overflow-x: hidden; }
 .anythingBase { max-width: 32766px; }
 
 /*****************
@@ -46,7 +46,7 @@ div.anythingSlider .forward a { background: url('../images/slider_arrow_right.pn
 div.anythingSlider .forward a:hover, 
 div.anythingSlider .forward a.hover { background: url('../images/slider_arrow_right.png') bottom no-repeat; }
 div.anythingSlider .forward.disabled { display: none; } /* disabled arrows, hide or reduce opacity: opacity: .5; filter: alpha(opacity=50); */
-div.anythingSlider .anythingControls { width: 598px; height: 40px; position: absolute; bottom: 0; left: 0; z-index: 1; background: #fff; outline: 0; display: none; }
+div.anythingSlider .anythingControls { width: 600px; height: 40px; position: absolute; bottom: 0; left: 0; z-index: 1; background: #fff; outline: 0; display: none; }
 div.anythingSlider .anythingControls ul { width: 95px; margin: 15px auto; padding: 0 0 0 20px; }
 div.anythingSlider .anythingControls ul li { width: 10px; height: 10px; float: left; margin: 0 5px 0 0; display: inline; }
 div.anythingSlider .anythingControls ul li a { background: url('../images/slider_dots.png') top no-repeat; }
