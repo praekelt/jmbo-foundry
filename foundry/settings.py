@@ -216,21 +216,19 @@ def compute_settings(sender):
     products can re-use it."""
     module = sys.modules[__name__]
 
-    sender.TEMPLATE_DIRS = [
-        os.path.join(os.path.dirname(sender.__file__), 'templates', layer) \
-            for layer in sender.FOUNDRY['layers']
-    ]
-    for s in getattr(module, 'TEMPLATE_DIRS', []):
-        if s not in sender.TEMPLATE_DIRS:
-            sender.TEMPLATE_DIRS.append(s)
+    if not hasattr(sender, 'TEMPLATE_DIRS'):
+        setattr(sender, 'TEMPLATE_DIRS', [])
+    if not hasattr(sender, 'STATICFILES_DIRS'):
+        setattr(sender, 'STATICFILES_DIRS', [])
+    for layer in sender.FOUNDRY['layers']:
+        for m in (module, sender):
+            pth = os.path.join(os.path.dirname(m.__file__), 'templates', layer)
+            if pth not in sender.TEMPLATE_DIRS:
+                sender.TEMPLATE_DIRS.insert(0, pth)
 
-    sender.STATICFILES_DIRS = [
-        os.path.join(os.path.dirname(sender.__file__), 'static', layer) \
-            for layer in sender.FOUNDRY['layers']
-    ] 
-    for s in getattr(module, 'STATICFILES_DIRS', []):
-        if s not in sender.STATICFILES_DIRS:
-            sender.STATICFILES_DIRS.append(s)
+            pth = os.path.join(os.path.dirname(m.__file__), 'static', layer)
+            if pth not in sender.STATICFILES_DIRS:
+                sender.STATICFILES_DIRS.insert(0, pth)
 
 
 # An "inheriting" settings module must have this exact same line as the last
