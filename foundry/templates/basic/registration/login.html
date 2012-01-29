@@ -2,8 +2,9 @@
 {% load i18n %}
 
 {% block content %}
+<div class="content">
 
-    <div class="h2">{% trans "Sign in" %}</div>
+    <div class="title">{% trans "Sign in" %}</div>
 
     <form action="{% url login %}" method="POST" class="foundry-form">
         {% csrf_token %}
@@ -16,4 +17,5 @@
         <span>{% trans "Not registered?" %} <a href="{% url join %}">{% trans "Sign up here" %}</a></span>
     </form>
 
+</div>
 {% endblock %}

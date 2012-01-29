@@ -2,14 +2,9 @@
 {% load i18n %}
 
 {% block content %}
+<div class="content"> 
 
-    <div class="h2">{% trans "Sign up" %}</div>
-
-    <!-- 
-    <span>
-        Sign up easily with Facebook or Twitter, or register a new account directly with us.
-    </span>
-    -->
+    <div class="title">{% trans "Sign up" %}</div>
 
     <form action="{% url join %}" method="POST" enctype="multipart/form-data" class="foundry-form">   
         {% csrf_token %}
@@ -19,4 +14,5 @@
         </div>
     </form>
 
+</div>
 {% endblock content %}
