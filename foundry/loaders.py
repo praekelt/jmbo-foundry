@@ -27,7 +27,6 @@ class AppDirectoriesTypeLoader(Loader):
         for template_dir in template_dirs:
             for layer in settings.FOUNDRY['layers']:
                 l_template_name = os.path.join(layer, template_name)
-                print l_template_name
                 try:
                     yield safe_join(template_dir, l_template_name)
                 except UnicodeDecodeError:
