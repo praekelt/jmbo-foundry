@@ -1,6 +1,19 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block extra-head %}
+<script type="text/javascript">
+$(document).ready(function(){
+    // Clear radiobuttons on file select
+    $('#id_image').change(function(){
+        $('input[name="default_avatar_id"]').each(function(){
+            $(this).removeAttr('checked');
+        });
+    });
+});
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="content">
 
