@@ -28,7 +28,7 @@ div.anythingSlider .anythingWindow { overflow: hidden; position: relative; width
 .anythingBase { background: transparent; list-style: none; position: absolute; overflow: visible !important; top: 0; left: 0; margin: 0; padding: 0; }
 .anythingBase .panel { display: block; overflow: hidden; float: left; padding: 0; margin: 0; position: relative; }
 .anythingBase .panel.vertical { float: none; }
-.anythingBase .panel .info { width: 558px; height: 113px; padding: 0 20px; background: url('../images/slider_bg.png') repeat; position: absolute; bottom: 40px; left: 0; z-index: 3; }
+.anythingBase .panel .info { width: 560px; height: 113px; padding: 0 20px; background: url('../images/slider_bg.png') repeat; position: absolute; bottom: 40px; left: 0; z-index: 3; }
 .anythingBase .panel .info .subtitle { padding: 15px 0 5px 0; font-size: 12px; font-weight: bold; color: #fff; text-transform: uppercase; }
 .anythingBase .panel .info .title { padding: 15px 0 0 0; font-size: 22px; font-weight: bold; color: #fff; background: transparent!important; border: 0; margin: 0; padding: 0; }
 .anythingBase .panel .info .title a { color: #fff; }
