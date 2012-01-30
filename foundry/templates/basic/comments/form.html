@@ -1,4 +1,7 @@
-{% comment %}Only change from default form is the next hidden input.{% endcomment %}
+{% comment %}
+1. Add next hidden input.
+2. Hide preview.
+{% endcomment %}
 
 {% load comments i18n %}
 <form action="{% comment_form_target %}" method="post">{% csrf_token %}
@@ -18,6 +21,7 @@
   {% endfor %}
   <p class="submit">
     <input type="submit" name="post" class="submit-post" value="{% trans "Post" %}" />
-    <input type="submit" name="preview" class="submit-preview" value="{% trans "Preview" %}" />
+    <!--<input type="submit" name="preview" class="submit-preview" value="{% trans "Preview" %}" />
+    -->
   </p>
 </form>
