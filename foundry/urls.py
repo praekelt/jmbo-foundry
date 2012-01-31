@@ -253,6 +253,16 @@ urlpatterns = patterns('',
         name='member-detail'
     ),
 
+    # Coming soon
+    url(
+        r'^coming-soon/$',
+        'django.views.generic.simple.direct_to_template',
+        {
+            'template':'foundry/coming_soon.html', 
+        },
+        name='coming-soon'
+    ),
+
     # Test views
     url(
         r'^test-plain-response/$',
