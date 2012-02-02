@@ -471,10 +471,20 @@ class Row(models.Model):
             within. It is only applicable if the page is set to be the home \
             page."
     )
+    has_left_or_right_column = models.BooleanField(default=False, editable=False, db_index=True)
 
     def save(self, *args, **kwargs):        
         if not self.id:
             self.index = self.page.row_set.count()
+
+        if self.id:
+            # Aggregate has_left_or_right_column
+            self.has_left_or_right_column = False
+            for column in self.column_set.all():
+                if column.designation in ('left', 'right'):
+                    self.has_left_or_right_column = True
+                    break
+
         super(Row, self).save(*args, **kwargs)
 
     @property
@@ -485,16 +495,31 @@ class Row(models.Model):
     def render_height(self):
         return max([o.render_height+8 for o in self.columns] + [0]) + 44
 
-
+    
 class Column(models.Model):
     row = models.ForeignKey(Row)
     index = models.PositiveIntegerField(default=0, editable=False)
     width = models.PositiveIntegerField(default=8)    
+    designation = models.CharField(
+        max_length=32, 
+        null=True,
+        blank=True,
+        default='',
+        choices=(
+            ('left', _('Left')),
+            ('right', _('Right')),
+        ),        
+        help_text="Applicable to content (green) rows. Used to display columns \
+to the left and right of the content block."
+    )
 
     def save(self, *args, **kwargs):        
         if not self.id:
             self.index = self.row.column_set.count()
         super(Column, self).save(*args, **kwargs)
+
+        # Save row so aggregation takes place
+        self.row.save()
 
     @property
     def tiles(self):

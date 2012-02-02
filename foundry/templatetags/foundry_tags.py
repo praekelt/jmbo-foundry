@@ -140,6 +140,10 @@ class RowsNode(template.Node):
         self.block_name = template.Variable(block_name)
 
     def render(self, context):
+        # Recursion guard flag. Set by TileNode.
+        if hasattr(context['request'], '_foundry_suppress_rows_tag'):
+            return
+
         block_name = self.block_name.resolve(context)
 
         pages = Page.permitted.filter(is_homepage=True)
@@ -192,8 +196,15 @@ class TileNode(template.Node):
                 return "No reverse match for %s" % tile.view_name
             view, args, kwargs = resolve(url)
 
+            # Set recursion guard flag
+            setattr(context['request'], '_foundry_suppress_rows_tag', 1)            
             # Call the view. Let any error propagate.
             html = view(context['request'], *args, **kwargs).content
+            # Clear flag  
+            # xxx: something may clear the flag. Need to investigate more 
+            # incase of thread safety problem.
+            if hasattr(context['request'], '_foundry_suppress_rows_tag'):           
+                delattr(context['request'], '_foundry_suppress_rows_tag')
 
             # Extract content div. Currently there is no way to instruct a 
             # view to render only the content block, hence this.
