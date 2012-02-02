@@ -1,6 +1,8 @@
 {% load jmbo_template_tags foundry_tags i18n %}
 
-<img src="{{ object.get_listing_vertical_thumbnail_LAYER_url }}" alt="{{ object.title }}" class="left" />
+<a href="{{ object.get_absolute_url }}">
+    <img src="{{ object.get_listing_vertical_thumbnail_LAYER_url }}" alt="{{ object.title }}" class="left" />
+</a>
 
 <div class="title">
     {% if object.categories.all.count %}<span class="category">{{ object.categories.all|join_titles }}:</span>{% endif %}
