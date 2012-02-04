@@ -1,5 +1,9 @@
 {% load jmbo_template_tags foundry_tags %}
 
+{% comment %}
+Layout similar to a classic iPod.
+{% endcomment %}
+
 <a href="{{ object.get_absolute_url }}">
     <img src="{{ object.get_listing_horizontal_LAYER_url }}" alt="{{ object.title }}" />
 </a>
