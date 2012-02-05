@@ -1,3 +1,9 @@
+<style type="text/css">
+    #tile-edit-form input[type="text"] {
+        width: 250px;
+    }
+</style>
+
 <form id="tile-edit-form" action="{% url admin-tile-edit-ajax %}" method="POST">
     <p>You must set either <i>Target</i> or <i>View name</i>.</p>
     {% csrf_token %}

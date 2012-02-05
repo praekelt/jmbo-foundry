@@ -385,6 +385,11 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractContact
         """Return number of comments made by the member"""
         return FoundryComment.objects.filter(user=self).count()
 
+    @property
+    def has_notifications(self):
+        """Return true if member has notifications"""
+        return self.notification_set.all().exists()
+    
 
 class DefaultAvatar(ImageModel):
     """A set of avatars users can choose from"""
@@ -579,7 +584,10 @@ it works - you cannot break anything.""",
     def condition_expression_result(self, request):
         if not self.condition_expression:
             return True
-        return eval(self.condition_expression)
+        try:
+            return eval(self.condition_expression)
+        except:
+            return False
 
 
 class FoundryComment(BaseComment):
