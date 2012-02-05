@@ -55,7 +55,7 @@ $(document).ready(function(){
         {% for comment in comment_list %}
             <div id="c{{ comment.id }}" class="item">
                 <div class="image">
-                    {% if comment.creator %}
+                    {% if comment.creator.image %}
                         <img src="{{ comment.creator.get_thumbnail_LAYER_url }}" />
                     {% else %}
                         <img src="{{ STATIC_URL }}/images/anonymous.png" />
