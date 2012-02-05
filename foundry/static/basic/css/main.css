@@ -243,13 +243,22 @@ table.poll-results td.bar {
     width: 150px;
 }
 table.poll-results tr.poll-result-1 td.bar > div {
-    background-color: red;
+    background-color: #D9CEB2;
 }    
 table.poll-results tr.poll-result-2 td.bar > div {
-    background-color: green;
+    background-color: #948C75;
 }    
 table.poll-results tr.poll-result-3 td.bar > div {
-    background-color: blue;
+    background-color: #D5DED9;
+}    
+table.poll-results tr.poll-result-4 td.bar > div {
+    background-color: #7A6A53;
+}    
+table.poll-results tr.poll-result-5 td.bar > div {
+    background-color: #99B2B7;
+}    
+table.poll-results tr.poll-result-6 td.bar > div {
+    background-color: #BED6C7;
 }    
 
 /* Additional styles that can be applied to tiles */
