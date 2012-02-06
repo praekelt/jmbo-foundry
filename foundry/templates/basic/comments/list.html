@@ -22,6 +22,7 @@ $(document).ready(function(){
 
 <!--Auto Update: {% if request.GET.comment_auto_update %}On{% else %}Turn Off{% endif %}-->
 
+{% if request.user.is_authenticated %}
 <div class="foundry-comments-messages-navbar">
     <div class="items">
         <div class="item first {% if not request.GET.my_messages %}active{% endif %}">
@@ -32,6 +33,7 @@ $(document).ready(function(){
         </div>
     </div>
 </div>
+{% endif %}
 
 {% with request.GET.paginate_by|default:20|add:0 as paginate_by %}
 
