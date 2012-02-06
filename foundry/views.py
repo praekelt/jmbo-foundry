@@ -15,6 +15,8 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.sites.models import get_current_site
+from django.template import Template
+from django.views.decorators.cache import cache_page
 
 from category.models import Category
 from jmbo.models import ModelBase
@@ -265,6 +267,36 @@ def member_detail(request, username):
     extra = {}
     extra['object'] = obj
     return render_to_response('foundry/member_detail.html', extra, context_instance=RequestContext(request))
+
+
+# Caching duration matches the refresh rate
+@cache_page(30) 
+def fetch_new_comments_ajax(request, content_type_id, oid, last_comment_id):
+    # xxx: not happy with this function. The idea was to re-use comment fetch 
+    # logic but it feels slow.
+    # Re-use template tag to fetch results
+    context = RequestContext(request)
+    context['object'] = ContentType.objects.get(
+        id=content_type_id
+    ).get_object_for_this_type(id=oid)
+    t = Template("{% load comments %} {% get_comment_list for object as comment_list %}")
+    t.render(context)
+
+    # Trivial case
+    if not context['comment_list']:
+        return HttpResponse('')
+
+    # Restrict object list to only newer comments
+    # Stupid stupid django comments makes comment_list a list, so I can't 
+    # filter it through the API.
+    #context['comment_list'] = context['comment_list'].filter(id__gt=int(last_comment_id))
+    li = []
+    for o in context['comment_list']:
+        if o.id > int(last_comment_id):
+            li.append(o)
+    context['comment_list'] = li
+
+    return render_to_response('comments/list_new_comments.html', {}, context_instance=context)
 
 
 # Views for testing

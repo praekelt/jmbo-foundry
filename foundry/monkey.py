@@ -47,6 +47,7 @@ AutoPaginateNode.render = render
 authenticated user. Add a method to the class."""
 
 from django.db.models import Q
+from django.db.models.aggregates import Max
 from django.contrib.comments.templatetags.comments import CommentListNode
 
 def get_query_set(self, context):
@@ -57,6 +58,10 @@ def get_query_set(self, context):
             q1 = Q(user=user)
             q2 = Q(in_reply_to__user=user)
             qs = qs.filter(q1 | q2)
+
+    # Inject last comment id in context since. This is a convenient place.
+    setattr(context, 'foundry_last_comment_id', qs.aggregate(Max('id'))['id__max'] or 0)
+
     return qs
 
 CommentListNode.get_query_set = get_query_set

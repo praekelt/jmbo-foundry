@@ -72,4 +72,21 @@ $(document).ready(function(){
         _submit_intercept_common(this, event, target);
     });
 
+    // Load new comments and chats
+    function load_new_comments(){
+        $('div.comment-list-placeholder').each(function(index){
+            var el = $(this);
+            var url = '/fetch-new-comments-ajax/' + el.attr('content_type_id') + '/' + el.attr('oid') + '/' + el.attr('last_comment_id') + '/';
+            $.get(
+                url, 
+                {}, 
+                function(data){
+                    if (data)
+                        el.replaceWith(data);
+                }
+            );
+        });
+    }
+    //setInterval(load_new_comments, 30000);
+
 });

@@ -262,6 +262,12 @@ urlpatterns = patterns('',
         },
         name='coming-soon'
     ),
+    url(
+        r'^fetch-new-comments-ajax/(?P<content_type_id>\d+)/(?P<oid>\d+)/(?P<last_comment_id>\d+)/$',
+        'foundry.views.fetch_new_comments_ajax',
+        {},
+        name='fetch-new-comments-ajax'
+    ),
 
     # Test views
     url(

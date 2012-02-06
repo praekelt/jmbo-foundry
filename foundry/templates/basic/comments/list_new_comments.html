@@ -1,0 +1,33 @@
+{% load jmbo_template_tags i18n %}
+
+{% for comment in comment_list %}
+   <div id="c{{ comment.id }}" class="item">
+       <div class="image">
+           {% if comment.creator.image %}
+               <img src="{{ comment.creator.get_thumbnail_LAYER_url }}" />
+           {% else %}
+               <img src="{{ STATIC_URL }}/images/anonymous.png" />
+           {% endif %}
+       </div>
+       <div class="meta">
+           <div class="byline">{% humanize_time_diff comment.submit_date _('ago') %}</div>
+           <!-- todo: Need can comment test -->
+           <a href="{% url comment-reply-form %}?content_type_id={{ comment.content_type_id }}&oid={{ comment.object_pk }}&path_info={{ request.META.PATH_INFO }}&my_messages={{ request.GET.my_messages }}&paginate_by={{ request.GET.paginate_by }}" 
+              class="comment-reply" 
+              comment_id="{{ comment.id }}" 
+              creator="{{ comment.creator.username }}">{% trans "Reply" %}
+           </a>
+       </div>
+       <div class="comment">
+           {{ comment.user.username|default:comment.name }}: {{ comment.comment|urlize }}
+       </div>
+   </div>
+{% endfor %}
+
+<div 
+    class="comment-list-placeholder" 
+    content_type_id="{{ object.content_type_id }}" 
+    oid="{{ object.id }}"
+    last_comment_id="{{ foundry_last_comment_id }}">
+</div>
+
