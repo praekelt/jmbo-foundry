@@ -627,6 +627,25 @@ class Notification(models.Model):
         return str(self.id)
 
 
+class Relation(models.Model):
+    """Generic relation between two objects"""
+    source_content_type = models.ForeignKey(ContentType, related_name='relation_source_content_type')
+    source_object_id = models.PositiveIntegerField()
+    source = generic.GenericForeignKey('source_content_type', 'source_object_id')
+    target_content_type = models.ForeignKey(ContentType, related_name='relation_target_content_type')
+    target_object_id = models.PositiveIntegerField()
+    target = generic.GenericForeignKey('target_content_type', 'target_object_id')
+    name = models.CharField(
+        max_length=32, 
+        db_index=True, 
+        help_text="A name used to identify the relation. Must be of the form \
+blog_galleries. Once set it is typically never changed."
+    )
+
+    class Meta:
+        unique_together = (('source_content_type', 'source_object_id', 'target_content_type', 'target_object_id', 'name'),)
+
+
 @receiver(m2m_changed)
 def check_slug(sender, **kwargs):
     """Slug must be unique per site"""
