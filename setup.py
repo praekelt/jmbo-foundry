@@ -48,6 +48,7 @@ setup(
         'south',
         'BeautifulSoup',
         'django_compressor',
+        'jmbo_analytics',
     ],
     include_package_data=True,
     tests_require=[

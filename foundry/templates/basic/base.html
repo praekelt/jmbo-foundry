@@ -1,4 +1,4 @@
-{% load foundry_tags i18n compress %}
+{% load foundry_tags i18n compress jmbo_analytics_tags %}
 
 <?xml version="1.0" encoding="utf-8"?> 
 <!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd"> 
@@ -63,5 +63,8 @@
     {% if ANALYTICS_TAGS %}
         {{ ANALYTICS_TAGS|safe }}
     {% endif %}
+
+    <img src="{% google_analytics %}" width="0" height="0" />
+
 </body>
 </html>

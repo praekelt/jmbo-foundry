@@ -45,6 +45,7 @@ urlpatterns = patterns('',
     (r'^post/', include('post.urls')),	# todo: add to paster
     (r'^poll/', include('poll.urls')),	# todo: add to paster
     (r'^simple-autocomplete/', include('simple_autocomplete.urls')),
+    (r'^jmbo-analytics/', include('jmbo_analytics.urls')),
 
     (r'^admin/', include(admin.site.urls)),
 

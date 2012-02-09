@@ -158,6 +158,8 @@ INSTALLED_APPS = (
     'pagination', # custom
     'south', # custom - add to paster
     'compressor', # custom - add to paster
+    'jmbo_analytics', # add to paster
+    'analytics', # add to paster
     'django.contrib.auth',
     'django.contrib.comments',
     'django.contrib.contenttypes',
@@ -209,6 +211,10 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 )
+
+JMBO_ANALYTICS = {
+    'google_analytics_id': '', 
+}
 
 
 def compute_settings(sender):
