@@ -1160,8 +1160,8 @@ $(document).ready(function(){
     
     //Gallerry initialize
     $('#gallery').galleryView({
-        panel_width: 700,
-        panel_height: 400,
+        panel_width: 800,
+        panel_height: 600,
         frame_width: 55,
         show_overlays: true
     });
