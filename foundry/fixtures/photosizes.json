@@ -71,9 +71,9 @@
             "watermark": null, 
             "increment_count": false, 
             "effect": null, 
-            "crop": false, 
-            "height": 400, 
-            "width": 0, 
+            "crop": true, 
+            "height": 600, 
+            "width": 800, 
             "upscale": false, 
             "pre_cache": true, 
             "quality": 90
