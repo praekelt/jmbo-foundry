@@ -12,7 +12,7 @@ from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
     NavbarLinkPosition, Navbar, GeneralPreferences, GeneralPreferences, \
     RegistrationPreferences, LoginPreferences, Member, DefaultAvatar, \
     PasswordResetPreferences, Country, Page, ChatRoom, BlogPost, Notification, \
-    FoundryComment, Relation
+    FoundryComment, Relation, PageView
 from foundry.widgets import SelectCommaWidget
 from foundry.utils import get_view_choices
 
@@ -246,9 +246,27 @@ class CountryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
 
 
+class PageViewForm(forms.ModelForm):       
+
+    class Meta:
+        model = PageView
+
+    def __init__(self, *args, **kwargs):
+        super(PageViewForm, self).__init__(*args, **kwargs)
+        self.fields['view_name'].widget = forms.widgets.Select(
+            choices=[('', '')] + get_view_choices()
+        )
+
+
+class PageViewInline(admin.StackedInline):
+    form = PageViewForm
+    model = PageView
+
+
 class PageAdmin(admin.ModelAdmin):
     list_display = ('title', 'subtitle', 'slug', 'is_homepage')
     prepopulated_fields = {'slug': ('title',)}
+    inlines = (PageViewInline,)
    
     def response_add(self, request, obj, post_url_continue='../%s/'):
         if '_addanother' not in request.POST and '_popup' not in request.POST:

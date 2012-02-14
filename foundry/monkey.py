@@ -146,3 +146,54 @@ class PhotoSizeCache(object):
         self.sizes = {}
 
 photologue.models.PhotoSizeCache = PhotoSizeCache
+
+
+"""Patch {% block %} so we can inject side columns."""
+from django.template.loader_tags import BlockNode, BLOCK_CONTEXT_KEY
+from django.core.urlresolvers import resolve, Resolver404
+from django.template.loader import render_to_string
+
+def BlockNode_render(self, context):
+    block_context = context.render_context.get(BLOCK_CONTEXT_KEY)
+    context.push()
+    if block_context is None:
+        context['block'] = self
+        result = self.nodelist.render(context)
+    else:
+        push = block = block_context.pop(self.name)
+        if block is None:
+            block = self
+        # Create new block so we can store context without thread-safety issues.
+        block = BlockNode(block.name, block.nodelist)
+        block.context = context
+        context['block'] = block
+        result = block.nodelist.render(context)
+        if push is not None:
+            block_context.push(self.name, push)
+    context.pop()
+
+    if (self.name == 'content') and not hasattr(context['request'], '_foundry_blocknode_marker'):
+        # What view are we rendering?
+        try:
+            view_name = resolve(context['request'].META['PATH_INFO']).view_name
+        except Resolver404:
+            return result
+
+        # Mark to prevent recursion
+        setattr(context['request'], '_foundry_blocknode_marker', 1)
+
+        # Find page if any. Import here to prevent circular import.
+        from foundry.models import Page, PageView
+        # Use first permitted page that has row of required type
+        pages = Page.permitted.filter(id__in=[o.page.id for o in PageView.objects.filter(view_name=view_name)])
+        for page in pages:
+            rows = page.row_set.filter(has_left_or_right_column=True)
+            if rows.exists():
+                html = render_to_string(
+                    'foundry/inclusion_tags/rows.html', {'rows':[rows[0]], 'include_center_marker':1}, context
+                )
+                return html.replace('_FOUNDRY_BLOCKNODE_PLACEHOLDER', result)
+
+    return result
+
+#BlockNode.render = BlockNode_render

@@ -461,6 +461,17 @@ class Page(models.Model):
         return sum([o.render_height+20 for o in self.rows])
 
 
+class PageView(models.Model):
+    """We need this bridging class for fast lookups"""
+    page = models.ForeignKey(Page)
+    view_name = models.CharField(
+        max_length=200, help_text='A view that uses the target page to render itself.',
+    )
+
+    def __unicode__(self):
+        return '%s > %s' % (self.page.title, self.view_name)
+
+
 class Row(models.Model):
     page = models.ForeignKey(Page)
     index = models.PositiveIntegerField(default=0, editable=False)

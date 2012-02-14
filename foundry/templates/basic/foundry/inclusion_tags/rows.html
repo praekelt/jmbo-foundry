@@ -7,8 +7,8 @@
             <td class="foundry-page-column foundry-page-column-{{ column.width }}">
                 {% if include_center_marker %}
                     {% ifchanged column.designation %}
-                        {% if column.designation == 'center' %}
-                            PLACEHOLDER
+                        {% if not column.designation %}
+                            _FOUNDRY_BLOCKNODE_PLACEHOLDER
                         {% endif %}
                     {% endifchanged %}
                 {% endif %}
