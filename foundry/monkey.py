@@ -143,7 +143,7 @@ class PhotoSizeCache(object):
                 self.sizes[size.name] = size
 
     def reset(self):
-        self.sizes = {}
+        self.sizes = LayerAwareSizes()
 
 photologue.models.PhotoSizeCache = PhotoSizeCache
 
