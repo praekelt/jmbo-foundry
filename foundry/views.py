@@ -30,23 +30,6 @@ from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
     SearchForm, CreateBlogPostForm
 
 
-class CategoryURL(object):
-
-    def __init__(self, category=None):
-        self.category = category
-
-    def __call__(self, obj=None):
-        if self.category and obj:
-            return reverse(
-                'category_object_detail',
-                kwargs={'category_slug': self.category.slug, 'slug': obj.slug}
-            )
-        elif obj:
-            return obj.as_leaf_class().get_absolute_url()
-        else:
-            return self
-
-
 def join(request):
     """Surface join form"""
     show_age_gateway = preferences.GeneralPreferences.show_age_gateway \
@@ -91,47 +74,6 @@ def join_finish(request):
 
     extra = dict(form=form)
     return render_to_response('foundry/join_finish.html', extra, context_instance=RequestContext(request))
-
-
-class CategoryObjectDetailView(DetailView):
-    model = ModelBase
-    
-    def get_queryset(self):
-        self.category = get_object_or_404(Category, slug__iexact=self.kwargs['category_slug'])
-        return super(CategoryObjectDetailView, self).get_queryset()
-
-    def get_template_names(self):
-        # todo: explain name resolution in documentation
-        return ['category/%s_detail.html' % self.category.slug, 'category/detail.html'] + super(CategoryObjectDetailView, self).get_template_names()
-    
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super(CategoryObjectDetailView, self).get_context_data(**kwargs)
-        context['category'] = self.category
-        context['object'] = context['object'].as_leaf_class()
-        return context
-
-
-class CategoryObjectListView(ListView):
-    paginate_by = 5
-
-    def get_queryset(self):
-        self.category = get_object_or_404(Category, slug__iexact=self.kwargs['category_slug'])
-        return ModelBase.permitted.filter(Q(primary_category=self.category)|Q(categories=self.category)).exclude(pin__category=self.category)
-        
-    def get_template_names(self):
-        return ['category/%s_list.html' % self.category.slug, 'category/list.html'] + super(CategoryObjectListView, self).get_template_names()
-    
-    def get_url_callable(self, *args, **kwargs):
-        return CategoryURL(category=self.category)
-
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super(CategoryObjectListView, self).get_context_data(**kwargs)
-        context['pinned_object_list'] = ModelBase.permitted.filter(pin__category=self.category).order_by('-created')
-        context['category'] = self.category
-        context['url_callable'] = self.get_url_callable()
-        return context
 
 
 def age_gateway(request):

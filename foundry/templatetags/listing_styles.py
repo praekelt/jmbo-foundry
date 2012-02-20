@@ -2,6 +2,7 @@ from django.template.loader import render_to_string
 
 from jmbo import models
 
+
 class AbstractBaseStyle(object):
 
     def __init__(self, listing):
@@ -25,7 +26,7 @@ class AbstractBaseStyle(object):
     
     def get_url_callable(self, *args, **kwargs):
         # Must put the import here to avoid circular import error
-        from foundry import views
+        from jmbo import views
         return views.CategoryURL(category=self.listing.category)
     
     def get_context_data(self, context):

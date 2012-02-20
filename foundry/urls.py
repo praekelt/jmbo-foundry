@@ -8,7 +8,6 @@ from preferences import preferences
 
 from foundry.models import Page
 from foundry.forms import LoginForm, PasswordResetForm
-from foundry.views import CategoryObjectDetailView, CategoryObjectListView
 
 admin.autodiscover()
 
@@ -72,16 +71,6 @@ urlpatterns = patterns('',
             'template':'foundry/inclusion_tags/header.html', 
         },
         name='header'
-    ),
-    url(
-        r'^category/(?P<category_slug>[\w-]+)/$',
-        CategoryObjectListView.as_view(),
-        name='category_object_list'
-    ),
-    url(
-        r'^category/(?P<category_slug>[\w-]+)/(?P<slug>[\w-]+)/$',
-        CategoryObjectDetailView.as_view(),
-        name='category_object_detail'
     ),
 
     # Join, login, password reset            
