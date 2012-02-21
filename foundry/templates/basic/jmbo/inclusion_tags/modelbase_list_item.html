@@ -2,7 +2,7 @@
 
 <div class="title">
     {% if object.categories.all.count %}<span class="category">{{ object.categories.all|join_titles }}:</span>{% endif %}
-    <a href="{% smart_url url_callable object %}">{{ object.title }}</a>
+    <a href="{{ object.get_absolute_url }}">{{ object.title }}</a>
 </div>
 
 {% include "includes/list_meta.html" %}

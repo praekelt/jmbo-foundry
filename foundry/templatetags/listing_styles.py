@@ -23,16 +23,10 @@ class AbstractBaseStyle(object):
         if self.listing.count:
             queryset = queryset[:self.listing.count]
         return queryset
-    
-    def get_url_callable(self, *args, **kwargs):
-        # Must put the import here to avoid circular import error
-        from jmbo import views
-        return views.CategoryURL(category=self.listing.category)
-    
+            
     def get_context_data(self, context):
         context['object_list'] = self.get_queryset()
         context['listing'] = self.listing
-        context['url_callable'] = self.get_url_callable()
         context['items_per_page'] = self.listing.items_per_page or 100
         if getattr(context['request'], 'page', 0) < 0:
             setattr(context['request'], 'page', 1)
