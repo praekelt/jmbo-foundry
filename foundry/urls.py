@@ -17,8 +17,9 @@ try:
 except ImportError:
     pass
 
-urlpatterns = patterns('',
+urlpatterns = patterns('',    
     # Pre-empt url call since we want to disable view modifiers for gallery.
+    url(r'^gallery/list/$', 'gallery.views.object_list', name='gallery_object_list'),
     url(
         r'^gallery/(?P<slug>[\w-]+)/$', 
         'gallery.views.object_detail', 
