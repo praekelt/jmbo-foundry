@@ -213,6 +213,10 @@ class Listing(models.Model):
 class AbstractLinkPosition(models.Model):
     link = models.ForeignKey(Link)
     position = models.IntegerField()
+    class_name = models.CharField(
+        max_length=200, null=True, blank=True,
+        help_text="One or more CSS classes that are applied to the link.",
+    )
     condition_expression = models.CharField(
         max_length=255,
         null=True,

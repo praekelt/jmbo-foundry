@@ -52,6 +52,8 @@ class MenuNode(template.Node):
         object_list = []
         for o in obj.menulinkposition_set.all().order_by('position'):
             if o.condition_expression_result(context['request']):          
+                # Glue class_name to o.link
+                o.link.class_name = o.class_name
                 object_list.append(o.link)
 
         extra = {'object':obj, 'object_list':object_list}
@@ -87,7 +89,9 @@ class NavbarNode(template.Node):
         object_list = []
         active_link = None
         for o in obj.navbarlinkposition_set.all().order_by('position'):
-            if o.condition_expression_result(context['request']):          
+            if o.condition_expression_result(context['request']):
+                # Glue class_name to o.link
+                o.link.class_name = o.class_name
                 object_list.append(o.link)
                 if not active_link and o.link.is_active(context['request']):
                     active_link = o.link

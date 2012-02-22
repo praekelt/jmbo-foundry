@@ -3,7 +3,7 @@
         {% if object.display_title %}<div class="title">{{ object.title }}</div>{% endif %}
         <div class="items">
         {% for link in object_list %}
-            <div class="item">
+            <div class="item {{ link.class_name|default_if_none:'' }} {% ifequal link active_link%}active{% endifequal %} {% if forloop.first %}first{% endif %} {% if forloop.last %}last{% endif %}">
                 <a href="{{ link.get_absolute_url }}">{{ link.title }}</a>
             </div>
         {% endfor %}
