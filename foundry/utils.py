@@ -1,5 +1,6 @@
 from django.conf import settings
 
+
 _foundry_utils_cache = {}
 
 def _build_view_names_recurse(url_patterns=None):

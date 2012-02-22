@@ -12,79 +12,9 @@ from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
     NavbarLinkPosition, Navbar, GeneralPreferences, GeneralPreferences, \
     RegistrationPreferences, LoginPreferences, Member, DefaultAvatar, \
     PasswordResetPreferences, Country, Page, ChatRoom, BlogPost, Notification, \
-    FoundryComment, Relation, PageView
+    FoundryComment, PageView
 from foundry.widgets import SelectCommaWidget
 from foundry.utils import get_view_choices
-
-
-class FoundryModelBaseAdminForm(forms.ModelForm):       
-    """Helper form for FoundryModelBaseAdmin"""
-
-    class Meta:
-        model = ModelBase
-
-    def __init__(self, *args, **kwargs):
-        super(FoundryModelBaseAdminForm, self).__init__(*args, **kwargs)
-
-        # Add relations fields
-        content_type = ContentType.objects.get_for_model(self._meta.model)
-        names = set([o.name for o in Relation.objects.filter(source_content_type=content_type)])
-        for name in names:
-            if not self.fields.has_key(name):
-                self.fields[name] = forms.ModelMultipleChoiceField(
-                    ModelBase.objects.all().order_by('title'), 
-                    required=False,
-                    label=forms.forms.pretty_name(name),
-                    help_text="This field does not perform any validation. \
-It is your responsibility to select the correct items."
-                )
-
-        instance = kwargs.get('instance', None)
-        if instance is not None:           
-            for name in names:
-                initial = Relation.objects.filter(
-                    source_content_type=instance.content_type,
-                    source_object_id=instance.id, 
-                    name=name
-                )
-                self.fields[name].initial = [o.target for o in initial]
-
-
-class FoundryModelBaseAdmin(ModelBaseAdmin):
-    """Relation aware form"""
-    form = FoundryModelBaseAdminForm
-
-    def get_fieldsets(self, request, obj=None):
-        result = super(FoundryModelBaseAdmin, self).get_fieldsets(request, obj)
-        result = list(result)
-
-        content_type = ContentType.objects.get_for_model(self.model)
-        q = Relation.objects.filter(source_content_type=content_type)
-        if q.exists():
-            result.append(
-                ('Related', 
-                    {'fields': set([o.name for o in q]), 'classes': ('collapse',),}
-                )
-            )
-
-        return tuple(result)
-
-    def save_model(self, request, obj, form, change):
-        super(FoundryModelBaseAdmin, self).save_model(request, obj, form, change)
-
-        content_type = ContentType.objects.get_for_model(self.model)
-        names = set([o.name for o in Relation.objects.filter(source_content_type=content_type)])
-        for name in names:
-            to_delete = Relation.objects.filter(
-                source_content_type=obj.content_type,
-                source_object_id=obj.id, 
-                name=name
-            )
-            for relation in to_delete:
-                relation.delete()
-            for target in form.cleaned_data[name]:
-                relation = Relation(source=obj, target=target.as_leaf_class(), name=name)
-                relation.save()
 
 
 class LinkAdminForm(forms.ModelForm):
@@ -291,13 +221,6 @@ class FoundryCommentAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'comment',)
 
 
-class RelationAdmin(admin.ModelAdmin):
-    list_display = (
-        'id', 'source_content_type', 'source_object_id', 'target_content_type', 
-        'target_object_id', 'name'
-    )
-
-
 admin.site.register(Link, LinkAdmin)
 admin.site.register(Menu, MenuAdmin)
 admin.site.register(Navbar, NavbarAdmin)
@@ -314,4 +237,3 @@ admin.site.register(ChatRoom, ChatRoomAdmin)
 admin.site.register(BlogPost, BlogPostAdmin)
 admin.site.register(Notification, NotificationAdmin)
 admin.site.register(FoundryComment, FoundryCommentAdmin)
-admin.site.register(Relation, RelationAdmin)

@@ -7,7 +7,7 @@ from django.conf import settings
 
 from preferences import preferences
 
-from foundry.models import Menu, Navbar, Listing, Page, Relation
+from foundry.models import Menu, Navbar, Listing, Page
 from foundry.templatetags import listing_styles
 
 register = template.Library()
@@ -261,48 +261,3 @@ class TileUrlNode(template.Node):
             # No harm done for now.
             url = reverse('listing-detail', args=[tile.target.slug])
             return url
-
-
-@register.tag
-def get_relation_list(parser, token):
-    """Gets list of relations from object identified by a relation name.
-
-    Syntax::
-
-        {% get_relation_list [relation_name] for [object] as [varname] %}
-    """
-    tokens = token.contents.split()
-    if len(tokens) != 6:
-        raise template.TemplateSyntaxError("%r tag requires 6 arguments" % tokens[0])
-
-    if tokens[2] != 'for':
-        raise template.TemplateSyntaxError("Third argument in %r tag must be 'for'" % tokens[0])
-
-    if tokens[4] != 'as':
-        raise template.TemplateSyntaxError("Fifth argument in %r tag must be 'as'" % tokens[0])
-
-    return RelationListNode(name=tokens[1], obj=tokens[3], as_var=tokens[5])
-
-      
-
-class RelationListNode(template.Node):
-
-    def __init__(self, name, obj, as_var):
-        self.name = template.Variable(name)
-        self.obj = template.Variable(obj)
-        self.as_var = template.Variable(as_var)
-
-    def render(self, context):
-        name = self.name.resolve(context)
-        obj = self.obj.resolve(context)
-        as_var = self.as_var.resolve(context)
-
-        relations = Relation.objects.filter(
-            source_content_type=obj.content_type, 
-            source_object_id=obj.id,
-            name=name
-        )
-        # Unpack. Relation set is small by nature.
-        context[as_var] = [o.target for o in relations if o.target.is_permitted]
-
-        return ''
