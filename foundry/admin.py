@@ -77,8 +77,8 @@ class ListingAdminForm(forms.ModelForm):
 
         # Limit content_type vocabulary. Cannot do it with limit_choices_to.
         ids = []
-        for obj in ContentType.objects.all():       
-            if issubclass(obj.model_class(), ModelBase):
+        for obj in ContentType.objects.all():
+            if (obj.model_class() is not None) and issubclass(obj.model_class(), ModelBase):
                ids.append(obj.id) 
         self.fields['content_type']._set_queryset(ContentType.objects.filter(id__in=ids).order_by('name'))
 
