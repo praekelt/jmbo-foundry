@@ -45,6 +45,13 @@ precedence over URL field below.",
         blank=True,
         null=True,
     )
+    target_content_type = models.ForeignKey(
+        ContentType, blank=True, null=True, related_name='link_target_content_type'
+    )
+    target_object_id = models.PositiveIntegerField(blank=True, null=True)
+    target = generic.GenericForeignKey(
+        'target_content_type', 'target_object_id'
+    )
     url = models.CharField(
         max_length=256,
         help_text='URL to which this link will redirect.',
@@ -62,6 +69,8 @@ precedence over URL field below.",
             return reverse(self.view_name)
         elif self.category:
             return self.category.get_absolute_url()
+        elif self.target:
+            return self.target.get_absolute_url()
         else:
             return self.url
 
@@ -84,6 +93,8 @@ precedence over URL field below.",
             active = pattern_name == self.view_name
         if not active and self.category:
             active = request.path_info.startswith(self.category.get_absolute_url())
+        if not active and self.target:
+            active = request.path_info.startswith(self.target.get_absolute_url())
         if not active and self.url:
             active = request.path_info.startswith(self.url)
         return active
