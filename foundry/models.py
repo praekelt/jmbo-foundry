@@ -33,15 +33,13 @@ class Link(models.Model):
     )
     view_name = models.CharField(
         max_length=256,
-        help_text="View name to which this link will redirect. This takes \
-precedence over Category and URL fields below.",
+        help_text="View name to which this link will redirect.",
         blank=True,
         null=True,
     )
     category = models.ForeignKey(
         'category.Category',
-        help_text="Category to which this link will redirect. This takes \
-precedence over URL field below.",
+        help_text="Category to which this link will redirect.",
         blank=True,
         null=True,
     )
