@@ -126,6 +126,9 @@ class Menu(models.Model):
     objects = models.Manager()
     permitted = PermittedManager()
 
+    class Meta():
+        ordering = ('title', 'subtitle')
+
     def __unicode__(self):
         return self.title
 
@@ -153,6 +156,9 @@ class Navbar(models.Model):
 
     objects = models.Manager()
     permitted = PermittedManager()
+
+    class Meta():
+        ordering = ('title', 'subtitle')
 
     def __unicode__(self):
         return self.title
@@ -214,6 +220,9 @@ class Listing(models.Model):
 
     objects = models.Manager()
     permitted = PermittedManager()
+
+    class Meta():
+        ordering = ('title', 'subtitle')
 
     def __unicode__(self):
         return self.title
