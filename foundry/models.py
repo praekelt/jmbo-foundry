@@ -57,6 +57,9 @@ class Link(models.Model):
         null=True,
     )    
 
+    class Meta():
+        ordering = ('title',)
+
     def get_absolute_url(self):
         """Returns URL to which link should redirect based on a reversed view
         name, category, target or explicitly provided URL."""
