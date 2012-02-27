@@ -20,8 +20,7 @@ from foundry.utils import get_view_choices
 class LinkAdminForm(forms.ModelForm):
     view_name = forms.ChoiceField(
         label='View Name',
-        help_text="View name to which this link will redirect. This takes \
-precedence over url field below.",
+        help_text="View name to which this link will redirect.",
         required=False
     )
     target = forms.ModelChoiceField(

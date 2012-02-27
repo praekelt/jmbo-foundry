@@ -58,11 +58,8 @@ class Link(models.Model):
     )    
 
     def get_absolute_url(self):
-        """
-        Returns URL to which link should redirect based on a reversed
-        view name, category or explicitly provided URL in that order
-        of precedence.
-        """
+        """Returns URL to which link should redirect based on a reversed view
+        name, category, target or explicitly provided URL."""
         if self.view_name:
             return reverse(self.view_name)
         elif self.category:
