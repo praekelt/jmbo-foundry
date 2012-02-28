@@ -263,3 +263,34 @@ class TileUrlNode(template.Node):
             # No harm done for now.
             url = reverse('listing-detail', args=[tile.target.slug])
             return url
+
+@register.tag
+def get_listing_queryset(parser, token):
+    """{% get_listing_queryset [slug] as [varname] %}"""
+    try:
+        tag_name, slug, dc, as_var = token.split_contents()
+    except ValueError:
+        raise template.TemplateSyntaxError(
+            "get_listing_queryset tag has syntax {% get_listing_items [slug] as [varname] %}"
+        )
+    return ListingQuerysetNode(slug, as_var)
+
+
+class ListingQuerysetNode(template.Node):
+
+    def __init__(self, slug):
+        self.slug = template.Variable(slug)
+        self.as_var = template.Variable(as_var)
+
+    def render(self, context):
+        slug = self.slug.resolve(context)
+        as_var = self.as_var.resolve(context)
+        try:
+            obj = Listing.permitted.get(slug=slug)
+            context[as_var] = obj.queryset
+        except Listing.DoesNotExist:
+            obj = None
+            context[as_var] = None
+
+        return ''
+

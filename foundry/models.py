@@ -2,6 +2,7 @@ import inspect
 
 from django.core.urlresolvers import reverse, Resolver404
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
@@ -57,7 +58,7 @@ class Link(models.Model):
         null=True,
     )    
 
-    class Meta():
+    class Meta:
         ordering = ('title',)
 
     def get_absolute_url(self):
@@ -126,7 +127,7 @@ class Menu(models.Model):
     objects = models.Manager()
     permitted = PermittedManager()
 
-    class Meta():
+    class Meta:
         ordering = ('title', 'subtitle')
 
     def __unicode__(self):
@@ -157,7 +158,7 @@ class Navbar(models.Model):
     objects = models.Manager()
     permitted = PermittedManager()
 
-    class Meta():
+    class Meta:
         ordering = ('title', 'subtitle')
 
     def __unicode__(self):
@@ -221,11 +222,24 @@ class Listing(models.Model):
     objects = models.Manager()
     permitted = PermittedManager()
 
-    class Meta():
+    class Meta:
         ordering = ('title', 'subtitle')
 
     def __unicode__(self):
         return self.title
+
+    @property
+    def queryset(self):        
+        q = self.content.all()
+        if not q.exists():
+            q = ModelBase.permitted.all()
+            if self.content_type.exists():
+                q = q.filter(content_type__in=self.content_type.all())
+            elif self.category:
+                q = q.filter(Q(primary_category=self.category)|Q(categories=self.category))
+        if self.count:
+            q = q[:self.count]
+        return q
 
 
 class AbstractLinkPosition(models.Model):
@@ -246,7 +260,7 @@ class AbstractLinkPosition(models.Model):
         help_text='A python expression. Variable request is in scope.'
     )
 
-    class Meta():
+    class Meta:
         abstract = True
         ordering = ('position',)
 
