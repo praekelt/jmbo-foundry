@@ -278,7 +278,7 @@ def get_listing_queryset(parser, token):
 
 class ListingQuerysetNode(template.Node):
 
-    def __init__(self, slug):
+    def __init__(self, slug, as_var):
         self.slug = template.Variable(slug)
         self.as_var = template.Variable(as_var)
 
