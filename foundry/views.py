@@ -27,7 +27,7 @@ from preferences import preferences
 from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification, \
     Member
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
-    SearchForm, CreateBlogPostForm
+    SearchForm, CreateBlogPostForm, FriendRequestForm
 
 
 def join(request):
@@ -239,6 +239,24 @@ def fetch_new_comments_ajax(request, content_type_id, oid, last_comment_id):
     context['comment_list'] = li
 
     return render_to_response('comments/list_new_comments.html', {}, context_instance=context)
+
+
+@login_required
+def friend_request(request, member_id):
+    friend = get_object_or_404(Member, id=member_id)
+    if request.method == 'POST':
+        form = FriendRequestForm(request.POST, initial=dict(member=request.user, friend=friend))
+        if form.is_valid():
+            instance = form.save()
+            msg = _("You are now friends with %s." % instance.friend.username)
+            messages.success(request, msg, fail_silently=True)
+            return HttpResponseRedirect('/')
+            #return HttpResponseRedirect(reverse('my-friends'))
+    else:
+        form = FriendRequestForm(initial=dict(member=request.user, friend=friend))
+
+    extra = dict(form=form, friend=friend)
+    return render_to_response('foundry/friend_request_form.html', extra, context_instance=RequestContext(request))
 
 
 # Views for testing

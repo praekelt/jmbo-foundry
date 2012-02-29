@@ -20,7 +20,7 @@ from preferences import preferences
 from jmbo.forms import as_div
 
 from foundry.models import Member, DefaultAvatar, Country, FoundryComment, \
-    BlogPost
+    BlogPost, MemberFriend
 from foundry.widgets import OldSchoolDateWidget
 from foundry.ambientmobile import AmbientSMS, AmbientSMSError
 
@@ -67,7 +67,7 @@ class JoinForm(UserCreationForm):
     """Custom join form"""
     country = forms.ModelChoiceField(queryset=Country.objects.all())
     date_of_birth = forms.DateField(widget=OldSchoolDateWidget) # todo: widget
-    #accept_terms = forms.BooleanField(required=True, label="", widget=TermsCheckboxInput)
+    accept_terms = forms.BooleanField(required=True, label="", widget=TermsCheckboxInput)
 
     class Meta:
         model = Member
@@ -127,6 +127,10 @@ Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
             field = self.fields.get(name, None)
             if field and not field.required:
                 field.required = True
+
+        # Remove accept_terms if terms and conditions not set
+        if not preferences.GeneralPreferences.terms_and_conditions:
+            del self.fields['accept_terms']
 
         # Make some messages and labels more reassuring
         self.fields['username'].help_text = _("This name is visible to other users on the site.")
@@ -341,6 +345,47 @@ class CreateBlogPostForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance            
+
+    as_div = as_div
+
+
+class FriendRequestForm(forms.ModelForm):
+    """This form does not follow the usual style since we do not want any 
+    fields to render."""
+
+    class Meta:
+        model = MemberFriend
+        fields = []
+
+    def __init__(self, *args, **kwargs):
+        super(FriendRequestForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super(FriendRequestForm, self).clean()
+        member = self.initial['member']
+        friend = self.initial['friend']
+        q = MemberFriend.objects.filter(member=member, friend=friend)
+        if q.filter(state='invited').exists():
+            raise forms.ValidationError(
+                _("You have already sent a friend request to %s" % friend.username)
+            )
+        if q.filter(state='accepted').exists():
+            raise forms.ValidationError(
+                _("You are already friends with %s" % friend.username)
+            )
+        if q.filter(state='declined').exists():
+            raise forms.ValidationError(
+                _("You may not be friends with %s" % friend.username)
+            )
+        cleaned_data['member'] = member
+        cleaned_data['friend'] = friend
+        cleaned_data['state'] = 'accepted'
+        return cleaned_data
+
+    def save(self, commit=True):
+        self._meta.fields = ('member', 'friend', 'state')
+        instance = super(FriendRequestForm, self).save(commit=commit)
+        return instance
 
     as_div = as_div
 

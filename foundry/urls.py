@@ -259,6 +259,14 @@ urlpatterns = patterns('',
         name='fetch-new-comments-ajax'
     ),
 
+    # Friend request
+    url(
+        r'^friend-request/(?P<member_id>\d+)/$',
+        'foundry.views.friend_request',
+        {},
+        name='friend-request'
+    ),
+
     # Test views
     url(
         r'^test-plain-response/$',

@@ -678,6 +678,21 @@ class Notification(models.Model):
         return str(self.id)
 
 
+class MemberFriend(models.Model):
+    member = models.ForeignKey(Member, related_name='member_friend_member')
+    friend = models.ForeignKey(Member, related_name='member_friend_friend')
+    state = models.CharField(
+        max_length=32,
+        default='invited',
+        db_index=True,
+        choices=(
+            ('invited', 'Invited'),
+            ('accepted', 'Accepted'),
+            ('declined', 'Declined')
+        )
+    )
+
+
 @receiver(m2m_changed)
 def check_slug(sender, **kwargs):
     """Slug must be unique per site"""
