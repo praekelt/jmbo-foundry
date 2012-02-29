@@ -25,7 +25,7 @@ from jmbo.view_modifiers import DefaultViewModifier
 from preferences import preferences
 
 from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification, \
-    Member
+    Member, MemberFriend
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
     SearchForm, CreateBlogPostForm, FriendRequestForm
 
@@ -250,13 +250,26 @@ def friend_request(request, member_id):
             instance = form.save()
             msg = _("You are now friends with %s." % instance.friend.username)
             messages.success(request, msg, fail_silently=True)
-            return HttpResponseRedirect('/')
-            #return HttpResponseRedirect(reverse('my-friends'))
+            return HttpResponseRedirect(reverse('my-friends'))
     else:
         form = FriendRequestForm(initial=dict(member=request.user, friend=friend))
 
     extra = dict(form=form, friend=friend)
     return render_to_response('foundry/friend_request_form.html', extra, context_instance=RequestContext(request))
+
+
+class MyFriends(GenericObjectList):
+
+    def get_queryset(self, *args, **kwargs):
+        return MemberFriend.objects.filter(
+            member=self.request.user, state='accepted'
+        )
+
+    def get_paginate_by(self, *args, **kwargs):
+        return 20
+
+# todo: figure out how to wrap with login_required
+my_friends = MyFriends()
 
 
 # Views for testing
