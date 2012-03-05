@@ -1,3 +1,2 @@
-3. Unify category url, absolute url mechanism with what is currently in jmbo core.
-4. Clean up modelbase_* and inclusion template mess in jmbo.
-5. See jmbo get_absolute_url for comments.
+1. Listing query should OR between all selected fields
+2. Listing category field must be multiple select
