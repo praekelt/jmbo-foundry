@@ -131,7 +131,10 @@ class Menu(models.Model):
         ordering = ('title', 'subtitle')
 
     def __unicode__(self):
-        return self.title
+        if self.subtitle:
+            return '%s (%s)' % (self.title, self.subtitle)
+        else:
+            return self.title
 
 
 class Navbar(models.Model):
@@ -162,7 +165,10 @@ class Navbar(models.Model):
         ordering = ('title', 'subtitle')
 
     def __unicode__(self):
-        return self.title
+        if self.subtitle:
+            return '%s (%s)' % (self.title, self.subtitle)
+        else:
+            return self.title
 
 
 class Listing(models.Model):
@@ -226,7 +232,10 @@ class Listing(models.Model):
         ordering = ('title', 'subtitle')
 
     def __unicode__(self):
-        return self.title
+        if self.subtitle:
+            return '%s (%s)' % (self.title, self.subtitle)
+        else:
+            return self.title
 
     @property
     def queryset(self):        
@@ -481,7 +490,10 @@ class Page(models.Model):
     permitted = PermittedManager()
 
     def __unicode__(self):
-        return self.title
+        if self.subtitle:
+            return '%s (%s)' % (self.title, self.subtitle)
+        else:
+            return self.title
 
     @property
     def rows(self):
