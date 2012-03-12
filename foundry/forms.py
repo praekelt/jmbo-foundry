@@ -8,6 +8,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, \
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth import authenticate
 from django.contrib.sites.models import get_current_site
 from django.template import Context, loader
 from django.utils.http import int_to_base36
@@ -58,7 +59,38 @@ class LoginForm(AuthenticationForm):
         if label is not None:
             self.fields['username'].label = label
 
-        # todo: customize error messages
+    def clean(self):
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+
+        if username and password:
+            self.user_cache = authenticate(username=username, password=password)
+            if self.user_cache is None:
+                v = preferences.LoginPreferences.raw_login_fields
+                if v == 'email':
+                    raise forms.ValidationError(_("Please enter a correct \
+                        email address and password. Note that both fields \
+                        are case-sensitive."))
+                elif v == 'mobile_number':
+                    raise forms.ValidationError(_("Please enter a correct \
+                        mobile number and password. Note that both fields \
+                        are case-sensitive."))
+                elif v == 'username,email':
+                    raise forms.ValidationError(_("Please enter a correct \
+                        username or email address and password. Note that \
+                        both fields are case-sensitive."))
+                elif v == 'username,mobile_number':
+                    raise forms.ValidationError(_("Please enter a correct \
+                        username or mobile number and password. Note that \
+                        both fields are case-sensitive."))
+                else:
+                    raise forms.ValidationError(_("Please enter a correct \
+                        username and password. Note that both fields are \
+                        case-sensitive."))
+            elif not self.user_cache.is_active:
+                raise forms.ValidationError(_("This account is inactive."))
+        self.check_for_test_cookie()
+        return self.cleaned_data
 
     as_div = as_div
     
