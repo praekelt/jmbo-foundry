@@ -361,6 +361,8 @@ urlpatterns = patterns('',
 
 urlpatterns += staticfiles_urlpatterns()
 
+handler500 = 'foundry.views.server_error'
+
 if settings.DEBUG:
     urlpatterns += patterns('',
     (r'^media/(?P<path>.*)$', 'django.views.static.serve',

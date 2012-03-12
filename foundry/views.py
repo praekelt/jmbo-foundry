@@ -3,9 +3,10 @@ import datetime
 from django.conf import settings
 from django.contrib.auth import authenticate, login, get_backends
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404, \
+    HttpResponseServerError
 from django.shortcuts import get_object_or_404, render_to_response
-from django.template import RequestContext
+from django.template import RequestContext, loader
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.contrib.auth.decorators import login_required
@@ -17,6 +18,7 @@ from django.contrib import messages
 from django.contrib.sites.models import get_current_site
 from django.template import Template
 from django.views.decorators.cache import cache_page
+from django.views.decorators.csrf import requires_csrf_token
 
 from category.models import Category
 from jmbo.models import ModelBase
@@ -270,6 +272,12 @@ class MyFriends(GenericObjectList):
 
 # todo: figure out how to wrap with login_required
 my_friends = MyFriends()
+
+
+@requires_csrf_token
+def server_error(request, template_name='500.html'):
+    t = loader.get_template(template_name)
+    return HttpResponseServerError(t.render(RequestContext(request)))
 
 
 # Views for testing
