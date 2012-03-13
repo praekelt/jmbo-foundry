@@ -1,3 +1,4 @@
+import types
 from BeautifulSoup import BeautifulSoup
 
 from django import template
@@ -106,26 +107,68 @@ class NavbarNode(template.Node):
 
 @register.tag
 def listing(parser, token):
-    try:
-        tag_name, slug = token.split_contents()
-    except ValueError:
+    tokens = token.split_contents()
+    length = len(tokens)
+    
+    if length < 2:
         raise template.TemplateSyntaxError(
-            'listing tag requires argument slug'
+            'listing tag require at least argument slug or queryset'
         )
-    return ListingNode(slug)
+   
+    slug_or_queryset = tokens[1]
+
+    title = items_per_page = style = 'None'
+    if length == 3:
+        title = tokens[2]
+    if length == 4:
+        style = tokens[3]
+    if length == 5:
+        items_per_page = tokens[4]
+
+    return ListingNode(slug_or_queryset, title, style, items_per_page)
 
 
 class ListingNode(template.Node):
 
-    def __init__(self, slug):
-        self.slug = template.Variable(slug)
+    def __init__(self, slug_or_queryset, title='None', style='None', items_per_page='None'):
+        self.slug_or_queryset = template.Variable(slug_or_queryset)
+        self.title = template.Variable(title)
+        self.style = template.Variable(style)
+        self.items_per_page = template.Variable(items_per_page)
 
     def render(self, context):
-        slug = self.slug.resolve(context)
+        slug_or_queryset = self.slug_or_queryset.resolve(context)
         try:
-            obj = Listing.permitted.get(slug=slug)
-        except Listing.DoesNotExist:
-            return ''
+            title = self.title.resolve(context)
+        except template.VariableDoesNotExist:
+            title = ''
+        try:
+            style = self.style.resolve(context)
+        except template.VariableDoesNotExist:
+            style = 'VerticalThumbnail'
+        try:
+            items_per_page = self.items_per_page.resolve(context)
+        except template.VariableDoesNotExist:
+            items_per_page = 100
+
+        if isinstance(slug_or_queryset, types.UnicodeType):
+            try:
+                obj = Listing.permitted.get(slug=slug_or_queryset)
+            except Listing.DoesNotExist:
+                return ''
+
+        else:
+            class ListingProxy:
+                """Helper class emulating Listing API so AbstractBaseStyle
+                works. Essentially a record class."""
+
+                def __init__(self, queryset, title, style, items_per_page):
+                    self.queryset = queryset
+                    self.title = title
+                    self.style = style
+                    self.items_per_page = items_per_page
+
+            obj = ListingProxy(slug_or_queryset, title, style, items_per_page)
 
         return getattr(listing_styles, obj.style)(obj).render(context)
 
@@ -293,4 +336,3 @@ class ListingQuerysetNode(template.Node):
             context[as_var] = None
 
         return ''
-
