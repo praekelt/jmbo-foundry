@@ -68,25 +68,25 @@ class LoginForm(AuthenticationForm):
             if self.user_cache is None:
                 v = preferences.LoginPreferences.raw_login_fields
                 if v == 'email':
-                    raise forms.ValidationError(_("Please enter a correct \
-                        email address and password. Note that both fields \
-                        are case-sensitive."))
+                    msg = "Please enter a correct email address and password. \
+Note that both fields are case-sensitive."
+                    raise forms.ValidationError(_(msg))
                 elif v == 'mobile_number':
-                    raise forms.ValidationError(_("Please enter a correct \
-                        mobile number and password. Note that both fields \
-                        are case-sensitive."))
+                    msg = "Please enter a correct mobile number and password. \
+Note that both fields are case-sensitive."
+                    raise forms.ValidationError(_(msg))
                 elif v == 'username,email':
-                    raise forms.ValidationError(_("Please enter a correct \
-                        username or email address and password. Note that \
-                        both fields are case-sensitive."))
+                    msg = "Please enter a correct username or email address and password. \
+Note that both fields are case-sensitive."
+                    raise forms.ValidationError(_(msg))
                 elif v == 'username,mobile_number':
-                    raise forms.ValidationError(_("Please enter a correct \
-                        username or mobile number and password. Note that \
-                        both fields are case-sensitive."))
+                     msg = "Please enter a correct username or mobile number and password. \
+Note that both fields are case-sensitive."
+                     raise forms.ValidationError(_(msg))
                 else:
-                    raise forms.ValidationError(_("Please enter a correct \
-                        username and password. Note that both fields are \
-                        case-sensitive."))
+                    msg = "Please enter a correct username and password. \
+Note that both fields are case-sensitive."
+                    raise forms.ValidationError(_(msg))
             elif not self.user_cache.is_active:
                 raise forms.ValidationError(_("This account is inactive."))
         self.check_for_test_cookie()

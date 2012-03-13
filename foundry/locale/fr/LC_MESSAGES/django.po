@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-20 09:05+0100\n"
+"POT-Creation-Date: 2012-03-13 11:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: forms.py:32
+#: forms.py:33
 msgid ""
 "I accept the <a href=\"/terms-and-conditions\" target=\"external\">terms and "
 "conditions</a>"
@@ -25,49 +25,53 @@ msgstr ""
 "J'accepte les <a href=\"/terms-and-conditions\" target=\"external"
 "\">conditions générales</a>"
 
-#: forms.py:51 models.py:337
+#: forms.py:52 models.py:398
 msgid "Email address"
 msgstr "Adresse électronique"
 
-#: forms.py:53 forms.py:186 forms.py:211 models.py:338
+#: forms.py:54 forms.py:175 forms.py:225 models.py:399
 msgid "Mobile number"
 msgstr "Numéro de mobile"
 
-#: forms.py:55 models.py:316
+#: forms.py:56 models.py:377
 msgid "Username or email address"
 msgstr "Nom d'utilisateur ou adresse électronique"
 
-#: forms.py:57 models.py:317
+#: forms.py:58 models.py:378
 msgid "Username or mobile number"
 msgstr "Nom d'utilisateur ou numéro de mobile"
 
-#: forms.py:78
+#: forms.py:91
+msgid "This account is inactive."
+msgstr ""
+
+#: forms.py:110
 msgid "Please enter a valid number"
 msgstr "Entrer s.v.p un numéro valable"
 
-#: forms.py:92
+#: forms.py:124
 #, python-format
 msgid ""
 "The %(pretty_name)s is already in use. Please supply a different %"
 "(pretty_name)s."
 msgstr "Le numéro %(pretty_name)s est actuellement utilisé."
 
-#: forms.py:132
+#: forms.py:168
 msgid "This name is visible to other users on the site."
 msgstr "Noter que ce nom est visible aux autres utilisateurs de ce site."
 
-#: forms.py:133
+#: forms.py:169
 msgid "We never store your password in its original form."
 msgstr ""
 "Noter que nous ne gardons jamais un mot de passe dans sa forme originelle."
 
-#: forms.py:135
+#: forms.py:171
 msgid "Your email address is required in case you lose your password."
 msgstr ""
 "On vous demande votre adresse électronique au cas où vous oubliez votre nom "
 "de passe."
 
-#: forms.py:137
+#: forms.py:176
 msgid ""
 "The number must be in international format and may start with a + sign. All "
 "other characters must be numbers. No spaces allowed. An example is "
@@ -77,128 +81,156 @@ msgstr ""
 "commencer avec +. Tous les autres caractères doivent être les numéros. Les "
 "espaces sont interdites.  A titre d'exemple un numéro peut être +27821234567."
 
-#: forms.py:154
+#: forms.py:193
 msgid "Upload a picture"
 msgstr "Télécharger une image"
 
-#: forms.py:155
+#: forms.py:194
 msgid "JPG, GIF or PNG accepted. Square is best. Keep it under 1MB."
 msgstr ""
 "On accepte JPG, GIF et PNG. Une image carrée au maximum d'un MB est préférée."
 
-#: forms.py:165
+#: forms.py:204
 msgid "Please upload or select a picture."
 msgstr "Télécharger ou choisir s'il vous plait une image."
 
-#: forms.py:197
+#: forms.py:236
 msgid "The mobile number is not registered with the system."
 msgstr "Ce numéro de portable n'est pas enregistré sur le système."
 
-#: forms.py:238
+#: forms.py:273
 #, python-format
 msgid "Password reset on %s"
 msgstr "Mot de passe remis %s"
 
-#: forms.py:276
+#: forms.py:311
 msgid "Where do you live?"
 msgstr "Où habitez-vous?"
 
-#: forms.py:333 models.py:451 models.py:569
+#: forms.py:369 models.py:535 models.py:681
 msgid "Content"
 msgstr ""
 
-#: models.py:241
+#: forms.py:402
+#, python-format
+msgid "You have already sent a friend request to %s"
+msgstr ""
+
+#: forms.py:406
+#, python-format
+msgid "You are already friends with %s"
+msgstr ""
+
+#: forms.py:410
+#, python-format
+msgid "You may not be friends with %s"
+msgstr ""
+
+#: models.py:302
 msgid "A private site requires a visitor to be logged in to view any content."
 msgstr ""
 
-#: models.py:257
+#: models.py:318
 msgid "Fields to display on the registration form."
 msgstr ""
 
-#: models.py:264
+#: models.py:325
 msgid ""
 "Set fields which are not required by default as required on the registration "
 "form."
 msgstr ""
 
-#: models.py:271
+#: models.py:332
 msgid "Set fields which must be unique on the registration form."
 msgstr ""
 
-#: models.py:313
+#: models.py:374
 msgid "Username only"
 msgstr ""
 
-#: models.py:314
+#: models.py:375
 msgid "Email address only"
 msgstr ""
 
-#: models.py:315
+#: models.py:376
 msgid "Mobile number only"
 msgstr ""
 
-#: models.py:319
+#: models.py:380
 msgid "Users may log in with more than one identifier."
 msgstr ""
 
-#: models.py:340
+#: models.py:401
 msgid "The field a user must enter to retrieve his password."
 msgstr ""
 
-#: models.py:360 templates/basic/foundry/join_finish.html:6
+#: models.py:421 templates/basic/foundry/join_finish.html:20
 msgid "Set your profile picture"
 msgstr "Préparer votre image de profil"
 
-#: models.py:450
+#: models.py:534
 msgid "Header"
 msgstr ""
 
-#: models.py:452
+#: models.py:536
 msgid "Footer"
 msgstr ""
 
-#: urls.py:118 templates/basic/foundry/inclusion_tags/footer.html:10
+#: models.py:577
+msgid "Left"
+msgstr ""
+
+#: models.py:578
+msgid "Right"
+msgstr ""
+
+#: urls.py:117 templates/basic/foundry/inclusion_tags/footer.html:10
 msgid "About us"
 msgstr "Au sujet de nous"
 
-#: urls.py:127
+#: urls.py:126
 msgid "Terms and conditions"
 msgstr "Conditions générales"
 
-#: urls.py:136
+#: urls.py:135
 msgid "Privacy policy"
 msgstr "Notre politique de confidentialité"
 
-#: views.py:66
+#: views.py:54
 msgid "You have successfully signed up to the site."
 msgstr "Vous vous êtes bien inscrit au site."
 
-#: views.py:197
+#: views.py:150
 #, python-format
 msgid "The blog post %s has been saved"
 msgstr "La poste de blog %s a été enregistrée"
 
-#: views.py:212
+#: views.py:165
 msgid "Blog Posts"
 msgstr "Poste"
 
-#: templates/admin/base.html:33
+#: views.py:253
+#, python-format
+msgid "You are now friends with %s."
+msgstr ""
+
+#: templates/admin/base.html:42
 msgid "Welcome,"
 msgstr "Bienvenu,"
 
-#: templates/admin/base.html:38
+#: templates/admin/base.html:47
 msgid "Documentation"
 msgstr ""
 
-#: templates/admin/base.html:46
+#: templates/admin/base.html:55
 msgid "Change password"
 msgstr ""
 
-#: templates/admin/base.html:53
+#: templates/admin/base.html:62
 msgid "Log out"
 msgstr ""
 
-#: templates/admin/base.html:60
+#: templates/admin/base.html:69
 #: templates/basic/registration/password_reset_complete.html:4
 #: templates/basic/registration/password_reset_confirm.html:8
 #: templates/basic/registration/password_reset_done.html:4
@@ -244,34 +276,88 @@ msgstr ""
 msgid "Unknown content"
 msgstr ""
 
-#: templates/basic/comments/form.html:21
+#: templates/basic/404.html:6
+msgid "Page not found"
+msgstr ""
+
+#: templates/basic/404.html:7
+msgid "The page you requested cannot be found."
+msgstr ""
+
+#: templates/basic/500.html:13
+msgid "A system error has occurred"
+msgstr ""
+
+#: templates/basic/500.html:14
+msgid ""
+"The system has encountered an error. The relevant people have already been "
+"notified."
+msgstr ""
+
+#: templates/basic/comments/form.html:23
+#: templates/basic/comments/preview.html:40
 msgid "Post"
 msgstr "Poste"
 
-#: templates/basic/comments/form.html:22
+#: templates/basic/comments/form.html:24
+#: templates/basic/comments/preview.html:41
 msgid "Preview"
 msgstr "Avant-première"
 
-#: templates/basic/comments/list.html:28
+#: templates/basic/comments/list.html:29
 msgid "All messages"
 msgstr "Tous les messages"
 
-#: templates/basic/comments/list.html:31
+#: templates/basic/comments/list.html:32
 msgid "My messages"
 msgstr "Mes messages"
 
-#: templates/basic/comments/list.html:40
+#: templates/basic/comments/list.html:42
 msgid "Show"
 msgstr "Présenter"
 
-#: templates/basic/comments/list.html:65
+#: templates/basic/comments/list.html:67
+#: templates/basic/comments/list_new_comments.html:13
 #: templates/basic/includes/list_meta.html:10
 msgid "ago"
 msgstr "il ya"
 
-#: templates/basic/comments/list.html:70
+#: templates/basic/comments/list.html:72
+#: templates/basic/comments/list_new_comments.html:18
 msgid "Reply"
 msgstr "Répondre"
+
+#: templates/basic/comments/preview.html:10
+#: templates/basic/comments/preview.html:21
+msgid "Preview your comment"
+msgstr ""
+
+#: templates/basic/comments/preview.html:19
+msgid "Please correct the error below"
+msgid_plural "Please correct the errors below"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/basic/comments/preview.html:24
+msgid "and"
+msgstr ""
+
+#: templates/basic/comments/preview.html:24
+msgid "Post your comment"
+msgstr ""
+
+#: templates/basic/comments/preview.html:24
+msgid "or make changes"
+msgstr ""
+
+#: templates/basic/foundry/coming_soon.html:6
+msgid "Coming soon"
+msgstr "A suivre"
+
+#: templates/basic/foundry/coming_soon.html:7
+msgid "We are busy creating this page. It will soon be available."
+msgstr ""
+"Nous sommes en train de créer cette page. Cela sera bientôt disponible."
 
 #: templates/basic/foundry/create_blogpost.html:6
 msgid "Create a blog post"
@@ -281,15 +367,24 @@ msgstr "Créer une poste de blog"
 msgid "Save"
 msgstr "Garder"
 
-#: templates/basic/foundry/join.html:6 templates/basic/foundry/join.html:18
+#: templates/basic/foundry/friend_request_form.html:8
+#, python-format
+msgid "Send friend request to %(username)s"
+msgstr ""
+
+#: templates/basic/foundry/friend_request_form.html:15
+msgid "Send request"
+msgstr ""
+
+#: templates/basic/foundry/join.html:7 templates/basic/foundry/join.html:13
 msgid "Sign up"
 msgstr "Enregistrer"
 
-#: templates/basic/foundry/join_finish.html:12
+#: templates/basic/foundry/join_finish.html:26
 msgid "Or, choose from our selection"
 msgstr "Ou choisir un dossier de notre selection"
 
-#: templates/basic/foundry/join_finish.html:19
+#: templates/basic/foundry/join_finish.html:33
 msgid "Finish"
 msgstr "Finir"
 
@@ -300,6 +395,10 @@ msgstr "Commentaires"
 #: templates/basic/foundry/member_notifications.html:7
 msgid "Notifications"
 msgstr "Notifications"
+
+#: templates/basic/foundry/my_friends.html:7
+msgid "My friends"
+msgstr ""
 
 #: templates/basic/foundry/user_detail.html:9
 msgid "This user does not have a public profile."
@@ -322,8 +421,8 @@ msgid "Sign out"
 msgstr "Fermer la session"
 
 #: templates/basic/foundry/inclusion_tags/header.html:10
-#: templates/basic/registration/login.html:6
-#: templates/basic/registration/login.html:13
+#: templates/basic/registration/login.html:7
+#: templates/basic/registration/login.html:14
 msgid "Sign in"
 msgstr "S'inscrire"
 
@@ -353,15 +452,15 @@ msgstr "le"
 msgid "You are now logged out"
 msgstr "Vous avez maintenant fermé la session"
 
-#: templates/basic/registration/login.html:15
+#: templates/basic/registration/login.html:16
 msgid "Forgot your password?"
 msgstr "Avez-vous oublié votre mot de passe?"
 
-#: templates/basic/registration/login.html:16
+#: templates/basic/registration/login.html:17
 msgid "Not registered?"
 msgstr "Pas encore inscrit?"
 
-#: templates/basic/registration/login.html:16
+#: templates/basic/registration/login.html:17
 msgid "Sign up here"
 msgstr "Enregistrer"
 
@@ -370,7 +469,7 @@ msgstr "Enregistrer"
 #: templates/basic/registration/password_reset_done.html:4
 #: templates/basic/registration/password_reset_form.html:5
 #: templates/basic/registration/password_reset_form.html:7
-#: templates/basic/registration/password_reset_form.html:10
+#: templates/basic/registration/password_reset_form.html:12
 msgid "Password reset"
 msgstr "Mot de passe remis"
 
@@ -459,7 +558,7 @@ msgstr "Allez à la page suivante et choisissez un nouveau mot de passe:"
 msgid "Your username, in case you've forgotten:"
 msgstr "Au cas où vous l'avez oublié, votre nom d'utilisateur est:"
 
-#: templates/basic/registration/password_reset_form.html:13
+#: templates/basic/registration/password_reset_form.html:15
 msgid ""
 "Forgotten your password? Enter your e-mail address below, and we'll e-mail "
 "instructions for setting a new one."
@@ -467,7 +566,7 @@ msgstr ""
 "Avez-vous oublié votre mot de passe ? Entrez votre adresse électronique et "
 "nous allons vous expliquer comment vous pouvez créer un nouveau mot de passe."
 
-#: templates/basic/registration/password_reset_form.html:16
+#: templates/basic/registration/password_reset_form.html:18
 msgid ""
 "Forgotten your password? Enter your mobile number below, and we'll send "
 "instructions for setting a new one."
@@ -476,6 +575,6 @@ msgstr ""
 "mobile au-dessous et nous vous expliquerons comment vous pouvez en créer un "
 "nouveau mot de passe."
 
-#: templates/basic/registration/password_reset_form.html:22
+#: templates/basic/registration/password_reset_form.html:25
 msgid "Reset my password"
 msgstr "Remettre mon mot de passe"
