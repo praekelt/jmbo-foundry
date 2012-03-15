@@ -10,6 +10,7 @@ setup(
     license='BSD',
     url='http://github.com/praekelt/jmbo-foundry',
     packages = find_packages(),
+    dependency_links = ['http://github.com/praekelt/jmbo-analytics/tarball/master#egg=jmbo-analytics',],
     install_requires = [
         # todo: eliminate dependencies handled by apps themselves
         'django-section',
