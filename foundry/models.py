@@ -9,7 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.contrib.comments.models import Comment as BaseComment
 from django.contrib.sites.models import Site
-from django.db.models.signals import m2m_changed
+from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
 
 from ckeditor.fields import RichTextField
@@ -430,6 +430,11 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractContact
                 pass
 
     @property
+    def last_5_comments(self):
+        """Return last 5 comments made by the member"""
+        return FoundryComment.objects.filter(user=self).order_by('id')[:5]
+
+    @property
     def number_of_comments(self):
         """Return number of comments made by the member"""
         return FoundryComment.objects.filter(user=self).count()
@@ -439,6 +444,12 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractContact
         """Return true if member has notifications"""
         return self.notification_set.all().exists()
     
+    def can_friend(self, friend):
+        # Can't friend yourself
+        if self == friend:
+            return False
+        return not MemberFriend.objects.filter(member=self, friend=friend).exists()
+
 
 class DefaultAvatar(ImageModel):
     """A set of avatars users can choose from"""
@@ -703,6 +714,17 @@ class MemberFriend(models.Model):
             ('declined', 'Declined')
         )
     )
+    
+    def save(self, *args, **kwargs):        
+        is_new = not self.id
+
+        super(MemberFriend, self).save(*args, **kwargs)        
+
+        if is_new:
+            link, dc = Link.objects.get_or_create(
+                title=ugettext("You have pending friend requests"), view_name='my-friend-requests'
+            )
+            Notification.objects.create(member=self.friend, link=link)
 
 
 @receiver(m2m_changed)

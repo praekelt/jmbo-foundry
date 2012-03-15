@@ -196,7 +196,7 @@ def user_detail(request, username):
     # Check if user has a corresponding Member object. Use that if possible.
     try:
         obj = Member.objects.get(username=username)
-        template = 'foundry/member_detail.html'
+        return HttpResponseRedirect(reverse('member-detail', args=[username]))
     except Member.DoesNotExist:
         obj = get_object_or_404(User, username=username)
         template = 'foundry/user_detail.html'
@@ -208,8 +208,14 @@ def user_detail(request, username):
 
 def member_detail(request, username):
     obj = get_object_or_404(Member, username=username)
+
+    can_friend = False
+    if request.user.is_authenticated() and isinstance(request.user, Member):
+        can_friend = request.user.can_friend(obj)
+
     extra = {}
     extra['object'] = obj
+    extra['can_friend'] = can_friend
     return render_to_response('foundry/member_detail.html', extra, context_instance=RequestContext(request))
 
 
@@ -250,7 +256,7 @@ def friend_request(request, member_id):
         form = FriendRequestForm(request.POST, initial=dict(member=request.user, friend=friend))
         if form.is_valid():
             instance = form.save()
-            msg = _("You are now friends with %s." % instance.friend.username)
+            msg = _("Your invitation has been sent to %s." % instance.friend.username)
             messages.success(request, msg, fail_silently=True)
             return HttpResponseRedirect(reverse('my-friends'))
     else:

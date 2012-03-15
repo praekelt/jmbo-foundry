@@ -391,31 +391,36 @@ class FriendRequestForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(FriendRequestForm, self).__init__(*args, **kwargs)
+        self._meta.fields = ('member', 'friend', 'state')
 
     def clean(self):
         cleaned_data = super(FriendRequestForm, self).clean()
         member = self.initial['member']
         friend = self.initial['friend']
+        if member == friend:
+            raise forms.ValidationError(
+                _("You may not be friends with yourself.")
+            )
+
         q = MemberFriend.objects.filter(member=member, friend=friend)
         if q.filter(state='invited').exists():
             raise forms.ValidationError(
-                _("You have already sent a friend request to %s" % friend.username)
+                _("You have already sent a friend request to %s." % friend.username)
             )
         if q.filter(state='accepted').exists():
             raise forms.ValidationError(
-                _("You are already friends with %s" % friend.username)
+                _("You are already friends with %s." % friend.username)
             )
         if q.filter(state='declined').exists():
             raise forms.ValidationError(
-                _("You may not be friends with %s" % friend.username)
+                _("You may not be friends with %s." % friend.username)
             )
         cleaned_data['member'] = member
         cleaned_data['friend'] = friend
-        cleaned_data['state'] = 'accepted'
+        cleaned_data['state'] = 'invited'
         return cleaned_data
 
     def save(self, commit=True):
-        self._meta.fields = ('member', 'friend', 'state')
         instance = super(FriendRequestForm, self).save(commit=commit)
         return instance
 
