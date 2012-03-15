@@ -280,6 +280,20 @@ class MyFriends(GenericObjectList):
 my_friends = MyFriends()
 
 
+class MyFriendRequests(GenericObjectList):
+
+    def get_queryset(self, *args, **kwargs):
+        return MemberFriend.objects.filter(
+            member=self.request.user, state='invited'
+        )
+
+    def get_paginate_by(self, *args, **kwargs):
+        return 20
+
+
+# todo: figure out how to wrap with login_required
+my_friend_requests = MyFriendRequests()
+
 @requires_csrf_token
 def server_error(request, template_name='500.html'):
     t = loader.get_template(template_name)

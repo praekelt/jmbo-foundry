@@ -275,6 +275,14 @@ urlpatterns = patterns('',
         name='my-friends'
     ),
 
+    # My friend requests
+    url(
+        r'^my-friend-requests/$',
+        'foundry.views.my_friend_requests',
+        {'template_name':'foundry/my_friend_requests.html'},
+        name='my-friend-requests'
+    ),
+
     # Test views
     url(
         r'^test-plain-response/$',
