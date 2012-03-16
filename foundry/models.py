@@ -448,7 +448,9 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractContact
         # Can't friend yourself
         if self == friend:
             return False
-        return not MemberFriend.objects.filter(member=self, friend=friend).exists()
+        return not MemberFriend.objects.filter(
+            Q(member=self, friend=friend) | Q(member=friend, friend=self)
+        ).exists()
 
 
 class DefaultAvatar(ImageModel):
@@ -724,7 +726,19 @@ class MemberFriend(models.Model):
             link, dc = Link.objects.get_or_create(
                 title=ugettext("You have pending friend requests"), view_name='my-friend-requests'
             )
-            Notification.objects.create(member=self.friend, link=link)
+            Notification.objects.get_or_create(member=self.friend, link=link)
+
+    def accept(self):
+        self.state = 'accepted'
+        self.save()
+
+        # Delete notifications if no more friend requests        
+        if not MemberFriend.objects.filter(friend=self.friend, state='invited').exclude(id=self.id).exists():
+            link, dc = Link.objects.get_or_create(
+                title=ugettext("You have pending friend requests"), view_name='my-friend-requests'
+            )
+            for obj in Notification.objects.filter(member=self.friend, link=link):
+                obj.delete()
 
 
 @receiver(m2m_changed)

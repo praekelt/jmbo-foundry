@@ -253,14 +253,21 @@ def fetch_new_comments_ajax(request, content_type_id, oid, last_comment_id):
 def friend_request(request, member_id):
     friend = get_object_or_404(Member, id=member_id)
     if request.method == 'POST':
-        form = FriendRequestForm(request.POST, initial=dict(member=request.user, friend=friend))
+        form = FriendRequestForm(
+            request.POST, 
+            initial=dict(member=request.user, friend=friend), 
+            request=request
+        )
         if form.is_valid():
             instance = form.save()
             msg = _("Your invitation has been sent to %s." % instance.friend.username)
             messages.success(request, msg, fail_silently=True)
             return HttpResponseRedirect(reverse('my-friends'))
     else:
-        form = FriendRequestForm(initial=dict(member=request.user, friend=friend))
+        form = FriendRequestForm(
+            initial=dict(member=request.user, friend=friend),
+            request=request
+        )
 
     extra = dict(form=form, friend=friend)
     return render_to_response('foundry/friend_request_form.html', extra, context_instance=RequestContext(request))
@@ -269,9 +276,18 @@ def friend_request(request, member_id):
 class MyFriends(GenericObjectList):
 
     def get_queryset(self, *args, **kwargs):
-        return MemberFriend.objects.filter(
-            member=self.request.user, state='accepted'
-        )
+        # todo: find a better way to query for friends
+        values_list = MemberFriend.objects.filter(
+            Q(member=self.request.user)|Q(friend=self.request.user), 
+            state='accepted'
+        ).values_list('member', 'friend')
+        ids = []
+        for member_id, friend_id in values_list:
+            if self.request.user.id != member_id:
+                ids.append(member_id)
+            if self.request.user.id != friend_id:
+                ids.append(friend_id)
+        return Member.objects.filter(id__in=ids)
 
     def get_paginate_by(self, *args, **kwargs):
         return 20
@@ -284,7 +300,7 @@ class MyFriendRequests(GenericObjectList):
 
     def get_queryset(self, *args, **kwargs):
         return MemberFriend.objects.filter(
-            member=self.request.user, state='invited'
+            friend=self.request.user, state='invited'
         )
 
     def get_paginate_by(self, *args, **kwargs):
@@ -293,6 +309,20 @@ class MyFriendRequests(GenericObjectList):
 
 # todo: figure out how to wrap with login_required
 my_friend_requests = MyFriendRequests()
+
+
+@login_required
+def accept_friend_request(request, memberfriend_id):
+    # This single check is sufficient to ensure a valid request
+    # todo: friendlier page than a 404. Break it down do inform "you are 
+    # already friends" etc.
+    obj = get_object_or_404(
+        MemberFriend, id=memberfriend_id, friend=request.user, state='invited'    
+    )
+    obj.accept()
+    extra = {'username': obj.member.username}
+    return render_to_response('foundry/friend_request_accepted.html', extra, context_instance=RequestContext(request))
+
 
 @requires_csrf_token
 def server_error(request, template_name='500.html'):

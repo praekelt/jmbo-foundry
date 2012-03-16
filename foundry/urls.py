@@ -283,6 +283,14 @@ urlpatterns = patterns('',
         name='my-friend-requests'
     ),
 
+    # Accept friend request
+    url(
+        r'^accept-friend-request/(?P<memberfriend_id>\d+)/$',
+        'foundry.views.accept_friend_request',
+        {},
+        name='accept-friend-request'
+    ),
+
     # Test views
     url(
         r'^test-plain-response/$',
