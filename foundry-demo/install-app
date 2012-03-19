@@ -1,0 +1,8 @@
+./bin/foundry syncdb
+./bin/foundry migrate foundry
+./bin/foundry migrate category
+./bin/foundry migrate jmbo
+./bin/foundry loaddata src/jmbo-foundry/foundry/fixtures/photosizes.json
+./bin/foundry loaddata src/jmbo-post/post/fixtures/photosizes.json
+./bin/foundry loaddata src/jmbo-gallery/gallery/fixtures/photosizes.json
+./bin/foundry loaddata src/jmbo/jmbo/fixtures/photosizes.json
