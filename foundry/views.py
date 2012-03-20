@@ -323,6 +323,17 @@ def accept_friend_request(request, memberfriend_id):
     extra = {'username': obj.member.username}
     return render_to_response('foundry/friend_request_accepted.html', extra, context_instance=RequestContext(request))
 
+@login_required
+def de_friend(request, member_id):
+    # This single check is sufficient to ensure a valid request
+    # todo: friendlier page than a 404. Break it down do inform "you are 
+    # already friends" etc.
+    obj = get_object_or_404(
+        MemberFriend, member=request.user, friend__id=member_id, state='accepted'    
+    )
+    obj.delete()
+    return HttpResponseRedirect(reverse('my-friends'))
+
 
 @requires_csrf_token
 def server_error(request, template_name='500.html'):

@@ -291,6 +291,14 @@ urlpatterns = patterns('',
         name='accept-friend-request'
     ),
 
+    # De-friend a member
+    url(
+        r'^de-friend/(?P<member_id>\d+)/$',
+        'foundry.views.de_friend',
+        {},
+        name='de-friend'
+    ),
+
     # Test views
     url(
         r'^test-plain-response/$',
