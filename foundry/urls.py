@@ -3,10 +3,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 
 from preferences import preferences
 
 from foundry.models import Page
+from foundry import views
 from foundry.forms import LoginForm, PasswordResetForm
 
 admin.autodiscover()
@@ -222,7 +224,7 @@ urlpatterns = patterns('',
     # Member notifications
     url(
         r'^member-notifications/$', 
-        'foundry.views.member_notifications', 
+        login_required(views.member_notifications), 
         {},
         name='member-notifications'
     ),
@@ -262,7 +264,7 @@ urlpatterns = patterns('',
     # Friend request
     url(
         r'^friend-request/(?P<member_id>\d+)/$',
-        'foundry.views.friend_request',
+        login_required(views.friend_request),
         {},
         name='friend-request'
     ),
@@ -270,7 +272,7 @@ urlpatterns = patterns('',
     # My friends
     url(
         r'^my-friends/$',
-        'foundry.views.my_friends',
+        login_required(views.my_friends),
         {'template_name':'foundry/my_friends.html'},
         name='my-friends'
     ),
@@ -278,7 +280,7 @@ urlpatterns = patterns('',
     # My friend requests
     url(
         r'^my-friend-requests/$',
-        'foundry.views.my_friend_requests',
+        login_required(views.my_friend_requests),
         {'template_name':'foundry/my_friend_requests.html'},
         name='my-friend-requests'
     ),
@@ -286,7 +288,7 @@ urlpatterns = patterns('',
     # Accept friend request
     url(
         r'^accept-friend-request/(?P<memberfriend_id>\d+)/$',
-        'foundry.views.accept_friend_request',
+        login_required(views.accept_friend_request),
         {},
         name='accept-friend-request'
     ),
@@ -294,7 +296,7 @@ urlpatterns = patterns('',
     # De-friend a member
     url(
         r'^de-friend/(?P<member_id>\d+)/$',
-        'foundry.views.de_friend',
+        login_required(views.de_friend),
         {},
         name='de-friend'
     ),

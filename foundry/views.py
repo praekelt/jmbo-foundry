@@ -249,7 +249,6 @@ def fetch_new_comments_ajax(request, content_type_id, oid, last_comment_id):
     return render_to_response('comments/list_new_comments.html', {}, context_instance=context)
 
 
-@login_required
 def friend_request(request, member_id):
     friend = get_object_or_404(Member, id=member_id)
     if request.method == 'POST':
@@ -292,7 +291,6 @@ class MyFriends(GenericObjectList):
     def get_paginate_by(self, *args, **kwargs):
         return 20
 
-# todo: figure out how to wrap with login_required
 my_friends = MyFriends()
 
 
@@ -306,12 +304,9 @@ class MyFriendRequests(GenericObjectList):
     def get_paginate_by(self, *args, **kwargs):
         return 20
 
-
-# todo: figure out how to wrap with login_required
 my_friend_requests = MyFriendRequests()
 
 
-@login_required
 def accept_friend_request(request, memberfriend_id):
     # This single check is sufficient to ensure a valid request
     # todo: friendlier page than a 404. Break it down do inform "you are 
@@ -323,7 +318,6 @@ def accept_friend_request(request, memberfriend_id):
     extra = {'username': obj.member.username}
     return render_to_response('foundry/friend_request_accepted.html', extra, context_instance=RequestContext(request))
 
-@login_required
 def de_friend(request, member_id):
     # This single check is sufficient to ensure a valid request
     # todo: friendlier page than a 404. Break it down do inform "you are 
