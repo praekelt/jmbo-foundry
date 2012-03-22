@@ -1,4 +1,5 @@
 import datetime
+import random
 
 from django.conf import settings
 from django.contrib.auth import authenticate, login, get_backends
@@ -208,14 +209,14 @@ def user_detail(request, username):
 
 def member_detail(request, username):
     obj = get_object_or_404(Member, username=username)
-
-    can_friend = False
-    if request.user.is_authenticated() and isinstance(request.user, Member):
-        can_friend = request.user.can_friend(obj)
-
+    
+    is_self = True if obj.id == request.user.id else False
+    
     extra = {}
     extra['object'] = obj
-    extra['can_friend'] = can_friend
+    extra['is_self'] = is_self
+    extra['notifications'] = Notification.objects.filter(member=request.user).count() if is_self else False
+    extra['can_friend'] = request.user.can_friend(obj) if request.user.is_authenticated() and isinstance(request.user, Member) else False
     return render_to_response('foundry/member_detail.html', extra, context_instance=RequestContext(request))
 
 
@@ -249,7 +250,6 @@ def fetch_new_comments_ajax(request, content_type_id, oid, last_comment_id):
     return render_to_response('comments/list_new_comments.html', {}, context_instance=context)
 
 
-@login_required
 def friend_request(request, member_id):
     friend = get_object_or_404(Member, id=member_id)
     if request.method == 'POST':
@@ -274,25 +274,15 @@ def friend_request(request, member_id):
 
 
 class MyFriends(GenericObjectList):
-
+    
+    
     def get_queryset(self, *args, **kwargs):
-        # todo: find a better way to query for friends
-        values_list = MemberFriend.objects.filter(
-            Q(member=self.request.user)|Q(friend=self.request.user), 
-            state='accepted'
-        ).values_list('member', 'friend')
-        ids = []
-        for member_id, friend_id in values_list:
-            if self.request.user.id != member_id:
-                ids.append(member_id)
-            if self.request.user.id != friend_id:
-                ids.append(friend_id)
-        return Member.objects.filter(id__in=ids)
-
+        
+        return self.request.user.member.get_friends()
+    
     def get_paginate_by(self, *args, **kwargs):
         return 20
 
-# todo: figure out how to wrap with login_required
 my_friends = MyFriends()
 
 
@@ -306,12 +296,9 @@ class MyFriendRequests(GenericObjectList):
     def get_paginate_by(self, *args, **kwargs):
         return 20
 
-
-# todo: figure out how to wrap with login_required
 my_friend_requests = MyFriendRequests()
 
 
-@login_required
 def accept_friend_request(request, memberfriend_id):
     # This single check is sufficient to ensure a valid request
     # todo: friendlier page than a 404. Break it down do inform "you are 
@@ -323,7 +310,6 @@ def accept_friend_request(request, memberfriend_id):
     extra = {'username': obj.member.username}
     return render_to_response('foundry/friend_request_accepted.html', extra, context_instance=RequestContext(request))
 
-@login_required
 def de_friend(request, member_id):
     # This single check is sufficient to ensure a valid request
     # todo: friendlier page than a 404. Break it down do inform "you are 

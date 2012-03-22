@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n jmbo_inclusion_tags %} 
+{% load i18n jmbo_inclusion_tags foundry_tags %} 
 
 {% block content %}
     <div class="content member-friends">
@@ -16,10 +16,10 @@
 	                <div class="title">
 	                    <a href="{{ object.get_absolute_url }}">{{ object.username }}</a>
 	                </div>
-	                
 	                <div class="meta">
                         <a href="{% url de-friend object.id %}">De-friend</a>
                     </div>
+                    {% other_friends request.user object_list object %}
 	           </div>
 	        {% empty %}
 	           <div>

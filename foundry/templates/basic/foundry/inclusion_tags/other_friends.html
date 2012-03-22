@@ -1,0 +1,15 @@
+{% if other_friends %}
+	<div class="friend_finder">
+	    {% for friend in other_friends %}
+	        <a href="{{ friend.get_absolute_url }}">
+	            <img src="{{ friend.get_thumbnail_LAYER_url }}" class="left" />
+	        </a>
+	        <div class="title">
+	            <a href="{{ friend.get_absolute_url }}">{{ friend.username }}</a>
+	        </div>
+	        <div class="meta">
+	            <a href="{% url friend-request friend.id %}">Friend</a>
+	        </div>
+	    {% endfor %}
+	</div>
+{% endif %}
