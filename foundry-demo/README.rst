@@ -11,6 +11,9 @@ Prerequisites
 Installation
 ------------
 
+Download the sample project and extract it.
+ https://github.com/downloads/praekelt/jmbo-foundry/jmbo-demo.tar.gz
+
 From the terminal::
 
  cd jmbo-demo
