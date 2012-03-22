@@ -61,11 +61,13 @@ http://localhost:8000/
 http://localhost:8000/admin/ #for admin interface
 
 
+
 Foundry App CMS
 ===============
 
 Admin Interface Stuff
 ---------------------
+
 #. Preferences
 
  - Setup General Preferences
@@ -80,6 +82,7 @@ Admin Interface Stuff
 
 Themeing
 --------
+
 Place static content in `/jmbo-demo/static/`. `web` and `basic` are provided for the respective theming requirements. `basic` is the fallback theme to be used.
  - `css/custom.css` #your custom css
  - `images/logo.png` #your own log
