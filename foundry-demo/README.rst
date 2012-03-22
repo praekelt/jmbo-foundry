@@ -19,7 +19,9 @@ From the terminal::
  cd jmbo-demo
  virtualenv --no-site-packages ve && source ve/bin/activate
  python bootstrap.py
- ./bin/buildout -N -c dev.cfg (if it fails with `connection reset by peer` just run it again) #This often take a while, so go ahead and make yourself a cup of coffee
+ ./bin/buildout -N -c dev.cfg (if it fails with `connection reset by peer` just run it again) 
+
+#This often takes a while, so go ahead and make yourself a cup of coffee
 
 
 MySql Setup
