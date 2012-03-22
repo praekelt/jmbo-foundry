@@ -476,9 +476,7 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractContact
             return Member.objects.filter(id__in=ids).order_by('?'), ids
         
     def get_5_random_friends(self, exlude_ids=[]):
-        print 'get_5_random_friends'
         friends, _ = self.get_friends_with_ids(exlude_ids, 5)
-        print friends
         return friends
     
     five_random_friends = property(get_5_random_friends)

@@ -6,26 +6,8 @@
 	    <div class="foundry-container foundry-listing-vertical-thumbnail">
 	
 	        <div class="title">{% trans "My friends" %}</div>
-	
 	        <div class="items">
-	        {% for object in object_list %}
-	            <div class="item {% if forloop.first %}first{% endif %} {% if forloop.last %}last{% endif %}">
-	                <a href="{{ object.get_absolute_url }}">
-	                    <img src="{{ object.get_thumbnail_LAYER_url }}" class="left" />
-	                </a>
-	                <div class="title">
-	                    <a href="{{ object.get_absolute_url }}">{{ object.username }}</a>
-	                </div>
-	                <div class="meta">
-                        <a href="{% url de-friend object.id %}">De-friend</a>
-                    </div>
-                    {% other_friends request.user object_list object %}
-	           </div>
-	        {% empty %}
-	           <div>
-	               You have no friends yet.
-	           </div>
-	        {% endfor %}
+                {% my_friends request.user object_list %}
 	        </div>
 	
 	        {% pager page_obj %}

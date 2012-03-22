@@ -3,17 +3,16 @@
 {% load i18n %}
 
 {% block content %}
-<div class="member-notifications">    
-    <div class="title">{% blocktrans %}Notifications{% endblocktrans %}</div>
-    
-    <div class="foundry-container foundry-listing-vertical">
-        <div class="items">
-        {% for object in object_list %}
-            <div class="item {% if forloop.first %}first{% endif %} {% if forloop.last %}last{% endif %}">
-                <a href="{{ object.link.get_absolute_url }}">{{ object.link.title }}</a>
-            </div>
-        {% endfor %}
-    </div>
-    </div>
-</div>
+	<div class="content member-friends member-notifications">    
+	    <div class="title">{% blocktrans %}Notifications{% endblocktrans %}</div>
+	    <div class="foundry-container foundry-listing-vertical">
+	        <div class="items">
+	        {% for object in object_list %}
+	            <div class="item {% if forloop.first %}first{% endif %} {% if forloop.last %}last{% endif %}">
+	                <a href="{{ object.link.get_absolute_url }}">{{ object.link.title }}</a>
+	            </div>
+	        {% endfor %}
+	       </div>
+	    </div>
+	</div>
 {% endblock %}

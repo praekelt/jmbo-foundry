@@ -436,10 +436,13 @@ class FriendRequestForm(forms.ModelForm):
             domain=current_site.domain,
         )
         content = render_to_string('foundry/friend_request_email.html', extra)
-        send_mail(
-            _("You have a new friend request from %(username)s on %(site_name)s") % extra, 
-            content, settings.DEFAULT_FROM_EMAIL, [instance.friend.email]
-        )
+        try:
+            send_mail(
+                _("You have a new friend request from %(username)s on %(site_name)s") % extra, 
+                content, settings.DEFAULT_FROM_EMAIL, [instance.friend.email]
+            )
+        except:
+            pass
 
         return instance
 

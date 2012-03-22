@@ -251,11 +251,12 @@ def fetch_new_comments_ajax(request, content_type_id, oid, last_comment_id):
 
 
 def friend_request(request, member_id):
+    member = get_object_or_404(Member, id=request.user.id)
     friend = get_object_or_404(Member, id=member_id)
     if request.method == 'POST':
         form = FriendRequestForm(
             request.POST, 
-            initial=dict(member=request.user, friend=friend), 
+            initial=dict(member=member, friend=friend), 
             request=request
         )
         if form.is_valid():
@@ -314,9 +315,14 @@ def de_friend(request, member_id):
     # This single check is sufficient to ensure a valid request
     # todo: friendlier page than a 404. Break it down do inform "you are 
     # already friends" etc.
-    obj = get_object_or_404(
-        MemberFriend, member=request.user, friend__id=member_id, state='accepted'    
-    )
+    try:
+        obj = MemberFriend.objects.get(member=request.user, friend__id=member_id, state='accepted')
+    except MemberFriend.DoesNotExist:
+        try:
+            obj = MemberFriend.objects.get(member__id=member_id, friend=request.user, state='accepted')
+        except MemberFriend.DoesNotExist:
+            return Http404('MemberFriend does not exist')
+        
     obj.delete()
     return HttpResponseRedirect(reverse('my-friends'))
 

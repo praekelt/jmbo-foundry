@@ -8,7 +8,7 @@ from django.conf import settings
 
 from preferences import preferences
 
-from foundry.models import Menu, Navbar, Listing, Page
+from foundry.models import Menu, Navbar, Listing, Page, Member
 from foundry.templatetags import listing_styles
 
 register = template.Library()
@@ -338,12 +338,15 @@ class ListingQuerysetNode(template.Node):
         return ''
 
 #------------------------------------------------------------------------------
-@register.inclusion_tag('foundry/inclusion_tags/other_friends.html')
-def other_friends(member, my_friends, friend):
+@register.inclusion_tag('foundry/inclusion_tags/my_friends.html')
+def my_friends(member, my_friends):
     """
-    Displays a list of 5 random friends of a friend, excluding the member itself.
+    Displays my friends and some of their's too.
     """
-    exclude_ids = [friend.id for friend in my_friends]
+    friends, exclude_ids = Member.objects.get(id=member.id).get_friends_with_ids()
     exclude_ids.append(member.id)
-    friends, _ = friend.get_friends_with_ids(exclude_ids, 5)
-    return { 'other_friends' : friends }
+    for friend in friends:
+        friend.other_friends, friend_ids = friend.get_friends_with_ids(exclude_ids, 5)
+        exclude_ids.extend(friend_ids)
+    
+    return { 'friends' : friends }
