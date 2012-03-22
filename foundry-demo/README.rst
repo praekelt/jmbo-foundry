@@ -84,5 +84,6 @@ Themeing
 --------
 
 Place static content in `/jmbo-demo/static/`. `web` and `basic` are provided for the respective theming requirements. `basic` is the fallback theme to be used.
+
  - `css/custom.css` #your custom css
  - `images/logo.png` #your own log
