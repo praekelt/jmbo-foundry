@@ -1,4 +1,5 @@
 import datetime
+import random
 
 from django.conf import settings
 from django.contrib.auth import authenticate, login, get_backends
@@ -208,14 +209,14 @@ def user_detail(request, username):
 
 def member_detail(request, username):
     obj = get_object_or_404(Member, username=username)
-
-    can_friend = False
-    if request.user.is_authenticated() and isinstance(request.user, Member):
-        can_friend = request.user.can_friend(obj)
-
+    
+    is_self = True if obj.id == request.user.id else False
+    
     extra = {}
     extra['object'] = obj
-    extra['can_friend'] = can_friend
+    extra['is_self'] = is_self
+    extra['notifications'] = Notification.objects.filter(member=request.user).count() if is_self else False
+    extra['can_friend'] = request.user.can_friend(obj) if request.user.is_authenticated() and isinstance(request.user, Member) else False
     return render_to_response('foundry/member_detail.html', extra, context_instance=RequestContext(request))
 
 
@@ -273,21 +274,12 @@ def friend_request(request, member_id):
 
 
 class MyFriends(GenericObjectList):
-
+    
+    
     def get_queryset(self, *args, **kwargs):
-        # todo: find a better way to query for friends
-        values_list = MemberFriend.objects.filter(
-            Q(member=self.request.user)|Q(friend=self.request.user), 
-            state='accepted'
-        ).values_list('member', 'friend')
-        ids = []
-        for member_id, friend_id in values_list:
-            if self.request.user.id != member_id:
-                ids.append(member_id)
-            if self.request.user.id != friend_id:
-                ids.append(friend_id)
-        return Member.objects.filter(id__in=ids)
-
+        
+        return self.request.user.member.get_friends()
+    
     def get_paginate_by(self, *args, **kwargs):
         return 20
 

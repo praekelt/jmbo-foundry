@@ -336,3 +336,14 @@ class ListingQuerysetNode(template.Node):
             context[as_var] = None
 
         return ''
+
+#------------------------------------------------------------------------------
+@register.inclusion_tag('foundry/inclusion_tags/other_friends.html')
+def other_friends(member, my_friends, friend):
+    """
+    Displays a list of 5 random friends of a friend, excluding the member itself.
+    """
+    exclude_ids = [friend.id for friend in my_friends]
+    exclude_ids.append(member.id)
+    friends, _ = friend.get_friends_with_ids(exclude_ids, 5)
+    return { 'other_friends' : friends }
