@@ -245,11 +245,25 @@ urlpatterns = patterns('',
     ),
 
     # Member detail page
-    url(
-        r'^members/(?P<username>[\w-]+)/$', 
-        'foundry.views.member_detail', 
-        {},
+    url(r'^members/(?P<username>[\w-]+)/$', 
+        views.MemberDetail.as_view(form_class=forms.CreateDirectMessage,
+                                   template_name='foundry/member_detail.html'), 
         name='member-detail'
+    ),
+    
+    # Inbox
+    url(r'^inbox/$',
+        login_required(views.Inbox.as_view(template_name='foundry/inbox.html')),
+        name='inbox'
+    ),
+    url(r'^message/(?P<pk>\d+)/view/$',
+        login_required(views.ViewMessage.as_view(template_name='foundry/message_view.html')),
+        name='message-view'
+    ),
+    url(r'^message/(?P<pk>\d+)/reply/$',
+        login_required(views.ReplyToMessage.as_view(form_class=forms.ReplyDirectMessage,
+                                                    template_name='foundry/message_reply.html')),
+        name='message-reply'
     ),
 
     # Coming soon

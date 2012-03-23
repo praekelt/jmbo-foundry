@@ -8,7 +8,7 @@ from django.conf import settings
 
 from preferences import preferences
 
-from foundry.models import Menu, Navbar, Listing, Page, Member
+from foundry.models import Menu, Navbar, Listing, Page, Member, DirectMessage
 from foundry.templatetags import listing_styles
 
 register = template.Library()
@@ -350,3 +350,12 @@ def my_friends(member, my_friends):
         exclude_ids.extend(friend_ids)
     
     return { 'friends' : friends }
+
+#------------------------------------------------------------------------------
+@register.inclusion_tag('foundry/inclusion_tags/direct_message.html')
+def direct_message(direct_message):
+    """
+    Iterates through all the message replies.
+    """
+    return { 'object' : direct_message }
+

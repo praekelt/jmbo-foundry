@@ -720,7 +720,23 @@ class ChatRoom(ModelBase):
 
 class BlogPost(ModelBase):
     content = RichTextField(_("Content"))
-
+    
+class DirectMessage(models.Model):
+    from_member = models.ForeignKey(Member, related_name='sent_items')
+    to_member = models.ForeignKey(Member, related_name='inbox')
+    message = models.TextField()
+    reply_to = models.ForeignKey('DirectMessage', related_name='replies', null=True, blank=True)
+    state = models.CharField(
+        max_length=32,
+        default='sent',
+        db_index=True,
+        choices=(
+            ('sent', 'Sent'),
+            ('read', 'Read'),
+            ('archived', 'Archived')
+        )
+    )
+    created = models.DateTimeField(auto_now_add=True)
 
 class Notification(models.Model):
     member = models.ForeignKey(Member)

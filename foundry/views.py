@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseServerError
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext, loader
-from django.views.generic import DetailView, ListView, UpdateView
+from django.views.generic import DetailView, ListView, CreateView, UpdateView
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
@@ -27,7 +27,7 @@ from jmbo.view_modifiers import DefaultViewModifier
 from preferences import preferences
 
 from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification, \
-    Member, MemberFriend
+    Member, MemberFriend, DirectMessage
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
     SearchForm, CreateBlogPostForm, FriendRequestForm
 
@@ -94,7 +94,9 @@ def age_gateway(request):
 class UpdateProfile(UpdateView):
     
     def get_object(self):
-        return Member.objects.get(id=self.request.user.id)
+        member = Member.objects.get(id=self.request.user.id)
+        self.success_url = reverse('member-detail', args=[member.username])
+        return member
 
 
 def listing_detail(request, slug):
@@ -210,19 +212,92 @@ def user_detail(request, username):
     extra['object'] = obj
     return render_to_response(template, extra, context_instance=RequestContext(request))
 
-
-def member_detail(request, username):
-    obj = get_object_or_404(Member, username=username)
+class MemberDetail(CreateView):
     
-    is_self = True if obj.id == request.user.id else False
+    def get_form_kwargs(self):
+        kwargs = super(MemberDetail, self).get_form_kwargs()
+        kwargs.update({'from_member': Member.objects.get(id=self.request.user.id),
+                       'to_member': self.member,
+                       })
+        return kwargs
     
-    extra = {}
-    extra['object'] = obj
-    extra['is_self'] = is_self
-    extra['notifications'] = Notification.objects.filter(member=request.user).count() if is_self else False
-    extra['can_friend'] = request.user.can_friend(obj) if request.user.is_authenticated() and isinstance(request.user, Member) else False
-    return render_to_response('foundry/member_detail.html', extra, context_instance=RequestContext(request))
+    def get_context_data(self, **kwargs):
+        context = super(MemberDetail, self).get_context_data(**kwargs)
+        
+        member_is_self = True if self.member.id == self.request.user.id else False
+    
+        context.update({'object' : self.member,
+                        'is_self' : member_is_self,
+                        'notifications' : Notification.objects.filter(member=self.request.user).count() if member_is_self else False,
+                        'unread_messages' : DirectMessage.objects.filter(to_member__id=self.request.user.id, state='sent', reply_to=None).count() if member_is_self else False,
+                        'can_friend' : self.request.user.can_friend(self.member) if self.request.user.is_authenticated() and isinstance(self.request.user, Member) else False,
+                        })
+        return context
+    
+    def get(self, request, *args, **kwargs):
+        username = kwargs.pop('username')
+        self.member = get_object_or_404(Member, username=username)
+        return super(MemberDetail, self).get(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        username = kwargs.pop('username')
+        self.member = get_object_or_404(Member, username=username)
+        return super(MemberDetail, self).post(request, *args, **kwargs)
 
+class Inbox(ListView):
+    
+    def get_queryset(self):
+        return DirectMessage.objects.filter(to_member__id=self.request.user.id).exclude(state='archived').order_by('-state', '-created')
+
+class ViewMessage(DetailView):
+    
+    def get_queryset(self):
+        return DirectMessage.objects.filter(to_member__id=self.request.user.id)
+    
+    def get_object(self, *args, **kwargs):
+        object = super(ViewMessage, self).get_object(*args, **kwargs)
+        if object.state == 'sent':
+            object.state = 'read'
+            object.save()
+        return object
+    
+    def get_context_data(self, **kwargs):
+        context = super(ViewMessage, self).get_context_data(**kwargs)
+        context.update({'unread_messages' : DirectMessage.objects.filter(to_member__id=self.request.user.id, state='sent', reply_to=None).count()})
+        return context
+    
+class ReplyToMessage(CreateView):
+    
+    def get_queryset(self):
+        return DirectMessage.objects.filter(Q(to_member__id=self.request.user.id) | Q(from_member__id=self.request.user.id))
+    
+    def get_object(self):
+        try:
+            return self.get_queryset().get(pk=self.kwargs['pk'])
+        except DirectMessage.DoesNotExist:
+            raise Http404(_(u"No DirectMessage found matching the query"))
+    
+    def get_form_kwargs(self):
+        kwargs = super(ReplyToMessage, self).get_form_kwargs()
+        kwargs.update({'from_member': self.message.to_member if self.message.to_member.id == self.request.user.id else self.message.from_member,
+                       'to_member': self.message.from_member if self.message.to_member.id == self.request.user.id else self.message.to_member,
+                       'reply_to': self.message,
+                       })
+        return kwargs
+    
+    def get_context_data(self, **kwargs):
+        context = super(ReplyToMessage, self).get_context_data(**kwargs)
+        context.update({'unread_messages' : DirectMessage.objects.filter(to_member__id=self.request.user.id, state='sent').count(),
+                        'original_message' : self.message})
+        return context
+    
+    def get(self, request, *args, **kwargs):
+        self.message = self.get_object()
+        return super(ReplyToMessage, self).get(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        self.message = self.get_object()
+        return super(ReplyToMessage, self).post(request, *args, **kwargs)
 
 # Caching duration matches the refresh rate
 @cache_page(30) 

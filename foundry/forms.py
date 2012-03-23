@@ -23,8 +23,7 @@ from django.conf import settings
 from preferences import preferences
 from jmbo.forms import as_div
 
-from foundry.models import Member, DefaultAvatar, Country, FoundryComment, \
-    BlogPost, MemberFriend
+from foundry import models
 from foundry.widgets import OldSchoolDateWidget
 from foundry.ambientmobile import AmbientSMS, AmbientSMSError
 
@@ -100,12 +99,12 @@ Note that both fields are case-sensitive."
     
 class JoinForm(UserCreationForm):
     """Custom join form"""
-    country = forms.ModelChoiceField(queryset=Country.objects.all())
+    country = forms.ModelChoiceField(queryset=models.Country.objects.all())
     date_of_birth = forms.DateField(widget=OldSchoolDateWidget) # todo: widget
     accept_terms = forms.BooleanField(required=True, label="", widget=TermsCheckboxInput)
 
     class Meta:
-        model = Member
+        model = models.Member
 
     def clean_mobile_number(self):
         mobile_number = self.cleaned_data["mobile_number"]
@@ -122,7 +121,7 @@ class JoinForm(UserCreationForm):
             value = self.cleaned_data.get(name, None)
             if value is not None:
                 di = {'%s__iexact' % name:value}
-                if Member.objects.filter(**di).count() > 0:
+                if models.Member.objects.filter(**di).count() > 0:
                     pretty_name = self.fields[name].label.lower()
                     message =_("The %(pretty_name)s is already in use. \
 Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
@@ -187,7 +186,7 @@ class JoinFinishForm(forms.ModelForm):
     """Show avatar selection form"""
 
     class Meta:
-        model = Member
+        model = models.Member
         fields = ('image',)
 
     def __init__(self, *args, **kwargs):
@@ -198,7 +197,7 @@ class JoinFinishForm(forms.ModelForm):
 
     @property
     def default_avatars(self):
-        return DefaultAvatar.objects.all()
+        return models.DefaultAvatar.objects.all()
 
     def clean(self):
         cleaned_data = super(JoinFinishForm, self).clean()
@@ -212,7 +211,7 @@ class JoinFinishForm(forms.ModelForm):
 
         # Set image from default avatar if required
         if not instance.image and self.data.has_key('default_avatar_id'):
-            obj = DefaultAvatar.objects.get(id=self.data['default_avatar_id'])
+            obj = models.DefaultAvatar.objects.get(id=self.data['default_avatar_id'])
             instance.image = obj.image
             if commit:
                 instance.save()
@@ -231,7 +230,7 @@ class PasswordResetForm(BasePasswordResetForm):
         """Clean method must have the same structure as clean_email in
         BasePasswordResetForm"""
         mobile_number = self.cleaned_data["mobile_number"]
-        self.users_cache = Member.objects.filter(
+        self.users_cache = models.Member.objects.filter(
             mobile_number__iexact=mobile_number,
             is_active=True
         )
@@ -291,7 +290,7 @@ class PasswordResetForm(BasePasswordResetForm):
 class ProfileUpdateForm(forms.ModelForm):
     
     class Meta:
-        model = Member
+        model = models.Member
         fields = ('email', 'image', 'dob', 'about_me', )
         
     def __init__(self, *args, **kwargs):
@@ -308,9 +307,54 @@ class ProfileUpdateForm(forms.ModelForm):
                 return self.cleaned_data['email']
         else:
             return self.cleaned_data['email']
+        
+class CreateDirectMessage(forms.ModelForm):
+    
+    success = False
+    success_message = 'Your message has been sent.'
+    
+    class Meta:
+        model = models.DirectMessage
+        fields = ('from_member', 'to_member', 'message', )
+        
+    def __init__(self, from_member, to_member, *args, **kwargs):
+        
+        self.base_fields['from_member'].initial = from_member
+        self.base_fields['from_member'].widget = forms.HiddenInput()
+        
+        self.base_fields['to_member'].initial = to_member
+        self.base_fields['to_member'].widget = forms.HiddenInput()
+        
+        self.base_fields['message'].widget.attrs.update({'class':'commentbox'})
+        
+        super(CreateDirectMessage, self).__init__(*args, **kwargs)
+        
+    def save(self, *args, **kwargs):
+        object = super(CreateDirectMessage, self).save(*args, **kwargs)
+        self.success = True
+        return object
+        
+class ReplyDirectMessage(CreateDirectMessage):
+    
+    class Meta:
+        model = models.DirectMessage
+        fields = ('from_member', 'to_member', 'message', 'reply_to',)
+    
+    def __init__(self, from_member, to_member, reply_to, *args, **kwargs):
+        
+        self.base_fields['reply_to'].initial = reply_to
+        self.base_fields['reply_to'].widget = forms.HiddenInput()
+        
+        super(ReplyDirectMessage, self).__init__(from_member, to_member, *args, **kwargs)
+        
+    def save(self, *args, **kwargs):
+        object = super(ReplyDirectMessage, self).save(*args, **kwargs)
+        object.reply_to.state = 'sent'
+        object.reply_to.save()
+        return object
 
 class AgeGatewayForm(forms.Form):
-    country = forms.ModelChoiceField(queryset=Country.objects.all())
+    country = forms.ModelChoiceField(queryset=models.Country.objects.all())
     date_of_birth = forms.DateField(widget=OldSchoolDateWidget)
     remember_me = forms.BooleanField(required=False, label="", widget=RememberMeCheckboxInput)
 
@@ -369,7 +413,7 @@ class CommentForm(BaseCommentForm):
         self.fields['email'].initial = 'anonymous@jmbo.org'
 
     def get_comment_model(self):
-        return FoundryComment
+        return models.FoundryComment
 
     def get_comment_create_data(self):
         data = super(CommentForm, self).get_comment_create_data()
@@ -380,7 +424,7 @@ class CommentForm(BaseCommentForm):
 class CreateBlogPostForm(forms.ModelForm):
 
     class Meta:
-        model = BlogPost
+        model = models.BlogPost
         fields = ('title', 'content')
 
     def __init__(self, *args, **kwargs):
@@ -409,7 +453,7 @@ class FriendRequestForm(forms.ModelForm):
     fields to render."""
 
     class Meta:
-        model = MemberFriend
+        model = models.MemberFriend
         fields = []
 
     def __init__(self, *args, **kwargs):
@@ -426,7 +470,7 @@ class FriendRequestForm(forms.ModelForm):
                 _("You may not be friends with yourself.")
             )
 
-        q = MemberFriend.objects.filter(member=member, friend=friend)
+        q = models.MemberFriend.objects.filter(member=member, friend=friend)
         if q.filter(state='invited').exists():
             raise forms.ValidationError(
                 _("You have already sent a friend request to %s." % friend.username)
