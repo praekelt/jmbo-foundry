@@ -5,6 +5,9 @@
 <div class="content user-detail">
 
     <div class="title">{{ object.username }}</div>
+    {% if object.about_me %}
+        <p>{{ object.about_me }}</p>
+    {% endif %}
     <p>
         {% blocktrans %}This user does not have a public profile.{% endblocktrans %}
     </p>

@@ -288,6 +288,26 @@ class PasswordResetForm(BasePasswordResetForm):
 
     as_div = as_div
 
+class ProfileUpdateForm(forms.ModelForm):
+    
+    class Meta:
+        model = Member
+        fields = ('email', 'image', 'dob', 'about_me', )
+        
+    def __init__(self, *args, **kwargs):
+        self.base_fields['image'].widget = forms.FileInput()
+        self.base_fields['dob'].help_text = _("yyyy-mm-dd")
+        super(ProfileUpdateForm, self).__init__(*args, **kwargs)
+        
+    def clean_email(self):
+        if self.cleaned_data['email'] and not self.cleaned_data['email'] == self.instance.email:
+            try:
+                User.objects.filter(email=self.cleaned_data['email'])
+                raise forms.ValidationError(_('This email already has an account linked to it. Please use another.'))
+            except User.DoesNotExist:
+                return self.cleaned_data['email']
+        else:
+            return self.cleaned_data['email']
 
 class AgeGatewayForm(forms.Form):
     country = forms.ModelChoiceField(queryset=Country.objects.all())

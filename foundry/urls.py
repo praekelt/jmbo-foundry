@@ -8,8 +8,7 @@ from django.contrib.auth.decorators import login_required
 from preferences import preferences
 
 from foundry.models import Page
-from foundry import views
-from foundry.forms import LoginForm, PasswordResetForm
+from foundry import views, forms
 
 admin.autodiscover()
 
@@ -91,7 +90,7 @@ urlpatterns = patterns('',
     url(
         r'^login/$',
         'django.contrib.auth.views.login',
-        {'authentication_form':LoginForm},
+        {'authentication_form': forms.LoginForm},
         name='login',
     ),
     url(
@@ -105,7 +104,7 @@ urlpatterns = patterns('',
         r'^auth/password_reset/$', 
         'django.contrib.auth.views.password_reset', 
         {
-            'password_reset_form':PasswordResetForm,
+            'password_reset_form': forms.PasswordResetForm,
         }
     ),
     (r'^auth/', include('django.contrib.auth.urls')),
@@ -153,6 +152,14 @@ urlpatterns = patterns('',
         'foundry.views.listing_detail',
         {},
         name='listing-detail'
+    ),
+    
+    # My Profile
+    
+    url(r'^my-profile/update/$',
+        login_required(views.UpdateProfile.as_view(form_class=forms.ProfileUpdateForm,
+                                                   template_name='foundry/update_profile.html')),
+        name='update-profile'
     ),
 
     # Page detail

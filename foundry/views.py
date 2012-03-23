@@ -8,8 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseServerError
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext, loader
-from django.views.generic.detail import DetailView
-from django.views.generic.list import ListView
+from django.views.generic import DetailView, ListView, UpdateView
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
@@ -91,6 +90,11 @@ def age_gateway(request):
 
     extra = dict(form=form)
     return render_to_response('foundry/age_gateway.html', extra, context_instance=RequestContext(request))
+
+class UpdateProfile(UpdateView):
+    
+    def get_object(self):
+        return Member.objects.get(id=self.request.user.id)
 
 
 def listing_detail(request, slug):
