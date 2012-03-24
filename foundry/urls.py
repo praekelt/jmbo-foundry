@@ -251,10 +251,15 @@ urlpatterns = patterns('',
         name='member-detail'
     ),
     
-    # Inbox
+    # Messaging
     url(r'^inbox/$',
         login_required(views.Inbox.as_view(template_name='foundry/inbox.html')),
         name='inbox'
+    ),
+    url(r'^message/send/$',
+        login_required(views.SendMessage.as_view(form_class=forms.SendDirectMessage,
+                                                 template_name='foundry/message_send.html')),
+        name='message-send'
     ),
     url(r'^message/(?P<pk>\d+)/view/$',
         login_required(views.ViewMessage.as_view(template_name='foundry/message_view.html')),

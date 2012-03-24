@@ -308,6 +308,31 @@ class ProfileUpdateForm(forms.ModelForm):
         else:
             return self.cleaned_data['email']
         
+class SendDirectMessage(forms.ModelForm):
+    
+    success = False
+    success_message = 'Your message has been sent.'
+    
+    class Meta:
+        model = models.DirectMessage
+        fields = ('from_member', 'to_member', 'message', )
+        
+    def __init__(self, from_member, *args, **kwargs):
+        
+        self.base_fields['from_member'].initial = from_member
+        self.base_fields['from_member'].widget = forms.HiddenInput()
+        
+        self.base_fields['to_member'].queryset = from_member.get_friends()
+        
+        self.base_fields['message'].widget.attrs.update({'class':'commentbox'})
+        
+        super(SendDirectMessage, self).__init__(*args, **kwargs)
+        
+    def save(self, *args, **kwargs):
+        object = super(SendDirectMessage, self).save(*args, **kwargs)
+        self.success = True
+        return object
+        
 class CreateDirectMessage(forms.ModelForm):
     
     success = False

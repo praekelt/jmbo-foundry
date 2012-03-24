@@ -248,6 +248,13 @@ class Inbox(ListView):
     
     def get_queryset(self):
         return DirectMessage.objects.filter(to_member__id=self.request.user.id).exclude(state='archived').order_by('-state', '-created')
+    
+class SendMessage(CreateView):
+    
+    def get_form_kwargs(self):
+        kwargs = super(SendMessage, self).get_form_kwargs()
+        kwargs.update({'from_member': Member.objects.get(pk=self.request.user.id)})
+        return kwargs
 
 class ViewMessage(DetailView):
     
