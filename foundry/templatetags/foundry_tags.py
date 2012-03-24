@@ -363,10 +363,8 @@ def suggested_friends(user):
         CACHE_KEY = 'JMBO_SUGGESTED_FRIENDS_MEMBER_ID_%d' % user.member.id
         suggested_friend_ids = cache.get(CACHE_KEY)
         if suggested_friend_ids:
-            print 'cache hit'
             suggested_friends = Member.objects.filter(pk__in=suggested_friend_ids)
         else:
-            print 'NON cache hit'
             friends, exclude_ids = Member.objects.get(id=user.member.id).get_friends_with_ids()
             exclude_ids.append(user.member.id)
             suggested_friends = []
