@@ -451,11 +451,7 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractContact
         return not MemberFriend.objects.filter(
             Q(member=self, friend=friend) | Q(member=friend, friend=self)
         ).exists()
-        
-    def get_friends(self):
-        friends, _ = self.get_friends_with_ids()
-        return friends 
-        
+                    
     def get_friends_with_ids(self, exlude_ids=[], limit=0):
         # todo: find a better way to query for friends
         values_list = MemberFriend.objects.filter(
@@ -474,12 +470,17 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractContact
             return Member.objects.filter(id__in=ids).order_by('?')[0:limit], ids
         else:
             return Member.objects.filter(id__in=ids).order_by('?'), ids
-        
+
+    def get_friends(self):
+        friends, _ = self.get_friends_with_ids()
+        return friends 
+    
     def get_5_random_friends(self, exlude_ids=[]):
         friends, _ = self.get_friends_with_ids(exlude_ids, 5)
         return friends
     
     five_random_friends = property(get_5_random_friends)
+
 
 class DefaultAvatar(ImageModel):
     """A set of avatars users can choose from"""
