@@ -120,11 +120,11 @@ def listing(parser, token):
     slug_or_queryset = tokens[1]
 
     title = items_per_page = style = 'None'
-    if length == 3:
+    if length >= 3:
         title = tokens[2]
-    if length == 4:
+    if length >= 4:
         style = tokens[3]
-    if length == 5:
+    if length >= 5:
         items_per_page = tokens[4]
 
     return ListingNode(slug_or_queryset, title, style, items_per_page)
