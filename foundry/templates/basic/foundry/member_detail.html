@@ -14,12 +14,12 @@
             </div>
         {% endif %}
         {% if notifications %}
-            <div class="friend">
+            <div class="notifications">
                 <a href="{% url member-notifications %}">{% trans "Notifications" %} ({{ notifications }})</a>
             </div>
         {% endif %}
         {% if is_self %}
-            <div class="friend">
+            <div class="my-friends">
                 <a href="{% url my-friends %}">{% trans "My Friends" %}</a>
             </div>
         {% endif %}
