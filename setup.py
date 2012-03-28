@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='0.0.3.unomena.1',
+    version='0.0.4.unomena.1',
     description='Jmbo foundry behaviour/templates app.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
