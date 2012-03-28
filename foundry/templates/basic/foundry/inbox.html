@@ -3,11 +3,11 @@
 
 {% block content %}
 	<div class="content user-detail">
-	    <div class="title">Inbox</div>
+	    <div class="title">{% blocktrans %}Inbox{% endblocktrans %}</div>
 	    {% if object_list %}
 		    <table>
 		       <tr>
-		           <th width="20%">From</th><th>Message</th><th width="20%">Date / Time</th>
+		           <th width="20%">{% blocktrans %}From{% endblocktrans %}</th><th>{% blocktrans %}Message{% endblocktrans %}</th><th width="20%">{% blocktrans %}Date / Time{% endblocktrans %}</th>
 		       </tr>
 		       {% for object in object_list %}
 			       <tr {% ifequal object.state 'sent' %}class="unread-message"{% endifequal %}>
@@ -18,7 +18,7 @@
 		       {% endfor %}
 		    </table>
 		{% else %}
-		    You have no mail yet, <a href="#">send some</a>.
+		    {% blocktrans %}You have no mail yet, {% endblocktrans %}<a href="{% url message-send %}">{% blocktrans %}send some{% endblocktrans %}</a>.
 		{% endif %}
 	</div>  
 {% endblock %}

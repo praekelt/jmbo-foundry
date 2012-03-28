@@ -3,7 +3,7 @@
 
 {% block content %}
 	<div class="content user-detail">
-	    <div class="title">Conversation with: {{ object.from_member }}</div>
+	    <div class="title">{% blocktrans %}Conversation with: {% endblocktrans %}{{ object.from_member }}</div>
 	    <div class="meta">
            <div class="friend">
                <a href="{% url inbox %}">{% trans "Back to Inbox" %}{% if unread_messages %} ({{ unread_messages }}){% endif %}</a>

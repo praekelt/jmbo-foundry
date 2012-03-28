@@ -1,6 +1,6 @@
 {% if suggested_friends %}
 	<div class="friend-finder">
-	    <div class="title">Suggested friends:</div>
+	    <div class="title">{% blocktrans %}Suggested friends:{% endblocktrans %}</div>
 	    <div class="items">
 	    {% for friend in suggested_friends %}
 	        <div class="item {% if forloop.first %}first{% endif %} {% if forloop.last %}last{% endif %}">
@@ -11,7 +11,7 @@
 	                <a href="{{ friend.get_absolute_url }}">{{ friend.username }}</a>
 	            </div>
 	            <div class="meta">
-	                <a href="{% url friend-request friend.id %}">Friend</a>
+	                <a href="{% url friend-request friend.id %}">{% blocktrans %}Friend{% endblocktrans %}</a>
 	            </div>
 	        </div>
 	    {% endfor %}
