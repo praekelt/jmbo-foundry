@@ -15,13 +15,15 @@ from django.utils.http import int_to_base36
 from django.http import HttpResponseRedirect
 from django.contrib.comments.forms import CommentForm as BaseCommentForm
 from django.contrib.sites.models import Site
+from django.template import RequestContext
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
 from django.conf import settings
 
 from preferences import preferences
 from jmbo.forms import as_div
 
-from foundry.models import Member, DefaultAvatar, Country, FoundryComment, \
-    BlogPost, MemberFriend
+from foundry import models
 from foundry.widgets import OldSchoolDateWidget
 from foundry.ambientmobile import AmbientSMS, AmbientSMSError
 
@@ -97,12 +99,12 @@ Note that both fields are case-sensitive."
     
 class JoinForm(UserCreationForm):
     """Custom join form"""
-    country = forms.ModelChoiceField(queryset=Country.objects.all())
+    country = forms.ModelChoiceField(queryset=models.Country.objects.all())
     date_of_birth = forms.DateField(widget=OldSchoolDateWidget) # todo: widget
     accept_terms = forms.BooleanField(required=True, label="", widget=TermsCheckboxInput)
 
     class Meta:
-        model = Member
+        model = models.Member
 
     def clean_mobile_number(self):
         mobile_number = self.cleaned_data["mobile_number"]
@@ -119,7 +121,7 @@ class JoinForm(UserCreationForm):
             value = self.cleaned_data.get(name, None)
             if value is not None:
                 di = {'%s__iexact' % name:value}
-                if Member.objects.filter(**di).count() > 0:
+                if models.Member.objects.filter(**di).count() > 0:
                     pretty_name = self.fields[name].label.lower()
                     message =_("The %(pretty_name)s is already in use. \
 Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
@@ -184,7 +186,7 @@ class JoinFinishForm(forms.ModelForm):
     """Show avatar selection form"""
 
     class Meta:
-        model = Member
+        model = models.Member
         fields = ('image',)
 
     def __init__(self, *args, **kwargs):
@@ -195,7 +197,7 @@ class JoinFinishForm(forms.ModelForm):
 
     @property
     def default_avatars(self):
-        return DefaultAvatar.objects.all()
+        return models.DefaultAvatar.objects.all()
 
     def clean(self):
         cleaned_data = super(JoinFinishForm, self).clean()
@@ -209,7 +211,7 @@ class JoinFinishForm(forms.ModelForm):
 
         # Set image from default avatar if required
         if not instance.image and self.data.has_key('default_avatar_id'):
-            obj = DefaultAvatar.objects.get(id=self.data['default_avatar_id'])
+            obj = models.DefaultAvatar.objects.get(id=self.data['default_avatar_id'])
             instance.image = obj.image
             if commit:
                 instance.save()
@@ -228,7 +230,7 @@ class PasswordResetForm(BasePasswordResetForm):
         """Clean method must have the same structure as clean_email in
         BasePasswordResetForm"""
         mobile_number = self.cleaned_data["mobile_number"]
-        self.users_cache = Member.objects.filter(
+        self.users_cache = models.Member.objects.filter(
             mobile_number__iexact=mobile_number,
             is_active=True
         )
@@ -285,9 +287,99 @@ class PasswordResetForm(BasePasswordResetForm):
 
     as_div = as_div
 
+class ProfileUpdateForm(forms.ModelForm):
+    
+    class Meta:
+        model = models.Member
+        fields = ('email', 'image', 'dob', 'about_me', )
+        
+    def __init__(self, *args, **kwargs):
+        self.base_fields['image'].widget = forms.FileInput()
+        self.base_fields['dob'].help_text = _("yyyy-mm-dd")
+        super(ProfileUpdateForm, self).__init__(*args, **kwargs)
+        
+    def clean_email(self):
+        if self.cleaned_data['email'] and not self.cleaned_data['email'] == self.instance.email:
+            try:
+                User.objects.filter(email=self.cleaned_data['email'])
+                raise forms.ValidationError(_('This email already has an account linked to it. Please use another.'))
+            except User.DoesNotExist:
+                return self.cleaned_data['email']
+        else:
+            return self.cleaned_data['email']
+        
+class SendDirectMessage(forms.ModelForm):
+    
+    success = False
+    success_message = 'Your message has been sent.'
+    
+    class Meta:
+        model = models.DirectMessage
+        fields = ('from_member', 'to_member', 'message', )
+        
+    def __init__(self, from_member, *args, **kwargs):
+        
+        self.base_fields['from_member'].initial = from_member
+        self.base_fields['from_member'].widget = forms.HiddenInput()
+        
+        self.base_fields['to_member'].queryset = from_member.get_friends()
+        
+        self.base_fields['message'].widget.attrs.update({'class':'commentbox'})
+        
+        super(SendDirectMessage, self).__init__(*args, **kwargs)
+        
+    def save(self, *args, **kwargs):
+        object = super(SendDirectMessage, self).save(*args, **kwargs)
+        self.success = True
+        return object
+        
+class CreateDirectMessage(forms.ModelForm):
+    
+    success = False
+    success_message = 'Your message has been sent.'
+    
+    class Meta:
+        model = models.DirectMessage
+        fields = ('from_member', 'to_member', 'message', )
+        
+    def __init__(self, from_member, to_member, *args, **kwargs):
+        
+        self.base_fields['from_member'].initial = from_member
+        self.base_fields['from_member'].widget = forms.HiddenInput()
+        
+        self.base_fields['to_member'].initial = to_member
+        self.base_fields['to_member'].widget = forms.HiddenInput()
+        
+        self.base_fields['message'].widget.attrs.update({'class':'commentbox'})
+        
+        super(CreateDirectMessage, self).__init__(*args, **kwargs)
+        
+    def save(self, *args, **kwargs):
+        object = super(CreateDirectMessage, self).save(*args, **kwargs)
+        self.success = True
+        return object
+        
+class ReplyDirectMessage(CreateDirectMessage):
+    
+    class Meta:
+        model = models.DirectMessage
+        fields = ('from_member', 'to_member', 'message', 'reply_to',)
+    
+    def __init__(self, from_member, to_member, reply_to, *args, **kwargs):
+        
+        self.base_fields['reply_to'].initial = reply_to
+        self.base_fields['reply_to'].widget = forms.HiddenInput()
+        
+        super(ReplyDirectMessage, self).__init__(from_member, to_member, *args, **kwargs)
+        
+    def save(self, *args, **kwargs):
+        object = super(ReplyDirectMessage, self).save(*args, **kwargs)
+        object.reply_to.state = 'sent'
+        object.reply_to.save()
+        return object
 
 class AgeGatewayForm(forms.Form):
-    country = forms.ModelChoiceField(queryset=Country.objects.all())
+    country = forms.ModelChoiceField(queryset=models.Country.objects.all())
     date_of_birth = forms.DateField(widget=OldSchoolDateWidget)
     remember_me = forms.BooleanField(required=False, label="", widget=RememberMeCheckboxInput)
 
@@ -346,7 +438,7 @@ class CommentForm(BaseCommentForm):
         self.fields['email'].initial = 'anonymous@jmbo.org'
 
     def get_comment_model(self):
-        return FoundryComment
+        return models.FoundryComment
 
     def get_comment_create_data(self):
         data = super(CommentForm, self).get_comment_create_data()
@@ -357,7 +449,7 @@ class CommentForm(BaseCommentForm):
 class CreateBlogPostForm(forms.ModelForm):
 
     class Meta:
-        model = BlogPost
+        model = models.BlogPost
         fields = ('title', 'content')
 
     def __init__(self, *args, **kwargs):
@@ -386,37 +478,61 @@ class FriendRequestForm(forms.ModelForm):
     fields to render."""
 
     class Meta:
-        model = MemberFriend
+        model = models.MemberFriend
         fields = []
 
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request')
         super(FriendRequestForm, self).__init__(*args, **kwargs)
+        self._meta.fields = ('member', 'friend', 'state')
 
     def clean(self):
         cleaned_data = super(FriendRequestForm, self).clean()
         member = self.initial['member']
         friend = self.initial['friend']
-        q = MemberFriend.objects.filter(member=member, friend=friend)
+        if member == friend:
+            raise forms.ValidationError(
+                _("You may not be friends with yourself.")
+            )
+
+        q = models.MemberFriend.objects.filter(member=member, friend=friend)
         if q.filter(state='invited').exists():
             raise forms.ValidationError(
-                _("You have already sent a friend request to %s" % friend.username)
+                _("You have already sent a friend request to %s." % friend.username)
             )
         if q.filter(state='accepted').exists():
             raise forms.ValidationError(
-                _("You are already friends with %s" % friend.username)
+                _("You are already friends with %s." % friend.username)
             )
         if q.filter(state='declined').exists():
             raise forms.ValidationError(
-                _("You may not be friends with %s" % friend.username)
+                _("You may not be friends with %s." % friend.username)
             )
         cleaned_data['member'] = member
         cleaned_data['friend'] = friend
-        cleaned_data['state'] = 'accepted'
+        cleaned_data['state'] = 'invited'
         return cleaned_data
 
     def save(self, commit=True):
-        self._meta.fields = ('member', 'friend', 'state')
         instance = super(FriendRequestForm, self).save(commit=commit)
+
+        # Send mail
+        current_site = get_current_site(self.request)
+        extra = dict(
+            memberfriend_id=instance.id,
+            username=instance.member.username,
+            site_name=current_site.name, 
+            domain=current_site.domain,
+        )
+        content = render_to_string('foundry/friend_request_email.html', extra)
+        try:
+            send_mail(
+                _("You have a new friend request from %(username)s on %(site_name)s") % extra, 
+                content, settings.DEFAULT_FROM_EMAIL, [instance.friend.email]
+            )
+        except:
+            pass
+
         return instance
 
     as_div = as_div

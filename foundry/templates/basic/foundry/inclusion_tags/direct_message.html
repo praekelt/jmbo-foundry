@@ -1,0 +1,14 @@
+{% load foundry_tags %}
+
+<div class="messages">
+    <div class="message">
+        <div class="header">From: {{ object.from_member }} To: {{ object.to_member }} At: {{ object.created }}</div>
+        <p>{{ object.message }}</p>
+        <div class="message-actions">
+            <a href="{% url message-reply object.id %}">Reply</a>
+        </div>
+    </div>
+    {% for message in object.replies.all %}  
+        {% direct_message message %}
+    {% endfor %}
+</div>

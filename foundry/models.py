@@ -9,7 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.contrib.comments.models import Comment as BaseComment
 from django.contrib.sites.models import Site
-from django.db.models.signals import m2m_changed
+from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
 
 from ckeditor.fields import RichTextField
@@ -21,7 +21,7 @@ from jmbo.utils import generate_slug
 from jmbo.models import ModelBase
 
 from foundry.profile_models import AbstractAvatarProfile, \
-    AbstractSocialProfile, AbstractContactProfile
+    AbstractSocialProfile, AbstractPersonalProfile, AbstractContactProfile
 from foundry.templatetags import listing_styles
 from foundry.managers import PermittedManager
 import foundry.monkey
@@ -405,7 +405,7 @@ class PasswordResetPreferences(Preferences):
         verbose_name_plural = 'Password Reset Preferences'
 
 
-class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractContactProfile):
+class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersonalProfile, AbstractContactProfile):
     """Class that models the default user account. Subclassing is superior to profiles since 
     a site may conceivably have more than one type of user account, but the profile architecture 
     limits the entire site to a single type of profile."""
@@ -430,6 +430,11 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractContact
                 pass
 
     @property
+    def last_5_comments(self):
+        """Return last 5 comments made by the member"""
+        return FoundryComment.objects.filter(user=self).order_by('id')[:5]
+
+    @property
     def number_of_comments(self):
         """Return number of comments made by the member"""
         return FoundryComment.objects.filter(user=self).count()
@@ -439,6 +444,42 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractContact
         """Return true if member has notifications"""
         return self.notification_set.all().exists()
     
+    def can_friend(self, friend):
+        # Can't friend yourself
+        if self == friend:
+            return False
+        return not MemberFriend.objects.filter(
+            Q(member=self, friend=friend) | Q(member=friend, friend=self)
+        ).exists()
+        
+    def get_friends(self):
+        friends, _ = self.get_friends_with_ids()
+        return friends 
+        
+    def get_friends_with_ids(self, exlude_ids=[], limit=0):
+        # todo: find a better way to query for friends
+        values_list = MemberFriend.objects.filter(
+            Q(member=self)|Q(friend=self), 
+            state='accepted'
+        ).values_list('member', 'friend')
+        ids = []
+        for member_id, friend_id in values_list:
+            if self.id != member_id:
+                if member_id not in exlude_ids:
+                    ids.append(member_id)
+            if self.id != friend_id:
+                if friend_id not in exlude_ids:
+                    ids.append(friend_id)
+        if limit > 0:
+            return Member.objects.filter(id__in=ids).order_by('?')[0:limit], ids
+        else:
+            return Member.objects.filter(id__in=ids).order_by('?'), ids
+        
+    def get_5_random_friends(self, exlude_ids=[]):
+        friends, _ = self.get_friends_with_ids(exlude_ids, 5)
+        return friends
+    
+    five_random_friends = property(get_5_random_friends)
 
 class DefaultAvatar(ImageModel):
     """A set of avatars users can choose from"""
@@ -679,7 +720,23 @@ class ChatRoom(ModelBase):
 
 class BlogPost(ModelBase):
     content = RichTextField(_("Content"))
-
+    
+class DirectMessage(models.Model):
+    from_member = models.ForeignKey(Member, related_name='sent_items')
+    to_member = models.ForeignKey(Member, related_name='inbox')
+    message = models.TextField()
+    reply_to = models.ForeignKey('DirectMessage', related_name='replies', null=True, blank=True)
+    state = models.CharField(
+        max_length=32,
+        default='sent',
+        db_index=True,
+        choices=(
+            ('sent', 'Sent'),
+            ('read', 'Read'),
+            ('archived', 'Archived')
+        )
+    )
+    created = models.DateTimeField(auto_now_add=True)
 
 class Notification(models.Model):
     member = models.ForeignKey(Member)
@@ -703,6 +760,29 @@ class MemberFriend(models.Model):
             ('declined', 'Declined')
         )
     )
+    
+    def save(self, *args, **kwargs):        
+        is_new = not self.id
+
+        super(MemberFriend, self).save(*args, **kwargs)        
+
+        if is_new:
+            link, dc = Link.objects.get_or_create(
+                title=ugettext("You have pending friend requests"), view_name='my-friend-requests'
+            )
+            Notification.objects.get_or_create(member=self.friend, link=link)
+
+    def accept(self):
+        self.state = 'accepted'
+        self.save()
+
+        # Delete notifications if no more friend requests        
+        if not MemberFriend.objects.filter(friend=self.friend, state='invited').exclude(id=self.id).exists():
+            link, dc = Link.objects.get_or_create(
+                title=ugettext("You have pending friend requests"), view_name='my-friend-requests'
+            )
+            for obj in Notification.objects.filter(member=self.friend, link=link):
+                obj.delete()
 
 
 @receiver(m2m_changed)

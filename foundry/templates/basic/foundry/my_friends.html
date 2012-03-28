@@ -1,28 +1,16 @@
 {% extends "base.html" %}
-{% load i18n jmbo_inclusion_tags %} 
+{% load i18n jmbo_inclusion_tags foundry_tags %} 
 
 {% block content %}
-    <div class="foundry-container foundry-listing-vertical-thumbnail">
-
-        <div class="title">{% trans "My friends" %}</div>
-
-        <div class="items">
-        {% for object in object_list %}
-            <div class="item {% if forloop.first %}first{% endif %} {% if forloop.last %}last{% endif %}">
-                <a href="{{ object.friend.get_absolute_url }}">
-                    {% if comment.creator.image %}
-                        <img src="{{ object.friend.get_thumbnail_LAYER_url }}" class="left" />
-                   {% else %}
-                        <img src="{{ STATIC_URL }}/images/anonymous.png" class="left" />
-                    {% endif %}
-                </a>
-                <div class="title">
-                    <a href="{{ object.friend.get_absolute_url }}">{{ object.friend.username }}</a>
-                </div>
-           </div>
-        {% endfor %}
-        </div>
-
-        {% pager page_obj %}
+    <div class="content member-friends">
+	    <div class="foundry-container foundry-listing-vertical-thumbnail">
+	
+	        <div class="title">{% trans "My friends" %}</div>
+	        <div class="items">
+                {% my_friends request.user object_list %}
+	        </div>
+	
+	        {% pager page_obj %}
+	    </div>
     </div>
 {% endblock %}

@@ -79,6 +79,11 @@ class AbstractPersonalProfile(models.Model):
         blank=True,
         null=True,
     )
+    
+    about_me = models.TextField(
+        blank=True,
+        null=True,                                
+    )
 
 class AbstractContactProfile(models.Model):
     class Meta:

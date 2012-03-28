@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n foundry_tags %}
+
+{% block content %}
+	<div class="content user-detail">
+	    <div class="title">Conversation with: {{ object.from_member }}</div>
+	    <div class="meta">
+           <div class="friend">
+               <a href="{% url inbox %}">{% trans "Back to Inbox" %}{% if unread_messages %} ({{ unread_messages }}){% endif %}</a>
+           </div>
+	    </div>
+	    
+	    {% direct_message object %}
+	    
+	</div>  
+{% endblock %}
