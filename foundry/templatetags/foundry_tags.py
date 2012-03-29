@@ -359,7 +359,7 @@ def suggested_friends(user):
     """
     Displays a list of suggested friends.
     """
-    if user.member:
+    try:
         CACHE_KEY = 'JMBO_SUGGESTED_FRIENDS_MEMBER_ID_%d' % user.member.id
         suggested_friend_ids = cache.get(CACHE_KEY)
         if suggested_friend_ids:
@@ -380,6 +380,8 @@ def suggested_friends(user):
             cache.set(CACHE_KEY, [fr.id for fr in suggested_friends], 60 * 5)
         
         return { 'suggested_friends' : suggested_friends }
+    except:
+        pass
     
     return {}
 
