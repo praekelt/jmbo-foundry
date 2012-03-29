@@ -16,7 +16,7 @@
             </div>
         {% endif %}
         {% if notifications %}
-            <div class="friend">
+            <div class="notifications">
                 <a href="{% url member-notifications %}">{% trans "Notifications" %} ({{ notifications }})</a>
             </div>
         {% endif %}
@@ -33,7 +33,7 @@
             <div class="friend">
                 <a href="{% url update-profile %}">{% trans "Update Profile" %}</a>
             </div>
-            <div class="friend">
+            <div class="my-friends">
                 <a href="{% url my-friends %}">{% trans "My Friends" %}</a>
             </div>
         {% endif %}
