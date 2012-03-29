@@ -301,7 +301,7 @@ class ProfileUpdateForm(forms.ModelForm):
     def clean_email(self):
         if self.cleaned_data['email'] and not self.cleaned_data['email'] == self.instance.email:
             try:
-                User.objects.filter(email=self.cleaned_data['email'])
+                User.objects.get(email=self.cleaned_data['email'])
                 raise forms.ValidationError(_('This email already has an account linked to it. Please use another.'))
             except User.DoesNotExist:
                 return self.cleaned_data['email']
