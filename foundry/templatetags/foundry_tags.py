@@ -6,6 +6,8 @@ from django import template
 from django.core.cache import cache
 from django.core.urlresolvers import reverse, resolve, NoReverseMatch
 from django.template.loader import render_to_string
+from django.http import HttpResponse
+from django.template.response import TemplateResponse
 from django.conf import settings
 
 from preferences import preferences
@@ -250,7 +252,15 @@ class TileNode(template.Node):
             # Set recursion guard flag
             setattr(context['request'], '_foundry_suppress_rows_tag', 1)            
             # Call the view. Let any error propagate.
-            html = view(context['request'], *args, **kwargs).content
+            html = ''
+            result = view(context['request'], *args, **kwargs)
+            if isinstance(result, TemplateResponse):
+                # The result of a generic view
+                result.render()
+                html = result.rendered_content
+            elif isinstance(result, HttpResponse):
+                # Old-school view
+                html = result.content
             # Clear flag  
             # xxx: something may clear the flag. Need to investigate more 
             # incase of thread safety problem.
