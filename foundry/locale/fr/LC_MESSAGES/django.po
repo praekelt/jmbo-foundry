@@ -282,7 +282,7 @@ msgstr ""
 
 #: templates/basic/404.html:7
 msgid "The page you requested cannot be found."
-msgstr ""
+msgstr "La page que vous avez demandé ne peut être trouvé."
 
 #: templates/basic/500.html:13
 msgid "A system error has occurred"
