@@ -224,13 +224,8 @@ class MemberDetail(CreateView):
     def get_context_data(self, **kwargs):
         context = super(MemberDetail, self).get_context_data(**kwargs)
         
-        member_is_self = True if self.member.id == self.request.user.id else False
-    
         context.update({'object' : self.member,
-                        'is_self' : member_is_self,
-                        'notifications' : Notification.objects.filter(member=self.request.user).count() if member_is_self else False,
-                        'unread_messages' : DirectMessage.objects.filter(to_member__id=self.request.user.id, state='sent', reply_to=None).count() if member_is_self else False,
-                        'can_friend' : self.request.user.can_friend(self.member) if self.request.user.is_authenticated() and isinstance(self.request.user, Member) else False,
+                        'is_self' : True if self.member.id == self.request.user.id else False,
                         })
         return context
     

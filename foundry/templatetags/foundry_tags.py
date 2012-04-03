@@ -12,7 +12,7 @@ from django.conf import settings
 
 from preferences import preferences
 
-from foundry.models import Menu, Navbar, Listing, Page, Member, DirectMessage
+from foundry.models import Menu, Navbar, Listing, Page, Member, DirectMessage, Notification
 from foundry.templatetags import listing_styles
 
 register = template.Library()
@@ -394,6 +394,18 @@ def suggested_friends(user):
         pass
     
     return {}
+
+#------------------------------------------------------------------------------
+@register.inclusion_tag('foundry/inclusion_tags/profile_blurb.html')
+def profile_blurb(user):
+    """
+    Displays the user's profile blurb and profile sub-menu.
+    """
+    return {'member' : user.member,
+            'notifications' : Notification.objects.filter(member=user).count(),
+            'unread_messages' : DirectMessage.objects.filter(to_member__id=user.id, state='sent', reply_to=None).count(),
+            'can_friend' : user.member.can_friend(user.member) if user.is_authenticated() and isinstance(user, Member) else False,
+            }
 
 #------------------------------------------------------------------------------
 @register.inclusion_tag('foundry/inclusion_tags/direct_message.html')
