@@ -18,12 +18,13 @@ TEMPLATE = '''
 
 {% for comment in comments %}
     <div>
-    {{ comment.comment }}
-    <br />
-    <a href="#">Remove this comment</a>
-    |
-    <a href="#">Allow this comment</a>
+        {{ comment.comment }}
+        <br />
+        <a href="http://{{ site_domain}}{% url admin-remove-comment comment.id %}" target="_">Remove this comment</a>
+        |
+        <a href="http://{{ site_domain}}{% url admin-allow-comment comment.id %}" target="_">Allow this comment</a>
     </div>
+    <br />
 {% endfor %}
 
 </body>
@@ -80,17 +81,18 @@ class Command(BaseCommand):
                 comment.save()
 
         # Compose a mail
-        site_name = Site.objects.get(id=settings.SITE_ID).name
-        template = get_template_from_string(TEMPLATE)
-        c = dict(comments=flagged)
-        content = template.render(Context(c))
-        msg = EmailMultiAlternatives(
-            "Naughty words report on %s" % site_name, 
-            strip_tags(content), 
-            settings.DEFAULT_FROM_EMAIL, 
-            preferences.NaughtyWordPreferences.email_recipients.split('\n')
-        )
-        msg.attach_alternative(content, 'text/html')
-        msg.send()
+        if flagged:
+            site = Site.objects.get(id=settings.SITE_ID)
+            template = get_template_from_string(TEMPLATE)
+            c = dict(comments=flagged, site_domain=site.domain)
+            content = template.render(Context(c))
+            msg = EmailMultiAlternatives(
+                "Naughty words report on %s" % site.name, 
+                strip_tags(content), 
+                settings.DEFAULT_FROM_EMAIL, 
+                preferences.NaughtyWordPreferences.email_recipients.split('\n')
+            )
+            msg.attach_alternative(content, 'text/html')
+            msg.send()
 
         print flagged
