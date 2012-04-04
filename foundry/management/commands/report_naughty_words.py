@@ -75,7 +75,7 @@ class Command(BaseCommand):
         for comment in comments:
             # Do permitted check since we report per site. No way to do it 
             # as part of the query.
-            if comment.content_object.is_permitted:
+            if comment.content_object and comment.content_object.is_permitted:
                 if self.flag(comment.comment):
                     flagged.append(comment)
                 else:
