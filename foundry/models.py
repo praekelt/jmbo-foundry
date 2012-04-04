@@ -405,6 +405,20 @@ class PasswordResetPreferences(Preferences):
         verbose_name_plural = 'Password Reset Preferences'
 
 
+class NaughtyWordPreferences(Preferences):
+    __module__ = 'preferences.models'
+
+    entries = models.TextField(
+        'Entries',
+        default='',
+        help_text='''Each line has format "word,weight", eg. "bomb,8". \
+Weight must be a value from 1 to 10.'''
+    )
+
+    class Meta:
+        verbose_name_plural = 'Naughty Word Preferences'
+
+
 class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersonalProfile, AbstractContactProfile):
     """Class that models the default user account. Subclassing is superior to profiles since 
     a site may conceivably have more than one type of user account, but the profile architecture 
