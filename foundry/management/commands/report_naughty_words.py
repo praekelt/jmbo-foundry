@@ -93,7 +93,7 @@ class Command(BaseCommand):
                 "Naughty words report on %s" % site.name, 
                 strip_tags(content), 
                 settings.DEFAULT_FROM_EMAIL, 
-                preferences.NaughtyWordPreferences.email_recipients.split('\n')
+                preferences.NaughtyWordPreferences.email_recipients.split()
             )
             msg.attach_alternative(content, 'text/html')
             msg.send()
