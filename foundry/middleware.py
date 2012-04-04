@@ -93,6 +93,4 @@ class MembersOnlineStatusMiddleware(object):
                   online_members, 
                   settings.MEMBERS_ONLINE_TIMEOUT * 5)
         
-        print online_members
-        
         return
