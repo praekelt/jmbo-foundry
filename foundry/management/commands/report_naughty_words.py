@@ -52,7 +52,7 @@ class Command(BaseCommand):
 
         return False
 
-    #@transaction.commit_on_success
+    @transaction.commit_on_success
     def handle(self, *args, **options):
         # As long as reporting is done often this method won't turn into a 
         # memory hog.
@@ -73,12 +73,15 @@ class Command(BaseCommand):
         flagged = []
         comments = FoundryComment.objects.filter(moderated=False).order_by('id')
         for comment in comments:
-            if self.flag(comment.comment):
-                flagged.append(comment)
-            else:
-                # If a comment passes the test it is marked as moderated
-                comment.moderated = True
-                comment.save()
+            # Do permitted check since we report per site. No way to do it 
+            # as part of the query.
+            if comment.content_object.is_permitted:
+                if self.flag(comment.comment):
+                    flagged.append(comment)
+                else:
+                    # If a comment passes the test it is marked as moderated
+                    comment.moderated = True
+                    comment.save()
 
         # Compose a mail
         if flagged:
@@ -94,5 +97,3 @@ class Command(BaseCommand):
             )
             msg.attach_alternative(content, 'text/html')
             msg.send()
-
-        print flagged
