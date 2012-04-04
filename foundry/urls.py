@@ -280,6 +280,8 @@ urlpatterns = patterns('',
         },
         name='coming-soon'
     ),
+
+    # Load new comments
     url(
         r'^fetch-new-comments-ajax/(?P<content_type_id>\d+)/(?P<oid>\d+)/(?P<last_comment_id>\d+)/$',
         'foundry.views.fetch_new_comments_ajax',
@@ -407,6 +409,18 @@ urlpatterns = patterns('',
         'foundry.admin_views.persist_sort_ajax',
         {},
         name='admin-persist-sort-ajax',
+    ),
+    url(
+        r'^admin-remove-comment/(?P<comment_id>\d+)/$',
+        'foundry.admin_views.remove_comment',
+        {},
+        name='admin-remove-comment'
+    ),
+    url(
+        r'^admin-allow-comment/(?P<comment_id>\d+)/$',
+        'foundry.admin_views.allow_comment',
+        {},
+        name='admin-allow-comment'
     ),
 
 )

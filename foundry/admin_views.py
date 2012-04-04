@@ -1,11 +1,12 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import simplejson
 from django.db.models import get_model
+from django.contrib import messages
 
-from foundry.models import Page, Row, Column, Tile
+from foundry.models import Page, Row, Column, Tile, FoundryComment
 from foundry.admin_forms import RowEditAjaxForm, ColumnCreateAjaxForm, \
     ColumnEditAjaxForm, TileEditAjaxForm
 
@@ -183,3 +184,24 @@ def persist_sort_ajax(request):
         obj.save()
     return HttpResponse('')
 
+
+@staff_member_required
+def remove_comment(request, comment_id):
+    obj = get_object_or_404(FoundryComment, id=comment_id)
+    obj.is_removed = True
+    obj.moderated = True
+    obj.save()
+    msg = "The comment has been removed"
+    messages.success(request, msg, fail_silently=True)
+    return HttpResponseRedirect('/admin')
+
+
+@staff_member_required
+def allow_comment(request, comment_id):
+    obj = get_object_or_404(FoundryComment, id=comment_id)
+    obj.is_removed = False
+    obj.moderated = True
+    obj.save()
+    msg = "The comment has been allowed"
+    messages.success(request, msg, fail_silently=True)
+    return HttpResponseRedirect('/admin')

@@ -405,6 +405,29 @@ class PasswordResetPreferences(Preferences):
         verbose_name_plural = 'Password Reset Preferences'
 
 
+class NaughtyWordPreferences(Preferences):
+    __module__ = 'preferences.models'
+
+    entries = models.TextField(
+        default='',
+        help_text='''Each line has format "word,weight", eg. "bomb,8". \
+Weight must be a value from 1 to 10.'''
+    )
+    threshold = models.PositiveIntegerField(
+        default=5, 
+        help_text="""An item is deemed suspect if its weighted score exceeds \
+this value."""
+    )
+    email_recipients = models.TextField(
+        default='',
+        help_text="""Reports are sent to these email addresses. One email \
+address per line."""
+    )
+
+    class Meta:
+        verbose_name_plural = 'Naughty Word Preferences'
+
+
 class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersonalProfile, AbstractContactProfile):
     """Class that models the default user account. Subclassing is superior to profiles since 
     a site may conceivably have more than one type of user account, but the profile architecture 
@@ -698,6 +721,7 @@ it works - you cannot break anything.""",
 class FoundryComment(BaseComment):
     """Custom comment class"""
     in_reply_to = models.ForeignKey('self', null=True, blank=True, db_index=True)
+    moderated = models.BooleanField(default=False, db_index=True)
 
     @property
     def replies(self):
