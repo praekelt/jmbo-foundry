@@ -1,8 +1,11 @@
 import re
 
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.core.cache import cache
+from django.core.urlresolvers import reverse
+from django.contrib.auth import get_user
+
+from django.http import HttpResponseRedirect
 
 from preferences import preferences
 
@@ -55,3 +58,41 @@ class PaginationMiddleware:
         except (KeyError, ValueError, TypeError):
             pass
         request.__class__.page = page
+        
+class MembersOnlineStatusMiddleware(object):
+    """Cache MembersOnlineStatus instance for an authenticated member"""
+    
+    def process_request(self, request):
+        
+        MEMBERS_ONLINE_CACHE_TAG = 'MEMBERS_ONLINE'
+        
+        user = get_user(request)
+        
+        if not user.is_authenticated() and hasattr(user,'member'):
+            return
+        
+        MEMBER_ONLINE_CACHE_TAG = 'USER_%d_MEMBER_ONLINE' % user.id
+        
+        cache.set(MEMBER_ONLINE_CACHE_TAG, 
+                  MEMBER_ONLINE_CACHE_TAG, 
+                  settings.MEMBERS_ONLINE_TIMEOUT)
+        
+        online_members = cache.get(MEMBERS_ONLINE_CACHE_TAG)
+        
+        if not online_members:
+            online_members = []
+            
+        if MEMBER_ONLINE_CACHE_TAG not in online_members:
+            online_members.append(MEMBER_ONLINE_CACHE_TAG)
+        
+        for member_id in online_members:
+            if not cache.get(member_id):
+                online_members.remove(member_id)
+                
+        cache.set(MEMBERS_ONLINE_CACHE_TAG, 
+                  online_members, 
+                  settings.MEMBERS_ONLINE_TIMEOUT * 5)
+        
+        print online_members
+        
+        return

@@ -93,7 +93,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'likes.middleware.SecretBallotUserIpUseragentMiddleware',
     'foundry.middleware.PaginationMiddleware',
-    'foundry.middleware.VerboseRequestMeta',                    
+    'foundry.middleware.VerboseRequestMeta',
+    'foundry.middleware.MembersOnlineStatusMiddleware',                  
     'django.middleware.transaction.TransactionMiddleware',
 )
 
@@ -216,6 +217,7 @@ JMBO_ANALYTICS = {
     'google_analytics_id': '', 
 }
 
+MEMBERS_ONLINE_TIMEOUT = 2 * 60 * 60
 
 def compute_settings(sender):
     """Settings computed from earlier values. Put in a function so other 

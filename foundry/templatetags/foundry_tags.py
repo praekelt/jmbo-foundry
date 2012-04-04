@@ -406,6 +406,17 @@ def profile_blurb(user):
             'unread_messages' : DirectMessage.objects.filter(to_member__id=user.id, state='sent', reply_to=None).count(),
             'can_friend' : user.member.can_friend(user.member) if user.is_authenticated() and isinstance(user, Member) else False,
             }
+#------------------------------------------------------------------------------
+@register.inclusion_tag('foundry/inclusion_tags/message_count.html')
+def message_count(user):
+    """
+    Displays the user's number of unread messages.
+    """
+    
+    if hasattr(user,'member'):
+        return { 'message_count' : DirectMessage.objects.filter(to_member__id=user.id, state='sent', reply_to=None).count() }
+    else:
+        return { 'message_count' : 0 }
 
 #------------------------------------------------------------------------------
 @register.inclusion_tag('foundry/inclusion_tags/direct_message.html')
