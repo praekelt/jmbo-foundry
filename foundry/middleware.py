@@ -68,7 +68,7 @@ class MembersOnlineStatusMiddleware(object):
         
         user = get_user(request)
         
-        if not user.is_authenticated() and hasattr(user,'member'):
+        if not user.is_authenticated() or not hasattr(user,'member'):
             return
         
         MEMBER_ONLINE_CACHE_TAG = 'USER_%d_MEMBER_ONLINE' % user.id
