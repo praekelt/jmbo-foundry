@@ -468,6 +468,9 @@ class CreateBlogPostForm(forms.ModelForm):
         instance.state = 'published'
         if commit:
             instance.save()
+        
+        models.UserActivity.add_blog_post(instance)    
+        
         return instance            
 
     as_div = as_div

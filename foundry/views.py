@@ -27,7 +27,7 @@ from jmbo.view_modifiers import DefaultViewModifier
 from preferences import preferences
 
 from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification, \
-    Member, MemberFriend, DirectMessage
+    Member, MemberFriend, DirectMessage, UserActivity
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
     SearchForm, CreateBlogPostForm, FriendRequestForm
 
@@ -238,6 +238,11 @@ class MemberDetail(CreateView):
         username = kwargs.pop('username')
         self.member = get_object_or_404(Member, username=username)
         return super(MemberDetail, self).post(request, *args, **kwargs)
+
+class UserActivityView(ListView):
+    
+    def get_queryset(self):
+        return UserActivity.objects.filter(user=self.request.user).order_by('-created')
 
 class Inbox(ListView):
     

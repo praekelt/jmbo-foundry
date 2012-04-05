@@ -236,6 +236,13 @@ urlpatterns = patterns('',
         name='member-notifications'
     ),
 
+    # User activity
+    url(
+        r'^user-activity/$', 
+        login_required(views.UserActivityView.as_view(template_name='foundry/user_activity.html')),
+        name='user_activity'
+    ),
+
     # User detail page
     url(
         r'^users/(?P<username>[\w-]+)/$', 

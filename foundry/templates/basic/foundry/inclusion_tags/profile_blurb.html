@@ -14,6 +14,9 @@
         </div>
     {% endif %}
     <div class="friend first">
+        <a href="{% url user_activity %}">{% trans "Activity" %}</a>
+    </div>
+    <div class="friend">
         <a href="{% url inbox %}">{% trans "Inbox" %}{% if unread_messages %} ({{ unread_messages }}){% endif %}</a>
     </div>
     <div class="friend">
@@ -23,9 +26,9 @@
         <a href="{% url create-blogpost %}">{% trans "Create Post" %}</a>
     </div>
     <div class="friend">
-        <a href="{% url update-profile %}">{% trans "Update Profile" %}</a>
+        <a href="{% url my-friends %}">{% trans "Friends" %}</a>
     </div>
     <div class="friend last">
-        <a href="{% url my-friends %}">{% trans "Friends" %}</a>
+        <a href="{% url update-profile %}">{% trans "Profile" %}</a>
     </div>
 </div>

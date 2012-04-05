@@ -785,6 +785,26 @@ class MemberFriend(models.Model):
             for obj in Notification.objects.filter(member=self.friend, link=link):
                 obj.delete()
 
+class UserActivity(models.Model):
+    """
+    Stores actions executed by users.
+    """
+    user = models.ForeignKey(User)
+    activity = models.CharField(max_length=256)
+    sub = models.CharField(max_length=256, null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    
+    @staticmethod
+    def add_blog_post(blog_post):
+        UserActivity.objects.create(user=blog_post.owner,
+                                    activity=ugettext('You added a <a href="%s">Blog Post</a>' % blog_post.get_absolute_url()),
+                                    sub=blog_post.title)
+        
+def log_blog_post(sender, instance, created, **kwargs):
+    if created:
+        pass
+
+post_save.connect(log_blog_post, sender=BlogPost)
 
 @receiver(m2m_changed)
 def check_slug(sender, **kwargs):
