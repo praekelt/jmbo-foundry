@@ -410,6 +410,8 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersona
     a site may conceivably have more than one type of user account, but the profile architecture 
     limits the entire site to a single type of profile."""
     
+    badges = models.ManyToManyField('Badge', through='MemberBadge')
+    
     def __unicode__(self):
         return self.username
 
@@ -713,6 +715,12 @@ class FoundryComment(BaseComment):
         except Member.DoesNotExist:
             # Happens when comment is not made by a member
             return None
+        
+    def save(self, *args, **kwargs):
+        
+        super(FoundryComment, self).save(*args, **kwargs)
+        
+        UserActivity.add_comment(self)
 
 
 class ChatRoom(ModelBase):
@@ -784,6 +792,8 @@ class MemberFriend(models.Model):
             )
             for obj in Notification.objects.filter(member=self.friend, link=link):
                 obj.delete()
+                
+        UserActivity.accept_friend_request(self)
 
 class UserActivity(models.Model):
     """
@@ -793,19 +803,120 @@ class UserActivity(models.Model):
     activity = models.CharField(max_length=256)
     sub = models.CharField(max_length=256, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
+    content_type = models.ForeignKey(ContentType)
+    content_id = models.PositiveIntegerField()
+    checked_for_badges = models.BooleanField(default=False)
     
     @staticmethod
     def add_blog_post(blog_post):
         UserActivity.objects.create(user=blog_post.owner,
                                     activity=ugettext('You added a <a href="%s">Blog Post</a>' % blog_post.get_absolute_url()),
-                                    sub=blog_post.title)
+                                    sub=blog_post.title,
+                                    content_type=ContentType.objects.get_for_model(blog_post),
+                                    content_id=blog_post.id)
+    
+    @staticmethod
+    def add_gallery(gallery):
+        UserActivity.objects.create(user=gallery.owner,
+                                    activity=ugettext('You added a <a href="%s">Gallery</a>' % gallery.get_absolute_url()),
+                                    sub=gallery.title,
+                                    content_type=ContentType.objects.get_for_model(gallery),
+                                    content_id=gallery.id)
+    
+    @staticmethod
+    def add_image(image):
+        UserActivity.objects.create(user=image.owner,
+                                    activity=ugettext('You added a <a href="%s">Image</a>' % image.get_absolute_url()),
+                                    sub=image.title,
+                                    content_type=ContentType.objects.get_for_model(image),
+                                    content_id=image.id)
+    
+    @staticmethod
+    def accept_friend_request(member_friend):
+        UserActivity.objects.create(user=member_friend.friend,
+                                    activity=ugettext('You accepted a Friend Request from <a href="%s">%s</a>' % (reverse('member-detail', args=[member_friend.member.username]), member_friend.member)),
+                                    content_type=ContentType.objects.get_for_model(member_friend),
+                                    content_id=member_friend.id)
         
-def log_blog_post(sender, instance, created, **kwargs):
-    if created:
-        pass
+        UserActivity.objects.create(user=member_friend.member,
+                                    activity=ugettext('Your friend <a href="%s">%s</a> accepted your Friend Request. ' % (reverse('member-detail', args=[member_friend.friend.username]), member_friend.friend)),
+                                    content_type=ContentType.objects.get_for_model(member_friend),
+                                    content_id=member_friend.id)
+    
+    @staticmethod
+    def add_comment(comment):
+        UserActivity.objects.create(user=comment.user,
+                                    activity=ugettext('You added a <a href="%s">comment</a>' % comment.content_object.get_absolute_url()),
+                                    sub=comment.comment,
+                                    content_type=ContentType.objects.get_for_model(comment),
+                                    content_id=comment.id)
 
-post_save.connect(log_blog_post, sender=BlogPost)
-
+class BadgeGroup(models.Model):
+    
+    TYPE_FRIENDS = 'friends'
+    TYPE_COMMENTS = 'comments'
+    
+    TYPE_CHOICES = (
+                    (TYPE_FRIENDS,'Social Butterfly badges'),
+                    (TYPE_COMMENTS,'Chatterbox badges'),
+                    )
+    
+    title = models.CharField(max_length=32)
+    type = models.CharField(max_length=64, choices=TYPE_CHOICES)
+        
+    def __str__(self):
+        return self.get_type_display()
+    
+class Badge(ImageModel):
+    
+    # Friend types
+    
+    TYPE_SOCIAL_GRUB = 'social grub'
+    TYPE_SOCIAL_CATPERLLAR = 'social caterpillar'
+    TYPE_BABY_SOCIAL_BUTTERFLY = 'baby social butterfly'
+    TYPE_GROWN_UP_SOCIAL_BUTTERFLY = 'grown-up social butterfly'
+    TYPE_MAJESTIC_SOCIAL_BUTTERFLY = 'majestic social butterfly'
+    
+    # Comment types
+    
+    TYPE_TALKATIVE = 'talkative'
+    TYPE_CHATTERER = 'chatterer'
+    TYPE_BUSY_BODY = 'busy-body'
+    TYPE_BABBLER = 'babbler'
+    TYPE_GOSSIP_MONGER = 'gossip-monger'
+    
+    # All choices
+    
+    TYPE_CHOICES = (
+                    (TYPE_SOCIAL_GRUB,'Social Grub'),
+                    (TYPE_SOCIAL_CATPERLLAR,'Social Caterpillar'),
+                    (TYPE_BABY_SOCIAL_BUTTERFLY,'Baby Social Butterfly'),
+                    (TYPE_GROWN_UP_SOCIAL_BUTTERFLY,'Grown-up Social Butterfly'),
+                    (TYPE_MAJESTIC_SOCIAL_BUTTERFLY,'Majestic Social Butterfly'),
+                    
+                    (TYPE_TALKATIVE,'Talkative'),
+                    (TYPE_CHATTERER,'Chatterer'),
+                    (TYPE_BUSY_BODY,'Busy-body'),
+                    (TYPE_BABBLER,'Babbler'),
+                    (TYPE_GOSSIP_MONGER,'Gossip-monger'),
+                    )
+    
+    group = models.ForeignKey(BadgeGroup)
+    type = models.CharField(max_length=64, choices=TYPE_CHOICES, unique=True)
+    threshold = models.PositiveSmallIntegerField(default=0)
+    description = models.TextField(null=True, blank=True)
+        
+    def __str__(self):
+        return '%s (%s)' % (self.get_type_display(), self.group)
+    
+class MemberBadge(models.Model):
+    member = models.ForeignKey(Member)
+    badge = models.ForeignKey(Badge)
+    created = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = (('member', 'badge'),)
+    
 @receiver(m2m_changed)
 def check_slug(sender, **kwargs):
     """Slug must be unique per site"""

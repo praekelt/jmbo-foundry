@@ -82,11 +82,11 @@ class MembersOnlineStatusMiddleware(object):
         if not online_members:
             online_members = []
             
-        if MEMBER_ONLINE_CACHE_TAG not in online_members:
-            online_members.append(MEMBER_ONLINE_CACHE_TAG)
+        if user.id not in online_members:
+            online_members.append(user.id)
         
         for member_id in online_members:
-            if not cache.get(member_id):
+            if not cache.get('USER_%d_MEMBER_ONLINE' % member_id):
                 online_members.remove(member_id)
                 
         cache.set(MEMBERS_ONLINE_CACHE_TAG, 

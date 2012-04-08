@@ -404,7 +404,6 @@ def profile_blurb(user):
     return {'member' : user.member,
             'notifications' : Notification.objects.filter(member=user).count(),
             'unread_messages' : DirectMessage.objects.filter(to_member__id=user.id, state='sent', reply_to=None).count(),
-            'can_friend' : user.member.can_friend(user.member) if user.is_authenticated() and isinstance(user, Member) else False,
             }
 #------------------------------------------------------------------------------
 @register.inclusion_tag('foundry/inclusion_tags/message_count.html')

@@ -10,9 +10,9 @@ from jmbo.admin import ModelBaseAdmin
 
 from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
     NavbarLinkPosition, Navbar, GeneralPreferences, GeneralPreferences, \
-    RegistrationPreferences, LoginPreferences, Member, DefaultAvatar, \
+    RegistrationPreferences, LoginPreferences, Member, MemberFriend, DefaultAvatar, \
     PasswordResetPreferences, Country, Page, ChatRoom, BlogPost, Notification, \
-    FoundryComment, PageView, UserActivity
+    FoundryComment, PageView, UserActivity, BadgeGroup, Badge, MemberBadge
 from foundry.widgets import SelectCommaWidget
 from foundry.utils import get_view_choices
 
@@ -268,6 +268,7 @@ admin.site.register(RegistrationPreferences, RegistrationPreferencesAdmin)
 admin.site.register(LoginPreferences, LoginPreferencesAdmin)
 admin.site.register(PasswordResetPreferences, PasswordResetPreferencesAdmin)
 admin.site.register(Member, MemberAdmin)
+admin.site.register(MemberFriend)
 admin.site.register(DefaultAvatar, DefaultAvatarAdmin)
 admin.site.register(Country, CountryAdmin)
 admin.site.register(Page, PageAdmin)
@@ -276,3 +277,6 @@ admin.site.register(BlogPost, BlogPostAdmin)
 admin.site.register(Notification, NotificationAdmin)
 admin.site.register(FoundryComment, FoundryCommentAdmin)
 admin.site.register(UserActivity)
+admin.site.register(BadgeGroup)
+admin.site.register(Badge)
+admin.site.register(MemberBadge)

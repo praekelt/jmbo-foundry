@@ -469,7 +469,7 @@ class CreateBlogPostForm(forms.ModelForm):
         if commit:
             instance.save()
         
-        models.UserActivity.add_blog_post(instance)    
+        models.UserActivity.add_blog_post(instance)
         
         return instance            
 

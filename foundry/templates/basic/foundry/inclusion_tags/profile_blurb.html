@@ -20,6 +20,9 @@
         <a href="{% url inbox %}">{% trans "Inbox" %}{% if unread_messages %} ({{ unread_messages }}){% endif %}</a>
     </div>
     <div class="friend">
+        <a href="{% url my-badges %}">{% trans "My Badges" %}</a>
+    </div>
+    <div class="friend">
         <a href="{% url message-send %}">{% trans "Send Message" %}</a>
     </div>
     <div class="friend">

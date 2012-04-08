@@ -8,6 +8,26 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
+        # Adding model 'MemberBadge'
+        db.create_table('foundry_memberbadge', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('member', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['foundry.Member'])),
+            ('badge', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['foundry.Badge'])),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+        ))
+        db.send_create_signal('foundry', ['MemberBadge'])
+
+        # Adding unique constraint on 'MemberBadge', fields ['member', 'badge']
+        db.create_unique('foundry_memberbadge', ['member_id', 'badge_id'])
+
+        # Adding model 'BadgeGroup'
+        db.create_table('foundry_badgegroup', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=32)),
+            ('type', self.gf('django.db.models.fields.CharField')(max_length=64)),
+        ))
+        db.send_create_signal('foundry', ['BadgeGroup'])
+
         # Adding model 'UserActivity'
         db.create_table('foundry_useractivity', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -15,14 +35,44 @@ class Migration(SchemaMigration):
             ('activity', self.gf('django.db.models.fields.CharField')(max_length=256)),
             ('sub', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
             ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'])),
+            ('content_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('checked_for_badges', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal('foundry', ['UserActivity'])
+
+        # Adding model 'Badge'
+        db.create_table('foundry_badge', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('image', self.gf('django.db.models.fields.files.ImageField')(max_length=100, blank=True)),
+            ('date_taken', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('view_count', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
+            ('crop_from', self.gf('django.db.models.fields.CharField')(default='center', max_length=10, blank=True)),
+            ('effect', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='badge_related', null=True, to=orm['photologue.PhotoEffect'])),
+            ('group', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['foundry.BadgeGroup'])),
+            ('type', self.gf('django.db.models.fields.CharField')(max_length=64)),
+            ('threshold', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
+            ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+        ))
+        db.send_create_signal('foundry', ['Badge'])
 
 
     def backwards(self, orm):
         
+        # Removing unique constraint on 'MemberBadge', fields ['member', 'badge']
+        db.delete_unique('foundry_memberbadge', ['member_id', 'badge_id'])
+
+        # Deleting model 'MemberBadge'
+        db.delete_table('foundry_memberbadge')
+
+        # Deleting model 'BadgeGroup'
+        db.delete_table('foundry_badgegroup')
+
         # Deleting model 'UserActivity'
         db.delete_table('foundry_useractivity')
+
+        # Deleting model 'Badge'
+        db.delete_table('foundry_badge')
 
 
     models = {
@@ -91,6 +141,25 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
+        'foundry.badge': {
+            'Meta': {'object_name': 'Badge'},
+            'crop_from': ('django.db.models.fields.CharField', [], {'default': "'center'", 'max_length': '10', 'blank': 'True'}),
+            'date_taken': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'effect': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'badge_related'", 'null': 'True', 'to': "orm['photologue.PhotoEffect']"}),
+            'group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.BadgeGroup']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'blank': 'True'}),
+            'threshold': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
+            'type': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
+            'view_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'})
+        },
+        'foundry.badgegroup': {
+            'Meta': {'object_name': 'BadgeGroup'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
+            'type': ('django.db.models.fields.CharField', [], {'max_length': '64'})
         },
         'foundry.blogpost': {
             'Meta': {'ordering': "('-created',)", 'object_name': 'BlogPost', '_ormbases': ['jmbo.ModelBase']},
@@ -168,6 +237,7 @@ class Migration(SchemaMigration):
         'foundry.member': {
             'Meta': {'object_name': 'Member', '_ormbases': ['auth.User']},
             'about_me': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'badges': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['foundry.Badge']", 'through': "orm['foundry.MemberBadge']", 'symmetrical': 'False'}),
             'crop_from': ('django.db.models.fields.CharField', [], {'default': "'center'", 'max_length': '10', 'blank': 'True'}),
             'date_taken': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'dob': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
@@ -178,6 +248,13 @@ class Migration(SchemaMigration):
             'twitter_username': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
             'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'}),
             'view_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'})
+        },
+        'foundry.memberbadge': {
+            'Meta': {'unique_together': "(('member', 'badge'),)", 'object_name': 'MemberBadge'},
+            'badge': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Badge']"}),
+            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'member': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Member']"})
         },
         'foundry.memberfriend': {
             'Meta': {'object_name': 'MemberFriend'},
@@ -268,6 +345,9 @@ class Migration(SchemaMigration):
         'foundry.useractivity': {
             'Meta': {'object_name': 'UserActivity'},
             'activity': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'checked_for_badges': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'content_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'sub': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),

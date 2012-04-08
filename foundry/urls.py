@@ -277,6 +277,11 @@ urlpatterns = patterns('',
                                                     template_name='foundry/message_reply.html')),
         name='message-reply'
     ),
+    
+    url(r'^my_badges/$',
+        login_required(views.MyBadges.as_view(template_name='foundry/my_badges.html')),
+        name='my-badges'
+    ),
 
     # Coming soon
     url(
