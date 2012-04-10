@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<div class="content user-detail">
+	<div class="content member-detail">
 	    <div class="title">{{ object.username }}</div>
 	    {% with form_name='frmUpdateProfile' submit='Update' %}
 	        {% include "foundry/includes/form.html" %}
