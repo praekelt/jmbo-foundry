@@ -2,9 +2,9 @@
 read -p "Installing required libraries. You may be prompted for a password. [enter]" y
 sudo apt-get install python-virtualenv mysql-server libmysqlclient-dev python-dev libjpeg62-dev
 echo "Setting up sandboxed Python environment"
-virtualenv --no-site-packages ve && source ve/bin/activate
+virtualenv --no-site-packages ve
 echo "Downloading distribute"
-python bootstrap.py
+ve/bin/python bootstrap.py
 read -p "This part may take a while. If it fails with 'connection reset by peer' run ./install-app again. [enter]" y
 ./bin/buildout -Nv -c dev.cfg
 read -p "Create a superuser when prompted. Do not generate default content. [enter]" y
