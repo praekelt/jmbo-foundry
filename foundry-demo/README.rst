@@ -1,17 +1,17 @@
 Jmbo Foundry Demo Setup
 =======================
 
-Getting started with a Foundry App
+Getting started with a Jmbo Foundry App.
 
 
 Installation
 ------------
 
-Download the sample project and extract it.
- https://github.com/downloads/praekelt/jmbo-foundry/jmbo-demo.tar.gz
-
 From the terminal::
 
+ cd /tmp
+ wget https://github.com/downloads/praekelt/jmbo-foundry/jmbo-demo.tar.gz
+ tar -xvzf jmbo-demo.tar.gz
  cd jmbo-demo
  ./install-app
 
@@ -19,11 +19,14 @@ From the terminal::
 Running the app
 ---------------
 
-From the terminal
+From the terminal::
 
-`./bin/foundry runserver`
+ ./bin/foundry runserver
 
-http://localhost:8000/  #the public site
 
-http://localhost:8000/admin/ #the admin interface
+Browse
+------
+
+Browse to the public site at http://localhost:8000/. The admin interface is at
+http://localhost:8000/admin/.
 
