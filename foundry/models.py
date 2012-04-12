@@ -213,7 +213,6 @@ class Listing(models.Model):
         choices=((style[0], style[0]) for style in inspect.getmembers(listing_styles, inspect.isclass) if style[0] != 'AbstractBaseStyle'),
         max_length=64
     )
-    display_likes = models.BooleanField(default=True)
     items_per_page = models.PositiveIntegerField(
         default=0, 
         help_text="Number of items displayed on a page. Set to zero to disable paging."
