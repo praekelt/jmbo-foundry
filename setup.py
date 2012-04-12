@@ -83,6 +83,7 @@ setup(
         'BeautifulSoup',
         'django_compressor',
         'jmbo_analytics',
+        'jmbo-friends',
     ],
     include_package_data=True,
     tests_require=[
