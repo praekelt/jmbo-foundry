@@ -1,5 +1,4 @@
 import types
-import random
 from BeautifulSoup import BeautifulSoup
 
 from django import template
@@ -12,7 +11,7 @@ from django.conf import settings
 
 from preferences import preferences
 
-from foundry.models import Menu, Navbar, Listing, Page, Member, DirectMessage
+from foundry.models import Menu, Navbar, Listing, Page, Member
 from foundry.templatetags import listing_styles
 
 register = template.Library()
@@ -334,59 +333,3 @@ class ListingQuerysetNode(template.Node):
             context[as_var] = None
 
         return ''
-
-#------------------------------------------------------------------------------
-@register.inclusion_tag('foundry/inclusion_tags/my_friends.html')
-def my_friends(member, my_friends):
-    """
-    Displays my friends and some of their's too.
-    """
-    friends, exclude_ids = Member.objects.get(id=member.id).get_friends_with_ids()
-    exclude_ids.append(member.id)
-    for friend in friends:
-        friend.other_friends, friend_ids = friend.get_friends_with_ids(exclude_ids, 5)
-        exclude_ids.extend(friend_ids)
-    
-    return { 'friends' : friends }
-
-#------------------------------------------------------------------------------
-@register.inclusion_tag('foundry/inclusion_tags/suggested_friends.html')
-def suggested_friends(user):
-    """
-    Displays a list of suggested friends.
-    """
-    try:
-        CACHE_KEY = 'JMBO_SUGGESTED_FRIENDS_MEMBER_ID_%d' % user.member.id
-        suggested_friend_ids = cache.get(CACHE_KEY)
-        if suggested_friend_ids:
-            suggested_friends = Member.objects.filter(pk__in=suggested_friend_ids)
-        else:
-            friends, exclude_ids = Member.objects.get(id=user.member.id).get_friends_with_ids()
-            exclude_ids.append(user.member.id)
-            suggested_friends = []
-            for friend in friends:
-                friend.other_friends, friend_ids = friend.get_friends_with_ids(exclude_ids, 5)
-                for suggested_friend in friend.other_friends:
-                    suggested_friends.append(suggested_friend) 
-                exclude_ids.extend(friend_ids)
-                
-            if len(suggested_friends) > 5:
-                suggested_friends = random.sample(suggested_friends, 5)
-                
-            cache.set(CACHE_KEY, [fr.id for fr in suggested_friends], 60 * 5)
-        
-        return { 'suggested_friends' : suggested_friends }
-    except:
-        pass
-    
-    return {}
-
-#------------------------------------------------------------------------------
-@register.inclusion_tag('foundry/inclusion_tags/direct_message.html')
-def direct_message(direct_message):
-    """
-    Iterates through all the message replies.
-    """
-    return { 'object' : direct_message }
-
-
