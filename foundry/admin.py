@@ -12,7 +12,7 @@ from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
     NavbarLinkPosition, Navbar, GeneralPreferences, GeneralPreferences, \
     RegistrationPreferences, LoginPreferences, Member, MemberFriend, DefaultAvatar, \
     PasswordResetPreferences, Country, Page, ChatRoom, BlogPost, Notification, \
-    FoundryComment, PageView, UserActivity, BadgeGroup, Badge, MemberBadge
+    FoundryComment, PageView, UserActivity, BadgeGroup, Badge, MemberBadge, Download
 from foundry.widgets import SelectCommaWidget
 from foundry.utils import get_view_choices
 
@@ -280,3 +280,4 @@ admin.site.register(UserActivity)
 admin.site.register(BadgeGroup)
 admin.site.register(Badge)
 admin.site.register(MemberBadge)
+admin.site.register(Download)
