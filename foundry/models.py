@@ -916,6 +916,20 @@ class MemberBadge(models.Model):
     
     class Meta:
         unique_together = (('member', 'badge'),)
+        
+#==============================================================================
+class Download(ModelBase):
+    """Model for downloads."""
+    points_required = models.PositiveSmallIntegerField(default=0)
+    file = models.FileField(upload_to='downloads/')
+    
+    #--------------------------------------------------------------------------
+    def __unicode__(self):
+        return self.title
+    
+    #==========================================================================
+    class Meta:
+        ordering = ['points_required']
     
 @receiver(m2m_changed)
 def check_slug(sender, **kwargs):
