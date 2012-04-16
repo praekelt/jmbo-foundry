@@ -50,7 +50,7 @@ class Command(BaseCommand):
         return total_weight > self.threshold
 
 
-    #@transaction.commit_on_success
+    @transaction.commit_on_success
     def handle(self, *args, **options):
         # As long as reporting is done often this method won't turn into a 
         # memory hog.
@@ -94,5 +94,4 @@ class Command(BaseCommand):
                 preferences.NaughtyWordPreferences.email_recipients.split()
             )
             msg.attach_alternative(content, 'text/html')
-            #msg.send()
-            print content
+            msg.send()
