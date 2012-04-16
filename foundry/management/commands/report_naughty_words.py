@@ -45,7 +45,8 @@ class Command(BaseCommand):
         for naughty in self.words:
             for word in words:
                 score = jellyfish.jaro_distance(word, naughty)
-                total_weight = total_weight + (score * self.words[naughty])
+                if score > 0.7:
+                    total_weight = total_weight + (score * self.words[naughty])
 
         return total_weight > self.threshold
 
