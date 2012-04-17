@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+	<div class="content member-detail">
+	    <div class="title">{{ object.username }}</div>
+
+        <form action="{% url edit-profile %}" method="POST" class="foundry-form">   
+	        {% csrf_token %}
+            {{ form.as_div }}
+            <div class="buttons">
+                <input type="submit" value="{% trans "Save" %}" />
+            </div>
+        </form>
+	</div>  
+{% endblock %}

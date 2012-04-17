@@ -83,7 +83,8 @@ setup(
         'BeautifulSoup',
         'django_compressor',
         'jmbo_analytics',
-        'jellyfish',
+        'jmbo-friends',
+        'jellyfish'
     ],
     include_package_data=True,
     tests_require=[
