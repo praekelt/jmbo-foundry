@@ -1,6 +1,6 @@
 #!/bin/sh
 read -p "Installing required libraries. You may be prompted for a password. [enter]" y
-sudo apt-get install python-virtualenv mysql-server libmysqlclient-dev python-dev libjpeg62-dev
+sudo apt-get install python-virtualenv mysql-server libmysqlclient-dev python-dev libjpeg62-dev git-core
 echo "Setting up sandboxed Python environment"
 virtualenv --no-site-packages ve
 echo "Downloading distribute"
@@ -12,6 +12,7 @@ read -p "Create a superuser when prompted. Do not generate default content. [ent
 ./bin/foundry migrate category
 ./bin/foundry migrate jmbo
 ./bin/foundry migrate foundry
+./bin/foundry migrate friends
 ./bin/foundry loaddata src/jmbo-foundry/foundry/fixtures/photosizes.json
 ./bin/foundry loaddata src/jmbo-post/post/fixtures/photosizes.json
 ./bin/foundry loaddata src/jmbo-gallery/gallery/fixtures/photosizes.json

@@ -116,6 +116,7 @@ ROOT_URLCONF = 'foundrydemo.urls'
 
 INSTALLED_APPS = (
     'foundrydemo',
+    'friends',
     'foundry',
     'section',
     'gallery',
