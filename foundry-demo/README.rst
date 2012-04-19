@@ -10,9 +10,9 @@ Installation
 From the terminal::
 
  cd /tmp
- wget https://github.com/downloads/praekelt/jmbo-foundry/jmbo-demo.tar.gz
- tar -xvzf jmbo-demo.tar.gz
- cd jmbo-demo
+ wget https://github.com/downloads/praekelt/jmbo-foundry/demo.tar.gz
+ tar -xvzf demo.tar.gz
+ cd demo
  ./install-app
 
 
