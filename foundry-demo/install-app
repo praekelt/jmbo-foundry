@@ -1,12 +1,13 @@
 #!/bin/sh
 read -p "Installing required libraries. You may be prompted for a password. [enter]" y
-sudo apt-get install python-virtualenv mysql-server libmysqlclient-dev python-dev libjpeg62-dev git-core
+sudo apt-get install python-virtualenv mysql-server libmysqlclient-dev python-dev \
+libjpeg62-dev git-core libjpeg62-dev zlib1g-dev --no-upgrade
 echo "Setting up sandboxed Python environment"
-virtualenv --no-site-packages ve
+virtualenv --python=python2.6 --no-site-packages ve
 echo "Downloading distribute"
 ve/bin/python bootstrap.py
 read -p "This part may take a while. If it fails with 'connection reset by peer' run ./install-app again. [enter]" y
-./bin/buildout -Nv -c dev.cfg
+./bin/buildout -nv -c dev.cfg
 read -p "Create a superuser when prompted. Do not generate default content. [enter]" y
 ./bin/foundry syncdb
 ./bin/foundry migrate category
