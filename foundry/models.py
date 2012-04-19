@@ -312,20 +312,20 @@ class RegistrationPreferences(Preferences):
 
     raw_display_fields = models.CharField(
         'Display fields',
-        max_length=32, 
+        max_length=256, 
         default='',
         help_text=_('Fields to display on the registration form.')
     )
     raw_required_fields = models.CharField(
         'Required fields',
-        max_length=32, 
+        max_length=256, 
         default='',
         blank=True,
         help_text=_('Set fields which are not required by default as required on the registration form.')
     )
     raw_unique_fields = models.CharField(
         'Unique fields',
-        max_length=32, 
+        max_length=256, 
         default='',
         blank=True,
         help_text=_('Set fields which must be unique on the registration form.')
