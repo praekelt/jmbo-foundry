@@ -310,23 +310,31 @@ class GeneralPreferences(Preferences):
 
 class RegistrationPreferences(Preferences):
     __module__ = 'preferences.models'
-
+    
+    # ALTER TABLE preferences_registrationpreferences ALTER raw_display_fields TYPE character varying(256);
+    
     raw_display_fields = models.CharField(
         'Display fields',
-        max_length=32, 
+        max_length=256, 
         default='',
         help_text=_('Fields to display on the registration form.')
     )
+    
+    # ALTER TABLE preferences_registrationpreferences ALTER raw_required_fields TYPE character varying(256);
+    
     raw_required_fields = models.CharField(
         'Required fields',
-        max_length=32, 
+        max_length=256, 
         default='',
         blank=True,
         help_text=_('Set fields which are not required by default as required on the registration form.')
     )
+    
+    # ALTER TABLE preferences_registrationpreferences ALTER raw_unique_fields TYPE character varying(256);
+    
     raw_unique_fields = models.CharField(
         'Unique fields',
-        max_length=32, 
+        max_length=256, 
         default='',
         blank=True,
         help_text=_('Set fields which must be unique on the registration form.')
@@ -411,6 +419,11 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersona
     limits the entire site to a single type of profile."""
     
     badges = models.ManyToManyField('Badge', through='MemberBadge')
+    
+    country = models.ForeignKey('Country',
+        blank=True,
+        null=True,
+    )
     
     def __unicode__(self):
         return self.username
@@ -803,8 +816,8 @@ class UserActivity(models.Model):
     activity = models.CharField(max_length=256)
     sub = models.CharField(max_length=256, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
-    content_type = models.ForeignKey(ContentType)
-    content_id = models.PositiveIntegerField()
+    content_type = models.ForeignKey(ContentType, null=True, blank=True)
+    content_id = models.PositiveIntegerField(null=True, blank=True)
     checked_for_badges = models.BooleanField(default=False)
     
     @staticmethod
@@ -850,6 +863,11 @@ class UserActivity(models.Model):
                                     sub=comment.comment,
                                     content_type=ContentType.objects.get_for_model(comment),
                                     content_id=comment.id)
+    
+    @staticmethod
+    def add_share(user, link, medium):
+        UserActivity.objects.create(user=user,
+                                    activity=ugettext('You shared <a href="%s">%s</a> via %s' % (link, link, medium)))
 
 class BadgeGroup(models.Model):
     

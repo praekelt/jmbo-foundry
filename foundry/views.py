@@ -1,5 +1,6 @@
 import datetime
 import random
+import urllib
 
 from django.conf import settings
 from django.contrib.auth import authenticate, login, get_backends
@@ -8,7 +9,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseServerError
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext, loader
-from django.views.generic import DetailView, ListView, CreateView, UpdateView, TemplateView
+from django.views.generic import DetailView, ListView, CreateView, UpdateView, TemplateView, View
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
@@ -432,6 +433,26 @@ class MyBadges(TemplateView):
         Notification.objects.filter(member=self.request.user.member, link=link).delete()
 
         return { 'badge_groups' : badge_groups }
+        
+class Share(View):
+    """
+    Share via Facebook or Twitter.
+    """
+    type = None
+    
+    def get(self, request, *args, **kwargs):
+        current_url = request.META['HTTP_REFERER']
+        
+        if self.type == 'Facebook':
+            url = 'http://www.facebook.com/sharer/sharer.php?u=%s' % urllib.quote(current_url)
+        elif self.type == 'Twitter':
+            url = 'https://twitter.com/intent/tweet?original_referer=%s' % urllib.quote(current_url)
+        else:
+            return Http404()
+        
+        UserActivity.add_share(request.user, request.META['HTTP_REFERER'], self.type)
+        
+        return HttpResponseRedirect(url)
 
 
 @requires_csrf_token
