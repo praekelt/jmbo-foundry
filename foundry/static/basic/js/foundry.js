@@ -87,6 +87,6 @@ $(document).ready(function(){
             );
         });
     }
-    //setInterval(load_new_comments, 30000);
+    setInterval(load_new_comments, 30000);
 
 });

@@ -1,16 +1,17 @@
 import types
-import random
 from BeautifulSoup import BeautifulSoup
 
 from django import template
 from django.core.cache import cache
 from django.core.urlresolvers import reverse, resolve, NoReverseMatch
 from django.template.loader import render_to_string
+from django.http import HttpResponse
+from django.template.response import TemplateResponse
 from django.conf import settings
 
 from preferences import preferences
 
-from foundry.models import Menu, Navbar, Listing, Page, Member, DirectMessage
+from foundry.models import Menu, Navbar, Listing, Page, Member
 from foundry.templatetags import listing_styles
 
 register = template.Library()
@@ -119,40 +120,23 @@ def listing(parser, token):
    
     slug_or_queryset = tokens[1]
 
-    title = items_per_page = style = 'None'
-    if length >= 3:
-        title = tokens[2]
-    if length >= 4:
-        style = tokens[3]
-    if length >= 5:
-        items_per_page = tokens[4]
+    kwargs = {}
+    for token in tokens[2:]:
+        k, v = token.split('=')
+        kwargs[k] = v
 
-    return ListingNode(slug_or_queryset, title, style, items_per_page)
+    return ListingNode(slug_or_queryset, **kwargs)
 
 
 class ListingNode(template.Node):
 
-    def __init__(self, slug_or_queryset, title='None', style='None', items_per_page='None'):
+    def __init__(self, slug_or_queryset, **kwargs):
         self.slug_or_queryset = template.Variable(slug_or_queryset)
-        self.title = template.Variable(title)
-        self.style = template.Variable(style)
-        self.items_per_page = template.Variable(items_per_page)
+        self.kwargs = kwargs
 
     def render(self, context):
         slug_or_queryset = self.slug_or_queryset.resolve(context)
-        try:
-            title = self.title.resolve(context)
-        except template.VariableDoesNotExist:
-            title = ''
-        try:
-            style = self.style.resolve(context)
-        except template.VariableDoesNotExist:
-            style = 'VerticalThumbnail'
-        try:
-            items_per_page = self.items_per_page.resolve(context)
-        except template.VariableDoesNotExist:
-            items_per_page = 100
-
+        
         if isinstance(slug_or_queryset, types.UnicodeType):
             try:
                 obj = Listing.permitted.get(slug=slug_or_queryset)
@@ -164,13 +148,16 @@ class ListingNode(template.Node):
                 """Helper class emulating Listing API so AbstractBaseStyle
                 works. Essentially a record class."""
 
-                def __init__(self, queryset, title, style, items_per_page):
+                def __init__(self, queryset, **kwargs):
                     self.queryset = queryset
-                    self.title = title
-                    self.style = style
-                    self.items_per_page = items_per_page
+                    self.items_per_page = 0
+                    for k, v in kwargs.items():
+                        setattr(self, k, v)
 
-            obj = ListingProxy(slug_or_queryset, title, style, items_per_page)
+            di = {}
+            for k, v in self.kwargs.items():
+                di[k] = template.Variable(v).resolve(context)
+            obj = ListingProxy(slug_or_queryset, **di)
 
         return getattr(listing_styles, obj.style)(obj).render(context)
 
@@ -250,7 +237,15 @@ class TileNode(template.Node):
             # Set recursion guard flag
             setattr(context['request'], '_foundry_suppress_rows_tag', 1)            
             # Call the view. Let any error propagate.
-            html = view(context['request'], *args, **kwargs).content
+            html = ''
+            result = view(context['request'], *args, **kwargs)
+            if isinstance(result, TemplateResponse):
+                # The result of a generic view
+                result.render()
+                html = result.rendered_content
+            elif isinstance(result, HttpResponse):
+                # Old-school view
+                html = result.content
             # Clear flag  
             # xxx: something may clear the flag. Need to investigate more 
             # incase of thread safety problem.
@@ -338,59 +333,3 @@ class ListingQuerysetNode(template.Node):
             context[as_var] = None
 
         return ''
-
-#------------------------------------------------------------------------------
-@register.inclusion_tag('foundry/inclusion_tags/my_friends.html')
-def my_friends(member, my_friends):
-    """
-    Displays my friends and some of their's too.
-    """
-    friends, exclude_ids = Member.objects.get(id=member.id).get_friends_with_ids()
-    exclude_ids.append(member.id)
-    for friend in friends:
-        friend.other_friends, friend_ids = friend.get_friends_with_ids(exclude_ids, 5)
-        exclude_ids.extend(friend_ids)
-    
-    return { 'friends' : friends }
-
-#------------------------------------------------------------------------------
-@register.inclusion_tag('foundry/inclusion_tags/suggested_friends.html')
-def suggested_friends(user):
-    """
-    Displays a list of suggested friends.
-    """
-    try:
-        CACHE_KEY = 'JMBO_SUGGESTED_FRIENDS_MEMBER_ID_%d' % user.member.id
-        suggested_friend_ids = cache.get(CACHE_KEY)
-        if suggested_friend_ids:
-            suggested_friends = Member.objects.filter(pk__in=suggested_friend_ids)
-        else:
-            friends, exclude_ids = Member.objects.get(id=user.member.id).get_friends_with_ids()
-            exclude_ids.append(user.member.id)
-            suggested_friends = []
-            for friend in friends:
-                friend.other_friends, friend_ids = friend.get_friends_with_ids(exclude_ids, 5)
-                for suggested_friend in friend.other_friends:
-                    suggested_friends.append(suggested_friend) 
-                exclude_ids.extend(friend_ids)
-                
-            if len(suggested_friends) > 5:
-                suggested_friends = random.sample(suggested_friends, 5)
-                
-            cache.set(CACHE_KEY, [fr.id for fr in suggested_friends], 60 * 5)
-        
-        return { 'suggested_friends' : suggested_friends }
-    except:
-        pass
-    
-    return {}
-
-#------------------------------------------------------------------------------
-@register.inclusion_tag('foundry/inclusion_tags/direct_message.html')
-def direct_message(direct_message):
-    """
-    Iterates through all the message replies.
-    """
-    return { 'object' : direct_message }
-
-
