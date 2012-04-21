@@ -351,8 +351,8 @@ class RegistrationPreferences(Preferences):
         # duplicate values. For example, if mobile number was not a unique
         # field before but it is now, then there may not be two members with
         # the same mobile number.
-        for fieldname in self.unique_fields:
-            values = Member.objects.all().values_list(fieldname, flat=True)
+        for fieldname in self.unique_fields:            
+            values = Member.objects.exclude(**{fieldname: None}).values_list(fieldname, flat=True)
             # set removes duplicates from a list
             if len(values) != len(set(values)):
                 raise RuntimeError(
