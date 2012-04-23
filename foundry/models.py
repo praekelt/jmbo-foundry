@@ -427,10 +427,30 @@ address per line."""
         verbose_name_plural = 'Naughty Word Preferences'
 
 
+class Country(models.Model):
+    """Countries used in the age gateway"""
+    title = models.CharField(max_length=32)
+    slug = models.SlugField(
+        editable=True,
+        max_length=32,
+        db_index=True,
+    )
+    minimum_age = models.PositiveIntegerField(default=18)
+
+    class Meta:
+        verbose_name_plural = 'Countries'
+        ordering = ('title',)
+
+    def __unicode__(self):
+        return self.title
+
+
 class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersonalProfile, AbstractContactProfile):
     """Class that models the default user account. Subclassing is superior to profiles since 
     a site may conceivably have more than one type of user account, but the profile architecture 
     limits the entire site to a single type of profile."""
+
+    country = models.ForeignKey(Country, null=True, blank=True)
     
     def __unicode__(self):
         return self.username
@@ -470,24 +490,6 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersona
 class DefaultAvatar(ImageModel):
     """A set of avatars users can choose from"""
     pass
-
-
-class Country(models.Model):
-    """Countries used in the age gateway"""
-    title = models.CharField(max_length=32)
-    slug = models.SlugField(
-        editable=True,
-        max_length=32,
-        db_index=True,
-    )
-    minimum_age = models.PositiveIntegerField(default=18)
-
-    class Meta:
-        verbose_name_plural = 'Countries'
-        ordering = ('title',)
-
-    def __unicode__(self):
-        return self.title
 
 
 class Page(models.Model):
