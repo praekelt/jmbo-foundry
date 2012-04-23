@@ -72,6 +72,33 @@ $(document).ready(function(){
         _submit_intercept_common(this, event, target);
     });
 
+    // Post a comment
+    $('form.comment-form').live('submit', function(event){
+        event.preventDefault();
+        var form = $(this);
+        var url = $(this).attr('action');
+        var data = $(this).serialize();
+        $.ajax({
+            url: url,
+            data: data,
+            async: false,
+            type: 'POST',
+            cache: false,                    
+            success: function(data){
+                if (data.indexOf('{') == 0)
+                {
+                    var obj = $.parseJSON(data);
+                    $('div.comment-list-placeholder').html(obj.html);
+                    var el = $('textarea', form);
+                    el.val('');
+                    el.focus();
+                }
+                else
+                    form.replaceWith(data);
+            }
+        })
+    });
+
     // Load new comments and chats
     function load_new_comments(){
         $('div.comment-list-placeholder').each(function(index){
