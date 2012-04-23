@@ -6,8 +6,28 @@ echo "Setting up sandboxed Python environment"
 virtualenv --python=python2.6 --no-site-packages ve
 echo "Downloading distribute"
 ve/bin/python bootstrap.py
-read -p "This part may take a while. If it fails with 'connection reset by peer' run ./install-app again. [enter]" y
-./bin/buildout -nv -c dev.cfg
+
+echo "Choose the type of demo site:"
+choice=3
+echo "1. Mobi"
+echo "2. Web"
+while [ $choice -eq 3 ]; do
+    read choice
+    if [ $choice -eq 1 ] ; then
+        read -p "This part may take a while. If it fails with 'connection reset by peer' run ./install-app again. [enter]" y
+        ./bin/buildout -nv -c dev_basic.cfg
+    else
+        read -p "This part may take a while. If it fails with 'connection reset by peer' run ./install-app again. [enter]" y
+        ./bin/buildout -nv -c dev_web.cfg
+    fi
+done
+
+# Remove stale database
+if [ -f /tmp/foundrydemo.sql ];
+then
+    rm /tmp/foundrydemo.sql
+fi
+
 read -p "Create a superuser when prompted. Do not generate default content. [enter]" y
 ./bin/foundry syncdb
 ./bin/foundry migrate category
