@@ -115,9 +115,16 @@ class JoinForm(UserCreationForm):
     def clean(self):
         cleaned_data = super(JoinForm, self).clean()
 
-        # Validate unique fields
+        # Validate required fields
         required_fields = preferences.RegistrationPreferences.required_fields
         for name in required_fields:
+            value = self.cleaned_data.get(name, None)
+            if not value:
+                message = _("This field is required.")
+
+        # Validate unique fields
+        unique_fields = preferences.RegistrationPreferences.unique_fields
+        for name in unique_fields:
             value = self.cleaned_data.get(name, None)
             if value is not None:
                 di = {'%s__iexact' % name:value}
