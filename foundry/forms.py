@@ -18,6 +18,7 @@ from django.contrib.sites.models import Site
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
+from django.db.models import DateField
 from django.conf import settings
 
 from preferences import preferences
@@ -99,8 +100,6 @@ Note that both fields are case-sensitive."
     
 class JoinForm(UserCreationForm):
     """Custom join form"""
-    country = forms.ModelChoiceField(queryset=models.Country.objects.all())
-    date_of_birth = forms.DateField(widget=OldSchoolDateWidget) # todo: widget
     accept_terms = forms.BooleanField(required=True, label="", widget=TermsCheckboxInput)
 
     class Meta:
@@ -117,6 +116,11 @@ class JoinForm(UserCreationForm):
 
         # Validate required fields
         required_fields = preferences.RegistrationPreferences.required_fields
+        if self.show_age_gateway:
+            if 'country' not in required_fields:
+                required_fields.append('country')
+            if 'dob' not in required_fields:
+                required_fields.append('dob')
         for name in required_fields:
             value = self.cleaned_data.get(name, None)
             if not value:
@@ -138,10 +142,10 @@ Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
         # Age gateway fields
         if self.show_age_gateway:
             country = cleaned_data.get('country')
-            date_of_birth = cleaned_data.get('date_of_birth')
-            if country and date_of_birth:
+            dob = cleaned_data.get('dob')
+            if country and dob:
                 today = datetime.date.today()
-                if date_of_birth > today.replace(today.year - country.minimum_age):
+                if dob > today.replace(today.year - country.minimum_age):
                     msg = "You must be at least %s years of age to use this site." \
                         % country.minimum_age
                     raise forms.ValidationError(_(msg))
@@ -151,10 +155,18 @@ Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
     def __init__(self, *args, **kwargs):
         self.show_age_gateway = kwargs.pop('show_age_gateway')
         super(JoinForm, self).__init__(*args, **kwargs)
-        
+       
+        # Set date widget for date field
+        for name, field in self.fields.items():            
+            if isinstance(field, forms.fields.DateField):
+                field.widget = OldSchoolDateWidget()
+
         display_fields = preferences.RegistrationPreferences.display_fields
         if self.show_age_gateway:
-            display_fields += ['country', 'date_of_birth']
+            if 'country' not in display_fields:
+                display_fields.append('country')
+            if 'dob' not in display_fields:
+                display_fields.append('dob')
         for name, field in self.fields.items():
             # Skip over protected fields
             if name in ('id', 'username', 'password1', 'password2', 'accept_terms'):
@@ -164,6 +176,11 @@ Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
             
         # Set some fields required
         required_fields = preferences.RegistrationPreferences.required_fields
+        if self.show_age_gateway:            
+            if 'country' not in required_fields:
+                required_fields.append('country')
+            if 'dob' not in required_fields:
+                required_fields.append('dob')
         for name in required_fields:
             field = self.fields.get(name, None)
             if field and not field.required:

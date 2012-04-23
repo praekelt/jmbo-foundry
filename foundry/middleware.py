@@ -22,6 +22,10 @@ class AgeGateway:
     AuthenticationMiddleware."""
 
     def process_response(self, request, response):
+        # Ignore ajax
+        if request.is_ajax():
+            return response
+
         # Already passed gateway
         if request.COOKIES.get('age_gateway_passed'):
             return response
