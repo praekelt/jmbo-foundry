@@ -19,6 +19,9 @@ from django.contrib.sites.models import get_current_site
 from django.template import Template
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import requires_csrf_token
+from django.contrib.comments.views.comments import post_comment as \
+    base_post_comment
+from django.views.decorators.http import require_POST
 
 from category.models import Category
 from jmbo.models import ModelBase
@@ -124,6 +127,11 @@ def search(request):
 
     extra = dict(form=form)
     return render_to_response('foundry/search.html', extra, context_instance=RequestContext(request))
+
+
+@require_POST
+def post_comment(request, next=None, using=None):
+    return base_post_comment(request, next=next, using=using)
 
 
 def comment_reply_form(request):

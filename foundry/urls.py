@@ -28,6 +28,14 @@ urlpatterns = patterns('',
         name='gallery_object_detail'
     ),
 
+    # Pre-empt url call for comment post
+    url(
+        r'^comments/post/$',          
+        'foundry.views.post_comment',
+        {},
+        name='comments-post-comment'
+    ),
+
     (r'^friends/', include('friends.urls')),
     (r'^gallery/', include('gallery.urls')),
     (r'^googlesearch/', include('googlesearch.urls')),
