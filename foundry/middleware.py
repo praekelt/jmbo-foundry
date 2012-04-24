@@ -7,14 +7,14 @@ from django.conf import settings
 from preferences import preferences
 
 
-PROTECTED_URLS = (
+PROTECTED_URLS_PATTERN = r'|'.join((
     reverse('age-gateway'), 
     reverse('join'), 
     reverse('login'), 
     '/password_reset', 
     '/static', 
     '/admin'
-)
+))
 
 
 class VerboseRequestMeta:
@@ -28,25 +28,30 @@ class VerboseRequestMeta:
 
 
 class AgeGateway:
-    """Redirect if age gateway is enabled and user is anonymous. Must run after
-    AuthenticationMiddleware."""
+    """Combined private site and age gateway. Due to legacy this name is used.
+    Must run after AuthenticationMiddleware."""
 
     def process_response(self, request, response):
+        
         # Ignore ajax
         if request.is_ajax():
             return response
-
-        # Already passed gateway
-        if request.COOKIES.get('age_gateway_passed'):
-            return response
-
+        
         # Protected URLs
-        if re.match(r'|'.join(PROTECTED_URLS), request.META['PATH_INFO']) is not None:
+        if re.match(PROTECTED_URLS_PATTERN, request.META['PATH_INFO']) is not None:
             return response
 
         # Now only do we hit the database
         # xxx: investigate preference caching. May want to hit the db less.
-        if not preferences.GeneralPreferences.show_age_gateway:
+        private_site = preferences.GeneralPreferences.private_site
+        show_age_gateway = preferences.GeneralPreferences.show_age_gateway
+
+        # Check trivial case
+        if not (private_site or show_age_gateway):
+            return response
+
+        # Private site not enabled and gateway passed
+        if not private_site and request.COOKIES.get('age_gateway_passed'):
             return response
 
         # Exempted URLs
@@ -62,8 +67,10 @@ class AgeGateway:
 
         user = getattr(request, 'user', None)
         if (user is not None) and user.is_anonymous():
-            # Redirect to age gateway (the first protected url)
-            return HttpResponseRedirect(PROTECTED_URLS[0])
+            if private_site:
+                return HttpResponseRedirect(reverse('login'))
+            else:
+                return HttpResponseRedirect(reverse('age-gateway'))
 
         return response            
 

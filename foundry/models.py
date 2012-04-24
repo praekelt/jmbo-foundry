@@ -306,7 +306,8 @@ class GeneralPreferences(Preferences):
         default='',
         help_text='''URL patterns that are exempted from the Private Site and \
 Age Gateway. Certain URLs like /login are already protected and do not need \
-to be listed. One entry per line.'''
+to be listed. One entry per line. Matches are wildcard by default, eg. \
+/my-page will match /my-pages/the-red-one.'''
     )
     analytics_tags = models.TextField(null=True, blank=True)
 
