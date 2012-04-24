@@ -73,7 +73,8 @@ $(document).ready(function(){
     });
 
     // Post a comment
-    $('form.comment-form').live('submit', function(event){
+    // xxx: disabled until we have a ua mapper in place :(
+    $('xform.comment-form').live('submit', function(event){
         event.preventDefault();
         var form = $(this);
         var url = $(this).attr('action');
@@ -88,7 +89,7 @@ $(document).ready(function(){
                 if (data.indexOf('{') == 0)
                 {
                     var obj = $.parseJSON(data);
-                    $('div.comment-list-placeholder').html(obj.html);
+                    $('div.comment-list').html(obj.html);
                     var el = $('textarea', form);
                     el.val('');
                     el.focus();

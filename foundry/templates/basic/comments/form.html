@@ -1,12 +1,14 @@
 {% comment %}
-1. Add next hidden input.
+1. Add hidden inputs.
 2. Hide preview.
 3. Add comment-form class to form tag.
 {% endcomment %}
 
 {% load comments i18n %}
 <form action="{% comment_form_target %}" method="post" class="comment-form">{% csrf_token %}
-  <input type="hidden" name="next" value="{{ next|default:request.META.PATH_INFO }}?paginate_by={{ request.GET.paginate_by }}&my_messages={{ request.GET.my_messages }}" />
+  <input type="hidden" name="next" value="{{ next|default:request.META.PATH_INFO }}?paginate_by={{ request.REQUEST.paginate_by }}&my_messages={{ request.REQUEST.my_messages }}" />
+  <input type="hidden" name="paginate_by" value="{{ request.REQUEST.paginate_by }}" />
+  <input type="hidden" name="my_messages" value="{{ request.REQUEST.my_messages }}" />
 
   {% for field in form %}
     {% if field.is_hidden %}

@@ -19,6 +19,8 @@ from django.contrib.sites.models import get_current_site
 from django.template import Template
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import requires_csrf_token
+
+# Comment post required imports
 from django.contrib.comments.views.comments import CommentPostBadRequest
 from django.views.decorators.http import require_POST
 from django.utils import simplejson
@@ -26,6 +28,9 @@ from django.utils.html import escape
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib import comments
 from django.contrib.comments import signals
+from django.http import QueryDict
+from django.contrib.comments.views.utils import next_redirect
+from django.contrib.comments.views.comments import comment_done
 
 from category.models import Category
 from jmbo.models import ModelBase
@@ -253,6 +258,8 @@ def post_comment(request, next=None, using=None):
     else:
         # Return rendered comment list
         context = RequestContext(request)
+        # Put paginate by as a GET variable so django-pagination works
+        context['request'].GET = QueryDict('paginate_by=%s' % request.POST['paginate_by'])
         context['object'] = target
         t = Template("{% load comments %} {% render_comment_list for object %}")
         html = t.render(context)
@@ -261,6 +268,7 @@ def post_comment(request, next=None, using=None):
         
 
 def comment_reply_form(request):
+    # This view is used when the browser has no javascript support
     obj = ContentType.objects.get(
         id=request.GET['content_type_id']
     ).get_object_for_this_type(id=request.GET['oid'])
