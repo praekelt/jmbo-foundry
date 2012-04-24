@@ -7,6 +7,16 @@ from django.conf import settings
 from preferences import preferences
 
 
+PROTECTED_URLS = (
+    reverse('age-gateway'), 
+    reverse('join'), 
+    reverse('login'), 
+    '/password_reset', 
+    '/static', 
+    '/admin'
+)
+
+
 class VerboseRequestMeta:
     """Add metadata to request so repr(request) prints more information. Runs
     as one of the last middleware."""
@@ -30,19 +40,30 @@ class AgeGateway:
         if request.COOKIES.get('age_gateway_passed'):
             return response
 
-        exempted_urls = (
-            reverse('age-gateway'), reverse('join'), reverse('login'), 
-            '/password_reset', '/static', '/admin'
-        )
+        # Protected URLs
+        if re.match(r'|'.join(PROTECTED_URLS), request.META['PATH_INFO']) is not None:
+            return response
 
-        # On an exempted url
-        if re.match(r'|'.join(exempted_urls), request.META['PATH_INFO']) is not None:
+        # Now only do we hit the database
+        # xxx: investigate preference caching. May want to hit the db less.
+        if not preferences.GeneralPreferences.show_age_gateway:
+            return response
+
+        # Exempted URLs
+        exempted_urls = preferences.GeneralPreferences.exempted_urls        
+        if exempted_urls \
+            and (
+                re.match(
+                    r'|'.join(exempted_urls.split()), 
+                    request.META['PATH_INFO']
+               ) is not None
+            ):
             return response
 
         user = getattr(request, 'user', None)
-        # xxx: investigate preference caching
-        if (user is not None) and user.is_anonymous() and preferences.GeneralPreferences.show_age_gateway:
-            return HttpResponseRedirect(exempted_urls[0])
+        if (user is not None) and user.is_anonymous():
+            # Redirect to age gateway (the first protected url)
+            return HttpResponseRedirect(PROTECTED_URLS[0])
 
         return response            
 
