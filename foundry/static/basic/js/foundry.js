@@ -1,5 +1,8 @@
 $(document).ready(function(){
 
+    if ($.support.ajax)
+    {
+
     // Ajaxify tile paging, view modifier
     $('div.foundry-enable-ajax div.pagination a, div.foundry-enable-ajax div.jmbo-view-modifier a').live('click', function(e){
         e.preventDefault();
@@ -73,8 +76,7 @@ $(document).ready(function(){
     });
 
     // Post a comment
-    // xxx: disabled until we have a ua mapper in place :(
-    $('xform.comment-form').live('submit', function(event){
+    $('form.comment-form').live('submit', function(event){
         event.preventDefault();
         var form = $(this);
         var url = $(this).attr('action');
@@ -116,5 +118,7 @@ $(document).ready(function(){
         });
     }
     setInterval(load_new_comments, 30000);
+
+    }
 
 });
