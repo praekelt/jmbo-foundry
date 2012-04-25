@@ -19,6 +19,7 @@ from django.contrib.sites.models import get_current_site
 from django.template import Template
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import requires_csrf_token
+from django.views.generic import ListView
 
 from category.models import Category
 from jmbo.models import ModelBase
@@ -27,7 +28,7 @@ from jmbo.view_modifiers import DefaultViewModifier
 from preferences import preferences
 
 from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification, \
-    Member
+    Member, UserActivity
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
     SearchForm, CreateBlogPostForm
 
@@ -216,6 +217,11 @@ class EditProfile(UpdateView):
         member = Member.objects.get(id=self.request.user.id)
         self.success_url = reverse('member-detail', args=[member.username])
         return member
+
+class UserActivityView(ListView):
+    
+    def get_queryset(self):
+        return UserActivity.objects.filter(user=self.request.user).order_by('-created')
 
 
 # Caching duration matches the refresh rate
