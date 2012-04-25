@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n foundry_tags jmbo_template_tags %}
+{% load i18n foundry_tags jmbo_template_tags pagination_tags %}
 
 {% block content %}
 
@@ -15,6 +15,9 @@
                         {% if object.sub %}<div class="meta"><div class="description">{{ object.sub }}</div></div>{% endif %}
                     </div>
                 {% endfor %}
+                
+                {% paginate %}
+                
             </div>
         </div>
     </div>  

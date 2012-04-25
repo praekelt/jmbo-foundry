@@ -243,7 +243,8 @@ urlpatterns = patterns('',
     # User activity
     url(
         r'^user-activity/$', 
-        login_required(views.UserActivityView.as_view(template_name='foundry/user_activity.html')),
+        login_required(views.UserActivityView.as_view(template_name='foundry/user_activity.html',
+                                                      paginate_by=5)),
         name='user_activity'
     ),
 

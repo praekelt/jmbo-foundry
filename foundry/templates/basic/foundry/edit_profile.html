@@ -1,17 +1,13 @@
 {% extends "base.html" %}
-
-{% load i18n %}
+{% load i18n foundry_tags %}
 
 {% block content %}
-	<div class="content member-detail">
-	    <div class="title">{{ object.username }}</div>
 
-        <form action="{% url edit-profile %}" method="POST" class="foundry-form">   
-	        {% csrf_token %}
-            {{ form.as_div }}
-            <div class="buttons">
-                <input type="submit" value="{% trans "Save" %}" />
-            </div>
-        </form>
-	</div>  
+    <div class="content member-detail">
+        {% profile_blurb user %}
+        <div class="title">{{ object.username }}</div>
+        {% with form_name='frmUpdateProfile' submit='Update' %}
+            {% include "foundry/includes/form.html" %}
+        {% endwith %}
+    </div>  
 {% endblock %}
