@@ -11,8 +11,8 @@ from foundry import settings as foundry_settings
 FOUNDRY = {
     'has_javascript': True,
     'has_ajax': True,
-    'sms_gateway_api_key': 'FCF2F73F-382C-47EA-930E-262F4A08B7C2',
-    'sms_gateway_password': 'ca2fbf32',
+    'sms_gateway_api_key': '',
+    'sms_gateway_password': '',
     'layers': ('basic',)
 }
 
