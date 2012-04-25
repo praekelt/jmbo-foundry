@@ -366,6 +366,14 @@ urlpatterns = patterns('',
         {},
         name='admin-allow-comment'
     ),
+    
+    url(r'^share/facebook/$',
+        login_required(views.Share.as_view(type='Facebook')),
+        name='share_facebook'),
+        
+    url(r'^share/twitter/$',
+        login_required(views.Share.as_view(type='Twitter')),
+        name='share_twitter'),
 
 )
 

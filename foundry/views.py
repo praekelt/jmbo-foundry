@@ -19,7 +19,7 @@ from django.contrib.sites.models import get_current_site
 from django.template import Template
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import requires_csrf_token
-from django.views.generic import ListView
+from django.views.generic import View, ListView
 
 from category.models import Category
 from jmbo.models import ModelBase
@@ -223,6 +223,26 @@ class UserActivityView(ListView):
     def get_queryset(self):
         return UserActivity.objects.filter(user=self.request.user).order_by('-created')
 
+
+class Share(View):
+    """
+    Share via Facebook or Twitter.
+    """
+    type = None
+    
+    def get(self, request, *args, **kwargs):
+        current_url = request.META['HTTP_REFERER']
+        
+        if self.type == 'Facebook':
+            url = 'http://www.facebook.com/sharer/sharer.php?u=%s' % urllib.quote(current_url)
+        elif self.type == 'Twitter':
+            url = 'https://twitter.com/intent/tweet?original_referer=%s' % urllib.quote(current_url)
+        else:
+            return Http404()
+        
+        UserActivity.add_share(request.user, request.META['HTTP_REFERER'], self.type)
+        
+        return HttpResponseRedirect(url)
 
 # Caching duration matches the refresh rate
 @cache_page(30) 
