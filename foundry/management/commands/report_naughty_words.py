@@ -1,3 +1,5 @@
+import jellyfish
+
 from django.core.management.base import BaseCommand, CommandError
 from django.core.mail import EmailMultiAlternatives
 from django.db import transaction
@@ -38,19 +40,16 @@ class Command(BaseCommand):
 
     def flag(self, text):
         """Very simple check for naughty words"""
-        # todo: Levenstein matching or a Bayesian filter
         total_weight = 0
-        number_of_words = 0
         words = text.lower().split()        
-        for word in words:
-            if word in self.words:
-                total_weight += self.words[word]
-                number_of_words += 1
+        for naughty in self.words:
+            for word in words:
+                score = jellyfish.jaro_distance(word, naughty)
+                if score > 0.7:
+                    total_weight = total_weight + (score * self.words[naughty])
 
-        if number_of_words:
-            return total_weight > self.threshold
+        return total_weight > self.threshold
 
-        return False
 
     @transaction.commit_on_success
     def handle(self, *args, **options):

@@ -20,8 +20,6 @@ $(document).ready(function(){
 </script>
 {% endif %}
 
-<!--Auto Update: {% if request.GET.comment_auto_update %}On{% else %}Turn Off{% endif %}-->
-
 {% if request.user.is_authenticated %}
 <div class="foundry-comments-messages-navbar">
     <div class="items">
@@ -81,12 +79,14 @@ $(document).ready(function(){
                     </div>
                 </div>
             {% endfor %}
+            {% if FOUNDRY.has_ajax %}
             <div 
                 class="comment-list-placeholder" 
                 content_type_id="{{ object.content_type_id }}" 
                 oid="{{ object.id }}"
                 last_comment_id="{{ foundry_last_comment_id }}">
             </div>
+            {% endif %}
         </div>
 
         {% paginate %}

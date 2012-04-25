@@ -89,7 +89,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'foundry.middleware.AgeGateway',                            
+    'foundry.middleware.AgeGateway',
     'django.contrib.messages.middleware.MessageMiddleware',
     'likes.middleware.SecretBallotUserIpUseragentMiddleware',
     'foundry.middleware.PaginationMiddleware',
@@ -123,6 +123,7 @@ TEMPLATE_LOADERS = (
 ROOT_URLCONF = 'foundry.urls'
 
 INSTALLED_APPS = (
+    'friends',
     'foundry',
     'section',
     'gallery',

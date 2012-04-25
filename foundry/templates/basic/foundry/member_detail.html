@@ -6,39 +6,14 @@
 
     <img src="{{ object.get_thumbnail_LAYER_url }}" />
     <div class="title">{{ object.username }}</div>
-    {% if object.about_me %}
-        <p>{{ object.about_me }}</p>
-    {% endif %}
+
     <div class="meta">
-        {% if can_friend %}
-            <div class="friend">
-                <a href="{% url friend-request object.id %}">{% trans "Send friend request" %}</a>
-            </div>
-        {% endif %}
         {% if notifications %}
             <div class="notifications">
                 <a href="{% url member-notifications %}">{% trans "Notifications" %} ({{ notifications }})</a>
             </div>
         {% endif %}
-        {% if is_self %}
-            <div class="friend">
-                <a href="{% url inbox %}">{% trans "Inbox" %}{% if unread_messages %} ({{ unread_messages }}){% endif %}</a>
-            </div>
-            <div class="friend">
-                <a href="{% url message-send %}">{% trans "Send a message" %}</a>
-            </div>
-            <div class="friend">
-                <a href="{% url create-blogpost %}">{% trans "Create a Blog Post" %}</a>
-            </div>
-            <div class="friend">
-                <a href="{% url update-profile %}">{% trans "Update Profile" %}</a>
-            </div>
-            <div class="my-friends">
-                <a href="{% url my-friends %}">{% trans "My Friends" %}</a>
-            </div>
-        {% endif %}
     </div>
-
 
     <table>
         <tr class="total-comments">
@@ -58,11 +33,5 @@
 
     </table>
     
-    {% if not is_self %}
-        {% with form_name='frmDirectMessage' submit='Send' %}
-            {% include "foundry/includes/form.html" %}
-        {% endwith %}
-    {% endif %}
-
 </div>
 {% endblock content %}

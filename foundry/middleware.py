@@ -10,6 +10,16 @@ from django.http import HttpResponseRedirect
 from preferences import preferences
 
 
+PROTECTED_URLS_PATTERN = r'|'.join((
+    reverse('age-gateway'), 
+    reverse('join'), 
+    reverse('login'), 
+    '/password_reset', 
+    '/static', 
+    '/admin'
+))
+
+
 class VerboseRequestMeta:
     """Add metadata to request so repr(request) prints more information. Runs
     as one of the last middleware."""
@@ -21,27 +31,49 @@ class VerboseRequestMeta:
 
 
 class AgeGateway:
-    """Redirect if age gateway is enabled and user is anonymous. Must run after
-    AuthenticationMiddleware."""
+    """Combined private site and age gateway. Due to legacy this name is used.
+    Must run after AuthenticationMiddleware."""
 
     def process_response(self, request, response):
-        # Already passed gateway
-        if request.COOKIES.get('age_gateway_passed'):
+        
+        # Ignore ajax
+        if request.is_ajax():
+            return response
+        
+        # Protected URLs
+        if re.match(PROTECTED_URLS_PATTERN, request.META['PATH_INFO']) is not None:
             return response
 
-        exempted_urls = (
-            reverse('age-gateway'), reverse('join'), reverse('login'), 
-            '/password_reset', '/static', '/admin'
-        )
+        # Now only do we hit the database
+        # xxx: investigate preference caching. May want to hit the db less.
+        private_site = preferences.GeneralPreferences.private_site
+        show_age_gateway = preferences.GeneralPreferences.show_age_gateway
 
-        # On an exempted url
-        if re.match(r'|'.join(exempted_urls), request.META['PATH_INFO']) is not None:
+        # Check trivial case
+        if not (private_site or show_age_gateway):
+            return response
+
+        # Private site not enabled and gateway passed
+        if not private_site and request.COOKIES.get('age_gateway_passed'):
+            return response
+
+        # Exempted URLs
+        exempted_urls = preferences.GeneralPreferences.exempted_urls        
+        if exempted_urls \
+            and (
+                re.match(
+                    r'|'.join(exempted_urls.split()), 
+                    request.META['PATH_INFO']
+               ) is not None
+            ):
             return response
 
         user = getattr(request, 'user', None)
-        # xxx: investigate preference caching
-        if (user is not None) and user.is_anonymous() and preferences.GeneralPreferences.show_age_gateway:
-            return HttpResponseRedirect(exempted_urls[0])
+        if (user is not None) and user.is_anonymous():
+            if private_site:
+                return HttpResponseRedirect(reverse('login'))
+            else:
+                return HttpResponseRedirect(reverse('age-gateway'))
 
         return response            
 
