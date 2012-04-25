@@ -11,8 +11,10 @@ from django.conf import settings
 
 from preferences import preferences
 
-from foundry.models import Menu, Navbar, Listing, Page, Member
+from foundry.models import Menu, Navbar, Listing, Page, Member, Notification
 from foundry.templatetags import listing_styles
+
+from friends.models import DirectMessage
 
 register = template.Library()
 
@@ -333,3 +335,13 @@ class ListingQuerysetNode(template.Node):
             context[as_var] = None
 
         return ''
+
+@register.inclusion_tag('friends/inclusion_tags/profile_blurb.html')
+def profile_blurb(user):
+    """
+    Displays the user's profile blurb and profile sub-menu.
+    """
+    return {'member' : user.member,
+            'notifications' : Notification.objects.filter(member=user).count(),
+            'unread_messages' : DirectMessage.objects.filter(to_member__id=user.id, state='sent', reply_to=None).count(),
+            }
