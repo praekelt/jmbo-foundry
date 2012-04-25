@@ -1,0 +1,52 @@
+{% load i18n %}
+<form name="{{ form_name }}" id="{{ form_name }}" class="form-horizontal" method="post" action="." enctype="multipart/form-data">{% csrf_token %}
+    <fieldset>
+        {% if legend %}<legend>{{ legend }}</legend>{% endif %}
+        <div class="control-group">
+            {% if form.success %}
+                <div class="alert alert-success">{{ form.success_message }}</div>
+            {% endif %}
+            {% if form.non_field_errors %}
+                <div class="alert alert-error">{{ form.non_field_errors|first }}</div>
+            {% endif %}
+            {% for field in form %}
+                {% if field.is_hidden %}
+                    {{ field }}
+                {% else %}
+	                <div class="control-group {% if field.errors %}error{% endif %}">
+	                    {% if field.label == 'Avatar' %}
+	                        <label class="control-label" for="{{ field.name }}">{{ field.label }}</label>
+	                        <div class="controls">
+	                            {% if form.object.image %}
+	                                <img src="{{ form.object.get_avatar_url }}" width="40" height="40" alt="{{ form.object }}" />
+	                            {% endif %}
+	                            {{ field }}
+	                            {% if field.errors %}
+	                                <span class="help-inline">{{ field.errors|first }}</span>
+	                            {% endif %}
+	                            {% if field.help_text %}
+	                                <p class="help-block">{{ field.help_text }}</p>
+	                            {% endif %}
+	                        </div>
+	                    {% else %}
+	                        <label class="control-label" for="{{ field.name }}">{{ field.label }}</label>
+	                        <div class="controls">
+	                            {{ field }}
+	                            {% if field.errors %}
+	                                <span class="help-inline">{{ field.errors|first }}</span>
+	                            {% endif %}
+	                            {% if field.help_text %}
+	                                <p class="help-block">{{ field.help_text }}</p>
+	                            {% endif %}
+	                        </div>
+	                    {% endif %}
+	                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">{{ submit }}</button>
+            <button type="reset" class="btn">{% blocktrans %}Reset{% endblocktrans %}</button>
+        </div>
+    </fieldset>
+</form>
