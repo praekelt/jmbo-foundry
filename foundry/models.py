@@ -796,6 +796,17 @@ class UserActivity(models.Model):
         UserActivity.objects.create(user=user,
                                     activity=ugettext('You shared <a href="%s">%s</a> via %s' % (link, link, medium)))
 
+class Download(ModelBase):
+    """Model for downloads."""
+    points_required = models.PositiveSmallIntegerField(default=0)
+    file = models.FileField(upload_to='downloads/')
+    
+    def __unicode__(self):
+        return self.title
+    
+    class Meta:
+        ordering = ['points_required']
+
 @receiver(m2m_changed)
 def check_slug(sender, **kwargs):
     """Slug must be unique per site"""
