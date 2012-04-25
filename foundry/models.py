@@ -460,8 +460,6 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersona
 
     country = models.ForeignKey(Country, null=True, blank=True)
     
-    badges = models.ManyToManyField('Badge', through='MemberBadge')
-    
     def __unicode__(self):
         return self.username
 
