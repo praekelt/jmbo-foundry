@@ -74,6 +74,14 @@ urlpatterns = patterns('',
         },
         name='header'
     ),
+    url(
+        r'^footer/$',
+        'django.views.generic.simple.direct_to_template',
+        {
+            'template':'foundry/inclusion_tags/footer.html', 
+        },
+        name='footer'
+    ),
 
     # Join, login, password reset            
     url(
