@@ -227,7 +227,9 @@ def compute_settings(sender):
         setattr(sender, 'TEMPLATE_DIRS', [])
     if not hasattr(sender, 'STATICFILES_DIRS'):
         setattr(sender, 'STATICFILES_DIRS', [])
-    for layer in sender.FOUNDRY['layers']:
+    layers = list(sender.FOUNDRY['layers'])
+    layers.reverse()
+    for layer in layers:
         for m in (module, sender):
             pth = os.path.join(os.path.dirname(m.__file__), 'templates', layer)
             if pth not in sender.TEMPLATE_DIRS:
