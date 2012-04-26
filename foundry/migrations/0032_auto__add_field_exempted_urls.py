@@ -8,8 +8,10 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        db.add_column('preferences_generalpreferences', 'exempted_urls', self.gf('django.db.models.fields.TextField')(default=''), keep_default=False)
-
+        try:
+            db.add_column('preferences_generalpreferences', 'exempted_urls', self.gf('django.db.models.fields.TextField')(default=''), keep_default=False)
+        except:
+            pass
 
     def backwards(self, orm):
         db.delete_column('preferences_generalpreferences', 'exempted_urls')
