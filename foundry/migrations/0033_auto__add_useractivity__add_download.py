@@ -1,40 +1,43 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
-
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Deleting model 'DirectMessage'
-        db.delete_table('foundry_directmessage')
+        
+        # Adding model 'UserActivity'
+        db.create_table('foundry_useractivity', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('activity', self.gf('django.db.models.fields.CharField')(max_length=256)),
+            ('sub', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'], null=True, blank=True)),
+            ('content_id', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
+            ('checked_for_badges', self.gf('django.db.models.fields.BooleanField')(default=False)),
+        ))
+        db.send_create_signal('foundry', ['UserActivity'])
 
-        # Deleting model 'MemberFriend'
-        db.delete_table('foundry_memberfriend')
+        # Adding model 'Download'
+        db.create_table('foundry_download', (
+            ('modelbase_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['jmbo.ModelBase'], unique=True, primary_key=True)),
+            ('points_required', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
+            ('file', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
+        ))
+        db.send_create_signal('foundry', ['Download'])
+
 
     def backwards(self, orm):
-        # Adding model 'DirectMessage'
-        db.create_table('foundry_directmessage', (
-            ('state', self.gf('django.db.models.fields.CharField')(default='sent', max_length=32, db_index=True)),
-            ('from_member', self.gf('django.db.models.fields.related.ForeignKey')(related_name='sent_items', to=orm['foundry.Member'])),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('reply_to', self.gf('django.db.models.fields.related.ForeignKey')(related_name='replies', null=True, to=orm['foundry.DirectMessage'], blank=True)),
-            ('message', self.gf('django.db.models.fields.TextField')()),
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('to_member', self.gf('django.db.models.fields.related.ForeignKey')(related_name='inbox', to=orm['foundry.Member'])),
-        ))
-        db.send_create_signal('foundry', ['DirectMessage'])
+        
+        # Deleting model 'UserActivity'
+        db.delete_table('foundry_useractivity')
 
-        # Adding model 'MemberFriend'
-        db.create_table('foundry_memberfriend', (
-            ('member', self.gf('django.db.models.fields.related.ForeignKey')(related_name='member_friend_member', to=orm['foundry.Member'])),
-            ('state', self.gf('django.db.models.fields.CharField')(default='invited', max_length=32, db_index=True)),
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('friend', self.gf('django.db.models.fields.related.ForeignKey')(related_name='member_friend_friend', to=orm['foundry.Member'])),
-        ))
-        db.send_create_signal('foundry', ['MemberFriend'])
+        # Deleting model 'Download'
+        db.delete_table('foundry_download')
+
 
     models = {
         'auth.group': {
@@ -70,14 +73,14 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "('title',)", 'object_name': 'Category'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['category.Category']", 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255', 'db_index': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         },
         'category.tag': {
             'Meta': {'ordering': "('title',)", 'object_name': 'Tag'},
             'categories': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['category.Category']", 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255', 'db_index': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         },
         'comments.comment': {
@@ -124,7 +127,7 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "('title',)", 'object_name': 'Country'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'minimum_age': ('django.db.models.fields.PositiveIntegerField', [], {'default': '18'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32', 'db_index': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '32'})
         },
         'foundry.defaultavatar': {
@@ -135,6 +138,12 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'blank': 'True'}),
             'view_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'})
+        },
+        'foundry.download': {
+            'Meta': {'ordering': "['points_required']", 'object_name': 'Download', '_ormbases': ['jmbo.ModelBase']},
+            'file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
+            'modelbase_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['jmbo.ModelBase']", 'unique': 'True', 'primary_key': 'True'}),
+            'points_required': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'})
         },
         'foundry.foundrycomment': {
             'Meta': {'ordering': "('submit_date',)", 'object_name': 'FoundryComment', '_ormbases': ['comments.Comment']},
@@ -161,7 +170,7 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'items_per_page': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32', 'db_index': 'True'}),
             'style': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'subtitle': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '256'})
@@ -169,6 +178,7 @@ class Migration(SchemaMigration):
         'foundry.member': {
             'Meta': {'object_name': 'Member', '_ormbases': ['auth.User']},
             'about_me': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Country']", 'null': 'True', 'blank': 'True'}),
             'crop_from': ('django.db.models.fields.CharField', [], {'default': "'center'", 'max_length': '10', 'blank': 'True'}),
             'date_taken': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'dob': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
@@ -185,7 +195,7 @@ class Migration(SchemaMigration):
             'display_title': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32', 'db_index': 'True'}),
             'subtitle': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
@@ -203,7 +213,7 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "('title', 'subtitle')", 'object_name': 'Navbar'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32', 'db_index': 'True'}),
             'subtitle': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
@@ -229,7 +239,7 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_homepage': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32', 'db_index': 'True'}),
             'subtitle': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         },
@@ -259,6 +269,17 @@ class Migration(SchemaMigration):
             'target_object_id': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True'}),
             'view_name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
         },
+        'foundry.useractivity': {
+            'Meta': {'object_name': 'UserActivity'},
+            'activity': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'checked_for_badges': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'content_id': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']", 'null': 'True', 'blank': 'True'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'sub': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+        },
         'jmbo.modelbase': {
             'Meta': {'ordering': "('-created',)", 'object_name': 'ModelBase'},
             'anonymous_comments': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
@@ -284,7 +305,7 @@ class Migration(SchemaMigration):
             'publishers': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['publisher.Publisher']", 'null': 'True', 'blank': 'True'}),
             'retract_on': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255', 'db_index': 'True'}),
             'state': ('django.db.models.fields.CharField', [], {'default': "'unpublished'", 'max_length': '32', 'null': 'True', 'blank': 'True'}),
             'subtitle': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'tags': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['category.Tag']", 'null': 'True', 'blank': 'True'}),

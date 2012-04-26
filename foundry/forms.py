@@ -202,7 +202,7 @@ Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
             self.fields['mobile_number'].help_text = _("The number must be in \
 international format and may start with a + sign. All other characters must \
 be numbers. No spaces allowed. An example is +27821234567.")
-
+        
     as_div = as_div
 
 
@@ -340,7 +340,9 @@ class PasswordResetForm(BasePasswordResetForm):
 class AgeGatewayForm(forms.Form):
     country = forms.ModelChoiceField(queryset=models.Country.objects.all())
     date_of_birth = forms.DateField(widget=OldSchoolDateWidget)
-    remember_me = forms.BooleanField(required=False, label="", widget=RememberMeCheckboxInput)
+    remember_me = forms.BooleanField(required=False, label="", 
+                                     widget=RememberMeCheckboxInput,
+                                     help_text="(Don't tick if you share your phone)")
 
     def clean(self):
         cleaned_data = super(AgeGatewayForm, self).clean()

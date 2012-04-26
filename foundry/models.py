@@ -300,6 +300,7 @@ class GeneralPreferences(Preferences):
         default=False,
         help_text=_("A private site requires a visitor to be logged in to view any content."),
     )
+    meta_description = models.TextField(null=True, blank=True)
     show_age_gateway = models.BooleanField(default=False)
     exempted_urls = models.TextField(
         blank=True,
