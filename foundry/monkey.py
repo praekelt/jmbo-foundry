@@ -197,3 +197,23 @@ def BlockNode_render(self, context):
     return result
 
 #BlockNode.render = BlockNode_render
+
+"""FileSystemStorage must be able to handle missing directories. If a foundry 
+based product has a layer 'foo' then collectstatic must not break."""
+import os
+
+from django.core.files.storage import FileSystemStorage
+
+def listdir(self, path):
+        if not self.exists(path):
+            return [], []
+        path = self.path(path)
+        directories, files = [], []
+        for entry in os.listdir(path):
+            if os.path.isdir(os.path.join(path, entry)):
+                directories.append(entry)
+            else:
+                files.append(entry)
+        return directories, files
+
+FileSystemStorage.listdir = listdir
