@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Add a base_inner.html template so it is easier to override base.html.
+
 0.1
 ---
 #. Use Jaro Winkler for matching naughty words.
