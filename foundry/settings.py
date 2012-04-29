@@ -221,7 +221,10 @@ JMBO_ANALYTICS = {
 def compute_settings(sender):
     """Settings computed from earlier values. Put in a function so other 
     products can re-use it."""
-    module = sys.modules[__name__]
+    try:
+        module = sys.modules[__name__]
+    except KeyError:
+        module = sender.foundry_settings
 
     if not hasattr(sender, 'TEMPLATE_DIRS'):
         setattr(sender, 'TEMPLATE_DIRS', [])
@@ -239,6 +242,8 @@ def compute_settings(sender):
             if pth not in sender.STATICFILES_DIRS:
                 sender.STATICFILES_DIRS.insert(0, pth)
 
+# An "inheriting" settings module must have this exact (uncommented) import.
+# from foundry import settings as foundry_settings
 
 # An "inheriting" settings module must have this exact same line as the last
 # line in that module.
