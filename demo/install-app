@@ -1,4 +1,5 @@
 #!/bin/sh
+
 echo "Choose the Python version to use:"
 choice=3
 echo "1. 2.6"
@@ -7,11 +8,19 @@ while [ $choice -eq 3 ]; do
     read choice
     read -p "Installing required libraries. You may be prompted for a password. [enter]" y
     if [ $choice -eq 1 ] ; then
-        sudo apt-get install python-virtualenv mysql-server libmysqlclient-dev python2.7-dev \
+	if [ -f ./ve/bin/python2.7 ];
+	then
+	    rm -rf ./ve ./bin
+	fi
+        sudo apt-get install python-virtualenv mysql-server libmysqlclient-dev python2.6-dev \
 	libjpeg62-dev git-core libjpeg62-dev zlib1g-dev build-essential --no-upgrade
 	echo "Setting up sandboxed Python environment with Python 2.6"
 	virtualenv --python=python2.6 --no-site-packages ve
     else
+	if [ -f ./ve/bin/python2.6 ];
+	then
+	    rm -rf ./ve ./bin
+	fi
 	sudo apt-get install python-virtualenv mysql-server libmysqlclient-dev python2.7-dev \
 	libjpeg62-dev git-core libjpeg62-dev zlib1g-dev build-essential --no-upgrade
 	echo "Setting up sandboxed Python environment with Python 2.7"
