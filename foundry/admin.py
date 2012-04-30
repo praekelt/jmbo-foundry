@@ -32,7 +32,7 @@ class LinkAdminForm(forms.ModelForm):
     class Meta:
         model = Link
         fields = (
-            'title', 'view_name', 'category', 'target', 'url'
+            'title', 'subtitle', 'view_name', 'category', 'target', 'url'
         )
 
 
