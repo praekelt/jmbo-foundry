@@ -1,7 +1,7 @@
 #!/bin/sh
 read -p "Installing required libraries. You may be prompted for a password. [enter]" y
 sudo apt-get install python-virtualenv mysql-server libmysqlclient-dev python2.6-dev \
-libjpeg62-dev git-core libjpeg62-dev zlib1g-dev --no-upgrade
+libjpeg62-dev git-core libjpeg62-dev zlib1g-dev build-essential --no-upgrade
 echo "Setting up sandboxed Python environment"
 virtualenv --python=python2.6 --no-site-packages ve
 echo "Downloading distribute"
