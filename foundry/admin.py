@@ -86,7 +86,15 @@ class MenuLinkPositionInline(admin.StackedInline):
     model = MenuLinkPosition
 
 
+class MenuAdminForm(forms.ModelForm):
+
+    class Meta:
+        model = Menu
+        widgets = {'sites': SitesGroupsWidget}
+
+
 class MenuAdmin(admin.ModelAdmin):
+    form = MenuAdminForm
     prepopulated_fields = {'slug': ('title',)}
     inlines = [MenuLinkPositionInline]
     list_display = ('title', 'subtitle')
@@ -96,7 +104,15 @@ class NavbarLinkPositionInline(admin.StackedInline):
     model = NavbarLinkPosition
 
 
+class NavbarAdminForm(forms.ModelForm):
+
+    class Meta:
+        model = Navbar
+        widgets = {'sites': SitesGroupsWidget}
+
+
 class NavbarAdmin(admin.ModelAdmin):
+    form = NavbarAdminForm
     prepopulated_fields = {'slug': ('title',)}
     inlines = [NavbarLinkPositionInline]
     list_display = ('title', 'subtitle')
@@ -237,7 +253,15 @@ class PageViewInline(admin.StackedInline):
     model = PageView
 
 
+class PageAdminForm(forms.ModelForm):
+
+    class Meta:
+        model = Page
+        widgets = {'sites': SitesGroupsWidget}
+
+
 class PageAdmin(admin.ModelAdmin):
+    form = PageAdminForm
     list_display = ('title', 'subtitle', 'slug', 'is_homepage')
     prepopulated_fields = {'slug': ('title',)}
     inlines = (PageViewInline,)

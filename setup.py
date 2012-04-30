@@ -84,7 +84,7 @@ setup(
         'django_compressor',
         'jmbo_analytics',
         'jmbo-friends',
-        'sites_groups',
+        'django-sites-groups',
         'jellyfish'
     ],
     include_package_data=True,
