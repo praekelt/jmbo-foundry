@@ -32,7 +32,7 @@ class LinkAdminForm(forms.ModelForm):
     class Meta:
         model = Link
         fields = (
-            'title', 'view_name', 'category', 'target', 'url'
+            'title', 'subtitle', 'view_name', 'category', 'target', 'url'
         )
 
 
@@ -72,7 +72,7 @@ class LinkAdminForm(forms.ModelForm):
 
 class LinkAdmin(admin.ModelAdmin):
     form = LinkAdminForm
-    list_display = ('title', '_get_absolute_url')
+    list_display = ('title', 'subtitle', '_get_absolute_url')
 
     def _get_absolute_url(self, obj):
         url = obj.get_absolute_url()
