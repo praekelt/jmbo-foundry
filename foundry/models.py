@@ -32,6 +32,12 @@ class Link(models.Model):
         max_length=256,
         help_text='A short descriptive title.',
     )
+    subtitle = models.CharField(
+        max_length=256,
+        blank=True,
+        null=True,
+        help_text='Some titles may be the same. A subtitle makes a distinction. It is not displayed on the site.',
+    )
     view_name = models.CharField(
         max_length=256,
         help_text="View name to which this link will redirect.",
@@ -59,7 +65,13 @@ class Link(models.Model):
     )    
 
     class Meta:
-        ordering = ('title',)
+        ordering = ('title', 'subtitle')
+
+    def __unicode__(self):
+        if self.subtitle:
+            return '%s (%s)' % (self.title, self.subtitle)
+        else:
+            return self.title
 
     def get_absolute_url(self):
         """Returns URL to which link should redirect based on a reversed view
@@ -97,9 +109,6 @@ class Link(models.Model):
         if not active and self.url:
             active = request.path_info.startswith(self.url)
         return active
-
-    def __unicode__(self):
-        return self.title
 
 
 class Menu(models.Model):
