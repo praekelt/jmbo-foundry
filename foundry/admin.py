@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 
 from preferences.admin import PreferencesAdmin
+from sites_groups.widgets import SitesGroupsWidget
 from jmbo.models import ModelBase
 from jmbo.admin import ModelBaseAdmin
 
@@ -109,6 +110,7 @@ class ListingAdminForm(forms.ModelForm):
             'title', 'slug', 'subtitle', 'content_type', 'category', 'content', 
             'style', 'count', 'items_per_page', 'sites'
         )       
+        widgets = {'sites': SitesGroupsWidget}
 
     def __init__(self, *args, **kwargs):
         super(ListingAdminForm, self).__init__(*args, **kwargs)
