@@ -89,7 +89,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'foundry.middleware.AgeGateway',                            
+    'foundry.middleware.AgeGateway',
     'django.contrib.messages.middleware.MessageMiddleware',
     'likes.middleware.SecretBallotUserIpUseragentMiddleware',
     'foundry.middleware.PaginationMiddleware',
@@ -161,6 +161,7 @@ INSTALLED_APPS = (
     'compressor', # custom - add to paster
     'jmbo_analytics', # add to paster
     'analytics', # add to paster
+    'sites_groups',
     'django.contrib.auth',
     'django.contrib.comments',
     'django.contrib.contenttypes',
@@ -221,13 +222,18 @@ JMBO_ANALYTICS = {
 def compute_settings(sender):
     """Settings computed from earlier values. Put in a function so other 
     products can re-use it."""
-    module = sys.modules[__name__]
+    try:
+        module = sys.modules[__name__]
+    except KeyError:
+        module = sender.foundry_settings
 
     if not hasattr(sender, 'TEMPLATE_DIRS'):
         setattr(sender, 'TEMPLATE_DIRS', [])
     if not hasattr(sender, 'STATICFILES_DIRS'):
         setattr(sender, 'STATICFILES_DIRS', [])
-    for layer in sender.FOUNDRY['layers']:
+    layers = list(sender.FOUNDRY['layers'])
+    layers.reverse()
+    for layer in layers:
         for m in (module, sender):
             pth = os.path.join(os.path.dirname(m.__file__), 'templates', layer)
             if pth not in sender.TEMPLATE_DIRS:
@@ -237,6 +243,8 @@ def compute_settings(sender):
             if pth not in sender.STATICFILES_DIRS:
                 sender.STATICFILES_DIRS.insert(0, pth)
 
+# An "inheriting" settings module must have this exact (uncommented) import.
+# from foundry import settings as foundry_settings
 
 # An "inheriting" settings module must have this exact same line as the last
 # line in that module.

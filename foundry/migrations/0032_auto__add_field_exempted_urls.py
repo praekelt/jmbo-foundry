@@ -1,227 +1,20 @@
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+
 class Migration(SchemaMigration):
 
-    depends_on = (
-        ("jmbo", "0001_initial"),
-        ("friends", "0001_initial"),
-    )
-
     def forwards(self, orm):
-        
-        # Adding model 'Link'
-        db.create_table('foundry_link', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('view_name', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
-            ('category', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['category.Category'], null=True, blank=True)),
-            ('url', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
-        ))
-        db.send_create_signal('foundry', ['Link'])
-
-        # Adding model 'Menu'
-        db.create_table('foundry_menu', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=32, db_index=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('display_title', self.gf('django.db.models.fields.BooleanField')(default=True)),
-        ))
-        db.send_create_signal('foundry', ['Menu'])
-
-        # Adding model 'Navbar'
-        db.create_table('foundry_navbar', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=32, db_index=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=255)),
-        ))
-        db.send_create_signal('foundry', ['Navbar'])
-
-        # Adding model 'Listing'
-        db.create_table('foundry_listing', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=32, db_index=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('category', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['category.Category'], null=True, blank=True)),
-            ('count', self.gf('django.db.models.fields.IntegerField')()),
-            ('style', self.gf('django.db.models.fields.CharField')(max_length=64)),
-            ('display_primary_category', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('display_likes', self.gf('django.db.models.fields.BooleanField')(default=True)),
-        ))
-        db.send_create_signal('foundry', ['Listing'])
-
-        # Adding M2M table for field content on 'Listing'
-        db.create_table('foundry_listing_content', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('listing', models.ForeignKey(orm['foundry.listing'], null=False)),
-            ('modelbase', models.ForeignKey(orm['jmbo.modelbase'], null=False))
-        ))
-        db.create_unique('foundry_listing_content', ['listing_id', 'modelbase_id'])
-
-        # Adding model 'MenuLinkPosition'
-        db.create_table('foundry_menulinkposition', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('link', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['foundry.Link'])),
-            ('position', self.gf('django.db.models.fields.IntegerField')()),
-            ('condition_expression', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
-            ('menu', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['foundry.Menu'])),
-        ))
-        db.send_create_signal('foundry', ['MenuLinkPosition'])
-
-        # Adding model 'NavbarLinkPosition'
-        db.create_table('foundry_navbarlinkposition', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('link', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['foundry.Link'])),
-            ('position', self.gf('django.db.models.fields.IntegerField')()),
-            ('condition_expression', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
-            ('navbar', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['foundry.Navbar'])),
-        ))
-        db.send_create_signal('foundry', ['NavbarLinkPosition'])
-
-        # Adding model 'Member'
-        db.create_table('foundry_member', (
-            ('user_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True, primary_key=True)),
-            ('image', self.gf('django.db.models.fields.files.ImageField')(max_length=100, blank=True)),
-            ('date_taken', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('view_count', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
-            ('crop_from', self.gf('django.db.models.fields.CharField')(default='center', max_length=10, blank=True)),
-            ('effect', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='member_related', null=True, to=orm['photologue.PhotoEffect'])),
-            ('facebook_id', self.gf('django.db.models.fields.CharField')(max_length=128, null=True, blank=True)),
-            ('twitter_username', self.gf('django.db.models.fields.CharField')(max_length=128, null=True, blank=True)),
-            ('mobile_number', self.gf('django.db.models.fields.CharField')(max_length=64, null=True, blank=True)),
-        ))
-        db.send_create_signal('foundry', ['Member'])
-
-        # Adding model 'DefaultAvatar'
-        db.create_table('foundry_defaultavatar', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('image', self.gf('django.db.models.fields.files.ImageField')(max_length=100, blank=True)),
-            ('date_taken', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('view_count', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
-            ('crop_from', self.gf('django.db.models.fields.CharField')(default='center', max_length=10, blank=True)),
-            ('effect', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='defaultavatar_related', null=True, to=orm['photologue.PhotoEffect'])),
-        ))
-        db.send_create_signal('foundry', ['DefaultAvatar'])
-
-        # Adding model 'Country'
-        db.create_table('foundry_country', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=32, db_index=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=32)),
-            ('minimum_age', self.gf('django.db.models.fields.PositiveIntegerField')(default=18)),
-        ))
-        db.send_create_signal('foundry', ['Country'])
-
-        # Adding model 'Page'
-        db.create_table('foundry_page', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=32, db_index=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('is_homepage', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        ))
-        db.send_create_signal('foundry', ['Page'])
-
-        # Adding M2M table for field sites on 'Page'
-        db.create_table('foundry_page_sites', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('page', models.ForeignKey(orm['foundry.page'], null=False)),
-            ('site', models.ForeignKey(orm['sites.site'], null=False))
-        ))
-        db.create_unique('foundry_page_sites', ['page_id', 'site_id'])
-
-        # Adding model 'Row'
-        db.create_table('foundry_row', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('page', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['foundry.Page'])),
-            ('index', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
-            ('block_name', self.gf('django.db.models.fields.CharField')(default='content', max_length=32)),
-        ))
-        db.send_create_signal('foundry', ['Row'])
-
-        # Adding model 'Column'
-        db.create_table('foundry_column', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('row', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['foundry.Row'])),
-            ('index', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
-            ('width', self.gf('django.db.models.fields.PositiveIntegerField')(default=8)),
-        ))
-        db.send_create_signal('foundry', ['Column'])
-
-        # Adding model 'Tile'
-        db.create_table('foundry_tile', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('column', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['foundry.Column'])),
-            ('index', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
-            ('target_content_type', self.gf('django.db.models.fields.related.ForeignKey')(related_name='tile_target_content_type', null=True, to=orm['contenttypes.ContentType'])),
-            ('target_object_id', self.gf('django.db.models.fields.PositiveIntegerField')(null=True)),
-            ('view_name', self.gf('django.db.models.fields.CharField')(max_length=200, null=True, blank=True)),
-            ('class_name', self.gf('django.db.models.fields.CharField')(max_length=200, null=True, blank=True)),
-            ('enable_ajax', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('condition_expression', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
-        ))
-        db.send_create_signal('foundry', ['Tile'])
-
-        # Adding model 'FoundryComment'
-        db.create_table('foundry_foundrycomment', (
-            ('comment_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['comments.Comment'], unique=True, primary_key=True)),
-            ('in_reply_to', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['foundry.FoundryComment'], null=True, blank=True)),
-        ))
-        db.send_create_signal('foundry', ['FoundryComment'])
-
+        try:
+            db.add_column('preferences_generalpreferences', 'exempted_urls', self.gf('django.db.models.fields.TextField')(default=''), keep_default=False)
+        except:
+            pass
 
     def backwards(self, orm):
-        
-        # Deleting model 'Link'
-        db.delete_table('foundry_link')
-
-        # Deleting model 'Menu'
-        db.delete_table('foundry_menu')
-
-        # Deleting model 'Navbar'
-        db.delete_table('foundry_navbar')
-
-        # Deleting model 'Listing'
-        db.delete_table('foundry_listing')
-
-        # Removing M2M table for field content on 'Listing'
-        db.delete_table('foundry_listing_content')
-
-        # Deleting model 'MenuLinkPosition'
-        db.delete_table('foundry_menulinkposition')
-
-        # Deleting model 'NavbarLinkPosition'
-        db.delete_table('foundry_navbarlinkposition')
-
-        # Deleting model 'Member'
-        db.delete_table('foundry_member')
-
-        # Deleting model 'DefaultAvatar'
-        db.delete_table('foundry_defaultavatar')
-
-        # Deleting model 'Country'
-        db.delete_table('foundry_country')
-
-        # Deleting model 'Page'
-        db.delete_table('foundry_page')
-
-        # Removing M2M table for field sites on 'Page'
-        db.delete_table('foundry_page_sites')
-
-        # Deleting model 'Row'
-        db.delete_table('foundry_row')
-
-        # Deleting model 'Column'
-        db.delete_table('foundry_column')
-
-        # Deleting model 'Tile'
-        db.delete_table('foundry_tile')
-
-        # Deleting model 'FoundryComment'
-        db.delete_table('foundry_foundrycomment')
-
+        db.delete_column('preferences_generalpreferences', 'exempted_urls')
 
     models = {
         'auth.group': {
@@ -257,14 +50,14 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "('title',)", 'object_name': 'Category'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['category.Category']", 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255', 'db_index': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         },
         'category.tag': {
             'Meta': {'ordering': "('title',)", 'object_name': 'Tag'},
             'categories': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['category.Category']", 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255', 'db_index': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         },
         'comments.comment': {
@@ -290,8 +83,18 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
+        'foundry.blogpost': {
+            'Meta': {'ordering': "('-created',)", 'object_name': 'BlogPost', '_ormbases': ['jmbo.ModelBase']},
+            'content': ('ckeditor.fields.RichTextField', [], {}),
+            'modelbase_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['jmbo.ModelBase']", 'unique': 'True', 'primary_key': 'True'})
+        },
+        'foundry.chatroom': {
+            'Meta': {'ordering': "('-created',)", 'object_name': 'ChatRoom', '_ormbases': ['jmbo.ModelBase']},
+            'modelbase_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['jmbo.ModelBase']", 'unique': 'True', 'primary_key': 'True'})
+        },
         'foundry.column': {
             'Meta': {'object_name': 'Column'},
+            'designation': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '32', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'index': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
             'row': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Row']"}),
@@ -301,7 +104,7 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "('title',)", 'object_name': 'Country'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'minimum_age': ('django.db.models.fields.PositiveIntegerField', [], {'default': '18'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '32', 'db_index': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '32'})
         },
         'foundry.defaultavatar': {
@@ -316,32 +119,40 @@ class Migration(SchemaMigration):
         'foundry.foundrycomment': {
             'Meta': {'ordering': "('submit_date',)", 'object_name': 'FoundryComment', '_ormbases': ['comments.Comment']},
             'comment_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['comments.Comment']", 'unique': 'True', 'primary_key': 'True'}),
-            'in_reply_to': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.FoundryComment']", 'null': 'True', 'blank': 'True'})
+            'in_reply_to': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.FoundryComment']", 'null': 'True', 'blank': 'True'}),
+            'moderated': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'})
         },
         'foundry.link': {
-            'Meta': {'object_name': 'Link'},
+            'Meta': {'ordering': "('title',)", 'object_name': 'Link'},
             'category': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['category.Category']", 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'target_content_type': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'link_target_content_type'", 'null': 'True', 'to': "orm['contenttypes.ContentType']"}),
+            'target_object_id': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
             'url': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'view_name': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'})
         },
         'foundry.listing': {
-            'Meta': {'object_name': 'Listing'},
+            'Meta': {'ordering': "('title', 'subtitle')", 'object_name': 'Listing'},
             'category': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['category.Category']", 'null': 'True', 'blank': 'True'}),
             'content': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['jmbo.ModelBase']", 'null': 'True', 'blank': 'True'}),
+            'content_type': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['contenttypes.ContentType']", 'null': 'True', 'blank': 'True'}),
             'count': ('django.db.models.fields.IntegerField', [], {}),
-            'display_likes': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'display_primary_category': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '32', 'db_index': 'True'}),
+            'items_per_page': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32'}),
             'style': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
+            'subtitle': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '256'})
         },
         'foundry.member': {
             'Meta': {'object_name': 'Member', '_ormbases': ['auth.User']},
+            'about_me': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Country']", 'null': 'True', 'blank': 'True'}),
             'crop_from': ('django.db.models.fields.CharField', [], {'default': "'center'", 'max_length': '10', 'blank': 'True'}),
             'date_taken': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'dob': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'effect': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'member_related'", 'null': 'True', 'to': "orm['photologue.PhotoEffect']"}),
             'facebook_id': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
             'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'blank': 'True'}),
@@ -351,45 +162,68 @@ class Migration(SchemaMigration):
             'view_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'})
         },
         'foundry.menu': {
-            'Meta': {'object_name': 'Menu'},
+            'Meta': {'ordering': "('title', 'subtitle')", 'object_name': 'Menu'},
             'display_title': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '32', 'db_index': 'True'}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32'}),
+            'subtitle': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
         'foundry.menulinkposition': {
             'Meta': {'ordering': "('position',)", 'object_name': 'MenuLinkPosition'},
+            'class_name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'condition_expression': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'link': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Link']"}),
             'menu': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Menu']"}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'position': ('django.db.models.fields.IntegerField', [], {})
         },
         'foundry.navbar': {
-            'Meta': {'object_name': 'Navbar'},
+            'Meta': {'ordering': "('title', 'subtitle')", 'object_name': 'Navbar'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '32', 'db_index': 'True'}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32'}),
+            'subtitle': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
         'foundry.navbarlinkposition': {
             'Meta': {'ordering': "('position',)", 'object_name': 'NavbarLinkPosition'},
+            'class_name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'condition_expression': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'link': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Link']"}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'navbar': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Navbar']"}),
             'position': ('django.db.models.fields.IntegerField', [], {})
+        },
+        'foundry.notification': {
+            'Meta': {'object_name': 'Notification'},
+            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'link': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Link']"}),
+            'member': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Member']"})
         },
         'foundry.page': {
             'Meta': {'object_name': 'Page'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_homepage': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '32', 'db_index': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32'}),
+            'subtitle': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'})
+        },
+        'foundry.pageview': {
+            'Meta': {'object_name': 'PageView'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'page': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Page']"}),
+            'view_name': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         },
         'foundry.row': {
             'Meta': {'object_name': 'Row'},
             'block_name': ('django.db.models.fields.CharField', [], {'default': "'content'", 'max_length': '32'}),
+            'has_left_or_right_column': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'index': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
             'page': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Page']"})
@@ -431,8 +265,9 @@ class Migration(SchemaMigration):
             'publishers': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['publisher.Publisher']", 'null': 'True', 'blank': 'True'}),
             'retract_on': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255', 'db_index': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255'}),
             'state': ('django.db.models.fields.CharField', [], {'default': "'unpublished'", 'max_length': '32', 'null': 'True', 'blank': 'True'}),
+            'subtitle': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'tags': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['category.Tag']", 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'view_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'})

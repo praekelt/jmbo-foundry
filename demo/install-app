@@ -1,24 +1,67 @@
 #!/bin/sh
-read -p "Installing required libraries. You may be prompted for a password. [enter]" y
-sudo apt-get install python-virtualenv mysql-server libmysqlclient-dev python2.6-dev \
-libjpeg62-dev git-core libjpeg62-dev zlib1g-dev --no-upgrade
-echo "Setting up sandboxed Python environment"
-virtualenv --python=python2.6 --no-site-packages ve
+
+echo "Choose the Python version to use:"
+choice=3
+echo "1. 2.6"
+echo "2. 2.7"
+while [ $choice -eq 3 ]; do
+    read choice
+    read -p "Installing required libraries. You may be prompted for a password. [enter]" y
+    if [ $choice -eq 1 ] ; then
+	if [ -f ./ve/bin/python2.7 ];
+	then
+	    rm -rf ./ve ./bin
+	fi
+        sudo apt-get install python-virtualenv mysql-server libmysqlclient-dev python2.6-dev \
+	libjpeg62-dev git-core libjpeg62-dev zlib1g-dev build-essential --no-upgrade
+	echo "Setting up sandboxed Python environment with Python 2.6"
+	virtualenv --python=python2.6 --no-site-packages ve
+    else
+	if [ -f ./ve/bin/python2.6 ];
+	then
+	    rm -rf ./ve ./bin
+	fi
+	sudo apt-get install python-virtualenv mysql-server libmysqlclient-dev python2.7-dev \
+	libjpeg62-dev git-core libjpeg62-dev zlib1g-dev build-essential --no-upgrade
+	echo "Setting up sandboxed Python environment with Python 2.7"
+	virtualenv --python=python2.7 --no-site-packages ve
+    fi
+done
+
 echo "Downloading distribute"
 ve/bin/python bootstrap.py
-read -p "This part may take a while. If it fails with 'connection reset by peer' run ./install-app again. [enter]" y
-./bin/buildout -nv -c dev.cfg
+echo "Choose the type of demo site:"
+choice=3
+echo "1. Mobi"
+echo "2. Web"
+while [ $choice -eq 3 ]; do
+    read choice
+    if [ $choice -eq 1 ] ; then
+        read -p "This part may take a while. If it fails with 'connection reset by peer' run ./install-app again. [enter]" y
+        ./bin/buildout -nv -c dev_basic.cfg
+    else
+        read -p "This part may take a while. If it fails with 'connection reset by peer' run ./install-app again. [enter]" y
+        ./bin/buildout -nv -c dev_web.cfg
+    fi
+done
+
+# Remove stale database
+if [ -f /tmp/foundrydemo.sql ];
+then
+    rm /tmp/foundrydemo.sql
+fi
+
 read -p "Create a superuser when prompted. Do not generate default content. [enter]" y
-./bin/foundry syncdb
-./bin/foundry migrate category
-./bin/foundry migrate jmbo
-./bin/foundry migrate foundry
-./bin/foundry migrate friends
-./bin/foundry loaddata src/jmbo-foundry/foundry/fixtures/photosizes.json
-./bin/foundry loaddata src/jmbo-post/post/fixtures/photosizes.json
-./bin/foundry loaddata src/jmbo-gallery/gallery/fixtures/photosizes.json
-./bin/foundry loaddata src/jmbo/jmbo/fixtures/photosizes.json
-./bin/foundry collectstatic --noinput
+./bin/foundrydemo syncdb
+./bin/foundrydemo migrate category
+./bin/foundrydemo migrate jmbo
+./bin/foundrydemo migrate foundry
+./bin/foundrydemo migrate friends
+./bin/foundrydemo loaddata src/jmbo-foundry/foundry/fixtures/photosizes.json
+./bin/foundrydemo loaddata src/jmbo-post/post/fixtures/photosizes.json
+./bin/foundrydemo loaddata src/jmbo-gallery/gallery/fixtures/photosizes.json
+./bin/foundrydemo loaddata src/jmbo/jmbo/fixtures/photosizes.json
+./bin/foundrydemo collectstatic --noinput
 echo "You may now start up the site with ./bin/foundry runserver 0.0.0.0:8000"
 echo "Browse to http://localhost:8000/ for the public site."
 echo "Browse to http://localhost:8000/admin for the admin interface."

@@ -1,6 +1,11 @@
 Changelog
 =========
 
+next
+----
+#. Add a base_inner.html template so it is easier to override base.html.
+#. Patch listdir so collectstatic does not fail on custom layers for third party foundry-based products.
+
 0.1
 ---
 #. Use Jaro Winkler for matching naughty words.
