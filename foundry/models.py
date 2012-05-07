@@ -21,7 +21,8 @@ from jmbo.utils import generate_slug
 from jmbo.models import ModelBase
 
 from foundry.profile_models import AbstractAvatarProfile, \
-    AbstractSocialProfile, AbstractPersonalProfile, AbstractContactProfile
+    AbstractSocialProfile, AbstractPersonalProfile, \
+    AbstractContactProfile, AbstractSubscriptionProfile
 from foundry.templatetags import listing_styles
 from foundry.managers import PermittedManager
 import foundry.monkey
@@ -462,7 +463,7 @@ class Country(models.Model):
         return self.title
 
 
-class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersonalProfile, AbstractContactProfile):
+class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersonalProfile, AbstractContactProfile, AbstractSubscriptionProfile):
     """Class that models the default user account. Subclassing is superior to profiles since 
     a site may conceivably have more than one type of user account, but the profile architecture 
     limits the entire site to a single type of profile."""

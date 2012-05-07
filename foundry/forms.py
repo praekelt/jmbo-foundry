@@ -43,6 +43,20 @@ class RememberMeCheckboxInput(forms.widgets.CheckboxInput):
         return result + "Remember me"
 
 
+class SMSOptInCheckboxInput(forms.widgets.CheckboxInput):
+
+    def render(self, *args, **kwargs):
+        result = super(SMSOptInCheckboxInput, self).render(*args, **kwargs)
+        return result + "Yes, I want to receive SMS alerts"
+
+
+class EmailOptInCheckboxInput(forms.widgets.CheckboxInput):
+
+    def render(self, *args, **kwargs):
+        result = super(EmailOptInCheckboxInput, self).render(*args, **kwargs)
+        return result + "Yes, I want to receive email alerts"
+
+
 class LoginForm(AuthenticationForm):
 
     def __init__(self, *args, **kwargs):
@@ -104,6 +118,7 @@ class JoinForm(UserCreationForm):
 
     class Meta:
         model = models.Member
+        widgets = {'receive_email': EmailOptInCheckboxInput, 'receive_sms': SMSOptInCheckboxInput}
 
     def clean_mobile_number(self):
         mobile_number = self.cleaned_data["mobile_number"]
@@ -202,6 +217,16 @@ Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
             self.fields['mobile_number'].help_text = _("The number must be in \
 international format and may start with a + sign. All other characters must \
 be numbers. No spaces allowed. An example is +27821234567.")
+
+        # Place opt-in fields at bottom and remove labels
+        for name in ('receive_email', 'receive_sms'):
+            if self.fields.has_key(name):
+                self.fields[name].label = ""
+                self.fields.keyOrder.remove(name)
+                if self.fields.keyOrder[-1] == 'accept_terms':
+                    self.fields.keyOrder.insert(-1, name)
+                else:
+                    self.fields.keyOrder.append(name)
 
     as_div = as_div
 
