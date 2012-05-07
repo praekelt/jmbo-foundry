@@ -43,6 +43,7 @@ setup(
                         'http://github.com/praekelt/jmbo-post/tarball/master#egg=jmbo-post',
                         'http://github.com/praekelt/jmbo-show/tarball/master#egg=jmbo-show',
                         'http://github.com/praekelt/jmbo-social/tarball/master#egg=jmbo-social',
+                        'http://github.com/praekelt/jmbo-friends/tarball/master#egg=jmbo-friends',
                         ],
     install_requires = [
         # todo: eliminate dependencies handled by apps themselves
