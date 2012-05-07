@@ -44,6 +44,7 @@ setup(
                         'http://github.com/praekelt/jmbo-show/tarball/master#egg=jmbo-show',
                         'http://github.com/praekelt/jmbo-social/tarball/master#egg=jmbo-social',
                         'http://github.com/praekelt/jmbo-friends/tarball/master#egg=jmbo-friends',
+                        'http://github.com/praekelt/django-sites-groups/tarball/master#egg=django-sites-groups',
                         ],
     install_requires = [
         # todo: eliminate dependencies handled by apps themselves
