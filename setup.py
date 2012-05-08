@@ -86,6 +86,7 @@ setup(
         'django_compressor',
         'jmbo_analytics',
         'jmbo-friends',
+        'gunicorn',
         'django-sites-groups',
         'jellyfish'
     ],

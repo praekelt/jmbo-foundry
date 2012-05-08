@@ -161,6 +161,7 @@ INSTALLED_APPS = (
     'compressor', # custom - add to paster
     'jmbo_analytics', # add to paster
     'analytics', # add to paster
+    'gunicorn',
     'sites_groups',
     'django.contrib.auth',
     'django.contrib.comments',
