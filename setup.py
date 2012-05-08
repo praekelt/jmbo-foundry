@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='0.1.9',
+    version='0.1.10',
     description='Jmbo foundry behaviour/templates app.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -43,7 +43,8 @@ setup(
                         'http://github.com/praekelt/jmbo-post/tarball/master#egg=jmbo-post',
                         'http://github.com/praekelt/jmbo-show/tarball/master#egg=jmbo-show',
                         'http://github.com/praekelt/jmbo-social/tarball/master#egg=jmbo-social',
-                        'http://github.com/praekelt/jmbo-friends/tarball/0.0.5#egg=jmbo-friends-0.0.5',
+                        'http://github.com/unomena/jmbo-friends/tarball/0.0.7#egg=jmbo-friends-0.0.7',
+                        'http://github.com/unomena/jmbo-activity/tarball/0.0.2#egg=jmbo-activity-0.0.2',
                         ],
     install_requires = [
         # todo: eliminate dependencies handled by apps themselves
@@ -52,7 +53,6 @@ setup(
         'django-googlesearch',
         'jmbo-music',
         'django-export',
-#        'jmbo-foundry',
         'django-snippetscream',
         'django-generate',
         'jmbo-calendar',
@@ -62,7 +62,6 @@ setup(
         'django-secretballot',
         'django-richcomments',
         'django-publisher',
-#        'jmbo-social',	# xxx: can't download tarball currently
         'django-category',
         'jmbo-post',
         'django-likes',
@@ -85,6 +84,7 @@ setup(
         'django_compressor',
         'jmbo_analytics',
         'jmbo-friends==0.0.5',
+        'jmbo-activity==0.0.2',
         'jellyfish'
     ],
     include_package_data=True,

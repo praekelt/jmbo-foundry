@@ -1,4 +1,5 @@
 import inspect
+import random
 
 from django.core.urlresolvers import reverse, Resolver404
 from django.db import models
@@ -473,6 +474,7 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersona
         )
         if not self.image:
             Notification.objects.get_or_create(member=self, link=link)
+            self.image = DefaultAvatar.object.get_random()
         else:
             try:
                 notification = Notification.objects.get(member=self, link=link)
@@ -496,11 +498,22 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersona
         return self.notification_set.all().exists()
     
 
+class DefaultAvatarManager(models.Manager):
+
+    def get_random(self):
+        avatars = self.all()
+        if avatars:
+            return random.choice(avatars).image
+        else:
+            return None
+
+
 class DefaultAvatar(ImageModel):
     """A set of avatars users can choose from"""
-    pass
-
-
+    
+    objects = DefaultAvatarManager()
+    
+    
 class Page(models.Model):
     title = models.CharField(
         max_length=200, help_text='A title that may appear in the browser window caption.',
@@ -747,55 +760,6 @@ class UserActivity(models.Model):
     content_type = models.ForeignKey(ContentType, null=True, blank=True)
     content_id = models.PositiveIntegerField(null=True, blank=True)
     checked_for_badges = models.BooleanField(default=False)
-    
-    @staticmethod
-    def add_blog_post(blog_post):
-        UserActivity.objects.create(user=blog_post.owner,
-                                    activity=ugettext('You added a <a href="%s">Blog Post</a>' % blog_post.get_absolute_url()),
-                                    sub=blog_post.title,
-                                    content_type=ContentType.objects.get_for_model(blog_post),
-                                    content_id=blog_post.id)
-    
-    @staticmethod
-    def add_gallery(gallery):
-        UserActivity.objects.create(user=gallery.owner,
-                                    activity=ugettext('You added a <a href="%s">Gallery</a>' % gallery.get_absolute_url()),
-                                    sub=gallery.title,
-                                    content_type=ContentType.objects.get_for_model(gallery),
-                                    content_id=gallery.id)
-    
-    @staticmethod
-    def add_image(image):
-        UserActivity.objects.create(user=image.owner,
-                                    activity=ugettext('You added a <a href="%s">Image</a>' % image.get_absolute_url()),
-                                    sub=image.title,
-                                    content_type=ContentType.objects.get_for_model(image),
-                                    content_id=image.id)
-    
-    @staticmethod
-    def accept_friend_request(member_friend):
-        UserActivity.objects.create(user=member_friend.friend,
-                                    activity=ugettext('You accepted a Friend Request from <a href="%s">%s</a>' % (reverse('member-detail', args=[member_friend.member.username]), member_friend.member)),
-                                    content_type=ContentType.objects.get_for_model(member_friend),
-                                    content_id=member_friend.id)
-        
-        UserActivity.objects.create(user=member_friend.member,
-                                    activity=ugettext('Your friend <a href="%s">%s</a> accepted your Friend Request. ' % (reverse('member-detail', args=[member_friend.friend.username]), member_friend.friend)),
-                                    content_type=ContentType.objects.get_for_model(member_friend),
-                                    content_id=member_friend.id)
-    
-    @staticmethod
-    def add_comment(comment):
-        UserActivity.objects.create(user=comment.user,
-                                    activity=ugettext('You added a <a href="%s">comment</a>' % comment.content_object.get_absolute_url()),
-                                    sub=comment.comment,
-                                    content_type=ContentType.objects.get_for_model(comment),
-                                    content_id=comment.id)
-    
-    @staticmethod
-    def add_share(user, link, medium):
-        UserActivity.objects.create(user=user,
-                                    activity=ugettext('You shared <a href="%s">%s</a> via %s' % (link, link, medium)))
 
 class Download(ModelBase):
     """Model for downloads."""
