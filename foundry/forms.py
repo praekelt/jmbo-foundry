@@ -47,14 +47,14 @@ class SMSOptInCheckboxInput(forms.widgets.CheckboxInput):
 
     def render(self, *args, **kwargs):
         result = super(SMSOptInCheckboxInput, self).render(*args, **kwargs)
-        return result + "Yes, I want to receive SMS alerts"
+        return result + ugettext("Yes, I want to receive SMS alerts")
 
 
 class EmailOptInCheckboxInput(forms.widgets.CheckboxInput):
 
     def render(self, *args, **kwargs):
         result = super(EmailOptInCheckboxInput, self).render(*args, **kwargs)
-        return result + "Yes, I want to receive email alerts"
+        return result + ugettext("Yes, I want to receive email alerts")
 
 
 class LoginForm(AuthenticationForm):
