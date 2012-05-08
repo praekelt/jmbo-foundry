@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+0.2
+---
 #. Add a base_inner.html template so it is easier to override base.html.
 #. Patch listdir so collectstatic does not fail on custom layers for third party foundry-based products.
 

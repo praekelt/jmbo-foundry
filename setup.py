@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='0.1',
+    version='0.2',
     description='Jmbo foundry behaviour/templates app.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -53,7 +53,6 @@ setup(
         'django-googlesearch',
         'jmbo-music',
         'django-export',
-#        'jmbo-foundry',
         'django-snippetscream',
         'django-generate',
         'jmbo-calendar',
@@ -63,7 +62,6 @@ setup(
         'django-secretballot',
         'django-richcomments',
         'django-publisher',
-#        'jmbo-social',	# xxx: can't download tarball currently
         'django-category',
         'jmbo-post',
         'django-likes',
