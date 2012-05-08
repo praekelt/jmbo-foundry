@@ -387,14 +387,12 @@ msgid "Notifications"
 msgstr "Notifications"
 
 #: templates/basic/foundry/member_detail.html:20
-#, fuzzy
 msgid "Total comments"
-msgstr "commentaires"
+msgstr "Total des commentaires"
 
 #: templates/basic/foundry/member_detail.html:24
-#, fuzzy
 msgid "Recent comments"
-msgstr "commentaires"
+msgstr "Derniers commentaires"
 
 #: templates/basic/foundry/user_detail.html:12
 msgid "This user does not have a public profile."
