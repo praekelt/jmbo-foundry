@@ -53,10 +53,7 @@ fi
 
 read -p "Create a superuser when prompted. Do not generate default content. [enter]" y
 ./bin/foundrydemo syncdb
-./bin/foundrydemo migrate category
-./bin/foundrydemo migrate jmbo
-./bin/foundrydemo migrate foundry
-./bin/foundrydemo migrate friends
+./bin/foundrydemo migrate
 ./bin/foundrydemo loaddata src/jmbo-foundry/foundry/fixtures/photosizes.json
 ./bin/foundrydemo loaddata src/jmbo-post/post/fixtures/photosizes.json
 ./bin/foundrydemo loaddata src/jmbo-gallery/gallery/fixtures/photosizes.json
