@@ -9,8 +9,10 @@ setup(
     author_email='dev@praekelt.com',
     license='BSD',
     url='',
-    packages = find_packages('src'),
-    package_dir = {'': 'src'},
+    packages = find_packages(),
+    dependency_links = [
+        'http://github.com/praekelt/jmbo-foundry/tarball/master#egg=jmbo-foundry',
+    ],
     install_requires = [
         'jmbo-foundry',
     ],
