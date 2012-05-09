@@ -54,9 +54,11 @@
         {% endblock %}
         </div>
         {% endblock %}
+        {% comment %}
         {% if request.user.is_authenticated %}
             {% suggested_friends request.user %}
         {% endif %}
+        {% endcomment %}
     </div>
 
     {% block footer %}

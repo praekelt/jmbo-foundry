@@ -213,7 +213,6 @@ class Listing(models.Model):
         choices=((style[0], style[0]) for style in inspect.getmembers(listing_styles, inspect.isclass) if style[0] != 'AbstractBaseStyle'),
         max_length=64
     )
-    display_likes = models.BooleanField(default=True)
     items_per_page = models.PositiveIntegerField(
         default=0, 
         help_text="Number of items displayed on a page. Set to zero to disable paging."
@@ -302,6 +301,14 @@ class GeneralPreferences(Preferences):
         help_text=_("A private site requires a visitor to be logged in to view any content."),
     )
     show_age_gateway = models.BooleanField(default=False)
+    exempted_urls = models.TextField(
+        blank=True,
+        default='',
+        help_text='''URL patterns that are exempted from the Private Site and \
+Age Gateway. Certain URLs like /login are already protected and do not need \
+to be listed. One entry per line. Matches are wildcard by default, eg. \
+/my-page will match /my-pages/the-red-one.'''
+    )
     analytics_tags = models.TextField(null=True, blank=True)
 
     class Meta:
@@ -313,20 +320,20 @@ class RegistrationPreferences(Preferences):
 
     raw_display_fields = models.CharField(
         'Display fields',
-        max_length=32, 
+        max_length=256, 
         default='',
         help_text=_('Fields to display on the registration form.')
     )
     raw_required_fields = models.CharField(
         'Required fields',
-        max_length=32, 
+        max_length=256, 
         default='',
         blank=True,
         help_text=_('Set fields which are not required by default as required on the registration form.')
     )
     raw_unique_fields = models.CharField(
         'Unique fields',
-        max_length=32, 
+        max_length=256, 
         default='',
         blank=True,
         help_text=_('Set fields which must be unique on the registration form.')
@@ -352,8 +359,8 @@ class RegistrationPreferences(Preferences):
         # duplicate values. For example, if mobile number was not a unique
         # field before but it is now, then there may not be two members with
         # the same mobile number.
-        for fieldname in self.unique_fields:
-            values = Member.objects.all().values_list(fieldname, flat=True)
+        for fieldname in self.unique_fields:            
+            values = Member.objects.exclude(**{fieldname: None}).values_list(fieldname, flat=True)
             # set removes duplicates from a list
             if len(values) != len(set(values)):
                 raise RuntimeError(
@@ -405,10 +412,53 @@ class PasswordResetPreferences(Preferences):
         verbose_name_plural = 'Password Reset Preferences'
 
 
+class NaughtyWordPreferences(Preferences):
+    __module__ = 'preferences.models'
+
+    entries = models.TextField(
+        default='',
+        help_text='''Each line has format "word,weight", eg. "bomb,8". \
+Weight must be a value from 1 to 10.'''
+    )
+    threshold = models.PositiveIntegerField(
+        default=5, 
+        help_text="""An item is deemed suspect if its weighted score exceeds \
+this value."""
+    )
+    email_recipients = models.TextField(
+        default='',
+        help_text="""Reports are sent to these email addresses. One email \
+address per line."""
+    )
+
+    class Meta:
+        verbose_name_plural = 'Naughty Word Preferences'
+
+
+class Country(models.Model):
+    """Countries used in the age gateway"""
+    title = models.CharField(max_length=32)
+    slug = models.SlugField(
+        editable=True,
+        max_length=32,
+        db_index=True,
+    )
+    minimum_age = models.PositiveIntegerField(default=18)
+
+    class Meta:
+        verbose_name_plural = 'Countries'
+        ordering = ('title',)
+
+    def __unicode__(self):
+        return self.title
+
+
 class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersonalProfile, AbstractContactProfile):
     """Class that models the default user account. Subclassing is superior to profiles since 
     a site may conceivably have more than one type of user account, but the profile architecture 
     limits the entire site to a single type of profile."""
+
+    country = models.ForeignKey(Country, null=True, blank=True)
     
     def __unicode__(self):
         return self.username
@@ -444,65 +494,10 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersona
         """Return true if member has notifications"""
         return self.notification_set.all().exists()
     
-    def can_friend(self, friend):
-        # Can't friend yourself
-        if self == friend:
-            return False
-        return not MemberFriend.objects.filter(
-            Q(member=self, friend=friend) | Q(member=friend, friend=self)
-        ).exists()
-                    
-    def get_friends_with_ids(self, exlude_ids=[], limit=0):
-        # todo: find a better way to query for friends
-        values_list = MemberFriend.objects.filter(
-            Q(member=self)|Q(friend=self), 
-            state='accepted'
-        ).values_list('member', 'friend')
-        ids = []
-        for member_id, friend_id in values_list:
-            if self.id != member_id:
-                if member_id not in exlude_ids:
-                    ids.append(member_id)
-            if self.id != friend_id:
-                if friend_id not in exlude_ids:
-                    ids.append(friend_id)
-        if limit > 0:
-            return Member.objects.filter(id__in=ids).order_by('?')[0:limit], ids
-        else:
-            return Member.objects.filter(id__in=ids).order_by('?'), ids
-
-    def get_friends(self):
-        friends, _ = self.get_friends_with_ids()
-        return friends 
-    
-    def get_5_random_friends(self, exlude_ids=[]):
-        friends, _ = self.get_friends_with_ids(exlude_ids, 5)
-        return friends
-    
-    five_random_friends = property(get_5_random_friends)
-
 
 class DefaultAvatar(ImageModel):
     """A set of avatars users can choose from"""
     pass
-
-
-class Country(models.Model):
-    """Countries used in the age gateway"""
-    title = models.CharField(max_length=32)
-    slug = models.SlugField(
-        editable=True,
-        max_length=32,
-        db_index=True,
-    )
-    minimum_age = models.PositiveIntegerField(default=18)
-
-    class Meta:
-        verbose_name_plural = 'Countries'
-        ordering = ('title',)
-
-    def __unicode__(self):
-        return self.title
 
 
 class Page(models.Model):
@@ -698,6 +693,7 @@ it works - you cannot break anything.""",
 class FoundryComment(BaseComment):
     """Custom comment class"""
     in_reply_to = models.ForeignKey('self', null=True, blank=True, db_index=True)
+    moderated = models.BooleanField(default=False, db_index=True)
 
     @property
     def replies(self):
@@ -713,6 +709,12 @@ class FoundryComment(BaseComment):
         except Member.DoesNotExist:
             # Happens when comment is not made by a member
             return None
+        
+    def save(self, *args, **kwargs):
+        
+        super(FoundryComment, self).save(*args, **kwargs)
+        
+        UserActivity.add_comment(self)
 
 
 class ChatRoom(ModelBase):
@@ -722,22 +724,6 @@ class ChatRoom(ModelBase):
 class BlogPost(ModelBase):
     content = RichTextField(_("Content"))
     
-class DirectMessage(models.Model):
-    from_member = models.ForeignKey(Member, related_name='sent_items')
-    to_member = models.ForeignKey(Member, related_name='inbox')
-    message = models.TextField()
-    reply_to = models.ForeignKey('DirectMessage', related_name='replies', null=True, blank=True)
-    state = models.CharField(
-        max_length=32,
-        default='sent',
-        db_index=True,
-        choices=(
-            ('sent', 'Sent'),
-            ('read', 'Read'),
-            ('archived', 'Archived')
-        )
-    )
-    created = models.DateTimeField(auto_now_add=True)
 
 class Notification(models.Model):
     member = models.ForeignKey(Member)
@@ -746,45 +732,80 @@ class Notification(models.Model):
 
     def __unicode__(self):
         return str(self.id)
-
-
-class MemberFriend(models.Model):
-    member = models.ForeignKey(Member, related_name='member_friend_member')
-    friend = models.ForeignKey(Member, related_name='member_friend_friend')
-    state = models.CharField(
-        max_length=32,
-        default='invited',
-        db_index=True,
-        choices=(
-            ('invited', 'Invited'),
-            ('accepted', 'Accepted'),
-            ('declined', 'Declined')
-        )
-    )
     
-    def save(self, *args, **kwargs):        
-        is_new = not self.id
 
-        super(MemberFriend, self).save(*args, **kwargs)        
+            
+class UserActivity(models.Model):
+    """
+    Stores actions executed by users.
+    """
+    user = models.ForeignKey(User)
+    activity = models.CharField(max_length=256)
+    sub = models.CharField(max_length=256, null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    content_type = models.ForeignKey(ContentType, null=True, blank=True)
+    content_id = models.PositiveIntegerField(null=True, blank=True)
+    checked_for_badges = models.BooleanField(default=False)
+    
+    @staticmethod
+    def add_blog_post(blog_post):
+        UserActivity.objects.create(user=blog_post.owner,
+                                    activity=ugettext('You added a <a href="%s">Blog Post</a>' % blog_post.get_absolute_url()),
+                                    sub=blog_post.title,
+                                    content_type=ContentType.objects.get_for_model(blog_post),
+                                    content_id=blog_post.id)
+    
+    @staticmethod
+    def add_gallery(gallery):
+        UserActivity.objects.create(user=gallery.owner,
+                                    activity=ugettext('You added a <a href="%s">Gallery</a>' % gallery.get_absolute_url()),
+                                    sub=gallery.title,
+                                    content_type=ContentType.objects.get_for_model(gallery),
+                                    content_id=gallery.id)
+    
+    @staticmethod
+    def add_image(image):
+        UserActivity.objects.create(user=image.owner,
+                                    activity=ugettext('You added a <a href="%s">Image</a>' % image.get_absolute_url()),
+                                    sub=image.title,
+                                    content_type=ContentType.objects.get_for_model(image),
+                                    content_id=image.id)
+    
+    @staticmethod
+    def accept_friend_request(member_friend):
+        UserActivity.objects.create(user=member_friend.friend,
+                                    activity=ugettext('You accepted a Friend Request from <a href="%s">%s</a>' % (reverse('member-detail', args=[member_friend.member.username]), member_friend.member)),
+                                    content_type=ContentType.objects.get_for_model(member_friend),
+                                    content_id=member_friend.id)
+        
+        UserActivity.objects.create(user=member_friend.member,
+                                    activity=ugettext('Your friend <a href="%s">%s</a> accepted your Friend Request. ' % (reverse('member-detail', args=[member_friend.friend.username]), member_friend.friend)),
+                                    content_type=ContentType.objects.get_for_model(member_friend),
+                                    content_id=member_friend.id)
+    
+    @staticmethod
+    def add_comment(comment):
+        UserActivity.objects.create(user=comment.user,
+                                    activity=ugettext('You added a <a href="%s">comment</a>' % comment.content_object.get_absolute_url()),
+                                    sub=comment.comment,
+                                    content_type=ContentType.objects.get_for_model(comment),
+                                    content_id=comment.id)
+    
+    @staticmethod
+    def add_share(user, link, medium):
+        UserActivity.objects.create(user=user,
+                                    activity=ugettext('You shared <a href="%s">%s</a> via %s' % (link, link, medium)))
 
-        if is_new:
-            link, dc = Link.objects.get_or_create(
-                title=ugettext("You have pending friend requests"), view_name='my-friend-requests'
-            )
-            Notification.objects.get_or_create(member=self.friend, link=link)
-
-    def accept(self):
-        self.state = 'accepted'
-        self.save()
-
-        # Delete notifications if no more friend requests        
-        if not MemberFriend.objects.filter(friend=self.friend, state='invited').exclude(id=self.id).exists():
-            link, dc = Link.objects.get_or_create(
-                title=ugettext("You have pending friend requests"), view_name='my-friend-requests'
-            )
-            for obj in Notification.objects.filter(member=self.friend, link=link):
-                obj.delete()
-
+class Download(ModelBase):
+    """Model for downloads."""
+    points_required = models.PositiveSmallIntegerField(default=0)
+    file = models.FileField(upload_to='downloads/')
+    
+    def __unicode__(self):
+        return self.title
+    
+    class Meta:
+        ordering = ['points_required']
 
 @receiver(m2m_changed)
 def check_slug(sender, **kwargs):

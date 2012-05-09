@@ -25,17 +25,11 @@ PROJECT_MODULE = 'foundrydemo'
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-# For MySQL remember to first do from a MySQL shell:
-# CREATE database foundrydemo;
-# GRANT ALL ON foundrydemo.* TO 'foundrydemo'@'localhost' IDENTIFIED BY 'foundrydemo';
-# GRANT ALL ON test_foundrydemo.* TO 'foundrydemo'@'localhost' IDENTIFIED BY 'foundrydemo';
-# FLUSH PRIVILEGES;
-
 DATABASES = {
     'default': {
-        'ENGINE': 'mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'foundrydemo', # Or path to database file if using sqlite3.
-        'USER': 'root', # Not used with sqlite3.
+        'ENGINE': 'sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '/tmp/foundrydemo.db', # Or path to database file if using sqlite3.
+        'USER': '', # Not used with sqlite3.
         'PASSWORD': '', # Not used with sqlite3.
         'HOST': '', # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '', # Set to empty string for default. Not used with sqlite3.
@@ -122,6 +116,7 @@ ROOT_URLCONF = 'foundrydemo.urls'
 
 INSTALLED_APPS = (
     'foundrydemo',
+    'friends',
     'foundry',
     'section',
     'gallery',

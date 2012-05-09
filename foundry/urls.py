@@ -28,6 +28,7 @@ urlpatterns = patterns('',
         name='gallery_object_detail'
     ),
 
+    (r'^friends/', include('friends.urls')),
     (r'^gallery/', include('gallery.urls')),
     (r'^googlesearch/', include('googlesearch.urls')),
     (r'^music/', include('music.urls')),
@@ -154,12 +155,15 @@ urlpatterns = patterns('',
         name='listing-detail'
     ),
     
-    # My Profile
-    
-    url(r'^my-profile/update/$',
-        login_required(views.UpdateProfile.as_view(form_class=forms.ProfileUpdateForm,
-                                                   template_name='foundry/update_profile.html')),
-        name='update-profile'
+    # Edit profile    
+    url(r'^edit-profile/$',
+        login_required(
+            views.EditProfile.as_view(
+                form_class=forms.EditProfileForm,
+                template_name='foundry/edit_profile.html'
+            )
+        ),
+        name='edit-profile'
     ),
 
     # Page detail
@@ -236,39 +240,20 @@ urlpatterns = patterns('',
         name='member-notifications'
     ),
 
+    # User activity
+    url(
+        r'^user-activity/$', 
+        login_required(views.UserActivityView.as_view(template_name='foundry/user_activity.html',
+                                                      paginate_by=5)),
+        name='user_activity'
+    ),
+
     # User detail page
     url(
         r'^users/(?P<username>[\w-]+)/$', 
         'foundry.views.user_detail', 
         {},
         name='user-detail'
-    ),
-
-    # Member detail page
-    url(r'^members/(?P<username>[\w-]+)/$', 
-        views.MemberDetail.as_view(form_class=forms.CreateDirectMessage,
-                                   template_name='foundry/member_detail.html'), 
-        name='member-detail'
-    ),
-    
-    # Messaging
-    url(r'^inbox/$',
-        login_required(views.Inbox.as_view(template_name='foundry/inbox.html')),
-        name='inbox'
-    ),
-    url(r'^message/send/$',
-        login_required(views.SendMessage.as_view(form_class=forms.SendDirectMessage,
-                                                 template_name='foundry/message_send.html')),
-        name='message-send'
-    ),
-    url(r'^message/(?P<pk>\d+)/view/$',
-        login_required(views.ViewMessage.as_view(template_name='foundry/message_view.html')),
-        name='message-view'
-    ),
-    url(r'^message/(?P<pk>\d+)/reply/$',
-        login_required(views.ReplyToMessage.as_view(form_class=forms.ReplyDirectMessage,
-                                                    template_name='foundry/message_reply.html')),
-        name='message-reply'
     ),
 
     # Coming soon
@@ -280,51 +265,13 @@ urlpatterns = patterns('',
         },
         name='coming-soon'
     ),
+
+    # Load new comments
     url(
         r'^fetch-new-comments-ajax/(?P<content_type_id>\d+)/(?P<oid>\d+)/(?P<last_comment_id>\d+)/$',
         'foundry.views.fetch_new_comments_ajax',
         {},
         name='fetch-new-comments-ajax'
-    ),
-
-    # Friend request
-    url(
-        r'^friend-request/(?P<member_id>\d+)/$',
-        login_required(views.friend_request),
-        {},
-        name='friend-request'
-    ),
-
-    # My friends
-    url(
-        r'^my-friends/$',
-        login_required(views.my_friends),
-        {'template_name':'foundry/my_friends.html'},
-        name='my-friends'
-    ),
-
-    # My friend requests
-    url(
-        r'^my-friend-requests/$',
-        login_required(views.my_friend_requests),
-        {'template_name':'foundry/my_friend_requests.html'},
-        name='my-friend-requests'
-    ),
-
-    # Accept friend request
-    url(
-        r'^accept-friend-request/(?P<memberfriend_id>\d+)/$',
-        login_required(views.accept_friend_request),
-        {},
-        name='accept-friend-request'
-    ),
-
-    # De-friend a member
-    url(
-        r'^de-friend/(?P<member_id>\d+)/$',
-        login_required(views.de_friend),
-        {},
-        name='de-friend'
     ),
 
     # Test views
@@ -408,6 +355,26 @@ urlpatterns = patterns('',
         {},
         name='admin-persist-sort-ajax',
     ),
+    url(
+        r'^admin-remove-comment/(?P<comment_id>\d+)/$',
+        'foundry.admin_views.remove_comment',
+        {},
+        name='admin-remove-comment'
+    ),
+    url(
+        r'^admin-allow-comment/(?P<comment_id>\d+)/$',
+        'foundry.admin_views.allow_comment',
+        {},
+        name='admin-allow-comment'
+    ),
+    
+    url(r'^share/facebook/$',
+        login_required(views.Share.as_view(type='Facebook')),
+        name='share_facebook'),
+        
+    url(r'^share/twitter/$',
+        login_required(views.Share.as_view(type='Twitter')),
+        name='share_twitter'),
 
 )
 

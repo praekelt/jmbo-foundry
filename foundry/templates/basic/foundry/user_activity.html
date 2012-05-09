@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n foundry_tags jmbo_template_tags pagination_tags %}
+
+{% block content %}
+
+    <div class="content member-detail">
+        {% profile_blurb user %}
+        <div class="foundry-container foundry-listing-vertical">
+            <div class="title">Activity</div>
+            <div class="items">
+                {% for object in object_list %}
+                    <div class="item {% if forloop.first %}first{% endif %} {% if forloop.last %}last{% endif %} item-{{ object.class_name|lower }}">
+                        <div class="meta"><div class="byline">{% humanize_time_diff object.created 'ago' %}</div></div>
+                        <div class="title">{{ object.activity|safe }}</div>
+                        {% if object.sub %}<div class="meta"><div class="description">{{ object.sub }}</div></div>{% endif %}
+                    </div>
+                {% endfor %}
+                
+                {% paginate %}
+                
+            </div>
+        </div>
+    </div>  
+    
+{% endblock %}

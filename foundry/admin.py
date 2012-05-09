@@ -12,7 +12,7 @@ from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
     NavbarLinkPosition, Navbar, GeneralPreferences, GeneralPreferences, \
     RegistrationPreferences, LoginPreferences, Member, DefaultAvatar, \
     PasswordResetPreferences, Country, Page, ChatRoom, BlogPost, Notification, \
-    FoundryComment, PageView
+    FoundryComment, PageView, NaughtyWordPreferences, UserActivity
 from foundry.widgets import SelectCommaWidget
 from foundry.utils import get_view_choices
 
@@ -107,7 +107,7 @@ class ListingAdminForm(forms.ModelForm):
         model = Listing
         fields = (
             'title', 'slug', 'subtitle', 'content_type', 'category', 'content', 
-            'style', 'count', 'display_likes', 'items_per_page', 'sites'
+            'style', 'count', 'items_per_page', 'sites'
         )       
 
     def __init__(self, *args, **kwargs):
@@ -177,6 +177,10 @@ class LoginPreferencesAdmin(PreferencesAdmin):
 
 
 class PasswordResetPreferencesAdmin(PreferencesAdmin):
+    pass
+
+
+class NaughtyWordPreferencesAdmin(PreferencesAdmin):
     pass
 
 
@@ -267,6 +271,7 @@ admin.site.register(GeneralPreferences, GeneralPreferencesAdmin)
 admin.site.register(RegistrationPreferences, RegistrationPreferencesAdmin)
 admin.site.register(LoginPreferences, LoginPreferencesAdmin)
 admin.site.register(PasswordResetPreferences, PasswordResetPreferencesAdmin)
+admin.site.register(NaughtyWordPreferences, NaughtyWordPreferencesAdmin)
 admin.site.register(Member, MemberAdmin)
 admin.site.register(DefaultAvatar, DefaultAvatarAdmin)
 admin.site.register(Country, CountryAdmin)
@@ -275,3 +280,5 @@ admin.site.register(ChatRoom, ChatRoomAdmin)
 admin.site.register(BlogPost, BlogPostAdmin)
 admin.site.register(Notification, NotificationAdmin)
 admin.site.register(FoundryComment, FoundryCommentAdmin)
+admin.site.register(UserActivity)
+

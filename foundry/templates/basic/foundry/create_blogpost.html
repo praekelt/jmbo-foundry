@@ -2,15 +2,14 @@
 {% load i18n %}
 
 {% block content %}
-
-    <div class="h2">{% blocktrans %}Create a blog post{% endblocktrans %}</div>
-
-    <form action="{% url create-blogpost %}" method="POST" class="foundry-form">   
-        {% csrf_token %}
-        {{ form.as_div }}
-        <div class="buttons">
-            <input type="submit" value="{% trans "Save" %}" />
-        </div>
-    </form>
-
+    <div class="content create-blogpost">
+	    <div class="title">{% blocktrans %}Create a blog post{% endblocktrans %}</div>
+	    <form action="{% url create-blogpost %}" method="POST" class="foundry-form">   
+	        {% csrf_token %}
+	        {{ form.as_div }}
+	        <div class="buttons">
+	            <input type="submit" value="{% trans "Save" %}" />
+	        </div>
+	    </form>
+    </div>
 {% endblock content %}
