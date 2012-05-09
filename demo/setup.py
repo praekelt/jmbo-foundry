@@ -10,9 +10,6 @@ setup(
     license='BSD',
     url='',
     packages = find_packages(),
-    dependency_links = [
-        'http://github.com/praekelt/jmbo-foundry/tarball/master#egg=jmbo-foundry',
-    ],
     install_requires = [
         'jmbo-foundry',
     ],
