@@ -50,7 +50,8 @@ setup(
         'jmbo-friends',
         'gunicorn',
         'django-sites-groups',
-        'jellyfish'
+        'jellyfish',
+        'python-memcached',
     ],
     include_package_data=True,
     tests_require=[
