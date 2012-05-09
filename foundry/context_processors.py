@@ -8,5 +8,6 @@ def foundry(request):
         'FOUNDRY': settings.FOUNDRY,
         'LAYER_PATH': settings.FOUNDRY['layers'][0] + '/',
         'CURRENT_SITE': get_current_site(request),
-        'ANALYTICS_TAGS': preferences.GeneralPreferences.analytics_tags
+        'ANALYTICS_TAGS': preferences.GeneralPreferences.analytics_tags,
+        'DEFAULT_META_DESCRIPTION': preferences.GeneralPreferences.meta_description,
     }

@@ -28,6 +28,9 @@ from foundry import models
 from foundry.widgets import OldSchoolDateWidget
 from foundry.ambientmobile import AmbientSMS, AmbientSMSError
 
+from activity import constants as activity_constants
+from activity import models as activity_models 
+
 
 class TermsCheckboxInput(forms.widgets.CheckboxInput):
 
@@ -202,7 +205,7 @@ Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
             self.fields['mobile_number'].help_text = _("The number must be in \
 international format and may start with a + sign. All other characters must \
 be numbers. No spaces allowed. An example is +27821234567.")
-
+        
     as_div = as_div
 
 
@@ -340,7 +343,9 @@ class PasswordResetForm(BasePasswordResetForm):
 class AgeGatewayForm(forms.Form):
     country = forms.ModelChoiceField(queryset=models.Country.objects.all())
     date_of_birth = forms.DateField(widget=OldSchoolDateWidget)
-    remember_me = forms.BooleanField(required=False, label="", widget=RememberMeCheckboxInput)
+    remember_me = forms.BooleanField(required=False, label="", 
+                                     widget=RememberMeCheckboxInput,
+                                     help_text="(Don't tick if you share your phone)")
 
     def clean(self):
         cleaned_data = super(AgeGatewayForm, self).clean()
@@ -428,7 +433,12 @@ class CreateBlogPostForm(forms.ModelForm):
         if commit:
             instance.save()
         
-        models.UserActivity.add_blog_post(instance)
+        activity_models.UserActivity.track_activity(user=instance.owner,
+                                                    activity=activity_constants.ACTIVITY_POSTED,
+                                                    sub=ugettext('<a href="%s">%s</a>' % (instance.get_absolute_url(),
+                                                                                          instance.title)),
+                                                    content_object=instance,
+                                                    image_object=instance.owner.member)
         
         return instance            
 

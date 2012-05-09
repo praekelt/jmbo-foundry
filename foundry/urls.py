@@ -29,6 +29,7 @@ urlpatterns = patterns('',
     ),
 
     (r'^friends/', include('friends.urls')),
+    (r'^activity/', include('activity.urls')),
     (r'^gallery/', include('gallery.urls')),
     (r'^googlesearch/', include('googlesearch.urls')),
     (r'^music/', include('music.urls')),
@@ -73,6 +74,14 @@ urlpatterns = patterns('',
             'template':'foundry/inclusion_tags/header.html', 
         },
         name='header'
+    ),
+    url(
+        r'^footer/$',
+        'django.views.generic.simple.direct_to_template',
+        {
+            'template':'foundry/inclusion_tags/footer.html', 
+        },
+        name='footer'
     ),
 
     # Join, login, password reset            
@@ -240,13 +249,13 @@ urlpatterns = patterns('',
         name='member-notifications'
     ),
 
-    # User activity
-    url(
-        r'^user-activity/$', 
-        login_required(views.UserActivityView.as_view(template_name='foundry/user_activity.html',
-                                                      paginate_by=5)),
-        name='user_activity'
-    ),
+#    # User activity
+#    url(
+#        r'^user-activity/$', 
+#        login_required(views.UserActivityView.as_view(template_name='foundry/user_activity.html',
+#                                                      paginate_by=5)),
+#        name='user_activity'
+#    ),
 
     # User detail page
     url(

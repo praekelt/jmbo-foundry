@@ -9,7 +9,8 @@ setup(
     author_email='dev@praekelt.com',
     license='BSD',
     url='',
-    packages = find_packages(),
+    packages = find_packages('src'),
+    package_dir = {'': 'src'},
     install_requires = [
         'jmbo-foundry',
     ],

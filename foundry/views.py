@@ -21,6 +21,7 @@ from django.template import Template
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import requires_csrf_token
 from django.views.generic import View, ListView
+from django.utils.translation import ugettext_lazy as _, ugettext
 
 from category.models import Category
 from jmbo.models import ModelBase
@@ -29,9 +30,12 @@ from jmbo.view_modifiers import DefaultViewModifier
 from preferences import preferences
 
 from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification, \
-    Member, UserActivity
+    Member
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
     SearchForm, CreateBlogPostForm
+    
+from activity import constants as activity_constants
+from activity.models import UserActivity
 
 def join(request):
     """Surface join form"""
@@ -219,11 +223,6 @@ class EditProfile(UpdateView):
         self.success_url = reverse('member-detail', args=[member.username])
         return member
 
-class UserActivityView(ListView):
-    
-    def get_queryset(self):
-        return UserActivity.objects.filter(user=self.request.user).order_by('-created')
-
 
 class Share(View):
     """
@@ -241,7 +240,11 @@ class Share(View):
         else:
             return Http404()
         
-        UserActivity.add_share(request.user, request.META['HTTP_REFERER'], self.type)
+        UserActivity.track_activity(user=request.user,
+                                    activity=activity_constants.ACTIVITY_SOCIAL_SHARE,
+                                    sub=ugettext('<a href="%s">%s</a> via %s' % (request.META['HTTP_REFERER'],
+                                                                                 request.META['HTTP_REFERER'],
+                                                                                 self.type)))
         
         return HttpResponseRedirect(url)
 
