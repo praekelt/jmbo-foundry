@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.2.1
+-----
+#. Remove dependency links.
+
 0.2
 ---
 #. Add a base_inner.html template so it is easier to override base.html.
