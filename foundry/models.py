@@ -27,6 +27,8 @@ from foundry.templatetags import listing_styles
 from foundry.managers import PermittedManager
 import foundry.monkey
 
+from activity import constants as activity_constants
+from activity.models import UserActivity
 
 class Link(models.Model):
     title = models.CharField(
@@ -728,7 +730,12 @@ class FoundryComment(BaseComment):
         
         super(FoundryComment, self).save(*args, **kwargs)
         
-        UserActivity.add_comment(self)
+        UserActivity.track_activity(user=self.user,
+                                    activity=activity_constants.ACTIVITY_COMMENTED,
+                                    sub=ugettext('<a href="%s">%s</a>' % (self.content_object.get_absolute_url(),
+                                                                          self.comment)),
+                                    content_object=self,
+                                    image_object=self.user.member)
 
 
 class ChatRoom(ModelBase):
@@ -746,20 +753,7 @@ class Notification(models.Model):
 
     def __unicode__(self):
         return str(self.id)
-    
 
-            
-class UserActivity(models.Model):
-    """
-    Stores actions executed by users.
-    """
-    user = models.ForeignKey(User)
-    activity = models.CharField(max_length=256)
-    sub = models.CharField(max_length=256, null=True, blank=True)
-    created = models.DateTimeField(auto_now_add=True)
-    content_type = models.ForeignKey(ContentType, null=True, blank=True)
-    content_id = models.PositiveIntegerField(null=True, blank=True)
-    checked_for_badges = models.BooleanField(default=False)
 
 class Download(ModelBase):
     """Model for downloads."""

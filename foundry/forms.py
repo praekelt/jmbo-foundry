@@ -28,6 +28,9 @@ from foundry import models
 from foundry.widgets import OldSchoolDateWidget
 from foundry.ambientmobile import AmbientSMS, AmbientSMSError
 
+from activity import constants as activity_constants
+from activity import models as activity_models 
+
 
 class TermsCheckboxInput(forms.widgets.CheckboxInput):
 
@@ -430,7 +433,12 @@ class CreateBlogPostForm(forms.ModelForm):
         if commit:
             instance.save()
         
-        models.UserActivity.add_blog_post(instance)
+        activity_models.UserActivity.track_activity(user=instance.owner,
+                                                    activity=activity_constants.ACTIVITY_POSTED,
+                                                    sub=ugettext('<a href="%s">%s</a>' % (instance.get_absolute_url(),
+                                                                                          instance.title)),
+                                                    content_object=instance,
+                                                    image_object=instance.owner.member)
         
         return instance            
 

@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='0.1.11',
+    version='0.1.12',
     description='Jmbo foundry behaviour/templates app.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -43,8 +43,8 @@ setup(
                         'http://github.com/praekelt/jmbo-post/tarball/master#egg=jmbo-post',
                         'http://github.com/praekelt/jmbo-show/tarball/master#egg=jmbo-show',
                         'http://github.com/praekelt/jmbo-social/tarball/master#egg=jmbo-social',
-                        'http://github.com/unomena/jmbo-friends/tarball/0.0.7#egg=jmbo-friends-0.0.7',
-                        'http://github.com/unomena/jmbo-activity/tarball/0.0.2#egg=jmbo-activity-0.0.2',
+                        'http://github.com/unomena/jmbo-friends/tarball/0.0.8#egg=jmbo-friends-0.0.8',
+                        'http://github.com/unomena/jmbo-activity/tarball/0.0.3#egg=jmbo-activity-0.0.3',
                         ],
     install_requires = [
         # todo: eliminate dependencies handled by apps themselves
@@ -83,8 +83,8 @@ setup(
         'BeautifulSoup',
         'django_compressor',
         'jmbo_analytics',
-        'jmbo-friends==0.0.7',
-        'jmbo-activity==0.0.2',
+        'jmbo-friends==0.0.8',
+        'jmbo-activity==0.0.3',
         'jellyfish'
     ],
     include_package_data=True,
