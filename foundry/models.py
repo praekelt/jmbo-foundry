@@ -476,7 +476,7 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersona
         )
         if not self.image:
             Notification.objects.get_or_create(member=self, link=link)
-            self.image = DefaultAvatar.object.get_random()
+            self.image = DefaultAvatar.objects.get_random()
         else:
             try:
                 notification = Notification.objects.get(member=self, link=link)
