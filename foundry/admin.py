@@ -12,7 +12,7 @@ from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
     NavbarLinkPosition, Navbar, GeneralPreferences, GeneralPreferences, \
     RegistrationPreferences, LoginPreferences, Member, DefaultAvatar, \
     PasswordResetPreferences, Country, Page, ChatRoom, BlogPost, Notification, \
-    FoundryComment, PageView, NaughtyWordPreferences, UserActivity
+    FoundryComment, PageView, NaughtyWordPreferences
 from foundry.widgets import SelectCommaWidget
 from foundry.utils import get_view_choices
 
@@ -280,5 +280,4 @@ admin.site.register(ChatRoom, ChatRoomAdmin)
 admin.site.register(BlogPost, BlogPostAdmin)
 admin.site.register(Notification, NotificationAdmin)
 admin.site.register(FoundryComment, FoundryCommentAdmin)
-admin.site.register(UserActivity)
 

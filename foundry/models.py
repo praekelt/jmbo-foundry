@@ -28,7 +28,7 @@ from foundry.managers import PermittedManager
 import foundry.monkey
 
 from activity import constants as activity_constants
-from activity.models import UserActivity
+
 
 class Link(models.Model):
     title = models.CharField(
@@ -729,7 +729,7 @@ class FoundryComment(BaseComment):
     def save(self, *args, **kwargs):
         
         super(FoundryComment, self).save(*args, **kwargs)
-        
+        from activity.models import UserActivity
         UserActivity.track_activity(user=self.user,
                                     activity=activity_constants.ACTIVITY_COMMENTED,
                                     sub=ugettext('<a href="%s">%s</a>' % (self.content_object.get_absolute_url(),
