@@ -27,7 +27,8 @@ while [ $choice -eq 3 ]; do
 	virtualenv --python=python2.7 --no-site-packages ve
     fi
 done
-
+echo "Installing gunicorn"
+ve/bin/pip install gunicorn
 echo "Downloading distribute"
 ve/bin/python bootstrap.py
 echo "Choose the type of demo site:"

@@ -27,7 +27,8 @@ urlpatterns = patterns('',
         {'view_modifier': []}, 
         name='gallery_object_detail'
     ),
-
+	
+    (r'^downloads/', include('downloads.urls')),
     (r'^friends/', include('friends.urls')),
     (r'^gallery/', include('gallery.urls')),
     (r'^googlesearch/', include('googlesearch.urls')),
