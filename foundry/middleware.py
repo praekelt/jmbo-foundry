@@ -11,7 +11,7 @@ PROTECTED_URLS_PATTERN = r'|'.join((
     reverse('age-gateway'), 
     reverse('join'), 
     reverse('login'), 
-    '/password_reset', 
+    '/auth/password_reset', 
     '/static', 
     '/admin'
 ))
