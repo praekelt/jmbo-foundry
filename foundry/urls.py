@@ -240,6 +240,22 @@ urlpatterns = patterns('',
         {},
         name='blogpost_object_detail'
     ),
+    
+    
+    url(r'^all_blogs/$',
+        login_required(views.BlogsAll.as_view(template_name='guinness_vip/blogs_all.html',
+                                              paginate_by=3)),
+        name='blogs_all'),
+    
+    url(r'^friends_blogs/$',
+        login_required(views.BlogsFriends.as_view(template_name='guinness_vip/blogs_all.html',
+                                              paginate_by=3)),
+        name='blogs_friends'),
+    
+    url(r'^my_blogs/$',
+        login_required(views.BlogsMine.as_view(template_name='guinness_vip/blogs_all.html',
+                                              paginate_by=3)),
+        name='blogs_mine'),
 
     # Member notifications
     url(
@@ -248,14 +264,6 @@ urlpatterns = patterns('',
         {},
         name='member-notifications'
     ),
-
-#    # User activity
-#    url(
-#        r'^user-activity/$', 
-#        login_required(views.UserActivityView.as_view(template_name='foundry/user_activity.html',
-#                                                      paginate_by=5)),
-#        name='user_activity'
-#    ),
 
     # User detail page
     url(

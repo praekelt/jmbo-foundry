@@ -153,7 +153,7 @@ def create_blogpost(request):
         if form.is_valid():
             instance = form.save()
             request.user.message_set.create(message=_("The blog post %s has been saved") % instance.title)
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/page/my-blogs/')
     else:
         form = CreateBlogPostForm(user=request.user, site=get_current_site(request)) 
 
@@ -188,6 +188,34 @@ class BlogPostObjectDetail(GenericObjectDetail):
 
 blogpost_object_detail = BlogPostObjectDetail()
 
+
+class BlogsAll(ListView):
+    
+    def get_queryset(self):
+        return BlogPost.permitted.all().order_by('-created')
+
+    
+class BlogsMine(ListView):
+    
+    def get_queryset(self):
+        return BlogPost.permitted.filter(owner=self.request.user).order_by('-created')
+    
+    def get(self, request, *args, **kwargs):
+        self.object_list = self.get_queryset()
+        if len(self.object_list) == 0:
+            return HttpResponseRedirect(reverse('create-blogpost'))
+        context = self.get_context_data(object_list=self.object_list)
+        return self.render_to_response(context)
+
+    
+class BlogsFriends(ListView):
+    
+    def get_queryset(self):
+        try:
+            _, friend_ids = self.request.user.member.get_friends_with_ids()
+            return BlogPost.permitted.filter(owner__id__in=friend_ids).order_by('-created')
+        except:
+            return BlogPost.objects.none()
 
 @login_required
 def member_notifications(request):
