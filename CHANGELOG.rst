@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Pin django-ckeditor to ?= 3.6.2
+
 0.2.1
 -----
 #. Remove dependency links.
