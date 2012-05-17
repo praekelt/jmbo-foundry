@@ -17,8 +17,8 @@
 	                    {% if field.label == 'Avatar' %}
 	                        <label class="control-label" for="{{ field.name }}">{{ field.label }}</label>
 	                        <div class="controls">
-	                            {% if form.object.image %}
-	                                <img src="{{ form.object.get_avatar_url }}" width="40" height="40" alt="{{ form.object }}" />
+	                            {% if form.instance.image %}
+	                                <img src="{{ form.instance.get_thumbnail_LAYER_url }}" alt="{{ form.object }}" />
 	                            {% endif %}
 	                            {{ field }}
 	                            {% if field.errors %}

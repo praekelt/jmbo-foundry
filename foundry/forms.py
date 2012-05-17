@@ -1,6 +1,8 @@
 import datetime
 import re
 
+from BeautifulSoup import BeautifulSoup
+
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, \
@@ -221,6 +223,7 @@ class JoinFinishForm(forms.ModelForm):
 
         self.fields['image'].label = _("Upload a picture")
         self.fields['image'].help_text = _("JPG, GIF or PNG accepted. Square is best. Keep it under 1MB.")
+        self.fields['image'].widget = forms.FileInput()
 
     @property
     def default_avatars(self):
@@ -252,12 +255,19 @@ class EditProfileForm(forms.ModelForm):
 
     class Meta:
         model = models.Member
-        fields = ('email', 'image', 'dob', 'about_me', )
+        fields = ('first_name', 'last_name', 'mobile_number', 'email', 'image', 
+                  'dob', 'about_me', 'receive_sms', 'receive_email',)
         
     def __init__(self, *args, **kwargs):
         self.base_fields['image'].widget = forms.FileInput()
-        self.base_fields['dob'].help_text = _("yyyy-mm-dd")
+        self.base_fields['image'].label = 'Avatar'
+        
         super(EditProfileForm, self).__init__(*args, **kwargs)
+        
+        # Set date widget for date field
+        for name, field in self.fields.items():            
+            if isinstance(field, forms.fields.DateField):
+                field.widget = OldSchoolDateWidget()
         
     def clean_email(self):
         # xxx: not necessarily required. Depends on preferences.
@@ -423,7 +433,14 @@ class CreateBlogPostForm(forms.ModelForm):
         # There is some bug in Django that does not allow translation to be
         # applied. Workaround.
         self.fields['content'].label = _("Content")
-
+        
+    def clean(self):
+        
+        if len(BeautifulSoup(self.cleaned_data["content"]).findAll(True)) > 0:
+            raise forms.ValidationError(_('You are not permitted to embed HTML code inside a blog post.'))
+        
+        return self.cleaned_data
+        
     def save(self, commit=True):    
         instance = super(CreateBlogPostForm, self).save(commit=commit)
         # Set owner, publish to current site
