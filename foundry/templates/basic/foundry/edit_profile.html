@@ -6,7 +6,7 @@
 	<div class="content member-detail">
 	    <div class="title">{{ object.username }}</div>
 
-        <form action="{% url edit-profile %}" method="POST" class="foundry-form">   
+        <form action="{% url edit-profile %}" method="POST" class="foundry-form" enctype="multipart/form-data">   
 	        {% csrf_token %}
             {{ form.as_div }}
             <div class="buttons">
