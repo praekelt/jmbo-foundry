@@ -19,6 +19,8 @@ from django.contrib.sites.models import get_current_site
 from django.template import Template
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import requires_csrf_token
+from django.dispatch import receiver
+from django.contrib.auth.signals import user_logged_in
 
 from category.models import Category
 from jmbo.models import ModelBase
@@ -44,18 +46,9 @@ def join(request):
             member.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
             login(request, member)            
             response = HttpResponseRedirect(reverse('join-finish'))
-
-            # Set cookie if age gateway applicable. Can't delegate to form :(
-            if show_age_gateway:
-                now = datetime.datetime.now()
-                expires = now.replace(year=now.year+10)
-                response.set_cookie('age_gateway_passed', value=1, expires=expires)
-
             msg = _("You have successfully signed up to the site.")
             messages.success(request, msg, fail_silently=True)
-
             return response
-
     else:
         form = JoinForm(show_age_gateway=show_age_gateway) 
 
@@ -69,7 +62,7 @@ def join_finish(request):
     if request.method == 'POST':
         form = JoinFinishForm(request.POST, request.FILES, instance=request.user) 
         if form.is_valid():
-            member = form.save()
+            member = form.save()            
             return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
     else:
         form = JoinFinishForm(instance=request.user) 
@@ -281,3 +274,14 @@ def test_redirect(request):
     extra = dict(title='Redirect', form=form)
     return render_to_response('foundry/test_form.html', extra, context_instance=RequestContext(request))
 
+
+@receiver(user_logged_in)
+def set_session_expiry(sender, request, user, **kwargs):
+    # Override session expiry date. We effectively ignore
+    # SESSION_EXPIRE_AT_BROWSER_CLOSE.
+    if request.REQUEST.get('remember_me'):
+        now = datetime.datetime.now()
+        expires = now.replace(year=now.year+10)
+        request.session.set_expiry(expires)
+    else:
+        request.session.set_expiry(0)

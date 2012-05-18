@@ -40,7 +40,7 @@ class RememberMeCheckboxInput(forms.widgets.CheckboxInput):
 
     def render(self, *args, **kwargs):
         result = super(RememberMeCheckboxInput, self).render(*args, **kwargs)
-        return result + "Remember me"
+        return result + ugettext("Remember me")
 
 
 class SMSOptInCheckboxInput(forms.widgets.CheckboxInput):
@@ -58,6 +58,7 @@ class EmailOptInCheckboxInput(forms.widgets.CheckboxInput):
 
 
 class LoginForm(AuthenticationForm):
+    remember_me = forms.BooleanField(required=False, initial=True, label="", widget=RememberMeCheckboxInput)
 
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
@@ -115,6 +116,7 @@ Note that both fields are case-sensitive."
 class JoinForm(UserCreationForm):
     """Custom join form"""
     accept_terms = forms.BooleanField(required=True, label="", widget=TermsCheckboxInput)
+    remember_me = forms.BooleanField(required=False, initial=True, label="", widget=RememberMeCheckboxInput)
 
     class Meta:
         model = models.Member
@@ -184,7 +186,7 @@ Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
                 display_fields.append('dob')
         for name, field in self.fields.items():
             # Skip over protected fields
-            if name in ('id', 'username', 'password1', 'password2', 'accept_terms'):
+            if name in ('id', 'username', 'password1', 'password2', 'accept_terms', 'remember_me'):
                 continue
             if name not in display_fields:
                 del self.fields[name]
@@ -365,7 +367,7 @@ class PasswordResetForm(BasePasswordResetForm):
 class AgeGatewayForm(forms.Form):
     country = forms.ModelChoiceField(queryset=models.Country.objects.all())
     date_of_birth = forms.DateField(widget=OldSchoolDateWidget)
-    remember_me = forms.BooleanField(required=False, label="", widget=RememberMeCheckboxInput)
+    remember_me = forms.BooleanField(required=False, initial=True, label="", widget=RememberMeCheckboxInput)
 
     def clean(self):
         cleaned_data = super(AgeGatewayForm, self).clean()

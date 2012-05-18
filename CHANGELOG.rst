@@ -3,7 +3,8 @@ Changelog
 
 next
 ----
-#. Pin django-ckeditor to ?= 3.6.2
+#. Pin django-ckeditor to >= 3.6.2
+#. Remember me field now on login and join forms. Checked by default.
 
 0.2.1
 -----
