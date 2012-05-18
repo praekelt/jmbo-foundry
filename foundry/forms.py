@@ -276,23 +276,55 @@ class EditProfileForm(forms.ModelForm):
 
     class Meta:
         model = models.Member
-        fields = ('email', 'image', 'dob', 'about_me', )
+        widgets = {'dob': OldSchoolDateWidget}
         
     def __init__(self, *args, **kwargs):
         self.base_fields['image'].widget = forms.FileInput()
-        self.base_fields['dob'].help_text = _("yyyy-mm-dd")
         super(EditProfileForm, self).__init__(*args, **kwargs)
+
+        # todo: need a preference member_edit_fields
+        display_fields = preferences.RegistrationPreferences.display_fields
+        for extra in ('image', 'dob', 'about_me'):
+            if extra not in display_fields:
+                display_fields.append(extra)
+        for name, field in self.fields.items():
+            # Skip over protected fields
+            if name in ('id',):
+                continue
+            if name not in display_fields:
+                del self.fields[name]
+
+        # Set some fields required
+        required_fields = preferences.RegistrationPreferences.required_fields
+        for name in required_fields:
+            field = self.fields.get(name, None)
+            if field and not field.required:
+                field.required = True
+
+    def clean(self):
+        cleaned_data = super(EditProfileForm, self).clean()
         
-    def clean_email(self):
-        # xxx: not necessarily required. Depends on preferences.
-        if self.cleaned_data['email'] and not self.cleaned_data['email'] == self.instance.email:
-            try:
-                User.objects.get(email=self.cleaned_data['email'])
-                raise forms.ValidationError(_('This email already has an account linked to it. Please use another.'))
-            except User.DoesNotExist:
-                return self.cleaned_data['email']
-        else:
-            return self.cleaned_data['email']
+        # Validate required fields
+        required_fields = preferences.RegistrationPreferences.required_fields
+        for name in required_fields:
+            value = self.cleaned_data.get(name, None)
+            if not value:
+                message = _("This field is required.")
+
+        # Validate unique fields
+        unique_fields = preferences.RegistrationPreferences.unique_fields
+        for name in unique_fields:
+            value = self.cleaned_data.get(name, None)
+            if value is not None:
+                di = {'%s__iexact' % name:value}
+                if models.Member.objects.filter(**di).count() > 0:
+                    pretty_name = self.fields[name].label.lower()
+                    message =_("The %(pretty_name)s is already in use. \
+Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
+                    )
+                    self._errors[name] = self.error_class([message])
+
+        return cleaned_data
 
     as_div = as_div
 
