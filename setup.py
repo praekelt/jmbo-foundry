@@ -37,7 +37,7 @@ setup(
         'django-preferences',
         'jmbo-banner',
         'jmbo-competition',
-        'django-ckeditor',
+        'django-ckeditor>=3.6.2',
         'jmbo-contact',
         'jmbo-poll',
         'django-debug-toolbar',
