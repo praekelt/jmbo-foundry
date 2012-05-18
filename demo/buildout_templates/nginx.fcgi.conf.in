@@ -14,6 +14,11 @@ server {
         expires 31d;
     }
 
+    location ^~ /media/downloads/(.*) {
+	internal;
+	alias ${media-root}/${downloads-root}/$1;
+    }
+
     # fcgi    
     location / {
         fastcgi_pass ${fcgi-host}:${fcgi-port};

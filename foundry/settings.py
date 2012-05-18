@@ -122,6 +122,7 @@ TEMPLATE_LOADERS = (
 ROOT_URLCONF = 'foundry.urls'
 
 INSTALLED_APPS = (
+    'downloads',
     'friends',
     'foundry',
     'section',
