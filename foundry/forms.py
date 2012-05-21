@@ -40,10 +40,25 @@ class RememberMeCheckboxInput(forms.widgets.CheckboxInput):
 
     def render(self, *args, **kwargs):
         result = super(RememberMeCheckboxInput, self).render(*args, **kwargs)
-        return result + "Remember me"
+        return result + ugettext("Remember me")
+
+
+class SMSOptInCheckboxInput(forms.widgets.CheckboxInput):
+
+    def render(self, *args, **kwargs):
+        result = super(SMSOptInCheckboxInput, self).render(*args, **kwargs)
+        return result + ugettext("Yes, I want to receive SMS alerts")
+
+
+class EmailOptInCheckboxInput(forms.widgets.CheckboxInput):
+
+    def render(self, *args, **kwargs):
+        result = super(EmailOptInCheckboxInput, self).render(*args, **kwargs)
+        return result + ugettext("Yes, I want to receive email alerts")
 
 
 class LoginForm(AuthenticationForm):
+    remember_me = forms.BooleanField(required=False, initial=True, label="", widget=RememberMeCheckboxInput)
 
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
@@ -101,9 +116,11 @@ Note that both fields are case-sensitive."
 class JoinForm(UserCreationForm):
     """Custom join form"""
     accept_terms = forms.BooleanField(required=True, label="", widget=TermsCheckboxInput)
+    remember_me = forms.BooleanField(required=False, initial=True, label="", widget=RememberMeCheckboxInput)
 
     class Meta:
         model = models.Member
+        widgets = {'receive_email': EmailOptInCheckboxInput, 'receive_sms': SMSOptInCheckboxInput}
 
     def clean_mobile_number(self):
         mobile_number = self.cleaned_data["mobile_number"]
@@ -169,7 +186,7 @@ Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
                 display_fields.append('dob')
         for name, field in self.fields.items():
             # Skip over protected fields
-            if name in ('id', 'username', 'password1', 'password2', 'accept_terms'):
+            if name in ('id', 'username', 'password1', 'password2', 'accept_terms', 'remember_me'):
                 continue
             if name not in display_fields:
                 del self.fields[name]
@@ -202,6 +219,16 @@ Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
             self.fields['mobile_number'].help_text = _("The number must be in \
 international format and may start with a + sign. All other characters must \
 be numbers. No spaces allowed. An example is +27821234567.")
+
+        # Place opt-in fields at bottom and remove labels
+        for name in ('receive_email', 'receive_sms'):
+            if self.fields.has_key(name):
+                self.fields[name].label = ""
+                self.fields.keyOrder.remove(name)
+                if self.fields.keyOrder[-1] == 'accept_terms':
+                    self.fields.keyOrder.insert(-1, name)
+                else:
+                    self.fields.keyOrder.append(name)
 
     as_div = as_div
 
@@ -249,23 +276,55 @@ class EditProfileForm(forms.ModelForm):
 
     class Meta:
         model = models.Member
-        fields = ('email', 'image', 'dob', 'about_me', )
+        widgets = {'dob': OldSchoolDateWidget}
         
     def __init__(self, *args, **kwargs):
         self.base_fields['image'].widget = forms.FileInput()
-        self.base_fields['dob'].help_text = _("yyyy-mm-dd")
         super(EditProfileForm, self).__init__(*args, **kwargs)
+
+        # todo: need a preference member_edit_fields
+        display_fields = preferences.RegistrationPreferences.display_fields
+        for extra in ('image', 'dob', 'about_me'):
+            if extra not in display_fields:
+                display_fields.append(extra)
+        for name, field in self.fields.items():
+            # Skip over protected fields
+            if name in ('id',):
+                continue
+            if name not in display_fields:
+                del self.fields[name]
+
+        # Set some fields required
+        required_fields = preferences.RegistrationPreferences.required_fields
+        for name in required_fields:
+            field = self.fields.get(name, None)
+            if field and not field.required:
+                field.required = True
+
+    def clean(self):
+        cleaned_data = super(EditProfileForm, self).clean()
         
-    def clean_email(self):
-        # xxx: not necessarily required. Depends on preferences.
-        if self.cleaned_data['email'] and not self.cleaned_data['email'] == self.instance.email:
-            try:
-                User.objects.get(email=self.cleaned_data['email'])
-                raise forms.ValidationError(_('This email already has an account linked to it. Please use another.'))
-            except User.DoesNotExist:
-                return self.cleaned_data['email']
-        else:
-            return self.cleaned_data['email']
+        # Validate required fields
+        required_fields = preferences.RegistrationPreferences.required_fields
+        for name in required_fields:
+            value = self.cleaned_data.get(name, None)
+            if not value:
+                message = _("This field is required.")
+
+        # Validate unique fields
+        unique_fields = preferences.RegistrationPreferences.unique_fields
+        for name in unique_fields:
+            value = self.cleaned_data.get(name, None)
+            if value is not None:
+                di = {'%s__iexact' % name:value}
+                if models.Member.objects.filter(**di).count() > 0:
+                    pretty_name = self.fields[name].label.lower()
+                    message =_("The %(pretty_name)s is already in use. \
+Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
+                    )
+                    self._errors[name] = self.error_class([message])
+
+        return cleaned_data
 
     as_div = as_div
 
@@ -340,7 +399,7 @@ class PasswordResetForm(BasePasswordResetForm):
 class AgeGatewayForm(forms.Form):
     country = forms.ModelChoiceField(queryset=models.Country.objects.all())
     date_of_birth = forms.DateField(widget=OldSchoolDateWidget)
-    remember_me = forms.BooleanField(required=False, label="", widget=RememberMeCheckboxInput)
+    remember_me = forms.BooleanField(required=False, initial=True, label="", widget=RememberMeCheckboxInput)
 
     def clean(self):
         cleaned_data = super(AgeGatewayForm, self).clean()

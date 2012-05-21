@@ -1,6 +1,21 @@
 Changelog
 =========
 
+next
+----
+#. Pin django-ckeditor to >= 3.6.2
+#. Remember me field now on login and join forms. Checked by default.
+#. Any call to get_XXX_url is now layer aware.
+
+0.2.1
+-----
+#. Remove dependency links.
+
+0.2
+---
+#. Add a base_inner.html template so it is easier to override base.html.
+#. Patch listdir so collectstatic does not fail on custom layers for third party foundry-based products.
+
 0.1
 ---
 #. Use Jaro Winkler for matching naughty words.

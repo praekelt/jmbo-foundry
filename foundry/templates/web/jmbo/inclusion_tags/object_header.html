@@ -1,5 +1,5 @@
 {% comment %}
-todo: This template must be backported to jmbo itself.
+Add social widgets from addthis.com
 {% endcomment %}
 
 {% load likes_inclusion_tags i18n %}
@@ -28,6 +28,16 @@ todo: This template must be backported to jmbo itself.
             {% likes object %}
         </div>
         {% endif %}
+
+        <div class="addthis">
+            <div class="addthis_toolbox addthis_default_style ">
+            <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+            <a class="addthis_button_tweet"></a>
+            <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+            <a class="addthis_counter addthis_pill_style"></a>
+            </div>        
+            <script type="text/javascript" src="http://s7.addthis.com/js/300/addthis_widget.js#pubid=xa-4f044e2e0586e005"></script>
+        </div>
 
     </div>
 

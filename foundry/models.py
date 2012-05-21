@@ -21,7 +21,8 @@ from jmbo.utils import generate_slug
 from jmbo.models import ModelBase
 
 from foundry.profile_models import AbstractAvatarProfile, \
-    AbstractSocialProfile, AbstractPersonalProfile, AbstractContactProfile
+    AbstractSocialProfile, AbstractPersonalProfile, \
+    AbstractContactProfile, AbstractSubscriptionProfile
 from foundry.templatetags import listing_styles
 from foundry.managers import PermittedManager
 import foundry.monkey
@@ -31,6 +32,12 @@ class Link(models.Model):
     title = models.CharField(
         max_length=256,
         help_text='A short descriptive title.',
+    )
+    subtitle = models.CharField(
+        max_length=256,
+        blank=True,
+        null=True,
+        help_text='Some titles may be the same. A subtitle makes a distinction. It is not displayed on the site.',
     )
     view_name = models.CharField(
         max_length=256,
@@ -59,7 +66,13 @@ class Link(models.Model):
     )    
 
     class Meta:
-        ordering = ('title',)
+        ordering = ('title', 'subtitle')
+
+    def __unicode__(self):
+        if self.subtitle:
+            return '%s (%s)' % (self.title, self.subtitle)
+        else:
+            return self.title
 
     def get_absolute_url(self):
         """Returns URL to which link should redirect based on a reversed view
@@ -97,9 +110,6 @@ class Link(models.Model):
         if not active and self.url:
             active = request.path_info.startswith(self.url)
         return active
-
-    def __unicode__(self):
-        return self.title
 
 
 class Menu(models.Model):
@@ -301,6 +311,14 @@ class GeneralPreferences(Preferences):
         help_text=_("A private site requires a visitor to be logged in to view any content."),
     )
     show_age_gateway = models.BooleanField(default=False)
+    exempted_urls = models.TextField(
+        blank=True,
+        default='',
+        help_text='''URL patterns that are exempted from the Private Site and \
+Age Gateway. Certain URLs like /login are already protected and do not need \
+to be listed. One entry per line. Matches are wildcard by default, eg. \
+/my-page will match /my-pages/the-red-one.'''
+    )
     analytics_tags = models.TextField(null=True, blank=True)
 
     class Meta:
@@ -445,7 +463,7 @@ class Country(models.Model):
         return self.title
 
 
-class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersonalProfile, AbstractContactProfile):
+class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersonalProfile, AbstractContactProfile, AbstractSubscriptionProfile):
     """Class that models the default user account. Subclassing is superior to profiles since 
     a site may conceivably have more than one type of user account, but the profile architecture 
     limits the entire site to a single type of profile."""
@@ -463,6 +481,10 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersona
             title=ugettext("Set your profile picture"), view_name='join-finish'
         )
         if not self.image:
+            # Set a default avatar
+            avatars = DefaultAvatar.objects.all().order_by('?')
+            if avatars.exists():
+                self.image = avatars[0].image
             Notification.objects.get_or_create(member=self, link=link)
         else:
             try:

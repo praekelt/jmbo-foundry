@@ -36,6 +36,7 @@ urlpatterns = patterns('',
         name='comments-post-comment'
     ),
 
+    (r'^downloads/', include('downloads.urls')),
     (r'^friends/', include('friends.urls')),
     (r'^gallery/', include('gallery.urls')),
     (r'^googlesearch/', include('googlesearch.urls')),
@@ -81,6 +82,14 @@ urlpatterns = patterns('',
             'template':'foundry/inclusion_tags/header.html', 
         },
         name='header'
+    ),
+    url(
+        r'^footer/$',
+        'django.views.generic.simple.direct_to_template',
+        {
+            'template':'foundry/inclusion_tags/footer.html', 
+        },
+        name='footer'
     ),
 
     # Join, login, password reset            
