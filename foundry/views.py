@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext, loader
 from django.views.generic import UpdateView
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Q, get_model
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
@@ -21,6 +21,18 @@ from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import requires_csrf_token
 from django.dispatch import receiver
 from django.contrib.auth.signals import user_logged_in
+
+# Comment post required imports
+from django.contrib.comments.views.comments import CommentPostBadRequest
+from django.views.decorators.http import require_POST
+from django.utils import simplejson
+from django.utils.html import escape
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.contrib import comments
+from django.contrib.comments import signals
+from django.http import QueryDict
+from django.contrib.comments.views.utils import next_redirect
+from django.contrib.comments.views.comments import comment_done
 
 from category.models import Category
 from jmbo.models import ModelBase
@@ -119,7 +131,137 @@ def search(request):
     return render_to_response('foundry/search.html', extra, context_instance=RequestContext(request))
 
 
+@require_POST
+def xpost_comment(request, next=None, using=None):
+    """Override with special handling for ajax"""
+    result = base_post_comment(request, next=next, using=using)
+
+    if not request.is_ajax():
+        return result
+    else:
+        di = {'status': 'success', 'message': '', 'html': ''}
+        if isinstance(result, CommentPostBadRequest):
+            di['status'] = 'error'
+            di['message'] = result.content
+            return HttpResponse(simplejson.dumps(di))
+        elif isinstance(result, HttpResponse):
+            # Form errors or preview
+            return result
+        elif isinstance(result, HttpResponseRedirect):
+            # Return rendered comment list
+            # xxx: my_messages, batch size and other params
+            context = {'comment_list':[]}
+            html = render_to_string('comments/list_new_comments.html', {}, context_instance=context)
+            di['html'] = html
+            return HttpResponse(simplejson.dumps(di))
+
+    return HttpResponse('')
+
+
+@require_POST
+def post_comment(request, next=None, using=None):
+    """
+    Adapted from django.contrib.comments. Preview functionality removed and 
+    made ajax aware.
+    """
+    # Fill out some initial data fields from an authenticated user, if present
+    data = request.POST.copy()
+    if request.user.is_authenticated():
+        if not data.get('name', ''):
+            data["name"] = request.user.get_full_name() or request.user.username
+        if not data.get('email', ''):
+            data["email"] = request.user.email
+
+    # Check to see if the POST data overrides the view's next argument.
+    next = data.get("next", next)
+
+    # Look up the object we're trying to comment about
+    ctype = data.get("content_type")
+    object_pk = data.get("object_pk")
+    if ctype is None or object_pk is None:
+        return CommentPostBadRequest("Missing content_type or object_pk field.")
+    try:
+        model = get_model(*ctype.split(".", 1))
+        target = model._default_manager.using(using).get(pk=object_pk)
+    except TypeError:
+        return CommentPostBadRequest(
+            "Invalid content_type value: %r" % escape(ctype))
+    except AttributeError:
+        return CommentPostBadRequest(
+            "The given content-type %r does not resolve to a valid model." % \
+                escape(ctype))
+    except ObjectDoesNotExist:
+        return CommentPostBadRequest(
+            "No object matching content-type %r and object PK %r exists." % \
+                (escape(ctype), escape(object_pk)))
+    except (ValueError, ValidationError), e:
+        return CommentPostBadRequest(
+            "Attempting go get content-type %r and object PK %r exists raised %s" % \
+                (escape(ctype), escape(object_pk), e.__class__.__name__))
+
+    # Construct the comment form
+    form = comments.get_form()(target, data=data)
+
+    # Check security information
+    if form.security_errors():
+        return CommentPostBadRequest(
+            "The comment form failed security verification: %s" % \
+                escape(str(form.security_errors())))
+
+    # If there are errors show the comment
+    if form.errors:            
+        return render_to_response(
+            ['comments/form.html'], 
+            {
+                "comment" : form.data.get("comment", ""),
+                "form" : form,
+                "next": next,
+            },
+            RequestContext(request, {})
+        )
+
+    # Otherwise create the comment
+    comment = form.get_comment_object()
+    comment.ip_address = request.META.get("REMOTE_ADDR", None)
+    if request.user.is_authenticated():
+        comment.user = request.user
+
+    # Signal that the comment is about to be saved
+    responses = signals.comment_will_be_posted.send(
+        sender  = comment.__class__,
+        comment = comment,
+        request = request
+    )
+
+    for (receiver, response) in responses:
+        if response == False:
+            return CommentPostBadRequest(
+                "comment_will_be_posted receiver %r killed the comment" % receiver.__name__)
+
+    # Save the comment and signal that it was saved
+    comment.save()
+    signals.comment_was_posted.send(
+        sender  = comment.__class__,
+        comment = comment,
+        request = request
+    )
+
+    if not request.is_ajax():
+        return next_redirect(data, next, comment_done, c=comment._get_pk_val())
+    else:
+        # Return rendered comment list
+        context = RequestContext(request)
+        # Put paginate by as a GET variable so django-pagination works
+        context['request'].GET = QueryDict('paginate_by=%s' % request.POST['paginate_by'])
+        context['object'] = target
+        t = Template("{% load comments %} {% render_comment_list for object %}")
+        html = t.render(context)
+        di = {'status': 'success', 'html': html}
+        return HttpResponse(simplejson.dumps(di))
+        
+
 def comment_reply_form(request):
+    # This view is used when the browser has no javascript support
     obj = ContentType.objects.get(
         id=request.GET['content_type_id']
     ).get_object_for_this_type(id=request.GET['oid'])

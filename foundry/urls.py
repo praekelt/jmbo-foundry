@@ -27,7 +27,15 @@ urlpatterns = patterns('',
         {'view_modifier': []}, 
         name='gallery_object_detail'
     ),
-	
+
+    # Pre-empt url call for comment post
+    url(
+        r'^comments/post/$',          
+        'foundry.views.post_comment',
+        {},
+        name='comments-post-comment'
+    ),
+
     (r'^downloads/', include('downloads.urls')),
     (r'^friends/', include('friends.urls')),
     (r'^gallery/', include('gallery.urls')),

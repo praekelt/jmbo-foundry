@@ -1,5 +1,8 @@
 $(document).ready(function(){
 
+    if ($.support.ajax)
+    {
+
     // Ajaxify tile paging, view modifier
     $('div.foundry-enable-ajax div.pagination a, div.foundry-enable-ajax div.jmbo-view-modifier a').live('click', function(e){
         e.preventDefault();
@@ -72,6 +75,33 @@ $(document).ready(function(){
         _submit_intercept_common(this, event, target);
     });
 
+    // Post a comment
+    $('form.comment-form').live('submit', function(event){
+        event.preventDefault();
+        var form = $(this);
+        var url = $(this).attr('action');
+        var data = $(this).serialize();
+        $.ajax({
+            url: url,
+            data: data,
+            async: false,
+            type: 'POST',
+            cache: false,                    
+            success: function(data){
+                if (data.indexOf('{') == 0)
+                {
+                    var obj = $.parseJSON(data);
+                    $('div.comment-list').html(obj.html);
+                    var el = $('textarea', form);
+                    el.val('');
+                    el.focus();
+                }
+                else
+                    form.replaceWith(data);
+            }
+        })
+    });
+
     // Load new comments and chats
     function load_new_comments(){
         $('div.comment-list-placeholder').each(function(index){
@@ -88,5 +118,7 @@ $(document).ready(function(){
         });
     }
     setInterval(load_new_comments, 30000);
+
+    }
 
 });
