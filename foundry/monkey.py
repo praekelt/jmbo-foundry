@@ -120,13 +120,19 @@ class LayerAwareSizes(dict):
     
     def get(self, key):
         result = None
+
+        # Handle legacy LAYER marker
         if key.endswith('_LAYER'):
-            prefix = key.replace('LAYER', '') 
-            for layer in settings.FOUNDRY['layers']:
-                result = super(LayerAwareSizes, self).get(prefix + layer)
-                if result is not None:
-                    break
-        else:
+            key = key.replace('_LAYER', '') 
+
+        # Iterate over layers
+        for layer in settings.FOUNDRY['layers']:
+            result = super(LayerAwareSizes, self).get(key + '_' + layer)
+            if result is not None:
+                break
+
+        # Fall back to default
+        if result is None:
             result = super(LayerAwareSizes, self).get(key)
 
         return result
