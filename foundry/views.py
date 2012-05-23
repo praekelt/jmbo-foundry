@@ -251,6 +251,11 @@ class EditProfile(UpdateView):
         self.success_url = reverse('member-detail', args=[member.username])
         return member
 
+    def form_valid(self, form):
+        msg = _("Your profile ahs been updated.")
+        messages.success(self.request, msg, fail_silently=True)
+        return super(EditProfile, self).form_valid(form)
+
 
 class Share(View):
     """

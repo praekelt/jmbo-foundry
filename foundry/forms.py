@@ -418,6 +418,12 @@ class CommentForm(BaseCommentForm):
         data = super(CommentForm, self).get_comment_create_data()
         data['in_reply_to_id'] = self.cleaned_data['in_reply_to']
         return data
+        
+    def clean(self):
+        if len(BeautifulSoup(self.cleaned_data["comment"]).findAll(True)) > 0:
+            raise forms.ValidationError(_('You are not permitted to embed HTML code inside a comment.'))
+        
+        return self.cleaned_data
 
 
 class CreateBlogPostForm(forms.ModelForm):
@@ -435,7 +441,6 @@ class CreateBlogPostForm(forms.ModelForm):
         self.fields['content'].label = _("Content")
         
     def clean(self):
-        
         if len(BeautifulSoup(self.cleaned_data["content"]).findAll(True)) > 0:
             raise forms.ValidationError(_('You are not permitted to embed HTML code inside a blog post.'))
         
