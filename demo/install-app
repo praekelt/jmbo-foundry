@@ -10,7 +10,7 @@ while [ $choice -eq 3 ]; do
     if [ $choice -eq 1 ] ; then
 	if [ -f ./ve/bin/python2.7 ];
 	then
-	    rm -rf ./ve ./bin
+	    sudo rm -rf ./ve ./bin
 	fi
         sudo apt-get install python-virtualenv mysql-server libmysqlclient-dev python2.6-dev \
 	libjpeg62-dev git-core libjpeg62-dev zlib1g-dev build-essential --no-upgrade
@@ -19,7 +19,7 @@ while [ $choice -eq 3 ]; do
     else
 	if [ -f ./ve/bin/python2.6 ];
 	then
-	    rm -rf ./ve ./bin
+	    sudo rm -rf ./ve ./bin
 	fi
 	sudo apt-get install python-virtualenv mysql-server libmysqlclient-dev python2.7-dev \
 	libjpeg62-dev git-core libjpeg62-dev zlib1g-dev build-essential --no-upgrade
@@ -39,10 +39,10 @@ while [ $choice -eq 3 ]; do
     read choice
     if [ $choice -eq 1 ] ; then
         read -p "This part may take a while. If it fails with 'connection reset by peer' run ./install-app again. [enter]" y
-        ./bin/buildout -nv -c dev_basic.cfg
+        ./bin/buildout -nv -c dev_basic_site.cfg
     else
         read -p "This part may take a while. If it fails with 'connection reset by peer' run ./install-app again. [enter]" y
-        ./bin/buildout -nv -c dev_web.cfg
+        ./bin/buildout -nv -c dev_web_site.cfg
     fi
 done
 
@@ -53,13 +53,14 @@ then
 fi
 
 read -p "Create a superuser when prompted. Do not generate default content. [enter]" y
-./bin/foundrydemo syncdb
-./bin/foundrydemo migrate
-./bin/foundrydemo loaddata src/jmbo-foundry/foundry/fixtures/photosizes.json
-./bin/foundrydemo loaddata src/jmbo-post/post/fixtures/photosizes.json
-./bin/foundrydemo loaddata src/jmbo-gallery/gallery/fixtures/photosizes.json
-./bin/foundrydemo loaddata src/jmbo/jmbo/fixtures/photosizes.json
-./bin/foundrydemo collectstatic --noinput
+./bin/foundrydemo-dev-web-site syncdb
+./bin/foundrydemo-dev-web-site migrate
+./bin/foundrydemo-dev-web-site loaddata src/jmbo-downloads/downloads/fixtures/photosizes.json
+./bin/foundrydemo-dev-web-site loaddata src/jmbo-foundry/foundry/fixtures/photosizes.json
+./bin/foundrydemo-dev-web-site loaddata src/jmbo-post/post/fixtures/photosizes.json
+./bin/foundrydemo-dev-web-site loaddata src/jmbo-gallery/gallery/fixtures/photosizes.json
+./bin/foundrydemo-dev-web-site loaddata src/jmbo/jmbo/fixtures/photosizes.json
+./bin/foundrydemo-dev-web-site collectstatic --noinput
 echo "You may now start up the site with ./bin/foundry runserver 0.0.0.0:8000"
 echo "Browse to http://localhost:8000/ for the public site."
 echo "Browse to http://localhost:8000/admin for the admin interface."

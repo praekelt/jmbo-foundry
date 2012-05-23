@@ -27,7 +27,7 @@ TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
     'default': {
-        'ENGINE': 'mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'foundrydemo', # Or path to database file if using sqlite3.
         'USER': 'foundrydemo', # Not used with sqlite3.
         'PASSWORD': 'foundrydemo', # Not used with sqlite3.
