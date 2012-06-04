@@ -1,14 +1,8 @@
 Jmbo Foundry User Guide
 =======================
 
-Initial configuration
----------------------
-
-`jmbo-foundry` requires initial configuration before it is ready to serve your
-site.
-
 Sites
-*****
+-----
 
 Your web presence typically consists of a normal web site and a mobile site.
 There may be many more types of sites in future and `jmbo-foundry` makes it
@@ -86,21 +80,45 @@ clickable links for approval or deletion is sent to the `Email recipients`.
 
 Listings
 --------
+A `listing` is essentially a stored search that can be rendered in a certain
+style. 
 
-Navbar preferences
-******************
+`Content type`, `Category` and `Content` are criteria which define the items
+present in the listing. These criteria are mutually exclusive.
 
-The navigation bar typically contains a small amount of items since horizontal
-space is limited.  Each item in the navigation bar is represented as a `link`.
-Links are not just normal links, although they can be. A link has a title and
-may point either to a dynamic page already available in the site, a category or
-a normal URL.
+`Count` specifies the maximum number of items in the listing.
 
-Menu preferences
-****************
+`Style` is the default way in which the listing is rendered. The styles are
+vertical, vertical, vertical thumbnail, horizontal, promo and widget. See
+`Listing styles` for detail.
 
-The site menu is exactly the same as the navigation bar, except it is rendered at 
-then bottom of the home page and has a vertical layout by default.
+`Items per page` is the number of items to display on a single listing page.
 
-Element preferences
-*******************
+Links
+-----
+
+A `link` is a re-usable pointer to something, be it inside the site or external.
+
+`URL`, `Category`, `View name` and `Target` fields are mutually exclusive.
+
+`View name` warrants further explanation. It is the name of a named Django
+view, eg. `contact-us`.  The vocabulary is all the named views in the Django
+site excluding those with a variable parameter.
+
+Navbars
+-------
+
+A navigation bar typically contains a small amount of items since horizontal
+space is limited.  Each item in the navigation bar is represented as a `Link`.
+
+A navbar with slug `main` is considered special. It is assumed to be the site 
+navbar by default.
+
+Menus
+-----
+
+A menu is essentially the same as a navigation bar, except it has a vertical
+layout by default.
+
+A menu with slug `main` is considered special. It is assumed to be the site
+menu by default.
