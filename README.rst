@@ -1,8 +1,11 @@
 Jmbo Foundry User Guide
 =======================
 
+`jmbo-foundry` ties together the various jmbo products enabling you to rapidly build 
+multilingual web and mobi sites with the minimum amount of code and customization.
+
 `jmbo-foundry` strives for a high level of through the web configuration. Much
-of the site's behaviour is customizable through the admin interface.
+of the site's behaviour is configurable through the admin interface.
 
 Sites
 -----
