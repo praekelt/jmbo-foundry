@@ -1,139 +1,161 @@
-Jmbo Foundry
-============
+Jmbo Foundry User Guide
+=======================
 
-Jmbo foundry behavior/templates app.
+`jmbo-foundry` ties together the various jmbo products enabling you to rapidly build 
+multilingual web and mobi sites with the minimum amount of code and customization.
 
-.. contents:: Contents
-    :depth: 5
+`jmbo-foundry` strives for a high level of through the web configuration. Much
+of the site's behaviour is configurable through the admin interface.
 
-Installation
-------------
+Sites
+-----
 
-#. Install or add ``jmbo-foundry`` to your Python path.
+Your web presence typically consists of a normal web site and a mobile site.
+There may be many more types of sites in future and `jmbo-foundry` makes it
+easy to configure them independently. If your main site is served on
+`www.mysite.com` then go to `Sites` in the admin interface and set `Domain
+name` and `Display name` accordingly. Then add a site entry for your mobile
+site and set the values to `m.mysite.com`.
 
-#. Install ``django-preferences`` as described `here <http://pypi.python.org/pypi/django-preferences#installation>`_.
+If you have only one site then you may blindly publish everything that is
+publishable to this site.  However, if you have more than one site and in
+different languages then understanding sites become significant. 
 
-#. Add ``foundry`` to your ``INSTALLED_APPS`` setting.
+At its most basic level publishing to a site means making content appear on a
+site. This is easy to understand when the content is eg. an article, but
+content is not always limited to things which are easily translatable into real
+world objects.
 
-#. Add ``foundry`` URL include to your project's ``urls.py`` file::
+Preferences
+-----------
 
-    (r'^', include('foundry.urls')),
+Preferences can be published to certain sites.
 
-#. ``jmbo-foundry`` includes a number of template sets allowing you to deliver lightweight(``zero``), mobile(``basic``) or desktop/touch(``full``) specific output. Specifying which template set to use is simply a matter of specifying a ``TEMPLATE_TYPE`` setting, and adding  ``foundry.loaders.TypeLoader`` to the ``TEMPLATE_LOADERS`` setting. For example to use the ``basic`` template set update your settings as follows::
-    
-    TEMPLATE_TYPE = "basic"
-
-    TEMPLATE_LOADERS = (
-        'foundry.loaders.TypeLoader',
-        ...other template loader classes...
-    )
-
-   This causes templates to be loaded from a path prefixed with whatever value was specified as the ``TEMPLATE_TYPE`` setting. For example in this case a template specified as ``foundry/home.html`` would actually be loaded from ``basic/foundry/home.html``.
-
-   .. note:: 
-   
-        You have to add ``TypeLoader`` as the first loader for it to resolve templates correctly.
-
-#. ``jmbo-foundry`` includes static media resources which you need to configure as described in `Django`s managing static files documentation <https://docs.djangoproject.com/en/dev/howto/static-files/>`_.
-
-#. Add ``foundry.middleware.AgeGateway`` to your ``MIDDLEWARES`` setting after ``AuthenticationMiddleware``.
-
-#. Optionally add ``foundry.middleware.VerboseRequestMeta`` to your ``MIDDLEWARES`` setting as the last entry. It adds more information to the request for easier debugging. 
-
-Models
-------
-
-.. _foundry.models.Link:
-
-foundry.models.Link
+General preferences
 *******************
 
-Used in conjunction with `{% menu %}`_ and `{% navbar %}`_ to provide an admin configurable navbar and menu.
+Check `Private site` to make the site accessible only to visitors who are 
+logged in.
 
-Fields
-~~~~~~
-        
-.. _foundry.models.Link.title:
-    
-title
-+++++
-A short descriptive title for link.
+Check `Show age gateway` to enable the age gateway for the site. Visitors must
+confirm their age before they are allowed to browse the site.
 
-.. _foundry.models.Link.view_name:
-    
-view_name
-+++++++++
-View name to which this link will redirect. This takes precedence over `category`_ and `url`_ fields.
-    
-    
-.. _foundry.models.Link.category:
-    
-category
-++++++++
-Category to which this link will redirect. This takes precedence over `url`_ field.
+`Exempted URLs` are URLs which must always be visible regardless of `Private
+site` or `Age gateway` settings. Certain URLs like `/login` are visible by
+default and do not need to be listed.
 
-.. _foundry.models.Link.url:
-    
-url
-+++
-URL to which this menu link will redirect. Only used if `view_name`_ is not specified.
+The `Analytics tags` field may contain javascript. There is a fallback to
+enable analytics on low-end browsers but it is not configurable through the
+web. See the `settings.py` section.
 
-.. _foundry.models.Link.methods:
+Registration preferences
+************************
 
-Methods & Properties
-~~~~~~~~~~~~~~~~~~~~
+You can select which fields to display on the registration form. Some fields
+(eg. `username`) are always visible on the registration form and cannot be
+removed.
 
-.. _foundry.models.Link.get_absolute_url:
-    
-get_absolute_url(self)
-++++++++++++++++++++++
-Returns URL to which link should redirect based on a `reversed <https://docs.djangoproject.com/en/dev/topics/http/urls/#reverse>`_ view name as specified in `view_name`_ field or category view for category specified in `category`_ field or otherwise an explicitly provided URL as specified in `url`_ field.
+You can select a subset of the displayed fields to be required. Fields which
+are absolutely required (eg. `username`) cannot be set to be optional. For
+instance, if the site users my log in using their mobile number then set
+`mobile_number` as a required field.
 
-.. _foundry.models.Link.is_active:
+Some fields may need to be unique, especially those that may be used to log in
+to the site. Using the mobile number example above you should set
+`mobile_number` to be a unique field. It is important to decide beforehand
+which fields must be unique since it is difficult to remove duplicates if you
+change this setting. An exeption is raised if you attempt to change this
+setting and duplicates are detected (friendlier validation still to be added).
 
-is_active(self, request)
-++++++++++++++++++++++++
-Determines whether or not the link can be consider active based on the request path. ``True`` if the request path can be resolved to the same view name as is contained in `view_name`_ field. Otherwise ``True`` if request path starts with URL as resolved for category contained in `category`_ field. Otherwise ``True`` if request path starts with URL as contained in `url`_ field.
+Login preferences
+*****************
 
-.. _foundry.models.LinkPosition:
+Users typically log in to a normal site with their username or email address,
+whereas a mobile number is a natural login field for a mobile site. Choose from
+`Username only`, `Email address only`, `Mobile number only` or `Username or
+email address`.
 
-foundry.models.LinkPosition
-***************************
+Password reset preferences
+**************************
 
-Used to determine position/order of elements in `{% menu %}`_ and `{% navbar %}`_ inclusion tags.
+When a user loses his password he may request a password reset. Normally this
+is accomplished by sending an email to the user, but in the case of a mobile
+site it is desirable to send a text. Choose between `Email address` or `Mobile
+number`. Note that a password reset request does not automatically generate a
+new password for the user since this may lead to malicious people disabling
+users' accounts.
 
-.. _foundry.models.LinkPosition.Fields:
+Naughty word preferences
+************************
 
-Fields
-~~~~~~
+You can set a list of weighted words. The `report_naughty_words` management
+command identifies potentially offensive comments. An email containing
+clickable links for approval or deletion is sent to the `Email recipients`.
 
-.. _foundry.models.LinkPosition.position:
-    
-position
-++++++++
-Specifies position/order of link in `{% menu %}`_ and `{% navbar %}`_ inclusion tags.
+Listings
+--------
+A `listing` is essentially a stored search that can be rendered in a certain
+style. A listing can be published to certain sites.
 
-.. _foundry_inclusion_tags:
+`Content type`, `Category` and `Content` are criteria which define the items
+present in the listing. These criteria are mutually exclusive.
 
-Inclusion Tags
---------------
+`Count` specifies the maximum number of items in the listing.
 
-foundry.templatetags.foundry_inclusion_tags
-*******************************************
+`Style` is the default way in which the listing is rendered. The styles are
+vertical, vertical, vertical thumbnail, horizontal, promo and widget. See
+`Listing styles` for detail.
 
-Provides foundry inclusion tags like `{% menu %}`_ and `{% navbar %}`_. Load these tags by including ``{% load foundry_inclusion_tags %}`` in your templates.
+`Items per page` is the number of items to display on a single listing page.
 
-.. _foundry_inclusion_tags.menu:
+Listing styles
+**************
 
-{% menu %}
-~~~~~~~~~~
+`Vertical` is a vertical listing with no images.
 
-Renders a navigation menu normally used as part of footer navigation element. Utilizes `foundry.models.Link`_ objects configurable via `Menu Preferences in admin <http://localhost:8000/admin/preferences/menupreferences>`_ to provide a flexible menu navigation system. Elements are ordered using `position`_ values as specified on `foundry.models.LinkPosition`_ objects via admin. You can customize the resulting HTML by overriding the ``foundry/inclusion_tags/menu.html`` template file. The template receives  an ``object_list`` context variable, which is a collection of ordered `foundry.models.Link`_ elements to display.
+`Vertical thumbnail` is a vertical listing with images.
 
-.. _foundry_inclusion_tags.navbar:
+`Horizontal` is a side-by-side listing with images. Each item looks like a
+baseball trading card.
 
-{% navbar %}
-~~~~~~~~~~~~
+`Promo` collates the items in a slideshow.
 
-Renders a navigation bar normally used as part of main navigation element positioned at top of pages. Utilizes `foundry.models.Link`_ objects configurable via `Navbar Preferences in admin <http://localhost:8000/admin/preferences/navbarpreferences>`_ to provide a flexible navbar system. Elements are ordered using `position`_ values as specified on `foundry.models.LinkPosition`_ objects via admin. You can customize the resulting HTML by overriding the ``foundry/inclusion_tags/navbar.html`` template file. The template receives  ``object_list`` and ``active_link`` context variables. ``object_list`` is a collection of ordered `foundry.models.Link`_ elements to display and ``active_link`` is an `foundry.models.Link`_ object determined to be active for the requested path.
+`Widget` is the most complex. It is used when each item can be interactive, eg.
+a listing of polls. Polls you have already voted on are read-only, and the
+others may change content once you vote on them. The content type being
+represented as a widget needs to provide code for this functionality.
 
+Links
+-----
+
+A `link` is a re-usable pointer to something, be it inside the site or external.
+
+`URL`, `Category`, `View name` and `Target` fields are mutually exclusive.
+
+`View name` warrants further explanation. It is the name of a named Django
+view, eg. `contact-us`.  The vocabulary is all the named views in the Django
+site excluding those with a variable parameter.
+
+Navbars
+-------
+
+A navigation bar typically contains a small amount of items since horizontal
+space is limited.  Each item in the navigation bar is represented as a `Link`.
+A navbar can be published to certain sites.
+
+A navbar with slug `main` is considered special. It is assumed to be the site 
+navbar by default.
+
+Menus
+-----
+
+A menu is essentially the same as a navigation bar, except it has a vertical
+layout by default.
+
+A menu with slug `main` is considered special. It is assumed to be the site
+menu by default.
+
+Pages
+-----
+
+Page builder documentation tbc.
