@@ -7,3 +7,4 @@ dist/
 .pydevproject
 .project
 .settings/
+*~

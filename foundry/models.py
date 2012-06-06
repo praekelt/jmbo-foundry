@@ -481,6 +481,10 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersona
             title=ugettext("Set your profile picture"), view_name='join-finish'
         )
         if not self.image:
+            # Set a default avatar
+            avatars = DefaultAvatar.objects.all().order_by('?')
+            if avatars.exists():
+                self.image = avatars[0].image
             Notification.objects.get_or_create(member=self, link=link)
         else:
             try:

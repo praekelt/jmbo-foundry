@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.2.2
+-----
+#. Pin django-ckeditor to >= 3.6.2
+#. Remember me field now on login and join forms. Checked by default.
+#. Any call to get_XXX_url is now layer aware.
+#. Comment posting now ajaxified depending on browser capabilities.
+
 0.2.1
 -----
 #. Remove dependency links.

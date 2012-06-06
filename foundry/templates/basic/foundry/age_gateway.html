@@ -1,14 +1,15 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
 
-    <div class="h2">Confirm your age</div>
+    <div class="h2">{% trans "Confirm your age" %}</div>
             
     <form action="{% url age-gateway %}" method="POST" class="foundry-form">   
         {% csrf_token %}
         {{ form.as_div }}
         <div class="buttons">
-            <input type="submit" value="Confirm" />
+            <input type="submit" value="{% trans "Confirm" %}" />
         </div>
     </form>
 

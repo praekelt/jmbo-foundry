@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='0.2.1',
+    version='0.2.2',
     description='Jmbo foundry behaviour/templates app.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -37,7 +37,7 @@ setup(
         'django-preferences',
         'jmbo-banner',
         'jmbo-competition',
-        'django-ckeditor',
+        'django-ckeditor>=3.6.2',
         'jmbo-contact',
         'jmbo-poll',
         'django-debug-toolbar',
@@ -50,7 +50,9 @@ setup(
         'jmbo-friends',
         'gunicorn',
         'django-sites-groups',
-        'jellyfish'
+        'jellyfish',
+        'python-memcached',
+	'jmbo-downloads',
     ],
     include_package_data=True,
     tests_require=[
