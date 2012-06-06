@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='foundrydemo',
-    version='0.0.1',
+    version='0.2.2',
     description='Demo based on the Jmbo platform.',
     long_description = open('README.rst', 'r').read(),
     author='Praekelt Foundation',
