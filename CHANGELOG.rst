@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Reduce ajax polling when user is inactive
+
 0.2.2
 -----
 #. Pin django-ckeditor to >= 3.6.2
