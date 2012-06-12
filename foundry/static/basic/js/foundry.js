@@ -1,7 +1,14 @@
 $(document).ready(function(){
 
+    var last_activity_time = $.now();
+
     if ($.support.ajax)
     {
+
+    // Update last activity time
+    $(document).mousemove(function(event){
+        last_activity_time = $.now();
+    });
 
     // Ajaxify tile paging, view modifier
     $('div.foundry-enable-ajax div.pagination a, div.foundry-enable-ajax div.jmbo-view-modifier a').live('click', function(e){
@@ -104,18 +111,19 @@ $(document).ready(function(){
 
     // Load new comments and chats
     function load_new_comments(){
-        $('div.comment-list-placeholder').each(function(index){
-            var el = $(this);
-            var url = '/fetch-new-comments-ajax/' + el.attr('content_type_id') + '/' + el.attr('oid') + '/' + el.attr('last_comment_id') + '/';
-            $.get(
-                url, 
-                {}, 
-                function(data){
-                    if (data)
-                        el.replaceWith(data);
-                }
-            );
-        });
+        if ($.now() - last_activity_time < 30000)
+            $('div.comment-list-placeholder').each(function(index){
+                var el = $(this);
+                var url = '/fetch-new-comments-ajax/' + el.attr('content_type_id') + '/' + el.attr('oid') + '/' + el.attr('last_comment_id') + '/';
+                $.get(
+                    url, 
+                    {}, 
+                    function(data){
+                        if (data)
+                            el.replaceWith(data);
+                    }
+                );
+            });
     }
     setInterval(load_new_comments, 30000);
 
