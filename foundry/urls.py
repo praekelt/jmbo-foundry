@@ -6,9 +6,12 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
 from preferences import preferences
+from tastypie.api import Api
+from jmbo.urls import v1_api
 
 from foundry.models import Page
 from foundry import views, forms
+from foundry.api import ListingResource, BlogPostResource
 
 admin.autodiscover()
 
@@ -17,6 +20,9 @@ try:
     object_tools.autodiscover()
 except ImportError:
     pass
+
+v1_api.register(ListingResource())
+v1_api.register(BlogPostResource())
 
 urlpatterns = patterns('',    
     # Pre-empt url call since we want to disable view modifiers for gallery.
@@ -56,6 +62,7 @@ urlpatterns = patterns('',
     (r'^poll/', include('poll.urls')),	# todo: add to paster
     (r'^simple-autocomplete/', include('simple_autocomplete.urls')),
     (r'^jmbo-analytics/', include('jmbo_analytics.urls')),
+    (r'^api/', include(v1_api.urls)),
 
     (r'^admin/', include(admin.site.urls)),
 
@@ -170,14 +177,6 @@ urlpatterns = patterns('',
         'foundry.views.listing_detail',
         {},
         name='listing-detail'
-    ),
-
-    # Listing as json
-    url(
-        r'^listing/as-json/(?P<slug>[\w-]+)/$',
-        'foundry.views.listing_as_json',
-        {},
-        name='listing-as-json'
     ),
 
     # Edit profile    

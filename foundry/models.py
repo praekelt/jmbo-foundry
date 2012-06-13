@@ -11,8 +11,6 @@ from django.contrib.comments.models import Comment as BaseComment
 from django.contrib.sites.models import Site
 from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
-from django.core import serializers
-from django.utils import simplejson
 
 from ckeditor.fields import RichTextField
 from preferences.models import Preferences
@@ -248,6 +246,9 @@ class Listing(models.Model):
         else:
             return self.title
 
+    def get_absolute_url(self):
+        return reverse('listing-detail', args=[self.slug])
+
     @property
     def queryset(self):        
         q = self.content.all()
@@ -260,22 +261,6 @@ class Listing(models.Model):
         if self.count:
             q = q[:self.count]
         return q
-
-    def as_json(self, offset=0, **options):
-        json = serializers.get_serializer('jmbo')()
-        me = json.serialize(self, ensure_ascii=False, **options)
-
-        # Items
-        qs = self.queryset
-        if self.items_per_page:
-            qs = self.queryset[offset:self.items_per_page]
-        items = json.serialize(qs, ensure_ascii=False, **options)
-
-        # Combine and return
-        me = simplejson.loads(me)
-        items = simplejson.loads(items)
-        me['items'] = items
-        return simplejson.dumps(me)
 
 
 class AbstractLinkPosition(models.Model):

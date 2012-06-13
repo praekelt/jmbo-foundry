@@ -164,6 +164,7 @@ INSTALLED_APPS = (
     'analytics', # add to paster
     'gunicorn',
     'sites_groups',
+    'tastypie',
     'django.contrib.auth',
     'django.contrib.comments',
     'django.contrib.contenttypes',
@@ -219,8 +220,6 @@ STATICFILES_FINDERS = (
 JMBO_ANALYTICS = {
     'google_analytics_id': '', 
 }
-
-SERIALIZATION_MODULES = {'jmbo':'jmbo.serializers.jmbo'}
 
 
 def compute_settings(sender):

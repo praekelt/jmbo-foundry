@@ -108,17 +108,6 @@ def listing_detail(request, slug):
     return render_to_response('foundry/listing_detail.html', extra, context_instance=RequestContext(request))
 
 
-def listing_as_json(request, slug):
-    listing = get_object_or_404(Listing.permitted, slug=slug)
-    options = {}
-    for param in ('fields', 'properties'):
-        value = request.GET.get(param)
-        if value:
-            options[param] = value.split(',')
-    offset = int(request.GET.get('offset', 0))
-    return HttpResponse(listing.as_json(offset=offset, **options))
-
-
 def page_detail(request, slug):
     """Render a page by iterating over rows, columns and tiles."""
     try:
