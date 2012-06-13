@@ -11,7 +11,8 @@ from jmbo.urls import v1_api
 
 from foundry.models import Page
 from foundry import views, forms
-from foundry.api import ListingResource, BlogPostResource
+from foundry.api import ListingResource, LinkResource, NavbarResource, \
+    BlogPostResource
 
 admin.autodiscover()
 
@@ -22,6 +23,8 @@ except ImportError:
     pass
 
 v1_api.register(ListingResource())
+v1_api.register(LinkResource())
+v1_api.register(NavbarResource())
 v1_api.register(BlogPostResource())
 
 urlpatterns = patterns('',    
