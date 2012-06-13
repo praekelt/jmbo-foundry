@@ -220,6 +220,8 @@ JMBO_ANALYTICS = {
     'google_analytics_id': '', 
 }
 
+SERIALIZATION_MODULES = {'jmbo':'jmbo.serializers.jmbo'}
+
 
 def compute_settings(sender):
     """Settings computed from earlier values. Put in a function so other 

@@ -171,7 +171,15 @@ urlpatterns = patterns('',
         {},
         name='listing-detail'
     ),
-    
+
+    # Listing as json
+    url(
+        r'^listing/as-json/(?P<slug>[\w-]+)/$',
+        'foundry.views.listing_as_json',
+        {},
+        name='listing-as-json'
+    ),
+
     # Edit profile    
     url(r'^edit-profile/$',
         login_required(
