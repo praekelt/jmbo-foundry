@@ -6,13 +6,14 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
 from preferences import preferences
-from tastypie.api import Api
 from jmbo.urls import v1_api
+# Trivial imports so resource registration works
+import post.urls
 
 from foundry.models import Page
 from foundry import views, forms
 from foundry.api import ListingResource, LinkResource, NavbarResource, \
-    BlogPostResource
+    MenuResource, BlogPostResource
 
 admin.autodiscover()
 
@@ -25,6 +26,7 @@ except ImportError:
 v1_api.register(ListingResource())
 v1_api.register(LinkResource())
 v1_api.register(NavbarResource())
+v1_api.register(MenuResource())
 v1_api.register(BlogPostResource())
 
 urlpatterns = patterns('',    

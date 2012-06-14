@@ -26,6 +26,11 @@ class LinkResource(ModelResource):
     class Meta:
         queryset = Link.objects.all()
         resource_name = 'link'
+        fields = ('title',)
+
+    def dehydrate(self, bundle):
+        bundle.data['permalink'] = bundle.obj.get_absolute_url()
+        return bundle
 
 
 class NavbarResource(ModelResource):
@@ -46,7 +51,26 @@ class NavbarResource(ModelResource):
                 bundle.data['items'].append(b)
         return bundle
 
-   
+ 
+class MenuResource(ModelResource):
+
+    class Meta:
+        queryset = Menu.permitted.all()
+        resource_name = 'menu'
+
+    def dehydrate(self, bundle):
+        bundle.data['items'] = []
+        for o in bundle.obj.menulinkposition_set.all().order_by('position'):
+            if o.condition_expression_result(bundle.request):
+                # Glue name and class_name to o.link
+                o.link.name = o.name
+                o.link.class_name = o.class_name
+                r = LinkResource()
+                b = r.full_dehydrate(r.build_bundle(o.link))
+                bundle.data['items'].append(b)
+        return bundle
+  
+
 class BlogPostResource(ModelResource):
 
     class Meta:
