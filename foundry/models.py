@@ -246,6 +246,9 @@ class Listing(models.Model):
         else:
             return self.title
 
+    def get_absolute_url(self):
+        return reverse('listing-detail', args=[self.slug])
+
     @property
     def queryset(self):        
         q = self.content.all()

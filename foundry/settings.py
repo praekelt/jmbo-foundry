@@ -164,6 +164,7 @@ INSTALLED_APPS = (
     'analytics', # add to paster
     'gunicorn',
     'sites_groups',
+    'tastypie',
     'django.contrib.auth',
     'django.contrib.comments',
     'django.contrib.contenttypes',
