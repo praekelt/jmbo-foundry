@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.3
+----
+#. Reduce ajax polling when user is inactive
+#. django-tastypie support added. jmbo and jmbo-post have minimum version requirements.
+
 0.2.2
 -----
 #. Pin django-ckeditor to >= 3.6.2
