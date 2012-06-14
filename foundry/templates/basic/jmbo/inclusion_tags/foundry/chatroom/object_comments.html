@@ -1,0 +1,11 @@
+{% load comments i18n %}
+
+{% if object.comments_enabled %}
+    <div class="object-comments">
+        <div class="title">{% blocktrans %}Comments{% endblocktrans %}</div>
+        {% if can_render_comment_form %}
+            {% render_comment_form for object %}
+        {% endif %}
+        {% render_comment_list for object %}
+    </div>
+{% endif %}

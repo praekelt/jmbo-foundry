@@ -132,33 +132,6 @@ def search(request):
 
 
 @require_POST
-def xpost_comment(request, next=None, using=None):
-    """Override with special handling for ajax"""
-    result = base_post_comment(request, next=next, using=using)
-
-    if not request.is_ajax():
-        return result
-    else:
-        di = {'status': 'success', 'message': '', 'html': ''}
-        if isinstance(result, CommentPostBadRequest):
-            di['status'] = 'error'
-            di['message'] = result.content
-            return HttpResponse(simplejson.dumps(di))
-        elif isinstance(result, HttpResponse):
-            # Form errors or preview
-            return result
-        elif isinstance(result, HttpResponseRedirect):
-            # Return rendered comment list
-            # xxx: my_messages, batch size and other params
-            context = {'comment_list':[]}
-            html = render_to_string('comments/list_new_comments.html', {}, context_instance=context)
-            di['html'] = html
-            return HttpResponse(simplejson.dumps(di))
-
-    return HttpResponse('')
-
-
-@require_POST
 def post_comment(request, next=None, using=None):
     """
     Adapted from django.contrib.comments. Preview functionality removed and 
