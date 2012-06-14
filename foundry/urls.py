@@ -6,14 +6,14 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
 from preferences import preferences
-#from jmbo.urls import v1_api
+from jmbo.urls import v1_api
 # Trivial imports so resource registration works
 import post.urls
 
 from foundry.models import Page
 from foundry import views, forms
-#from foundry.api import ListingResource, LinkResource, NavbarResource, \
-#    MenuResource, BlogPostResource
+from foundry.api import ListingResource, LinkResource, NavbarResource, \
+    MenuResource, BlogPostResource
 
 admin.autodiscover()
 
@@ -23,11 +23,11 @@ try:
 except ImportError:
     pass
 
-#v1_api.register(ListingResource())
-#v1_api.register(LinkResource())
-#v1_api.register(NavbarResource())
-#v1_api.register(MenuResource())
-#v1_api.register(BlogPostResource())
+v1_api.register(ListingResource())
+v1_api.register(LinkResource())
+v1_api.register(NavbarResource())
+v1_api.register(MenuResource())
+v1_api.register(BlogPostResource())
 
 urlpatterns = patterns('',    
     # Pre-empt url call since we want to disable view modifiers for gallery.
@@ -67,7 +67,7 @@ urlpatterns = patterns('',
     (r'^poll/', include('poll.urls')),	# todo: add to paster
     (r'^simple-autocomplete/', include('simple_autocomplete.urls')),
     (r'^jmbo-analytics/', include('jmbo_analytics.urls')),
-    #(r'^api/', include(v1_api.urls)),
+    (r'^api/', include(v1_api.urls)),
 
     (r'^admin/', include(admin.site.urls)),
 
