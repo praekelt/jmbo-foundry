@@ -255,7 +255,23 @@ class Listing(models.Model):
         if not q.exists():
             q = ModelBase.permitted.all()
             if self.content_type.exists():
-                q = q.filter(content_type__in=self.content_type.all())
+                permitted_ids = []
+                in_permitted_ids = []
+                content_types = list(self.content_type.all())
+                index = 0
+                for content_type in content_types:
+                    cls = content_type.model_class()
+                    # if the content type has overridden the permitted manager
+                    if cls.permitted.__class__ is not ModelBase.permitted.__class__:
+                        permitted_ids.extend(cls.permitted.all().values_list('id', flat=True))
+                        in_permitted_ids.append(index)
+                    index += 1
+                
+                # remove the content types that have already been considered
+                for index in in_permitted_ids:
+                    del content_types[index]
+                    
+                q = q.filter(Q(content_type__in=content_types)|Q(id__in=permitted_ids))
             elif self.category:
                 q = q.filter(Q(primary_category=self.category)|Q(categories=self.category))
         if self.count:
