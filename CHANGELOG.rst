@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Chatrooms and normal comments can now have distinct appearances. jmbo>=0.3.1 required.
+
 0.3
 ----
 #. Reduce ajax polling when user is inactive
