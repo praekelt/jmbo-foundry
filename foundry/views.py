@@ -182,9 +182,16 @@ def post_comment(request, next=None, using=None):
                 escape(str(form.security_errors())))
 
     # If there are errors show the comment
-    if form.errors:            
+    if form.errors:
+        # Pass a list of templates
+        app_label, model = ctype.split('.')
+        template_name = [
+            "comments/%s/%s/form.html" % (app_label, model),
+            "comments/%s/form.html" % app_label,
+            "comments/form.html"
+        ]
         return render_to_response(
-            ['comments/form.html'], 
+            template_name,
             {
                 "comment" : form.data.get("comment", ""),
                 "form" : form,
