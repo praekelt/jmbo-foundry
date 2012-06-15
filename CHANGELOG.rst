@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+0.3.1
+-----
 #. Chatrooms and normal comments can now have distinct appearances. jmbo>=0.3.1 required.
 
 0.3
