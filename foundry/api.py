@@ -1,8 +1,11 @@
+from django.conf.urls.defaults import url
+
 from tastypie.resources import ModelResource
 from tastypie import fields
 from jmbo.api import ModelBaseResource
 
-from foundry.models import Listing, Link, Navbar, Menu, BlogPost
+from foundry.models import Listing, Link, Navbar, Menu, Page, Row, Column, \
+    Tile, BlogPost
 
 
 class ListingResource(ModelResource):
@@ -10,6 +13,11 @@ class ListingResource(ModelResource):
     class Meta:
         queryset = Listing.permitted.all()
         resource_name = 'listing'
+
+    def override_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/(?P<slug>[\w-]+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
+        ]
 
     def dehydrate(self, bundle):
         bundle.data['permalink'] = bundle.obj.get_absolute_url()
@@ -39,6 +47,11 @@ class NavbarResource(ModelResource):
         queryset = Navbar.permitted.all()
         resource_name = 'navbar'
 
+    def override_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/(?P<slug>[\w-]+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
+        ]
+
     def dehydrate(self, bundle):
         bundle.data['items'] = []
         for o in bundle.obj.navbarlinkposition_set.all().order_by('position'):
@@ -58,6 +71,11 @@ class MenuResource(ModelResource):
         queryset = Menu.permitted.all()
         resource_name = 'menu'
 
+    def override_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/(?P<slug>[\w-]+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
+        ]
+
     def dehydrate(self, bundle):
         bundle.data['items'] = []
         for o in bundle.obj.menulinkposition_set.all().order_by('position'):
@@ -70,6 +88,65 @@ class MenuResource(ModelResource):
                 bundle.data['items'].append(b)
         return bundle
   
+
+class TileResource(ModelResource):
+
+    class Meta:
+        queryset = Tile.objects.all()
+        resource_name = 'tile'
+
+
+class ColumnResource(ModelResource):
+
+    class Meta:
+        queryset = Column.objects.all()
+        resource_name = 'column'
+
+    def dehydrate(self, bundle):
+        tiles = []
+        for tile_obj in bundle.obj.tiles:
+            r = TileResource()
+            b = r.full_dehydrate(r.build_bundle(tile_obj))
+            tiles.append(b)
+        bundle.data['tiles'] = tiles
+        return bundle
+
+
+class RowResource(ModelResource):
+
+    class Meta:
+        queryset = Row.objects.all()
+        resource_name = 'row'
+
+    def dehydrate(self, bundle):
+        columns = []
+        for column_obj in bundle.obj.columns:
+            r = ColumnResource()
+            b = r.full_dehydrate(r.build_bundle(column_obj))
+            columns.append(b)
+        bundle.data['columns'] = columns
+        return bundle
+
+
+class PageResource(ModelResource):
+
+    class Meta:
+        queryset = Page.permitted.all()
+        resource_name = 'page'
+
+    def override_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/(?P<slug>[\w-]+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
+        ]
+
+    def dehydrate(self, bundle):
+        rows = []
+        for row_obj in bundle.obj.rows_by_block_name['content']:
+            r = RowResource()
+            b = r.full_dehydrate(r.build_bundle(row_obj))
+            rows.append(b)
+        bundle.data['rows'] = rows
+        return bundle
 
 class BlogPostResource(ModelResource):
 
