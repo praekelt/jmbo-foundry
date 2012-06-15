@@ -1,0 +1,15 @@
+{% load comments i18n %}
+
+{% comment %}
+Based on jmbo/templates/inclusion_tags.html.
+1. No title.
+{% endcomment %}
+
+{% if object.comments_enabled %}
+    <div class="object-comments">
+        {% render_comment_list for object %}
+        {% if can_render_comment_form %}
+            {% render_comment_form for object %}
+        {% endif %}
+    </div>
+{% endif %}

@@ -455,6 +455,13 @@ class CommentForm(BaseCommentForm):
         self.fields['name'].initial = 'Anonymous'
         self.fields['email'].initial = 'anonymous@jmbo.org'
 
+        # Override label
+        instance = args[0]
+        if instance.class_name == 'ChatRoom':
+            self.fields['comment'].label = _('Post your message')
+        else:
+            self.fields['comment'].label = _('Post your comment')
+
     def get_comment_model(self):
         return models.FoundryComment
 
