@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.3.2
+-----
+#. Use slug for lookups in tastypie API.
+
 0.3.1
 -----
 #. Chatrooms and normal comments can now have distinct appearances. jmbo>=0.3.1 required.
