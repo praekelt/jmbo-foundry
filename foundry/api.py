@@ -19,11 +19,22 @@ class ListingResource(ModelResource):
             url(r"^(?P<resource_name>%s)/(?P<slug>[\w-]+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
         ]
 
-    def dehydrate(self, bundle):
+    def dehydrate(self, bundle):        
         bundle.data['resource_name'] = self._meta.resource_name
         bundle.data['permalink'] = bundle.obj.get_absolute_url()
         bundle.data['items'] = []
-        for o in bundle.obj.queryset:
+
+        # Batching
+        link = bundle.obj
+        qs = link.queryset        
+        if link.items_per_page:
+            # The seemingly strange page calculation is due to
+            # django-paginations's middleware.
+            page = max(getattr(bundle.request, 'page', 1), 1)
+            offset = (page-1) * link.items_per_page
+            qs = qs[offset:offset+link.items_per_page]
+
+        for o in qs:
             r = ModelBaseResource()
             b = r.full_dehydrate(r.build_bundle(o))
             bundle.data['items'].append(b)
