@@ -20,6 +20,7 @@ class ListingResource(ModelResource):
         ]
 
     def dehydrate(self, bundle):
+        bundle.data['resource_name'] = self._meta.resource_name
         bundle.data['permalink'] = bundle.obj.get_absolute_url()
         bundle.data['items'] = []
         for o in bundle.obj.queryset:
@@ -37,6 +38,7 @@ class LinkResource(ModelResource):
         fields = ('title',)
 
     def dehydrate(self, bundle):
+        bundle.data['resource_name'] = self._meta.resource_name
         bundle.data['permalink'] = bundle.obj.get_absolute_url()
         return bundle
 
@@ -53,6 +55,7 @@ class NavbarResource(ModelResource):
         ]
 
     def dehydrate(self, bundle):
+        bundle.data['resource_name'] = self._meta.resource_name
         bundle.data['items'] = []
         for o in bundle.obj.navbarlinkposition_set.all().order_by('position'):
             if o.condition_expression_result(bundle.request):
@@ -77,6 +80,7 @@ class MenuResource(ModelResource):
         ]
 
     def dehydrate(self, bundle):
+        bundle.data['resource_name'] = self._meta.resource_name
         bundle.data['items'] = []
         for o in bundle.obj.menulinkposition_set.all().order_by('position'):
             if o.condition_expression_result(bundle.request):
@@ -95,6 +99,28 @@ class TileResource(ModelResource):
         queryset = Tile.objects.all()
         resource_name = 'tile'
 
+    def dehydrate(self, bundle):
+        bundle.data['resource_name'] = self._meta.resource_name
+        bundle.data['content'] = ''
+
+        tile = bundle.obj
+
+        # Evaluate condition
+        if not tile.condition_expression_result(bundle.request):
+            return bundle
+
+        if tile.view_name:
+            # No implemented yet
+            return bundle
+
+        if tile.target:
+            # Use convention to lookup resource
+            r = globals().get('%sResource' % tile.target.__class__.__name__)()
+            b = r.full_dehydrate(r.build_bundle(tile.target))
+            bundle.data['content'] = b
+
+        return bundle
+
 
 class ColumnResource(ModelResource):
 
@@ -103,6 +129,7 @@ class ColumnResource(ModelResource):
         resource_name = 'column'
 
     def dehydrate(self, bundle):
+        bundle.data['resource_name'] = self._meta.resource_name
         tiles = []
         for tile_obj in bundle.obj.tiles:
             r = TileResource()
@@ -119,6 +146,7 @@ class RowResource(ModelResource):
         resource_name = 'row'
 
     def dehydrate(self, bundle):
+        bundle.data['resource_name'] = self._meta.resource_name
         columns = []
         for column_obj in bundle.obj.columns:
             r = ColumnResource()
@@ -140,6 +168,7 @@ class PageResource(ModelResource):
         ]
 
     def dehydrate(self, bundle):
+        bundle.data['resource_name'] = self._meta.resource_name
         rows = []
         for row_obj in bundle.obj.rows_by_block_name['content']:
             r = RowResource()
@@ -153,3 +182,7 @@ class BlogPostResource(ModelResource):
     class Meta:
         queryset = BlogPost.permitted.all()
         resource_name = 'blogpost'
+
+    def dehydrate(self, bundle):
+        bundle.data['resource_name'] = self._meta.resource_name
+        return bundle
