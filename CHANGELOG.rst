@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.3.3
+-----
+#. Version pins for jmbo and jmbo-post.
+
 0.3.2
 -----
 #. Use slug for lookups in tastypie API.

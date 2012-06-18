@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='foundrydemo',
-    version='0.3',
+    version='0.3.3',
     description='Demo based on the Jmbo platform.',
     long_description = open('README.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -11,7 +11,7 @@ setup(
     url='',
     packages = find_packages(),
     install_requires = [
-        'jmbo-foundry',
+        'jmbo-foundry>=0.3.3',
     ],
     include_package_data=True,
     tests_require=[
