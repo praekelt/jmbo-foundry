@@ -256,7 +256,7 @@ class EditProfileForm(forms.ModelForm):
     class Meta:
         model = models.Member
         fields = ('first_name', 'last_name', 'mobile_number', 'email', 'image', 
-                  'dob', 'about_me', 'receive_sms', 'receive_email',)
+                  'dob', 'gender', 'city', 'about_me', 'receive_sms', 'receive_email',)
         
     def __init__(self, *args, **kwargs):
         self.base_fields['image'].widget = forms.FileInput()
