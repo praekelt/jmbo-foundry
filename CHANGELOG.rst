@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Batching on tastypie listing API.
+
 0.3.3
 -----
 #. Version pins for jmbo and jmbo-post.

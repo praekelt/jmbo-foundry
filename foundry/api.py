@@ -19,13 +19,24 @@ class ListingResource(ModelResource):
             url(r"^(?P<resource_name>%s)/(?P<slug>[\w-]+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
         ]
 
-    def dehydrate(self, bundle):
+    def dehydrate(self, bundle):        
         bundle.data['resource_name'] = self._meta.resource_name
         bundle.data['permalink'] = bundle.obj.get_absolute_url()
         bundle.data['items'] = []
-        for o in bundle.obj.queryset:
+
+        # Batching
+        link = bundle.obj
+        qs = link.queryset        
+        if link.items_per_page:
+            # The seemingly strange page calculation is due to
+            # django-paginations's middleware.
+            page = max(getattr(bundle.request, 'page', 1), 1)
+            offset = (page-1) * link.items_per_page
+            qs = qs[offset:offset+link.items_per_page]
+
+        for o in qs:
             r = ModelBaseResource()
-            b = r.full_dehydrate(r.build_bundle(o))
+            b = r.full_dehydrate(r.build_bundle(o, request=bundle.request))
             bundle.data['items'].append(b)
         return bundle
 
@@ -63,7 +74,7 @@ class NavbarResource(ModelResource):
                 o.link.name = o.name
                 o.link.class_name = o.class_name
                 r = LinkResource()
-                b = r.full_dehydrate(r.build_bundle(o.link))
+                b = r.full_dehydrate(r.build_bundle(o.link, request=bundle.request))
                 bundle.data['items'].append(b)
         return bundle
 
@@ -88,7 +99,7 @@ class MenuResource(ModelResource):
                 o.link.name = o.name
                 o.link.class_name = o.class_name
                 r = LinkResource()
-                b = r.full_dehydrate(r.build_bundle(o.link))
+                b = r.full_dehydrate(r.build_bundle(o.link, request=bundle.request))
                 bundle.data['items'].append(b)
         return bundle
   
@@ -116,7 +127,7 @@ class TileResource(ModelResource):
         if tile.target:
             # Use convention to lookup resource
             r = globals().get('%sResource' % tile.target.__class__.__name__)()
-            b = r.full_dehydrate(r.build_bundle(tile.target))
+            b = r.full_dehydrate(r.build_bundle(tile.target, request=bundle.request))
             bundle.data['content'] = b
 
         return bundle
@@ -133,7 +144,7 @@ class ColumnResource(ModelResource):
         tiles = []
         for tile_obj in bundle.obj.tiles:
             r = TileResource()
-            b = r.full_dehydrate(r.build_bundle(tile_obj))
+            b = r.full_dehydrate(r.build_bundle(tile_obj, request=bundle.request))
             tiles.append(b)
         bundle.data['tiles'] = tiles
         return bundle
@@ -150,7 +161,7 @@ class RowResource(ModelResource):
         columns = []
         for column_obj in bundle.obj.columns:
             r = ColumnResource()
-            b = r.full_dehydrate(r.build_bundle(column_obj))
+            b = r.full_dehydrate(r.build_bundle(column_obj, request=bundle.request))
             columns.append(b)
         bundle.data['columns'] = columns
         return bundle
@@ -172,7 +183,7 @@ class PageResource(ModelResource):
         rows = []
         for row_obj in bundle.obj.rows_by_block_name['content']:
             r = RowResource()
-            b = r.full_dehydrate(r.build_bundle(row_obj))
+            b = r.full_dehydrate(r.build_bundle(row_obj, request=bundle.request))
             rows.append(b)
         bundle.data['rows'] = rows
         return bundle
