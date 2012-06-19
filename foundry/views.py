@@ -252,7 +252,7 @@ class EditProfile(UpdateView):
         return member
 
     def form_valid(self, form):
-        msg = _("Your profile ahs been updated.")
+        msg = _("Your profile has been updated.")
         messages.success(self.request, msg, fail_silently=True)
         return super(EditProfile, self).form_valid(form)
 
