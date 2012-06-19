@@ -243,17 +243,17 @@ urlpatterns = patterns('',
     
     
     url(r'^all_blogs/$',
-        login_required(views.BlogsAll.as_view(template_name='guinness_vip/blogs_all.html',
+        login_required(views.BlogsAll.as_view(template_name='foundry/blogs_all.html',
                                               paginate_by=3)),
         name='blogs_all'),
     
     url(r'^friends_blogs/$',
-        login_required(views.BlogsFriends.as_view(template_name='guinness_vip/blogs_all.html',
+        login_required(views.BlogsFriends.as_view(template_name='foundry/blogs_all.html',
                                               paginate_by=3)),
         name='blogs_friends'),
     
     url(r'^my_blogs/$',
-        login_required(views.BlogsMine.as_view(template_name='guinness_vip/blogs_all.html',
+        login_required(views.BlogsMine.as_view(template_name='foundry/blogs_all.html',
                                               paginate_by=3)),
         name='blogs_mine'),
 

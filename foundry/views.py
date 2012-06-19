@@ -264,22 +264,25 @@ class Share(View):
     type = None
     
     def get(self, request, *args, **kwargs):
-        current_url = request.META['HTTP_REFERER']
-        
-        if self.type == 'Facebook':
-            url = 'http://www.facebook.com/sharer/sharer.php?u=%s' % urllib.quote(current_url)
-        elif self.type == 'Twitter':
-            url = 'https://twitter.com/intent/tweet?original_referer=%s' % urllib.quote(current_url)
-        else:
+        try:
+            current_url = request.META['HTTP_REFERER']
+            
+            if self.type == 'Facebook':
+                url = 'http://www.facebook.com/sharer/sharer.php?u=%s' % urllib.quote(current_url)
+            elif self.type == 'Twitter':
+                url = 'https://twitter.com/intent/tweet?original_referer=%s' % urllib.quote(current_url)
+            else:
+                return Http404()
+            
+            UserActivity.track_activity(user=request.user,
+                                        activity=activity_constants.ACTIVITY_SOCIAL_SHARE,
+                                        sub=ugettext('<a href="%s">%s</a> via %s' % (request.META['HTTP_REFERER'],
+                                                                                     request.META['HTTP_REFERER'],
+                                                                                     self.type)))
+            
+            return HttpResponseRedirect(url)
+        except:
             return Http404()
-        
-        UserActivity.track_activity(user=request.user,
-                                    activity=activity_constants.ACTIVITY_SOCIAL_SHARE,
-                                    sub=ugettext('<a href="%s">%s</a> via %s' % (request.META['HTTP_REFERER'],
-                                                                                 request.META['HTTP_REFERER'],
-                                                                                 self.type)))
-        
-        return HttpResponseRedirect(url)
 
 # Caching duration matches the refresh rate
 @cache_page(30) 

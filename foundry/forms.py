@@ -253,10 +253,15 @@ class JoinFinishForm(forms.ModelForm):
 
 class EditProfileForm(forms.ModelForm):
 
+    password_1 = forms.CharField(max_length=16, required=False,
+                                 widget=forms.PasswordInput())
+    password_2 = forms.CharField(max_length=16, required=False,
+                                 widget=forms.PasswordInput())
+
     class Meta:
         model = models.Member
-        fields = ('first_name', 'last_name', 'mobile_number', 'email', 'image', 
-                  'dob', 'gender', 'city', 'about_me', 'receive_sms', 'receive_email',)
+        fields = ('username', 'first_name', 'last_name', 'mobile_number', 'email', 'image', 
+                  'dob', 'gender', 'city', 'country', 'about_me', 'receive_sms', 'receive_email',)
         
     def __init__(self, *args, **kwargs):
         self.base_fields['image'].widget = forms.FileInput()
@@ -264,13 +269,15 @@ class EditProfileForm(forms.ModelForm):
         
         super(EditProfileForm, self).__init__(*args, **kwargs)
         
+        self.base_fields['username'].help_text = _('This is your public name visible on the site')
+        self.base_fields['image'].help_text = _('This is your picture visible on the site')
+        
         # Set date widget for date field
         for name, field in self.fields.items():            
             if isinstance(field, forms.fields.DateField):
                 field.widget = OldSchoolDateWidget()
         
     def clean_email(self):
-        # xxx: not necessarily required. Depends on preferences.
         if self.cleaned_data['email'] and not self.cleaned_data['email'] == self.instance.email:
             try:
                 User.objects.get(email=self.cleaned_data['email'])
@@ -280,6 +287,20 @@ class EditProfileForm(forms.ModelForm):
         else:
             return self.cleaned_data['email']
 
+    def clean_password_2(self):
+        if (self.cleaned_data.has_key('password_1') or self.cleaned_data.has_key('password_2')) and \
+           (self.cleaned_data['password_1'] == self.cleaned_data['password_2']):
+            return self.cleaned_data
+        else:
+            raise forms.ValidationError(_('Passwords do not match'))
+
+    def save(self, *args, **kwargs):
+        instance = super(EditProfileForm, self).save(*args, **kwargs)
+        if self.cleaned_data.has_key('password_2') and self.cleaned_data['password_2']:
+            instance.set_password(self.cleaned_data['password_2'])
+        
+        return instance
+        
     as_div = as_div
 
 
