@@ -223,3 +223,28 @@ def listdir(self, path):
         return directories, files
 
 FileSystemStorage.listdir = listdir
+
+
+"""Django wraps the already hidden CSRF token input in an invisible container. This causes problems on low-end handsets. 
+https://code.djangoproject.com/ticket/18484"""
+from django.template.defaulttags import CsrfTokenNode
+from django.utils.safestring import mark_safe
+from django.conf import settings
+
+def CsrfTokenNode_render(self, context):
+    csrf_token = context.get('csrf_token', None)
+    if csrf_token:
+        if csrf_token == 'NOTPROVIDED':
+            return mark_safe(u"")
+        else:
+            return mark_safe(u"<input type='hidden' name='csrfmiddlewaretoken' value='%s' />" % csrf_token)
+    else:
+        # It's very probable that the token is missing because of
+        # misconfiguration, so we raise a warning
+        from django.conf import settings
+        if settings.DEBUG:
+            import warnings
+            warnings.warn("A {% csrf_token %} was used in a template, but the context did not provide the value.  This is usually caused by not using RequestContext.")
+        return u''
+
+CsrfTokenNode.render = CsrfTokenNode_render

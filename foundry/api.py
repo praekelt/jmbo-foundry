@@ -36,7 +36,7 @@ class ListingResource(ModelResource):
 
         for o in qs:
             r = ModelBaseResource()
-            b = r.full_dehydrate(r.build_bundle(o))
+            b = r.full_dehydrate(r.build_bundle(o, request=bundle.request))
             bundle.data['items'].append(b)
         return bundle
 
@@ -74,7 +74,7 @@ class NavbarResource(ModelResource):
                 o.link.name = o.name
                 o.link.class_name = o.class_name
                 r = LinkResource()
-                b = r.full_dehydrate(r.build_bundle(o.link))
+                b = r.full_dehydrate(r.build_bundle(o.link, request=bundle.request))
                 bundle.data['items'].append(b)
         return bundle
 
@@ -99,7 +99,7 @@ class MenuResource(ModelResource):
                 o.link.name = o.name
                 o.link.class_name = o.class_name
                 r = LinkResource()
-                b = r.full_dehydrate(r.build_bundle(o.link))
+                b = r.full_dehydrate(r.build_bundle(o.link, request=bundle.request))
                 bundle.data['items'].append(b)
         return bundle
   
@@ -127,7 +127,7 @@ class TileResource(ModelResource):
         if tile.target:
             # Use convention to lookup resource
             r = globals().get('%sResource' % tile.target.__class__.__name__)()
-            b = r.full_dehydrate(r.build_bundle(tile.target))
+            b = r.full_dehydrate(r.build_bundle(tile.target, request=bundle.request))
             bundle.data['content'] = b
 
         return bundle
@@ -144,7 +144,7 @@ class ColumnResource(ModelResource):
         tiles = []
         for tile_obj in bundle.obj.tiles:
             r = TileResource()
-            b = r.full_dehydrate(r.build_bundle(tile_obj))
+            b = r.full_dehydrate(r.build_bundle(tile_obj, request=bundle.request))
             tiles.append(b)
         bundle.data['tiles'] = tiles
         return bundle
@@ -161,7 +161,7 @@ class RowResource(ModelResource):
         columns = []
         for column_obj in bundle.obj.columns:
             r = ColumnResource()
-            b = r.full_dehydrate(r.build_bundle(column_obj))
+            b = r.full_dehydrate(r.build_bundle(column_obj, request=bundle.request))
             columns.append(b)
         bundle.data['columns'] = columns
         return bundle
@@ -183,7 +183,7 @@ class PageResource(ModelResource):
         rows = []
         for row_obj in bundle.obj.rows_by_block_name['content']:
             r = RowResource()
-            b = r.full_dehydrate(r.build_bundle(row_obj))
+            b = r.full_dehydrate(r.build_bundle(row_obj, request=bundle.request))
             rows.append(b)
         bundle.data['rows'] = rows
         return bundle

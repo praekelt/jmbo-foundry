@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.3.4
+-----
+#. Batching on tastypie listing API.
+#. Remove django-ckeditor dependency. Handled by jmbo-post.
+#. Patch CsrfTokenNode.render so the input is not wrapped in a hidden container.
+
 0.3.3
 -----
 #. Version pins for jmbo and jmbo-post.
