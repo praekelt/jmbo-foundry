@@ -20,7 +20,7 @@ setup(
         'django-snippetscream',
         'django-generate',
         'jmbo-calendar',
-        'jmbo>=0.3.2',
+        'jmbo>=0.3.3',
         'jmbo-chart',
         'django-recaptcha',
         'django-secretballot',
