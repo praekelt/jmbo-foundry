@@ -1,5 +1,6 @@
 #!/bin/sh
 
+echo "The demo app checks out code from github and uses sqlite as backend. Installation is confined to this directory."
 echo "Choose the Python version to use:"
 choice=3
 echo "1. 2.6"
@@ -12,8 +13,8 @@ while [ $choice -eq 3 ]; do
 	then
 	    sudo rm -rf ./ve ./bin
 	fi
-        sudo apt-get install python-virtualenv mysql-server libmysqlclient-dev python2.6-dev \
-	libjpeg62-dev git-core libjpeg62-dev zlib1g-dev build-essential --no-upgrade
+        sudo apt-get install python-virtualenv python2.6-dev \
+	libjpeg62-dev libjpeg62-dev zlib1g-dev build-essential git-core --no-upgrade
 	echo "Setting up sandboxed Python environment with Python 2.6"
 	virtualenv --python=python2.6 --no-site-packages ve
     else
@@ -21,20 +22,19 @@ while [ $choice -eq 3 ]; do
 	then
 	    sudo rm -rf ./ve ./bin
 	fi
-	sudo apt-get install python-virtualenv mysql-server libmysqlclient-dev python2.7-dev \
-	libjpeg62-dev git-core libjpeg62-dev zlib1g-dev build-essential --no-upgrade
+	sudo apt-get install python-virtualenv python2.7-dev \
+	libjpeg62-dev libjpeg62-dev zlib1g-dev build-essential git-core --no-upgrade
 	echo "Setting up sandboxed Python environment with Python 2.7"
 	virtualenv --python=python2.7 --no-site-packages ve
     fi
 done
-echo "Installing gunicorn"
-ve/bin/pip install gunicorn
 echo "Downloading distribute"
 ve/bin/python bootstrap.py
 echo "Choose the type of demo site:"
 choice=3
-echo "1. Mobi"
+echo "1. Basic (mobi for low-end handsets)"
 echo "2. Web"
+SITE_TYPE=basic
 while [ $choice -eq 3 ]; do
     read choice
     if [ $choice -eq 1 ] ; then
@@ -43,6 +43,7 @@ while [ $choice -eq 3 ]; do
     else
         read -p "This part may take a while. If it fails with 'connection reset by peer' run ./install-app again. [enter]" y
         ./bin/buildout -nv -c dev_web_site.cfg
+        SITE_TYPE=web
     fi
 done
 
@@ -53,14 +54,15 @@ then
 fi
 
 read -p "Create a superuser when prompted. Do not generate default content. [enter]" y
-./bin/foundrydemo-dev-web-site syncdb
-./bin/foundrydemo-dev-web-site migrate
-./bin/foundrydemo-dev-web-site loaddata src/jmbo-downloads/downloads/fixtures/photosizes.json
-./bin/foundrydemo-dev-web-site loaddata src/jmbo-foundry/foundry/fixtures/photosizes.json
-./bin/foundrydemo-dev-web-site loaddata src/jmbo-post/post/fixtures/photosizes.json
-./bin/foundrydemo-dev-web-site loaddata src/jmbo-gallery/gallery/fixtures/photosizes.json
-./bin/foundrydemo-dev-web-site loaddata src/jmbo/jmbo/fixtures/photosizes.json
-./bin/foundrydemo-dev-web-site collectstatic --noinput
-echo "You may now start up the site with ./bin/foundry runserver 0.0.0.0:8000"
+./bin/foundrydemo-dev-$SITE_TYPE-site syncdb
+./bin/foundrydemo-dev-$SITE_TYPE-site migrate
+#./bin/foundrydemo-dev-$SITE_TYPE-site loaddata src/jmbo-downloads/downloads/fixtures/photosizes.json
+#./bin/foundrydemo-dev-$SITE_TYPE-site loaddata src/jmbo-foundry/foundry/fixtures/photosizes.json
+#./bin/foundrydemo-dev-$SITE_TYPE-site loaddata src/jmbo-post/post/fixtures/photosizes.json
+#./bin/foundrydemo-dev-$SITE_TYPE-site loaddata src/jmbo-gallery/gallery/fixtures/photosizes.json
+#./bin/foundrydemo-dev-$SITE_TYPE-site loaddata src/jmbo/jmbo/fixtures/photosizes.json
+rm -rf static
+#./bin/foundrydemo-dev-$SITE_TYPE-site collectstatic --noinput
+echo "You may now start up the site with ./bin/foundrydemo-dev-$SITE_TYPE-site runserver 0.0.0.0:8000"
 echo "Browse to http://localhost:8000/ for the public site."
 echo "Browse to http://localhost:8000/admin for the admin interface."

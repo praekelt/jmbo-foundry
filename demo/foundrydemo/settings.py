@@ -25,14 +25,10 @@ PROJECT_MODULE = 'foundrydemo'
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-# For PostgreSQL first do from the command line
-# echo "CREATE USER foundrydemo WITH PASSWORD 'foundrydemo'" | sudo -u postgres psql
-# echo "CREATE DATABASE foundrydemo WITH OWNER foundrydemo ENCODING 'UTF8'" | sudo -u postgres psql
-
 DATABASES = {
     'default': {
-        'ENGINE': 'postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'foundrydemo', # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '/tmp/foundrydemo.sql', # Or path to database file if using sqlite3.
         'USER': 'foundrydemo', # Not used with sqlite3.
         'PASSWORD': 'foundrydemo', # Not used with sqlite3.
         'HOST': '', # Set to empty string for localhost. Not used with sqlite3.
