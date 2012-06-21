@@ -25,15 +25,13 @@ PROJECT_MODULE = 'foundry'
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-# For MySQL remember to first do from a MySQL shell:
-# CREATE database foundry;
-# GRANT ALL ON foundry.* TO 'foundry'@'localhost' IDENTIFIED BY 'foundry';
-# GRANT ALL ON test_foundry.* TO 'foundry'@'localhost' IDENTIFIED BY 'foundry';
-# FLUSH PRIVILEGES;
+# For PostgreSQL first do from the command line
+# echo "CREATE USER foundry WITH PASSWORD 'foundry'" | sudo -u postgres psql
+# echo "CREATE DATABASE foundry WITH OWNER foundry ENCODING 'UTF8'" | sudo -u postgres psql
 
 DATABASES = {
     'default': {
-        'ENGINE': 'mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'foundry', # Or path to database file if using sqlite3.
         'USER': 'foundry', # Not used with sqlite3.
         'PASSWORD': 'foundry', # Not used with sqlite3.
@@ -52,7 +50,6 @@ TIME_ZONE = 'America/Chicago'
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
-#LANGUAGE_CODE = 'af'
 
 SITE_ID = 1
 
@@ -122,9 +119,10 @@ TEMPLATE_LOADERS = (
 ROOT_URLCONF = 'foundry.urls'
 
 INSTALLED_APPS = (
+    # The order is important else template resolution may not work
+    'foundry',
     'downloads',
     'friends',
-    'foundry',
     'section',
     'gallery',
     'googlesearch',
