@@ -27,8 +27,8 @@ TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'foundrydemo', # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '/tmp/foundrydemo.sql', # Or path to database file if using sqlite3.
         'USER': 'foundrydemo', # Not used with sqlite3.
         'PASSWORD': 'foundrydemo', # Not used with sqlite3.
         'HOST': '', # Set to empty string for localhost. Not used with sqlite3.
@@ -115,10 +115,11 @@ TEMPLATE_LOADERS = (
 ROOT_URLCONF = 'foundrydemo.urls'
 
 INSTALLED_APPS = (
+    # The order is important else template resolution may not work
     'foundrydemo',
+    'foundry',
     'downloads',
     'friends',
-    'foundry',
     'section',
     'gallery',
     'googlesearch',
@@ -154,6 +155,7 @@ INSTALLED_APPS = (
     'analytics', # add to paster
     'gunicorn',
     'sites_groups',
+    'tastypie',
     'django.contrib.auth',
     'django.contrib.comments',
     'django.contrib.contenttypes',

@@ -51,7 +51,7 @@ setup(
         'django-sites-groups',
         'jellyfish',
         'python-memcached',
-	'jmbo-downloads',
+	    'jmbo-downloads',
     ],
     include_package_data=True,
     tests_require=[
