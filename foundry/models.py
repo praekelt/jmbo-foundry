@@ -17,8 +17,10 @@ from preferences.models import Preferences
 from snippetscream import resolve_to_name
 from photologue.models import ImageModel
 from south.modelsinspector import add_introspection_rules
+
 from jmbo.utils import generate_slug
 from jmbo.models import ModelBase
+from jmbo.managers import DefaultManager
 
 from foundry.profile_models import AbstractAvatarProfile, \
     AbstractSocialProfile, AbstractPersonalProfile, \
@@ -26,6 +28,40 @@ from foundry.profile_models import AbstractAvatarProfile, \
 from foundry.templatetags import listing_styles
 from foundry.managers import PermittedManager
 import foundry.monkey
+
+
+class FoundryModelBaseAbstract(models.Model):  
+    title = models.CharField(
+        max_length=256,
+        help_text='A short descriptive title.',
+    )
+    subtitle = models.CharField(
+        max_length=256,
+        blank=True,
+        null=True,
+        help_text='Some titles may be the same. A subtitle makes a distinction. It is not displayed on the site.',
+    )
+    slug = models.SlugField(
+        editable=True,
+        max_length=32,
+        db_index=True,
+    )
+    
+    sites = models.ManyToManyField(
+        'sites.Site',
+        blank=True,
+        null=True,
+        help_text='Sites that this page will appear on.',
+    )
+
+    objects = DefaultManager()
+    permitted = PermittedManager()
+    
+    class Meta:
+        abstract = True
+
+    def natural_key(self):
+        return (self.slug)
 
 
 class Link(models.Model):
@@ -111,31 +147,19 @@ class Link(models.Model):
             active = request.path_info.startswith(self.url)
         return active
 
+    def natural_key(self):
+        # should rather use category.natural_key() and target.natural_key() but hasn't been implemented yet
+        return (self.title,
+        self.category.slug if self.category else None,
+        self.url,
+        self.target.slug if self.target else None,
+        self.view_name)
+    natural_key.dependencies = ['jmbo.ModelBase', 'category.Category']
 
-class Menu(models.Model):
+
+class Menu(FoundryModelBaseAbstract):
     """A tile menu contains ordered links"""
-    title = models.CharField(max_length=255)
-    subtitle = models.CharField(
-        max_length=256,
-        blank=True,
-        null=True,
-        help_text='Some titles may be the same. A subtitle makes a distinction. It is not displayed on the site.',
-    )
-    slug = models.SlugField(
-        editable=True,
-        max_length=32,
-        db_index=True,
-    )
     display_title = models.BooleanField(default=True)
-    sites = models.ManyToManyField(
-        'sites.Site',
-        blank=True,
-        null=True,
-        help_text='Sites that this page will appear on.',
-    )
-
-    objects = models.Manager()
-    permitted = PermittedManager()
 
     class Meta:
         ordering = ('title', 'subtitle')
@@ -147,29 +171,8 @@ class Menu(models.Model):
             return self.title
 
 
-class Navbar(models.Model):
+class Navbar(FoundryModelBaseAbstract):
     """A tile navbar contains ordered links"""
-    title = models.CharField(max_length=255, help_text='This title is not displayed on the site.')
-    subtitle = models.CharField(
-        max_length=256,
-        blank=True,
-        null=True,
-        help_text='Some titles may be the same. A subtitle makes a distinction. It is not displayed on the site.',
-    )
-    slug = models.SlugField(
-        editable=True,
-        max_length=32,
-        db_index=True,
-    )
-    sites = models.ManyToManyField(
-        'sites.Site',
-        blank=True,
-        null=True,
-        help_text='Sites that this page will appear on.',
-    )
-
-    objects = models.Manager()
-    permitted = PermittedManager()
 
     class Meta:
         ordering = ('title', 'subtitle')
@@ -181,23 +184,8 @@ class Navbar(models.Model):
             return self.title
 
 
-class Listing(models.Model):
+class Listing(FoundryModelBaseAbstract):
     """A themed, ordered collection of items"""
-    title = models.CharField(
-        max_length=256,
-        help_text='A short descriptive title.',
-    )
-    subtitle = models.CharField(
-        max_length=256,
-        blank=True,
-        null=True,
-        help_text='Some titles may be the same. A subtitle makes a distinction. It is not displayed on the site.',
-    )
-    slug = models.SlugField(
-        editable=True,
-        max_length=32,
-        db_index=True,
-    )
     content_type = models.ManyToManyField(
         ContentType,
         help_text="Content types to display, eg. post or gallery.",
@@ -227,15 +215,6 @@ class Listing(models.Model):
         default=0, 
         help_text="Number of items displayed on a page. Set to zero to disable paging."
     )
-    sites = models.ManyToManyField(
-        'sites.Site',
-        blank=True,
-        null=True,
-        help_text='Sites that this listing will appear on.',
-    )
-
-    objects = models.Manager()
-    permitted = PermittedManager()
 
     class Meta:
         ordering = ('title', 'subtitle')
@@ -293,6 +272,10 @@ class AbstractLinkPosition(models.Model):
         if not self.condition_expression:
             return True
         return eval(self.condition_expression)
+
+    def natural_key(self):
+        return (self.link.natural_key(), self.position)
+    natural_key.dependencies = ['foundry.Link']
 
 
 class MenuLinkPosition(AbstractLinkPosition):
@@ -465,6 +448,9 @@ class Country(models.Model):
     def __unicode__(self):
         return self.title
 
+    def natural_key(self):
+        return (self.slug, )
+
 
 class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersonalProfile, AbstractContactProfile, AbstractSubscriptionProfile):
     """Class that models the default user account. Subclassing is superior to profiles since 
@@ -514,34 +500,12 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersona
 
 class DefaultAvatar(ImageModel):
     """A set of avatars users can choose from"""
-    pass
+    def natural_key(self):
+        return (self.image, )
 
 
-class Page(models.Model):
-    title = models.CharField(
-        max_length=200, help_text='A title that may appear in the browser window caption.',
-    )
-    subtitle = models.CharField(
-        max_length=256,
-        blank=True,
-        null=True,
-        help_text='Some titles may be the same. A subtitle makes a distinction. It is not displayed on the site.',
-    )
-    slug = models.SlugField(
-        editable=True,
-        max_length=32,
-        db_index=True,
-    )
+class Page(FoundryModelBaseAbstract):
     is_homepage = models.BooleanField(default=False, help_text="Tick if you want this page to be the site's homepage.")
-    sites = models.ManyToManyField(
-        'sites.Site',
-        blank=True,
-        null=True,
-        help_text='Sites that this page will appear on.',
-    )
-
-    objects = models.Manager()
-    permitted = PermittedManager()
 
     def __unicode__(self):
         if self.subtitle:
@@ -576,6 +540,10 @@ class PageView(models.Model):
 
     def __unicode__(self):
         return '%s > %s' % (self.page.title, self.view_name)
+
+    def natural_key(self):
+        return (self.page.natural_key(), self.view_name)
+    natural_key.dependencies = ['foundry.Page']
 
 
 class Row(models.Model):
@@ -617,6 +585,10 @@ class Row(models.Model):
     def render_height(self):
         return max([o.render_height+8 for o in self.columns] + [0]) + 44
 
+    def natural_key(self):
+        return (self.page.natural_key(), self.index)
+    natural_key.dependencies = ['foundry.Page']
+
     
 class Column(models.Model):
     row = models.ForeignKey(Row)
@@ -655,6 +627,10 @@ to the left and right of the content block."
     @property
     def render_height(self):
         return sum([o.render_height+8 for o in self.tiles]) + 44
+
+    def natural_key(self):
+        return (self.row.natural_key(), self.index)
+    natural_key.dependencies = ['foundry.Row']
 
 
 class Tile(models.Model):
@@ -706,6 +682,10 @@ it works - you cannot break anything.""",
         except:
             return False
 
+    def natural_key(self):
+        return (self.column.natural_key(), self.index)
+    natural_key.dependencies = ['foundry.Column']
+
 
 class FoundryComment(BaseComment):
     """Custom comment class"""
@@ -743,6 +723,10 @@ class Notification(models.Model):
 
     def __unicode__(self):
         return str(self.id)
+
+    def natural_key(self):
+        return (self.member.natural_key(), self.link.natural_key())
+    natural_key.dependencies = ['foundry.Link', 'foundry.Member']
 
 
 @receiver(m2m_changed)
