@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.3.5
+-----
+#. Adjust South migration dependencies.
+#. Simplify and extend demo.
+
 0.3.4
 -----
 #. Batching on tastypie listing API.
