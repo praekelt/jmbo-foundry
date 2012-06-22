@@ -2,8 +2,6 @@ from foundry import settings as foundry_settings
 
 from foundrydemo.settings import *
 
-DEBUG = False
-TEMPLATE_DEBUG = DEBUG
 
 FOUNDRY['layers'] = ('basic',)
 
