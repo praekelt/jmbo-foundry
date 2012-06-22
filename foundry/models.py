@@ -147,14 +147,14 @@ class Link(models.Model):
             active = request.path_info.startswith(self.url)
         return active
 
-    def natural_key(self):
+    '''def natural_key(self):
         # should rather use category.natural_key() and target.natural_key() but hasn't been implemented yet
         return (self.title,
         self.category.slug if self.category else None,
         self.url,
         self.target.slug if self.target else None,
         self.view_name)
-    natural_key.dependencies = ['jmbo.ModelBase', 'category.Category']
+    natural_key.dependencies = ['jmbo.ModelBase', 'category.Category']'''
 
 
 class Menu(FoundryModelBaseAbstract):
@@ -273,9 +273,9 @@ class AbstractLinkPosition(models.Model):
             return True
         return eval(self.condition_expression)
 
-    def natural_key(self):
+    '''def natural_key(self):
         return (self.link.natural_key(), self.position)
-    natural_key.dependencies = ['foundry.Link']
+    natural_key.dependencies = ['foundry.Link']'''
 
 
 class MenuLinkPosition(AbstractLinkPosition):
