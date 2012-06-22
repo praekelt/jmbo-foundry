@@ -62,7 +62,7 @@ do
 done
 
 # Create database. Safe to run even if database already exists.
-DB_NAME=${PREFIX}_${DEPLOYTYPE}
+DB_NAME=${PREFIX}_${DEPLOY_TYPE}
 echo "CREATE USER $DB_NAME WITH PASSWORD '$DB_NAME'" | sudo -u postgres psql
 echo "CREATE DATABASE $DB_NAME WITH OWNER $DB_NAME ENCODING 'UTF8'" | sudo -u postgres psql
 
