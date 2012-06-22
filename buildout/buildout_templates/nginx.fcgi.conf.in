@@ -13,7 +13,7 @@ server {
         alias   ${static-root}/;
         expires 31d;
     }
-    
+
     # fcgi    
     location / {
         fastcgi_pass ${fcgi-host}:${fcgi-port};
