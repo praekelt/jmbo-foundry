@@ -1,8 +1,6 @@
 from foundry import settings as foundry_settings
 
-from foundrydemo.settings import *
+from foundrydemo.settings_live_base import *
 
-
-FOUNDRY['layers'] = ('basic',)
 
 foundry_settings.compute_settings(sys.modules[__name__])
