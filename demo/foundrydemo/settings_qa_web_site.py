@@ -1,6 +1,6 @@
 from foundry import settings as foundry_settings
 
-from foundrydemo.settings_live_base import *
+from foundrydemo.settings_qa_base import *
 
 
 FOUNDRY['layers'] = ('web', 'basic',)
