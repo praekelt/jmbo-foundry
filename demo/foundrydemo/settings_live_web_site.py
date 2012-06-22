@@ -1,9 +1,7 @@
 from foundry import settings as foundry_settings
 
-from foundrydemo.settings import *
+from foundrydemo.settings_live_base import *
 
-DEBUG = False
-TEMPLATE_DEBUG = DEBUG
 
 FOUNDRY['layers'] = ('web', 'basic',)
 

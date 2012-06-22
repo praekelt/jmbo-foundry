@@ -11,7 +11,7 @@ sudo /etc/init.d/postgresql stop
 sudo apt-get remove "postgresql-8.4"
 sudo apt-get --no-upgrade install python-virtualenv python-dev \
 postgresql-9.1 libjpeg-dev zlib1g-dev build-essential git-core \
-memcached supervisor nginx --no-upgrade
+memcached supervisor nginx postgresql-server-dev-all libxslt1-dev --no-upgrade
 
 echo "Configuring PostgreSQL..."
 # xxx: regexes would be better
@@ -29,6 +29,7 @@ sudo usermod www-data -s /bin/bash
 
 echo "Setting up the Django directory..."
 sudo mkdir /var/${DJANGO_DIR}
+sudo virtualenv /var/praekelt/python --no-site-packages
 sudo chown -R www-data:www-data /var/praekelt
 
 echo ""
