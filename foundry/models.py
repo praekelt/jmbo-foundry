@@ -116,10 +116,7 @@ class Link(models.Model):
 
 class Menu(models.Model):
     """A tile menu contains ordered links"""
-    title = models.CharField(
-        max_length=256,
-        help_text='A short descriptive title.',
-    )
+    title = models.CharField(max_length=255)
     subtitle = models.CharField(
         max_length=256,
         blank=True,
@@ -154,10 +151,7 @@ class Menu(models.Model):
 
 class Navbar(models.Model):
     """A tile navbar contains ordered links"""
-    title = models.CharField(
-        max_length=256,
-        help_text='A short descriptive title.',
-    )
+    title = models.CharField(max_length=255, help_text='This title is not displayed on the site.')
     subtitle = models.CharField(
         max_length=256,
         blank=True,
@@ -240,7 +234,7 @@ class Listing(models.Model):
         'sites.Site',
         blank=True,
         null=True,
-        help_text='Sites that this page will appear on.',
+        help_text='Sites that this listing will appear on.',
     )
     
     objects = DefaultManager()
@@ -528,8 +522,7 @@ class DefaultAvatar(ImageModel):
 
 class Page(models.Model):
     title = models.CharField(
-        max_length=256,
-        help_text='A short descriptive title.',
+        max_length=200, help_text='A title that may appear in the browser window caption.',
     )
     subtitle = models.CharField(
         max_length=256,
