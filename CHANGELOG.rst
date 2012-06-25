@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Demo is now part og jmbo-skeleton.
+
 0.3.5
 -----
 #. Adjust South migration dependencies.
