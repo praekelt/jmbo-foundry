@@ -17,8 +17,10 @@ from preferences.models import Preferences
 from snippetscream import resolve_to_name
 from photologue.models import ImageModel
 from south.modelsinspector import add_introspection_rules
+
 from jmbo.utils import generate_slug
 from jmbo.models import ModelBase
+from jmbo.managers import DefaultManager
 
 from foundry.profile_models import AbstractAvatarProfile, \
     AbstractSocialProfile, AbstractPersonalProfile, \
@@ -134,7 +136,7 @@ class Menu(models.Model):
         help_text='Sites that this page will appear on.',
     )
 
-    objects = models.Manager()
+    objects = DefaultManager()
     permitted = PermittedManager()
 
     class Meta:
@@ -161,6 +163,7 @@ class Navbar(models.Model):
         max_length=32,
         db_index=True,
     )
+    
     sites = models.ManyToManyField(
         'sites.Site',
         blank=True,
@@ -168,9 +171,9 @@ class Navbar(models.Model):
         help_text='Sites that this page will appear on.',
     )
 
-    objects = models.Manager()
+    objects = DefaultManager()
     permitted = PermittedManager()
-
+    
     class Meta:
         ordering = ('title', 'subtitle')
 
@@ -233,10 +236,10 @@ class Listing(models.Model):
         null=True,
         help_text='Sites that this listing will appear on.',
     )
-
-    objects = models.Manager()
+    
+    objects = DefaultManager()
     permitted = PermittedManager()
-
+    
     class Meta:
         ordering = ('title', 'subtitle')
 
@@ -540,7 +543,7 @@ class Page(models.Model):
         help_text='Sites that this page will appear on.',
     )
 
-    objects = models.Manager()
+    objects = DefaultManager()
     permitted = PermittedManager()
 
     def __unicode__(self):

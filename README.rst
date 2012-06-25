@@ -160,3 +160,14 @@ Pages
 
 Page builder documentation tbc.
 
+How to use dumpdata
+-------------------
+
+To move your `jmbo-foundry` site between databases you will have to use `dumpdata --natural`.
+This will emit natural keys for all relations to external models. Internal
+relations use primary keys. To safely migrate `jmbo-foundry` models, use the following:
+
+    migrate.py dumpdata --natural --all foundry preferences --exclude=foundry.Member --exclude=foundry.Notification --exclude=foundry.BlogPost --exclude=foundry.ChatRoom --exclude=foundry.FoundryComment
+
+The excluded models subclass external models. You will need to manually dump them
+along with their parent models.
