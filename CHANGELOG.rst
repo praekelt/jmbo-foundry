@@ -4,6 +4,7 @@ Changelog
 next
 ----
 #. Demo is now part og jmbo-skeleton.
+#. Minimum jmbo version required is now >0.3.3.
 
 0.3.5
 -----
