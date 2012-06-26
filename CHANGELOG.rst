@@ -1,10 +1,10 @@
 Changelog
 =========
 
-next
-----
+0.3.6
+-----
 #. Demo is now part og jmbo-skeleton.
-#. Minimum jmbo version required is now >0.3.3.
+#. Minimum jmbo version required is now >= 0.3.4.
 #. Management command load_photosizes loads photosizes in a sane way.
 
 0.3.5
