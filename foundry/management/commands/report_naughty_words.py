@@ -1,3 +1,4 @@
+import unicodedata
 import jellyfish
 
 from django.core.management.base import BaseCommand, CommandError
@@ -40,8 +41,11 @@ class Command(BaseCommand):
 
     def flag(self, text):
         """Very simple check for naughty words"""
+        # Normalize diacritic characters into ASCII since current version of 
+        # jaro_distance cannot handle them.
+        normalized_text = ''.join((c for c in unicodedata.normalize('NFD', text) if unicodedata.category(c) != 'Mn'))
         total_weight = 0
-        words = text.lower().split()        
+        words = normalized_text.lower().split()        
         for naughty in self.words:
             for word in words:
                 score = jellyfish.jaro_distance(word, naughty)
