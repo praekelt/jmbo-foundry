@@ -49,6 +49,8 @@ class RememberMeCheckboxInput(forms.widgets.CheckboxInput):
 
 
 class LoginForm(AuthenticationForm):
+    
+    remember_me = forms.BooleanField(required=False, initial=True, label="", widget=RememberMeCheckboxInput)
 
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
@@ -374,7 +376,7 @@ class PasswordResetForm(BasePasswordResetForm):
 class AgeGatewayForm(forms.Form):
     country = forms.ModelChoiceField(queryset=models.Country.objects.all())
     date_of_birth = forms.DateField(widget=OldSchoolDateWidget)
-    remember_me = forms.BooleanField(required=False, label="", 
+    remember_me = forms.BooleanField(required=False, initial=True, label="", 
                                      widget=RememberMeCheckboxInput,
                                      help_text="(Don't tick if you share your phone)")
 
