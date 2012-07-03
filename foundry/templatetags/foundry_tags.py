@@ -46,7 +46,7 @@ class MenuNode(template.Node):
     def __init__(self, slug):
         self.slug = template.Variable(slug)
 
-    def render(self, context):       
+    def render(self, context, as_tile=False):       
         slug = self.slug.resolve(context)
         try:
             obj = Menu.permitted.get(slug=slug)
@@ -82,7 +82,7 @@ class NavbarNode(template.Node):
     def __init__(self, slug):
         self.slug = template.Variable(slug)        
 
-    def render(self, context):
+    def render(self, context, as_tile=False):
         slug = self.slug.resolve(context)
         try:
             obj = Navbar.permitted.get(slug=slug)
