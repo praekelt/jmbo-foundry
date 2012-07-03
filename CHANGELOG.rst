@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+0.3.9
+-----
 #. Searching now working.
 
 0.3.8
