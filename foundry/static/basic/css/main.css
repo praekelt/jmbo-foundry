@@ -30,7 +30,10 @@ div.view-modifier > div.title,
 div.object-header > div.title, 
 div#content > h1,
 div.content > h1,
+div#content > div.title,
+div.content > div.title,
 div.member-notifications > div.title,
+div.search-results > div.title,
 div.page > div.title { 
     background-color: #f1f1f1; 
     padding: 3px; 
