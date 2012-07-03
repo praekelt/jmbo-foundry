@@ -222,6 +222,14 @@ urlpatterns = patterns('',
         name='search'
     ),
 
+    # Search results
+    url(
+        r'^search-results/$',
+        'foundry.views.search_results',
+        {},
+        name='search-results'
+    ),
+
     # Comment reply form in case of no javascript
     url(
         r'^comment-reply-form/$',

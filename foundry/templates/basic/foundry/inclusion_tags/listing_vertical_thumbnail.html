@@ -2,7 +2,7 @@
 
 {% if object_list.exists %}
     <div class="foundry-container foundry-listing-vertical-thumbnail">
-        {% if display_title %}<div class="title">{{ listing.title }}</div>{% endif %}
+        {% if display_title %}{% if listing.title %}<div class="title">{{ listing.title }}</div>{% endif %}{% endif %}
         <div class="items">
         {% autopaginate object_list items_per_page %}
         {% for object in object_list %}

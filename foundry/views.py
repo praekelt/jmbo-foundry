@@ -1,5 +1,6 @@
 import datetime
 import random
+import urllib
 
 from django.conf import settings
 from django.contrib.auth import authenticate, login, get_backends
@@ -123,12 +124,30 @@ def search(request):
     if request.method == 'POST':
         form = SearchForm(request.POST) 
         if form.is_valid():
-            return HttpResponseRedirect('/')
+            param = urllib.quote(form.cleaned_data['search_term'])
+            return HttpResponseRedirect(
+                reverse('search-results') + '?search_term=' + param
+            )
     else:
         form = SearchForm() 
 
     extra = dict(form=form)
     return render_to_response('foundry/search.html', extra, context_instance=RequestContext(request))
+
+
+def search_results(request):
+    search_term = request.REQUEST.get('search_term', '')
+    if search_term:
+        # A bit brutal. Search on description as well.
+        queryset = ModelBase.permitted.filter(title__icontains=search_term)
+    else:
+        queryset = ModelBase.objects.none()
+    extra = dict(
+        items_per_page=10,
+        search_term=search_term, 
+        queryset=queryset
+    )
+    return render_to_response('foundry/search_results.html', extra, context_instance=RequestContext(request))
 
 
 @require_POST

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n foundry_tags %}
+
+{% block content %}
+
+<div class="search-results">
+   
+    <div class="title">{% trans "Search results for " %} <span class="search-term">{{ search_term }}</span></div>
+
+    {% if not queryset.exists %}
+        <div class="no-results">{% trans "No results match your search." %}</div>
+    {% endif %}
+
+    {% listing queryset title='' style='Vertical' items_per_page=items_per_page %}
+
+</div>
+
+{% endblock %}
