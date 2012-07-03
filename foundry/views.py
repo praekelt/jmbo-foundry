@@ -22,6 +22,7 @@ from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import requires_csrf_token
 from django.dispatch import receiver
 from django.contrib.auth.signals import user_logged_in
+from django.db.models import Q
 
 # Comment post required imports
 from django.contrib.comments.views.comments import CommentPostBadRequest
@@ -138,8 +139,9 @@ def search(request):
 def search_results(request):
     search_term = request.REQUEST.get('search_term', '')
     if search_term:
-        # A bit brutal. Search on description as well.
-        queryset = ModelBase.permitted.filter(title__icontains=search_term)
+        q1 = Q(title__icontains=search_term)
+        q2 = Q(description__icontains=search_term)
+        queryset = ModelBase.permitted.filter(q1|q2)
     else:
         queryset = ModelBase.objects.none()
     extra = dict(
