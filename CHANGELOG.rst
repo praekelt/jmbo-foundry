@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.3.8
+-----
+#. Bug fix for regression introduced into 0.3.7.
+
 0.3.7
 -----
 #. Listings being used within a tile can now choose whether to display a title.
