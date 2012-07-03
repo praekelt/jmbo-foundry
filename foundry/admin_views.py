@@ -66,6 +66,7 @@ def column_create_ajax(request):
             di = dict(
                 id=column.id, 
                 width=column.width,
+                title=column.title,
                 row_id=column.row.id,
                 row_render_height=column.row.render_height,
                 page_render_height=column.row.page.render_height
@@ -92,6 +93,7 @@ def column_edit_ajax(request):
             di = dict(
                 id=column.id, 
                 width=column.width,
+                title=column.title,
             )
             return HttpResponse(simplejson.dumps(di))
     else:

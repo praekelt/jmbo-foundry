@@ -17,7 +17,7 @@ class ColumnCreateAjaxForm(forms.ModelForm):
 
     class Meta:
         model = Column
-        fields = ('row', 'width', 'designation')
+        fields = ('row', 'width', 'title', 'designation')
         widgets = {
             'row':forms.widgets.HiddenInput, 
         }
@@ -38,7 +38,7 @@ class ColumnEditAjaxForm(forms.ModelForm):
 
     class Meta:
         model = Column
-        fields = ('row', 'width', 'designation')
+        fields = ('row', 'width', 'title', 'designation')
         widgets = {
             'row':forms.widgets.HiddenInput, 
         }
