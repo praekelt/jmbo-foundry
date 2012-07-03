@@ -5,6 +5,8 @@
         <tr>
         {% for column in row.columns %}
             <td class="foundry-page-column foundry-page-column-{{ column.width }}">
+                {% if column.title %}<div class="title"></div>{% endif %}
+
                 {% if include_center_marker %}
                     {% ifchanged column.designation %}
                         {% if not column.designation %}

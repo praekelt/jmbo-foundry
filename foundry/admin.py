@@ -124,7 +124,7 @@ class ListingAdminForm(forms.ModelForm):
         model = Listing
         fields = (
             'title', 'slug', 'subtitle', 'content_type', 'category', 'content', 
-            'style', 'count', 'items_per_page', 'sites'
+            'style', 'count', 'items_per_page', 'display_title_tiled', 'sites'
         )       
         widgets = {'sites': SitesGroupsWidget}
 

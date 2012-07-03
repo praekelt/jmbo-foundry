@@ -134,7 +134,7 @@ class ListingNode(template.Node):
         self.slug_or_queryset = template.Variable(slug_or_queryset)
         self.kwargs = kwargs
 
-    def render(self, context):
+    def render(self, context, as_tile=False):
         slug_or_queryset = self.slug_or_queryset.resolve(context)
         
         if isinstance(slug_or_queryset, types.UnicodeType):
@@ -148,7 +148,7 @@ class ListingNode(template.Node):
                 """Helper class emulating Listing API so AbstractBaseStyle
                 works. Essentially a record class."""
 
-                def __init__(self, queryset, **kwargs):
+                def __init__(self, queryset, **kwargs):                    
                     self.queryset = queryset
                     self.items_per_page = 0
                     for k, v in kwargs.items():
@@ -159,7 +159,7 @@ class ListingNode(template.Node):
                 di[k] = template.Variable(v).resolve(context)
             obj = ListingProxy(slug_or_queryset, **di)
 
-        return getattr(listing_styles, obj.style)(obj).render(context)
+        return getattr(listing_styles, obj.style)(obj).render(context, as_tile=as_tile)
 
 
 @register.tag
@@ -266,7 +266,7 @@ class TileNode(template.Node):
             # Use convention to lookup node
             node = globals().get('%sNode' % tile.target.__class__.__name__)
             try:
-                return node('"'+tile.target.slug+'"').render(context)
+                return node('"'+tile.target.slug+'"').render(context, as_tile=True)
             except:
                 if settings.DEBUG:
                     raise
