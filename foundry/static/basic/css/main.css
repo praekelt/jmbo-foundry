@@ -93,6 +93,15 @@ div#search form {
     clear: both; 
  }
 
+/* Column title */
+.foundry-page-column > div.title { 
+    background-color: #f1f1f1; 
+    padding: 3px; 
+    border-bottom: 1px solid #ddd; 
+    margin-bottom: 3px; 
+    clear: both; 
+}
+
 /* Navbar */
 .foundry-navbar { 
     background-color: #000; 

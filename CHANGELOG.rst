@@ -1,6 +1,11 @@
 Changelog
 =========
 
+next
+----
+#. Listings being used within a tile can now choose whether to display a title.
+#. Columns now have an optional title.
+
 0.3.6
 -----
 #. Demo is now part og jmbo-skeleton.

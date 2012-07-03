@@ -230,6 +230,12 @@ class Listing(models.Model):
         default=0, 
         help_text="Number of items displayed on a page. Set to zero to disable paging."
     )
+    display_title_tiled = models.BooleanField(
+        "Display title if in a tile",
+        default=True,
+        help_text="""Display the title if used as a tile within a more 
+complex page."""
+    )
     sites = models.ManyToManyField(
         'sites.Site',
         blank=True,
@@ -625,6 +631,12 @@ class Column(models.Model):
     row = models.ForeignKey(Row)
     index = models.PositiveIntegerField(default=0, editable=False)
     width = models.PositiveIntegerField(default=8)    
+    title = models.CharField(
+        max_length=256,
+        null=True,
+        blank=True,
+        help_text='The title is rendered at the top of a column.',
+    )
     designation = models.CharField(
         max_length=32, 
         null=True,
