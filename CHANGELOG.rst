@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+0.3.7
+-----
 #. Listings being used within a tile can now choose whether to display a title.
 #. Columns now have an optional title.
 
