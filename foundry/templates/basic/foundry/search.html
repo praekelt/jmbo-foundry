@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<form method="POST" action="." class="foundry-form">
+<form method="POST" action="{% url search %}" class="foundry-form">
     {% csrf_token %}
     {{ form.as_div }}
     <input type="submit" value="Submit" />

@@ -1,5 +1,6 @@
 import datetime
 import random
+import urllib
 
 from django.conf import settings
 from django.contrib.auth import authenticate, login, get_backends
@@ -21,6 +22,7 @@ from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import requires_csrf_token
 from django.dispatch import receiver
 from django.contrib.auth.signals import user_logged_in
+from django.db.models import Q
 
 # Comment post required imports
 from django.contrib.comments.views.comments import CommentPostBadRequest
@@ -123,12 +125,31 @@ def search(request):
     if request.method == 'POST':
         form = SearchForm(request.POST) 
         if form.is_valid():
-            return HttpResponseRedirect('/')
+            param = urllib.quote(form.cleaned_data['search_term'])
+            return HttpResponseRedirect(
+                reverse('search-results') + '?search_term=' + param
+            )
     else:
         form = SearchForm() 
 
     extra = dict(form=form)
     return render_to_response('foundry/search.html', extra, context_instance=RequestContext(request))
+
+
+def search_results(request):
+    search_term = request.REQUEST.get('search_term', '')
+    if search_term:
+        q1 = Q(title__icontains=search_term)
+        q2 = Q(description__icontains=search_term)
+        queryset = ModelBase.permitted.filter(q1|q2)
+    else:
+        queryset = ModelBase.objects.none()
+    extra = dict(
+        items_per_page=10,
+        search_term=search_term, 
+        queryset=queryset
+    )
+    return render_to_response('foundry/search_results.html', extra, context_instance=RequestContext(request))
 
 
 @require_POST

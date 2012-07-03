@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.3.9
+-----
+#. Searching now working.
+
 0.3.8
 -----
 #. Bug fix for regression introduced into 0.3.7.
