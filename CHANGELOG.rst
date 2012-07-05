@@ -4,6 +4,7 @@ Changelog
 next
 ----
 #. Translation for search form.
+#. Member profile editing regression fixed.
 
 0.3.9
 -----

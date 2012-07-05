@@ -312,12 +312,13 @@ class EditProfileForm(forms.ModelForm):
                 message = _("This field is required.")
 
         # Validate unique fields
+        print self.instance.id
         unique_fields = preferences.RegistrationPreferences.unique_fields
         for name in unique_fields:
             value = self.cleaned_data.get(name, None)
             if value is not None:
                 di = {'%s__iexact' % name:value}
-                if models.Member.objects.filter(**di).count() > 0:
+                if models.Member.objects.filter(**di).exclude(id=self.instance.id).count() > 0:
                     pretty_name = self.fields[name].label.lower()
                     message =_("The %(pretty_name)s is already in use. \
 Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
