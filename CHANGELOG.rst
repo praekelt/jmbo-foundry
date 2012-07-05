@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.3.10
+------
+#. Translation for search form.
+#. Member profile editing regression fixed.
+
 0.3.9
 -----
 #. Searching now working.

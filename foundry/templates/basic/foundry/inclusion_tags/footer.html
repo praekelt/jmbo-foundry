@@ -2,10 +2,6 @@
 
 {% menu 'main' %}
 
-<div id="search">
-    <form name="search-form" action="search-results.html" method="get" class="foundry-form-inline"><input type="text" name="search" class="txt" /><input type="submit" name="search-btn" value="{% trans "Search" %}" /></form>
-</div>
-
 <div id="footer">
 	<span><a href="{% url about-us %}">{% trans "About us" %}</a></span> - <span><a href="{% url site_contact %}">{% trans "Contact us" %}</a></span> - <span><a href="{% url terms-and-conditions %}">{% trans "Terms" %}</a></span><br />&copy; Praekelt Digital {% now "Y" %}</span>
 </div>
