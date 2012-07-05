@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Translation for search form.
+
 0.3.9
 -----
 #. Searching now working.
