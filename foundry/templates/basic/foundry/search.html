@@ -1,11 +1,16 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
 
+<div class="search">
 <form method="POST" action="{% url search %}" class="foundry-form">
     {% csrf_token %}
     {{ form.as_div }}
-    <input type="submit" value="Submit" />
+    <div class="buttons">
+        <input type="submit" value="{% trans "Submit" %}" />
+    </div>
 </form>
+</div>
 
 {% endblock %}
