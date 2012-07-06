@@ -504,9 +504,3 @@ class TestForm(forms.Form):
     title = forms.CharField(max_length=20)
 
     as_div = as_div
-
-
-# Monkey patch some methods. Cannot put in monkey.py due to circular imports.
-from contact.forms import SiteContactForm
-
-SiteContactForm.as_p = as_div
