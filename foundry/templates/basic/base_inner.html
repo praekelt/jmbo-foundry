@@ -71,7 +71,9 @@
         {{ ANALYTICS_TAGS|safe }}
     {% endif %}
 
-    <img src="{% google_analytics %}" width="0" height="0" />
+    <noscript>
+        <img src="{% google_analytics %}" width="0" height="0" />
+    </noscript>
 
 </body>
 </html>
