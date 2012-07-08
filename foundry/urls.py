@@ -27,7 +27,7 @@ urlpatterns = patterns('',
         {'view_modifier': []}, 
         name='gallery_object_detail'
     ),
-
+    (r'^analytics/', include('analytics.urls')),
     (r'^friends/', include('friends.urls')),
     (r'^activity/', include('activity.urls')),
     (r'^gallery/', include('gallery.urls')),
