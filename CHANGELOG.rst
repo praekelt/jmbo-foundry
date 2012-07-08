@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. `layered` decorator so you can write different views for different layers without cluttering urls.py.
+
 0.3.10
 ------
 #. Translation for search form.
