@@ -766,6 +766,26 @@ class Download(ModelBase):
     
     class Meta:
         ordering = ['points_required']
+        
+class PageImpression(models.Model):
+    """
+    Records a page impression.
+    """
+    user = models.ForeignKey(User, null=True, blank=True)
+    path = models.CharField(max_length=256)
+    user_agent = models.CharField(max_length=256, null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+            
+    def __str__(self):
+        return '%s @ %s' % (self.path, self.timestamp)
+        
+class UserAgent(models.Model):
+    """
+    Records hits on a user agent.
+    """
+    user_agent = models.CharField(max_length=256, null=True, blank=True)
+    hits = models.IntegerField(default=0)
+
 
 @receiver(m2m_changed)
 def check_slug(sender, **kwargs):

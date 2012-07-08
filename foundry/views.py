@@ -23,6 +23,8 @@ from django.views.decorators.csrf import requires_csrf_token
 from django.views.generic import View, ListView
 from django.utils.translation import ugettext_lazy as _, ugettext
 
+from django_geckoboard.decorators import number_widget, funnel, text_widget, TEXT_NONE
+
 from category.models import Category
 from jmbo.models import ModelBase
 from jmbo.generic.views import GenericObjectDetail, GenericObjectList
@@ -30,10 +32,10 @@ from jmbo.view_modifiers import DefaultViewModifier
 from preferences import preferences
 
 from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification, \
-    Member
+    Member, UserAgent
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
     SearchForm, CreateBlogPostForm
-    
+
 from activity import constants as activity_constants
 from activity.models import UserActivity
 
@@ -317,6 +319,17 @@ def fetch_new_comments_ajax(request, content_type_id, oid, last_comment_id):
 def server_error(request, template_name='500.html'):
     t = loader.get_template(template_name)
     return HttpResponseServerError(t.render(RequestContext(request)))
+
+
+@text_widget
+def latest_5_new_members(request):
+    members = Member.objects.all().order_by('-date_joined')[0:5]
+    return [(member.username, TEXT_NONE) for member in members]
+
+@text_widget
+def top_5_user_agents(request):
+    user_agents = UserAgent.objects.all().order_by('-hits')[0:5]
+    return [(user_agent.user_agent, TEXT_NONE) for user_agent in user_agents]
 
 
 # Views for testing

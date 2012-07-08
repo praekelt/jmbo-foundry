@@ -392,6 +392,14 @@ urlpatterns = patterns('',
     url(r'^share/twitter/$',
         login_required(views.Share.as_view(type='Twitter')),
         name='share_twitter'),
+    
+    url(r'^dashboard/latest_5_new_members/$',
+        views.latest_5_new_members,
+        name='latest_5_new_members'),
+    
+    url(r'^dashboard/top_5_user_agents/$',
+        views.top_5_user_agents,
+        name='top_5_user_agents'),
 
 )
 

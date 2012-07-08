@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='0.1.30',
+    version='0.1.31',
     description='Jmbo foundry behaviour/templates app.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -48,6 +48,8 @@ setup(
                         ],
     install_requires = [
         # todo: eliminate dependencies handled by apps themselves
+        'django-geckoboard',
+        'django-analytics',
         'django-section',
         'jmbo-gallery',
         'django-googlesearch',
