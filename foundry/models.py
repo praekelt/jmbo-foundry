@@ -471,6 +471,11 @@ class Country(models.Model):
         db_index=True,
     )
     minimum_age = models.PositiveIntegerField(default=18)
+    country_code = models.CharField(
+        max_length=2,
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         verbose_name_plural = 'Countries'
