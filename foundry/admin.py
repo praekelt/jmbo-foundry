@@ -277,7 +277,7 @@ class ChatRoomAdmin(ModelBaseAdmin):
 
 
 class BlogPostAdmin(ModelBaseAdmin):
-    list_display = ('title', 'owner')
+    pass
 
 
 class NotificationAdmin(admin.ModelAdmin):
