@@ -10,11 +10,17 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'Country.country_code'
         db.add_column('foundry_country', 'country_code',
-                      self.gf('django.db.models.fields.CharField')(max_length=2, null=True, blank=True),
+                      self.gf('django.db.models.fields.CharField')(max_length=2, unique=True, null=True, db_index=True),
                       keep_default=False)
+
+        # Adding unique constraint on 'Country', fields ['slug']
+        db.create_unique('foundry_country', ['slug'])
 
 
     def backwards(self, orm):
+        # Removing unique constraint on 'Country', fields ['slug']
+        db.delete_unique('foundry_country', ['slug'])
+
         # Deleting field 'Country.country_code'
         db.delete_column('foundry_country', 'country_code')
 
@@ -106,10 +112,10 @@ class Migration(SchemaMigration):
         },
         'foundry.country': {
             'Meta': {'ordering': "('title',)", 'object_name': 'Country'},
-            'country_code': ('django.db.models.fields.CharField', [], {'max_length': '2', 'null': 'True', 'blank': 'True'}),
+            'country_code': ('django.db.models.fields.CharField', [], {'max_length': '2', 'unique': 'True', 'null': 'True', 'db_index': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'minimum_age': ('django.db.models.fields.PositiveIntegerField', [], {'default': '18'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '32'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '32'})
         },
         'foundry.defaultavatar': {

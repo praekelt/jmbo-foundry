@@ -230,21 +230,10 @@ class DefaultAvatarAdmin(admin.ModelAdmin):
     _image.allow_tags = True
 
 
-class CountryAdminForm(forms.ModelForm):
-    
-    class Meta:
-        model = Country
-        fields = ('country_code', )
-
-    def __init__(self, *args, **kwargs):
-        super(CountryAdminForm, self).__init__(*args, **kwargs)
-        self.fields['country_code'].label = "Country"
-
-
 class CountryAdmin(admin.ModelAdmin):
-    form = CountryAdminForm
     list_display = ('title', 'minimum_age')
     list_editable = ('minimum_age',)
+    prepopulated_fields = {'slug': ('title',)}
 
 
 class PageViewForm(forms.ModelForm):       
