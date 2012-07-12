@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <div class="h2">Pages</div>
+    <div class="title">Pages</div>
     
     {% for page in object_list %}
         <a href="{% url page-detail page.slug %}">{{ page.title }}</a><br />
