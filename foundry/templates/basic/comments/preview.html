@@ -1,7 +1,7 @@
 {% extends "comments/base.html" %}
 
 {% comment %}
-1. Add <div class="content"> wrapper.
+1. Add <div class="preview"> wrapper.
 2. Hide preview button.
 {% endcomment %}
 
@@ -10,7 +10,7 @@
 {% block title %}{% trans "Preview your comment" %}{% endblock %}
 
 {% block content %}
-<div class="content">
+<div class="preview">
 
   {% load comments %}
   <form action="{% comment_form_target %}" method="post">{% csrf_token %}

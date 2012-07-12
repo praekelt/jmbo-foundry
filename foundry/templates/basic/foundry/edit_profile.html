@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block content %}
-	<div class="content member-detail">
+	<div class="edit-profile">
 	    <div class="title">{{ object.username }}</div>
 
         <form action="{% url edit-profile %}" method="POST" class="foundry-form" enctype="multipart/form-data">   
