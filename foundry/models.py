@@ -11,6 +11,7 @@ from django.contrib.comments.models import Comment as BaseComment
 from django.contrib.sites.models import Site
 from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
+from django.template.defaultfilters import slugify
 
 from ckeditor.fields import RichTextField
 from preferences.models import Preferences
@@ -28,6 +29,7 @@ from foundry.profile_models import AbstractAvatarProfile, \
 from foundry.templatetags import listing_styles
 from foundry.managers import PermittedManager
 import foundry.monkey
+from foundry.constants import countries, sorted_countries
 
 
 class Link(models.Model):
@@ -475,11 +477,20 @@ class Country(models.Model):
         max_length=2,
         null=True,
         blank=True,
+        choices=sorted_countries,
     )
 
     class Meta:
         verbose_name_plural = 'Countries'
         ordering = ('title',)
+        
+    def save(self, *args, **kwargs):
+        country = countries[self.country_code]
+        self.title = country['name']
+        self.minimum_age = country['min-age'] \
+            if 'min-age' in country else 18
+        self.slug = slugify(self.title)
+        super(Country, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.title

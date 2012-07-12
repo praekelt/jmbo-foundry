@@ -2,7 +2,6 @@ from django import forms
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.template.defaultfilters import slugify
 from django.contrib.contenttypes.models import ContentType
 
 from preferences.admin import PreferencesAdmin
@@ -17,7 +16,6 @@ from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
     FoundryComment, PageView, NaughtyWordPreferences
 from foundry.widgets import SelectCommaWidget
 from foundry.utils import get_view_choices
-from foundry.admin_constants import countries, sorted_country_codes
 
 
 class LinkAdminForm(forms.ModelForm):
@@ -233,33 +231,19 @@ class DefaultAvatarAdmin(admin.ModelAdmin):
 
 
 class CountryAdminForm(forms.ModelForm):
-    country = forms.ChoiceField(required=True)
     
     class Meta:
         model = Country
-        fields = ('country', )
+        fields = ('country_code', )
 
     def __init__(self, *args, **kwargs):
         super(CountryAdminForm, self).__init__(*args, **kwargs)
-        self.fields['country'].choices = [(key, countries[key]['name']) for key in sorted_country_codes]
-        if 'instance' in kwargs:
-            self.fields['country'].initial = kwargs['instance'].country_code
-
-    def save(self, commit=True):
-        instance = super(CountryAdminForm, self).save(commit=False)
-        code = self.cleaned_data['country']
-        instance.title = countries[code]['name']
-        instance.slug = slugify(instance.slug)
-        instance.country_code = code
-        instance.minimum_age = 18  # countries[code]['min-age']
-        if commit:
-            instance.save()
-        return instance
+        self.fields['country_code'].label = "Country"
 
 
 class CountryAdmin(admin.ModelAdmin):
     form = CountryAdminForm
-    list_display = ('title', 'country_code', 'minimum_age')
+    list_display = ('title', 'minimum_age')
     list_editable = ('minimum_age',)
 
 

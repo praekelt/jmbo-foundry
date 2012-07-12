@@ -257,4 +257,4 @@ countries = {
     'AX': {'name': '\xc3\x85land Islands'},
 }
 
-sorted_country_codes = [tup[0] for tup in sorted([item for item in countries.iteritems()], key=lambda i: i[1]['name'])]
+sorted_countries = [(tup[0], tup[1]['name']) for tup in sorted([item for item in countries.iteritems()], key=lambda i: i[1]['name'])]
