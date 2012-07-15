@@ -262,7 +262,7 @@ class EditProfileForm(forms.ModelForm):
 
     class Meta:
         model = models.Member
-        fields = ('username', 'first_name', 'last_name', 'mobile_number', 'email', 'image', 
+        fields = ('username', 'first_name', 'last_name', 'nickname', 'mobile_number', 'email', 'image', 
                   'dob', 'gender', 'city', 'country', 'about_me', 'receive_sms', 'receive_email',)
         
     def __init__(self, *args, **kwargs):
@@ -271,7 +271,8 @@ class EditProfileForm(forms.ModelForm):
         
         super(EditProfileForm, self).__init__(*args, **kwargs)
         
-        self.base_fields['username'].help_text = _('This is your public name visible on the site')
+        self.base_fields['username'].help_text = None
+        self.base_fields['nickname'].help_text = _('This is your public name visible on the site')
         self.base_fields['image'].help_text = _('This is your picture visible on the site')
         
         # Set date widget for date field

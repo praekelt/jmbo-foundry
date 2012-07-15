@@ -73,6 +73,12 @@ class AbstractLocationProfile(models.Model):
 class AbstractPersonalProfile(models.Model):
     class Meta:
         abstract = True
+        
+    nickname = models.CharField(
+        max_length=64,
+        blank=True,
+        null=True,
+    )
     
     dob = models.DateField(
         verbose_name="Date of Birth",

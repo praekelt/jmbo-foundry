@@ -500,6 +500,10 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersona
         """Return true if member has notifications"""
         return self.notification_set.all().exists()
     
+    @property
+    def display_name(self):
+        return self.nickname if self.nickname else self.username
+    
 
 class DefaultAvatarManager(models.Manager):
 
