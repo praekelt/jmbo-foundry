@@ -464,10 +464,10 @@ address per line."""
 
 class Country(models.Model):
     """Countries used in the age gateway"""
-    title = models.CharField(max_length=32)
+    title = models.CharField(max_length=50)
     slug = models.SlugField(
         editable=True,
-        max_length=32,
+        max_length=50,
         unique=True,
     )
     minimum_age = models.PositiveIntegerField(default=18)
