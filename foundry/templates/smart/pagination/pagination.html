@@ -1,0 +1,13 @@
+{% if is_paginated %}
+{% load i18n %}
+
+{% if page_obj.has_next %}
+<div class="pagination"> 
+    <a href="?page={{ page_obj.next_page_number }}{{ getvars }}{{ hashtag }}" class="more">{% trans "More" %}</a>
+</div>
+<noscript>
+Pagination requires javascript.
+</noscript>
+{% endif %}
+
+{% endif %}
