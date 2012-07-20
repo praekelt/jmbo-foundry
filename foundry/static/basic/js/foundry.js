@@ -10,7 +10,8 @@ $(document).ready(function(){
         last_activity_time = $.now();
     });
 
-    // Ajaxify tile paging, view modifier
+    // Ajaxify tile paging, view modifier. Works with listings and 
+    // modelbase_list or templates based on it.
     $('div.foundry-enable-ajax div.pagination a, div.foundry-enable-ajax div.jmbo-view-modifier a').live('click', function(e){
         e.preventDefault();
         var target = $(this).parents('div.foundry-enable-ajax:first');

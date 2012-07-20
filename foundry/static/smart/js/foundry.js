@@ -10,13 +10,14 @@ $(document).ready(function(){
         last_activity_time = $.now();
     });
 
-    // Ajaxify tile paging, view modifier
+    // Ajaxify tile paging, view modifier. Works with listings and 
+    // modelbase_list or templates based on it.
     $('div.foundry-enable-ajax div.pagination a, div.foundry-enable-ajax div.jmbo-view-modifier a').live('click', function(e){
         e.preventDefault();
-        var tile = $('div.foundry-enable-ajax:first');
+        var tile = $(this).parents('div.foundry-enable-ajax:first');
         var container = $('div.foundry-container', tile);
-        var target_items = $('div.items', container);
-        var target_pagination = $('div.pagination', container);
+        var target_items = $('div.items:last', tile);
+        var target_pagination = $('div.pagination', tile);
         var url = tile.attr('original_url');
         url = url + $(this).attr('href');
         $.get(
@@ -27,15 +28,15 @@ $(document).ready(function(){
                 {
                     // Markup that contains fluff. We want only the content.
                     var el = $('<div>' + data + '</div>');                   
-                    var content = $('div#content div.foundry-container div.items div.item', el);
+                    var content = $('div#content div.items:last div.item', el);
                     target_items.append(content);
-                    var content = $('div#content div.foundry-container div.pagination', el);
+                    var content = $('div#content div.pagination', el);
                     target_pagination.replaceWith(content);
                 }
                 else
                 {
                     var el = $(data);
-                    var content = $('div.items div.item', el);
+                    var content = $('div.items:last div.item', el);
                     target_items.append(content);
                     var content = $('div.pagination', el);
                     target_pagination.replaceWith(content);
