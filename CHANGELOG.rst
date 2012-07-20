@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. "More" style batching for smart layer.
+
 0.4
 ---
 #. `layered` decorator so you can write different views for different layers without cluttering urls.py.

@@ -14,8 +14,11 @@ $(document).ready(function(){
     // modelbase_list or templates based on it.
     $('div.foundry-enable-ajax div.pagination a, div.foundry-enable-ajax div.jmbo-view-modifier a').live('click', function(e){
         e.preventDefault();
-        var target = $(this).parents('div.foundry-enable-ajax:first');
-        var url = target.attr('original_url');
+        var tile = $(this).parents('div.foundry-enable-ajax:first');
+        var container = $('div.foundry-container', tile);
+        var target_items = $('div.items:last', tile);
+        var target_pagination = $('div.pagination', tile);
+        var url = tile.attr('original_url');
         url = url + $(this).attr('href');
         $.get(
             url, 
@@ -25,11 +28,19 @@ $(document).ready(function(){
                 {
                     // Markup that contains fluff. We want only the content.
                     var el = $('<div>' + data + '</div>');                   
-                    var content = $('div#content', el);
-                    target.html(content.html());
+                    var content = $('div#content div.items:last div.item', el);
+                    target_items.append(content);
+                    var content = $('div#content div.pagination', el);
+                    target_pagination.replaceWith(content);
                 }
                 else
-                    target.html(data);
+                {
+                    var el = $(data);
+                    var content = $('div.items:last div.item', el);
+                    target_items.append(content);
+                    var content = $('div.pagination', el);
+                    target_pagination.replaceWith(content);
+                }
             }
         );
     });
