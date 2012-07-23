@@ -1,4 +1,7 @@
+import sys
 import inspect
+import random
+import hashlib
 
 from django.core.urlresolvers import reverse, Resolver404
 from django.db import models
@@ -770,6 +773,12 @@ class Notification(models.Model):
         return str(self.id)
 
 
+class UserAuthToken(models.Model):
+    """Token enabling passwordless login"""
+    user = models.ForeignKey(User)
+    token = models.CharField(max_length=32, unique=True, db_index=True)
+
+
 @receiver(m2m_changed)
 def check_slug(sender, **kwargs):
     """Slug must be unique per site"""
@@ -788,10 +797,14 @@ def post_save_member(sender, **kwargs):
     if kwargs['created']:
         member = kwargs['instance']
 
+        # Create token
+        token = hashlib.md5(str(random.randint(1, sys.maxint))).hexdigest()
+        UserAuthToken.objects.create(user=member.user, token=token)
+
         # First try SMS, then email
         # todo: async
         if member.mobile_number:
-            content = 'blabla'
+            content = 'blabla %s' % token
             sms = AmbientSMS(
                 settings.FOUNDRY['sms_gateway_api_key'], 
                 settings.FOUNDRY['sms_gateway_password']

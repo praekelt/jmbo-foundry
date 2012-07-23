@@ -8,10 +8,19 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        db.add_column('preferences_registrationpreferences', 'passwordless_login', self.gf('django.db.models.fields.BooleanField')(default=False), keep_default=False)
-        
+        # Adding model 'UserAuthToken'
+        db.create_table('foundry_userauthtoken', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('token', self.gf('django.db.models.fields.CharField')(unique=True, max_length=32, db_index=True)),
+        ))
+        db.send_create_signal('foundry', ['UserAuthToken'])
+
+
     def backwards(self, orm):
-        db.delete_column('preferences_registrationpreferences', 'passwordless_login')
+        # Deleting model 'UserAuthToken'
+        db.delete_table('foundry_userauthtoken')
+
 
     models = {
         'auth.group': {
@@ -242,6 +251,12 @@ class Migration(SchemaMigration):
             'target_object_id': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True'}),
             'view_name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
         },
+        'foundry.userauthtoken': {
+            'Meta': {'object_name': 'UserAuthToken'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'token': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '32', 'db_index': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+        },
         'jmbo.modelbase': {
             'Meta': {'ordering': "('-created',)", 'object_name': 'ModelBase'},
             'anonymous_comments': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
@@ -263,9 +278,9 @@ class Migration(SchemaMigration):
             'modified': ('django.db.models.fields.DateTimeField', [], {}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
             'primary_category': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'primary_modelbase_set'", 'null': 'True', 'to': "orm['category.Category']"}),
-            'publish_on': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'publish_on': ('django.db.models.fields.DateTimeField', [], {'db_index': 'True', 'null': 'True', 'blank': 'True'}),
             'publishers': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['publisher.Publisher']", 'null': 'True', 'blank': 'True'}),
-            'retract_on': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'retract_on': ('django.db.models.fields.DateTimeField', [], {'db_index': 'True', 'null': 'True', 'blank': 'True'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255'}),
             'state': ('django.db.models.fields.CharField', [], {'default': "'unpublished'", 'max_length': '32', 'null': 'True', 'blank': 'True'}),
