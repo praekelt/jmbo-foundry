@@ -6,6 +6,12 @@
 
     <div class="title">{% trans "Sign up" %}</div>
 
+    {% if form.passwordless_login %}
+        <div class="help">
+            {% blocktrans %}This site does not require passwords for login. You will a receive message containing a link that you can use to login in future.{% endblocktrans %}
+        </div>
+    {% endif %}
+
     <form action="{% url join %}" method="POST" enctype="multipart/form-data" class="foundry-form">   
         {% csrf_token %}
         {{ form.as_div }}

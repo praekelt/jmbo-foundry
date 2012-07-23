@@ -28,6 +28,7 @@ from foundry.profile_models import AbstractAvatarProfile, \
 from foundry.templatetags import listing_styles
 from foundry.managers import PermittedManager
 import foundry.monkey
+from foundry.ambientmobile import AmbientSMS, AmbientSMSError
 
 
 class Link(models.Model):
@@ -364,6 +365,10 @@ class RegistrationPreferences(Preferences):
         default='',
         blank=True,
         help_text=_('Set fields which must be unique on the registration form.')
+    )
+    passwordless_login = models.BooleanField(
+        default=False, 
+        help_text=_("If you select passwordless login then you must set email address and / or mobile number"),
     )
 
     class Meta:
@@ -776,6 +781,31 @@ def check_slug(sender, **kwargs):
             q = instance.__class__.objects.filter(slug=instance.slug, sites=site).exclude(id=instance.id)
             if q.exists():
                 raise RuntimeError("The slug %s is already in use for site %s by %s" % (instance.slug, site.domain, q[0].title))
+
+
+def post_save_member(sender, **kwargs):
+    """Send courtesy SMS or email if a new member. Sending is async."""
+    if kwargs['created']:
+        member = kwargs['instance']
+
+        # First try SMS, then email
+        # todo: async
+        if member.mobile_number:
+            content = 'blabla'
+            sms = AmbientSMS(
+                settings.FOUNDRY['sms_gateway_api_key'], 
+                settings.FOUNDRY['sms_gateway_password']
+            )
+            try:
+                sms.sendmsg(content, [member.mobile_number])
+            except AmbientSMSError:
+                pass
+
+        else:
+            pass
+    
+
+post_save.connect(post_save_member, sender=Member)
 
 
 # Custom fields to be handled by south

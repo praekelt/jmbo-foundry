@@ -122,6 +122,10 @@ class JoinForm(UserCreationForm):
         model = models.Member
         widgets = {'receive_email': EmailOptInCheckboxInput, 'receive_sms': SMSOptInCheckboxInput}
 
+    @property
+    def passwordless_login(self):
+        return preferences.RegistrationPreferences.passwordless_login
+
     def clean_mobile_number(self):
         mobile_number = self.cleaned_data["mobile_number"]
         if not re.match(r'[\+]?[0-9]*$', mobile_number):
@@ -229,6 +233,22 @@ be numbers. No spaces allowed. An example is +27821234567.")
                     self.fields.keyOrder.insert(-1, name)
                 else:
                     self.fields.keyOrder.append(name)
+
+        # Remove password if password-less login
+        if self.passwordless_login:
+            del self.fields['password1']
+            del self.fields['password2']
+
+    def save(self, commit=True):
+        user = super(UserCreationForm, self).save(commit=False)
+        if self.passwordless_login:      
+            user.set_password('random')
+        else:
+            user.set_password(self.cleaned_data["password1"])
+        if commit:
+            user.save()
+        return user
+        # Signal handler to send async sms
 
     as_div = as_div
 
