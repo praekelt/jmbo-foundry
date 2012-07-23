@@ -85,16 +85,17 @@ def join_finish(request):
     return render_to_response('foundry/join_finish.html', extra, context_instance=RequestContext(request))
 
 
-def autologin(self, token):
+def tokenlogin(request, token):
     try:
-        obj = UserAuthToken(token=token)
+        obj = UserAuthToken.objects.get(token=token)
     except UserAuthToken.DoesNotExist:
-        return HttpResponseRedirect(reverse('autologin-invalid'))
+        # todo: create this view
+        return HttpResponseRedirect(reverse('tokenlogin-invalid'))
 
-    #backend = get_backends()[0]
-    #obj.user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+    backend = get_backends()[0]
+    obj.user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
     login(request, obj.user)            
-    return HttpResponseRedirect(reverse('join-finish'))
+    return HttpResponseRedirect(reverse('home'))
 
 
 def age_gateway(request):

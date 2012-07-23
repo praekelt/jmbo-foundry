@@ -130,6 +130,13 @@ urlpatterns = patterns('',
         {'next_page':'/'},
         name='logout',
     ),
+    url(
+        r'^tokenlogin/(?P<token>[\w-]+)/$', 
+        'foundry.views.tokenlogin', 
+        {}, 
+        name='tokenlogin'
+    ),
+
     # Pre-empt password reset so we can use custom form
     (
         r'^auth/password_reset/$', 
