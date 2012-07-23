@@ -43,7 +43,7 @@ from jmbo.view_modifiers import DefaultViewModifier
 from preferences import preferences
 
 from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification, \
-    Member
+    Member, UserAuthToken
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
     SearchForm, CreateBlogPostForm
 
@@ -83,6 +83,18 @@ def join_finish(request):
 
     extra = dict(form=form)
     return render_to_response('foundry/join_finish.html', extra, context_instance=RequestContext(request))
+
+
+def autologin(self, token):
+    try:
+        obj = UserAuthToken(token=token)
+    except UserAuthToken.DoesNotExist:
+        return HttpResponseRedirect(reverse('autologin-invalid'))
+
+    #backend = get_backends()[0]
+    #obj.user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+    login(request, obj.user)            
+    return HttpResponseRedirect(reverse('join-finish'))
 
 
 def age_gateway(request):

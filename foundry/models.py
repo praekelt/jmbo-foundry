@@ -14,6 +14,7 @@ from django.contrib.comments.models import Comment as BaseComment
 from django.contrib.sites.models import Site
 from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
+from django.conf import settings
 
 from ckeditor.fields import RichTextField
 from preferences.models import Preferences
@@ -799,7 +800,7 @@ def post_save_member(sender, **kwargs):
 
         # Create token
         token = hashlib.md5(str(random.randint(1, sys.maxint))).hexdigest()
-        UserAuthToken.objects.create(user=member.user, token=token)
+        UserAuthToken.objects.create(user=member, token=token)
 
         # First try SMS, then email
         # todo: async
@@ -809,10 +810,10 @@ def post_save_member(sender, **kwargs):
                 settings.FOUNDRY['sms_gateway_api_key'], 
                 settings.FOUNDRY['sms_gateway_password']
             )
-            try:
-                sms.sendmsg(content, [member.mobile_number])
-            except AmbientSMSError:
-                pass
+            #try:
+            #    sms.sendmsg(content, [member.mobile_number])
+            #except AmbientSMSError:
+            #    pass
 
         else:
             pass
