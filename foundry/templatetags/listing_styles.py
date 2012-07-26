@@ -1,5 +1,7 @@
 from django.template.loader import render_to_string
 
+from jmbo.models import ModelBase
+
 
 class AbstractBaseStyle(object):
 
@@ -10,7 +12,10 @@ class AbstractBaseStyle(object):
         return self.listing.queryset
 
     def get_pinned_queryset(self):
-        return self.listing.pinned_queryset
+        # Check for pinned_queryset. It can be missing since listings can be 
+        # called via the {% listing %} tag. The resulting proxy listing object 
+        # does not neccessarily have the property.
+        return getattr(self.listing, 'pinned_queryset', ModelBase.objects.none())
        
     def get_context_data(self, context, as_tile=False):
         context['object_list'] = self.get_queryset()
