@@ -8,9 +8,13 @@ class AbstractBaseStyle(object):
     
     def get_queryset(self):
         return self.listing.queryset
-            
+
+    def get_pinned_queryset(self):
+        return self.listing.pinned_queryset
+       
     def get_context_data(self, context, as_tile=False):
         context['object_list'] = self.get_queryset()
+        context['pinned_list'] = self.get_pinned_queryset()
         context['listing'] = self.listing
         context['items_per_page'] = self.listing.items_per_page or 100
         if getattr(context['request'], 'page', 0) < 0:
