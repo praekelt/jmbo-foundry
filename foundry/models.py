@@ -219,8 +219,17 @@ class Listing(models.Model):
         blank=True,
         null=True,
     )
+    pinned = models.ManyToManyField(
+        'jmbo.ModelBase',
+        help_text="""Individual items to pin to the top of the listing. These 
+items are visible across all pages when navigating the listing.""",
+        blank=True,
+        null=True,
+        related_name='listing_pinned',
+    )
     count = models.IntegerField(
-        help_text="Number of items to display. Set to zero to display all items.",
+        help_text="""Number of items to display (excludes any pinned items). 
+Set to zero to display all items.""",
     )
     style = models.CharField(
         choices=((style[0], style[0]) for style in inspect.getmembers(listing_styles, inspect.isclass) if style[0] != 'AbstractBaseStyle'),
@@ -228,7 +237,7 @@ class Listing(models.Model):
     )
     items_per_page = models.PositiveIntegerField(
         default=0, 
-        help_text="Number of items displayed on a page. Set to zero to disable paging."
+        help_text="Number of items displayed on a page (excludes any pinned items). Set to zero to disable paging."
     )
     display_title_tiled = models.BooleanField(
         "Display title if in a tile",
@@ -267,10 +276,15 @@ complex page."""
                 q = q.filter(content_type__in=self.content_type.all())
             elif self.category:
                 q = q.filter(Q(primary_category=self.category)|Q(categories=self.category))
+        q = q.exclude(id__in=self.pinned.all().values_list('id', flat=True))
         if self.count:
             q = q[:self.count]
         return q
 
+    @property
+    def pinned_queryset(self):
+        return self.pinned.all()
+        
 
 class AbstractLinkPosition(models.Model):
     link = models.ForeignKey(Link)

@@ -15,9 +15,9 @@ $(document).ready(function(){
 {% endblock %}
 
 {% block content %}
-<div class="content">
+<div class="join-finish">
 
-    <div class="h2">{% trans "Set your profile picture" %}</div>
+    <div class="title">{% trans "Set your profile picture" %}</div>
             
     <form action="{% url join-finish %}" method="POST" enctype="multipart/form-data" class="foundry-form">   
         {% csrf_token %}

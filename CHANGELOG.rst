@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.5
+---
+#. "More" style batching for smart layer.
+#. Listings now have optional pinned items which are anchored to the top of a listing.
+#. Default photosizes for basic, mid, smart and web. Some old settings have changed so existing images may be scaled differently.
+
 0.4
 ---
 #. `layered` decorator so you can write different views for different layers without cluttering urls.py.

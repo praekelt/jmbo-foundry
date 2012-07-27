@@ -1,13 +1,5 @@
-{% extends "base.html" %}
-{% load jmbo_inclusion_tags %} 
+{% extends "jmbo/modelbase_detail.html" %}
 
-{% block content %}
-    {% view_modifier view_modifier %}
-
-    {% object_header object %}
-
-    {{ object.content|safe }}
-
-    {% object_comments object %}
-{% endblock %}
-
+{% comment %}
+This entire template to be removed when template resolution is fixed
+{% endcomment %}

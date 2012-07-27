@@ -1,0 +1,12 @@
+{% load jmbo_template_tags foundry_tags i18n %}
+
+<a href="{{ object.get_absolute_url }}">
+    <img src="{{ object.get_listing_vertical_thumbnail_pinned_LAYER_url }}" alt="{{ object.title }}" class="left" />
+</a>
+
+<div class="title">
+    {% if object.categories.all.count %}<span class="category">{{ object.categories.all|join_titles }}:</span>{% endif %}
+    <a href="{{ object.get_absolute_url }}">{{ object.title }}</a>
+</div>
+
+{% include "includes/list_meta.html" %}
