@@ -67,7 +67,7 @@
         "pk": null, 
         "model": "photologue.photosize", 
         "fields": {
-            "name": "listing_vertical_thumbnail_featured_basic", 
+            "name": "listing_vertical_thumbnail_pinned_basic", 
             "watermark": null, 
             "increment_count": false, 
             "effect": null, 
@@ -83,7 +83,7 @@
         "pk": null, 
         "model": "photologue.photosize", 
         "fields": {
-            "name": "listing_vertical_thumbnail_featured_mid", 
+            "name": "listing_vertical_thumbnail_pinned_mid", 
             "watermark": null, 
             "increment_count": false, 
             "effect": null, 
@@ -99,7 +99,7 @@
         "pk": null, 
         "model": "photologue.photosize", 
         "fields": {
-            "name": "listing_vertical_thumbnail_featured_smart", 
+            "name": "listing_vertical_thumbnail_pinned_smart", 
             "watermark": null, 
             "increment_count": false, 
             "effect": null, 
@@ -115,7 +115,7 @@
         "pk": null, 
         "model": "photologue.photosize", 
         "fields": {
-            "name": "listing_vertical_thumbnail_featured_web", 
+            "name": "listing_vertical_thumbnail_pinned_web", 
             "watermark": null, 
             "increment_count": false, 
             "effect": null, 
@@ -136,7 +136,7 @@
             "watermark": null, 
             "increment_count": false, 
             "effect": null, 
-            "crop": false, 
+            "crop": true, 
             "height": 180,             
             "width": 240, 
             "upscale": false, 
@@ -152,7 +152,7 @@
             "watermark": null, 
             "increment_count": false, 
             "effect": null, 
-            "crop": false, 
+            "crop": true, 
             "height": 240,             
             "width": 320, 
             "upscale": false, 
@@ -168,7 +168,7 @@
             "watermark": null, 
             "increment_count": false, 
             "effect": null, 
-            "crop": false, 
+            "crop": true, 
             "height": 960,             
             "width": 1280, 
             "upscale": false, 
@@ -260,7 +260,7 @@
         "pk": null, 
         "model": "photologue.photosize", 
         "fields": {
-            "name": "listing_horizontal_featured_basic", 
+            "name": "listing_horizontal_pinned_basic", 
             "watermark": null, 
             "increment_count": false, 
             "effect": null, 
@@ -276,7 +276,7 @@
         "pk": null, 
         "model": "photologue.photosize", 
         "fields": {
-            "name": "listing_horizontal_featured_mid", 
+            "name": "listing_horizontal_pinned_mid", 
             "watermark": null, 
             "increment_count": false, 
             "effect": null, 
@@ -292,7 +292,7 @@
         "pk": null, 
         "model": "photologue.photosize", 
         "fields": {
-            "name": "listing_horizontal_featured_smart", 
+            "name": "listing_horizontal_pinned_smart", 
             "watermark": null, 
             "increment_count": false, 
             "effect": null, 
@@ -308,7 +308,7 @@
         "pk": null, 
         "model": "photologue.photosize", 
         "fields": {
-            "name": "listing_horizontal_featured_web", 
+            "name": "listing_horizontal_pinned_web", 
             "watermark": null, 
             "increment_count": false, 
             "effect": null, 
