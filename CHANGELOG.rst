@@ -4,6 +4,7 @@ Changelog
 next
 ----
 #. "More" style batching for smart layer.
+#. Listings now have optional pinned items which are anchored to the top of a listing.
 
 0.4
 ---
