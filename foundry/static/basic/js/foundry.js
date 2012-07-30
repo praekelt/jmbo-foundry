@@ -10,12 +10,16 @@ $(document).ready(function(){
         last_activity_time = $.now();
     });
 
-    // Ajaxify tile paging, view modifier. Works with listings and 
-    // modelbase_list or templates based on it.
-    $('div.foundry-enable-ajax div.pagination a, div.foundry-enable-ajax div.jmbo-view-modifier a').live('click', function(e){
+    // Ajaxify paging for (1) standalone listing (2) listing in a tile.
+    $('div.foundry-listing div.pagination a').live('click', function(e){
         e.preventDefault();
-        var target = $(this).parents('div.foundry-enable-ajax:first');
+        var target = $(this).parents('div.foundry-page-tile:first');
         var url = target.attr('original_url');
+        if (!target.length)
+        {
+            target = $(this).parents('div.foundry-listing:first');
+            url = $(location).attr('href');
+        }
         url = url + $(this).attr('href');
         $.get(
             url, 

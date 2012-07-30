@@ -1,7 +1,7 @@
 {% load jmbo_template_tags jmbo_inclusion_tags pagination_tags %}
 
 {% if object_list.exists %}
-    <div class="foundry-container foundry-listing-horizontal">
+    <div class="foundry-container foundry-listing foundry-listing-horizontal">
         
         {% if display_title %}{% if listing.title %}<div class="title">{{ listing.title }}</div>{% endif %}{% endif %}
 
