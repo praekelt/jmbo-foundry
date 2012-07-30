@@ -1,6 +1,11 @@
 Changelog
 =========
 
+next
+----
+#. Clean up ajax batching of listings for basic and smart layers. 
+#. View modifiers and modelbase_list.html style templates are not ajaxified anymore.
+
 0.5
 ---
 #. "More" style batching for smart layer.
