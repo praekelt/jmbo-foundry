@@ -123,8 +123,9 @@ class ListingAdminForm(forms.ModelForm):
     class Meta:
         model = Listing
         fields = (
-            'title', 'slug', 'subtitle', 'content_type', 'category', 'content', 
-            'style', 'count', 'items_per_page', 'display_title_tiled', 'sites'
+            'title', 'slug', 'subtitle', 'content_type', 'category', 'content',
+            'pinned', 'style', 'count', 'items_per_page', 
+            'display_title_tiled', 'sites'
         )       
         widgets = {'sites': SitesGroupsWidget}
 
@@ -277,7 +278,7 @@ class ChatRoomAdmin(ModelBaseAdmin):
 
 
 class BlogPostAdmin(ModelBaseAdmin):
-    list_display = ('title', 'owner')
+    pass
 
 
 class NotificationAdmin(admin.ModelAdmin):

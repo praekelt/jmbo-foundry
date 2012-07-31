@@ -1,0 +1,11 @@
+
+{% if page_obj.has_other_pages %}
+
+    {% load jmbo_template_tags i18n %}
+    <div class="pagination">
+        {% if page_obj.has_next %}
+            <a href="{% smart_query_string 'page' page_obj.next_page_number %}" class="more">{% trans "More" %}</a>
+        {% endif %}
+    </div>
+
+{% endif %}

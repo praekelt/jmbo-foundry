@@ -20,6 +20,8 @@ $(document).ready(function(){
             target = $(this).parents('div.foundry-listing:first');
             url = $(location).attr('href');
         }
+        var target_items = $('div.items:last', target);
+        var target_pagination = $('div.pagination', target);
         url = url + $(this).attr('href');
         $.get(
             url, 
@@ -29,11 +31,19 @@ $(document).ready(function(){
                 {
                     // Markup that contains fluff. We want only the content.
                     var el = $('<div>' + data + '</div>');                   
-                    var content = $('div#content', el);
-                    target.html(content.html());
+                    var content = $('div#content div.items:last div.item', el);
+                    target_items.append(content);
+                    var content = $('div#content div.pagination', el);
+                    target_pagination.replaceWith(content);
                 }
                 else
-                    target.html(data);
+                {
+                    var el = $(data);
+                    var content = $('div.items:last div.item', el);
+                    target_items.append(content);
+                    var content = $('div.pagination', el);
+                    target_pagination.replaceWith(content);
+                }
             }
         );
     });

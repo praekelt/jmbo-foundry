@@ -77,7 +77,7 @@ $(document).ready(function(){
                         </a>
                     </div>
                     <div class="comment">
-                        {{ comment.user.username|default:comment.name }}: {{ comment.comment|urlize }}
+                        <span class="creator">{{ comment.user.username|default:comment.name }}:</span> {{ comment.comment|urlize }}
                     </div>
                 </div>
             {% endfor %}

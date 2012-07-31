@@ -1,0 +1,6 @@
+<div class="object-detail-inclusion blogpost-detail-inclusion">
+    {% if not '<img' in object.content %}
+        <img src="{{ object.image_detail_url }}" />
+    {% endif %}
+    {{ object.content|safe }}
+</div>
