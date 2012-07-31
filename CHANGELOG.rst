@@ -5,6 +5,7 @@ next
 ----
 #. Clean up ajax batching of listings for basic and smart layers. 
 #. View modifiers and modelbase_list.html style templates are not ajaxified anymore.
+#. Country model has new field country code.
 
 0.5
 ---

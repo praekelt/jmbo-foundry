@@ -478,13 +478,20 @@ address per line."""
 
 class Country(models.Model):
     """Countries used in the age gateway"""
-    title = models.CharField(max_length=32)
+    title = models.CharField(max_length=50)
     slug = models.SlugField(
         editable=True,
-        max_length=32,
-        db_index=True,
+        max_length=50,
+        unique=True,
     )
     minimum_age = models.PositiveIntegerField(default=18)
+    country_code = models.CharField(
+        max_length=2,
+        null=True,
+        blank=False,
+        unique=True,
+        db_index=True,
+    )
 
     class Meta:
         verbose_name_plural = 'Countries'
