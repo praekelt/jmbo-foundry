@@ -48,6 +48,7 @@ urlpatterns = patterns('',
         name='comments-post-comment'
     ),
 
+    (r'^atlas/', include('atlas.urls')),
     (r'^downloads/', include('downloads.urls')),
     (r'^friends/', include('friends.urls')),
     (r'^gallery/', include('gallery.urls')),
