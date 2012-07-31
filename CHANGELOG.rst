@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.5.1
+-----
+#. Clean up ajax batching of listings for basic and smart layers. 
+#. View modifiers and modelbase_list.html style templates are not ajaxified anymore.
+#. Country model has new field country code.
+#. Up required jmbo to 0.4.
+
 0.5
 ---
 #. "More" style batching for smart layer.
