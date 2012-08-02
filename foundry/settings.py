@@ -111,9 +111,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 # AppDirectoriesTypeLoader must be after filesystem loader
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
+    'django.template.loaders.filesystem.Loader',
     'foundry.loaders.AppDirectoriesTypeLoader',
-    'django.template.loaders.app_directories.load_template_source',
+    'django.template.loaders.app_directories.Loader',
 )
 
 ROOT_URLCONF = 'foundry.urls'
