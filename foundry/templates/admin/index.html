@@ -4,9 +4,9 @@
 Add app_filter and model_filter filters so admin shows only relevant items.
 {% endcomment %}
 
-{% load i18n hide_admin %}
+{% load i18n hide_admin admin_static %}
 
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}admin/css/dashboard.css" />{% endblock %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />{% endblock %}
 
 {% block coltype %}colMS{% endblock %}
 
