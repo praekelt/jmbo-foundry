@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.6.1
+-----
+#. Change admin static file urls to use 'static' filter instead of deprecated 'ADMIN_MEDIA_PREFIX'.
+
 0.6
 ---
 #. Up required jmbo to 0.5. Django 1.4 now implicitly required. You may get errors on template loaders not being found. See the Django 1.4 changelog in that case.

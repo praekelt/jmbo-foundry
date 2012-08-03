@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='0.6',
+    version='0.6.1',
     description='Jmbo foundry behaviour/templates app.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -30,7 +30,7 @@ setup(
         'jmbo-post>=0.1.2',
         'django-likes',
         'django-gizmo',
-        'django-object-tools',
+        'django-object-tools>=0.0.5',
         'django-registration',
         'jmbo-show',
         'jmbo-event',
