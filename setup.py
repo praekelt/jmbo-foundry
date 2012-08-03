@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='0.5.1',
+    version='0.6',
     description='Jmbo foundry behaviour/templates app.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -20,7 +20,7 @@ setup(
         'django-snippetscream',
         'django-generate',
         'jmbo-calendar',
-        'jmbo>=0.4',
+        'jmbo>=0.5',
         'jmbo-chart',
         'django-recaptcha',
         'django-secretballot',
