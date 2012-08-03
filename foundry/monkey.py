@@ -59,7 +59,7 @@ def get_query_set(self, context):
             q2 = Q(in_reply_to__user=user)
             qs = qs.filter(q1 | q2)
 
-    # Inject last comment id in context since. This is a convenient place.
+    # Inject last comment id in context. This is a convenient place.
     setattr(context, 'foundry_last_comment_id', qs.aggregate(Max('id'))['id__max'] or 0)
 
     return qs

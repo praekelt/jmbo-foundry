@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.6
+---
+#. Up required jmbo to 0.5. Django 1.4 now implicitly required. You may get errors on template loaders not being found. See the Django 1.4 changelog in that case.
+
 0.5.1
 -----
 #. Clean up ajax batching of listings for basic and smart layers. 
