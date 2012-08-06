@@ -4,6 +4,7 @@ Changelog
 next
 ----
 #. Django 1.4 incompatibilities with login and password reset fixed.
+#. More tests.
 
 0.6.1
 -----
