@@ -13,7 +13,7 @@
         <div class="buttons">
         	<input type="submit" value="{% trans "Sign in" %}" />
         </div>
-        <span><a href="/auth/password_reset">{% blocktrans %}Forgot your password?{% endblocktrans %}</a></span>
+        <span><a href="{% url password_reset %}">{% blocktrans %}Forgot your password?{% endblocktrans %}</a></span>
         <span>{% trans "Not registered?" %} <a href="{% url join %}">{% trans "Sign up here" %}</a></span>
     </form>
 

@@ -117,6 +117,7 @@ urlpatterns = patterns('',
         {},
         name='join-finish',
     ),
+    (r'^auth/', include('django.contrib.auth.urls')),
     url(
         r'^login/$',
         'django.contrib.auth.views.login',
@@ -129,16 +130,16 @@ urlpatterns = patterns('',
         {'next_page':'/'},
         name='logout',
     ),
-    # Pre-empt password reset so we can use custom form
-    (
-        r'^auth/password_reset/$', 
+    # Password reset with custom form
+    url(
+        r'^password_reset/$', 
         'django.contrib.auth.views.password_reset', 
         {
             'password_reset_form': forms.PasswordResetForm,
-        }
+        },
+        name='password_reset',
     ),
-    (r'^auth/', include('django.contrib.auth.urls')),
-
+    
     # Pages defined in preferences
     url(
         r'^about-us/$',
