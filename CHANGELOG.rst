@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.6.2
+-----
+#. Django 1.4 incompatibilities with login and password reset fixed.
+#. More tests.
+
 0.6.1
 -----
 #. Change admin static file urls to use 'static' filter instead of deprecated 'ADMIN_MEDIA_PREFIX'.
