@@ -1,16 +1,30 @@
 from django.core import management
 from django.utils import unittest
 from django.contrib.contenttypes.models import ContentType
-from django.test.client import Client
+from django.test.client import Client as BaseClient, FakePayload, \
+    RequestFactory
+from django.core.urlresolvers import reverse
 
 from post.models import Post
 
 from foundry.models import Member, Listing
 
 
+class Client(BaseClient):
+    """Bug in django/test/client.py omits wsgi.input"""
+
+    def _base_environ(self, **request):
+        result = super(Client, self)._base_environ(**request)
+        result['HTTP_USER_AGENT'] = 'Django Unittest'
+        result['HTTP_REFERER'] = 'dummy'
+        result['wsgi.input'] = FakePayload('')
+        return result
+
+
 class TestCase(unittest.TestCase):
 
     def setUp(self):
+        self.request = RequestFactory()
         self.client = Client()
 
         # Post-syncdb steps
@@ -44,6 +58,6 @@ class TestCase(unittest.TestCase):
         self.failUnless(self.post1.modelbase_obj in posts.queryset.all())
 
     def test_pages(self):
-        response =self.client.get('/login')
+        response = self.client.get(reverse('login'))
         self.assertEqual(response.status_code, 200)
         self.failIf(response.content.find('<form') == -1)
