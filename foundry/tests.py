@@ -1,15 +1,18 @@
 from django.core import management
-from django.test import TestCase
+from django.utils import unittest
 from django.contrib.contenttypes.models import ContentType
+from django.test.client import Client
 
 from post.models import Post
 
 from foundry.models import Member, Listing
 
 
-class TestCase(TestCase):
+class TestCase(unittest.TestCase):
 
     def setUp(self):
+        self.client = Client()
+
         # Post-syncdb steps
         management.call_command('migrate', interactive=False)
         management.call_command('load_photosizes', interactive=False)
@@ -39,3 +42,8 @@ class TestCase(TestCase):
         posts.sites = [1]
         posts.save()
         self.failUnless(self.post1.modelbase_obj in posts.queryset.all())
+
+    def test_pages(self):
+        response =self.client.get('/login')
+        self.assertEqual(response.status_code, 200)
+        self.failIf(response.content.find('<form') == -1)
