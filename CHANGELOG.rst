@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Move FileSystemStorage listdir monkey patch to __init__.py so it is applied for collectstatic.
+
 0.6.2
 -----
 #. Django 1.4 incompatibilities with login and password reset fixed.
