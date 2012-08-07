@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+0.6.3
+-----
 #. Move FileSystemStorage listdir monkey patch to __init__.py so it is applied for collectstatic.
 
 0.6.2
