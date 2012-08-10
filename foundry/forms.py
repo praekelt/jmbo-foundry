@@ -3,7 +3,8 @@ import re
 
 from BeautifulSoup import BeautifulSoup
 
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, \
     PasswordResetForm as BasePasswordResetForm
@@ -45,8 +46,7 @@ class RememberMeCheckboxInput(forms.widgets.CheckboxInput):
 
     def render(self, *args, **kwargs):
         result = super(RememberMeCheckboxInput, self).render(*args, **kwargs)
-        return result + "Remember me"
-
+        return result + ugettext("Remember me")
 
 class LoginForm(AuthenticationForm):
     
@@ -54,7 +54,6 @@ class LoginForm(AuthenticationForm):
 
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
-
         # Set label
         v = preferences.LoginPreferences.raw_login_fields
         label = None

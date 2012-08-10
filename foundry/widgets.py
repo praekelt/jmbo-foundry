@@ -3,6 +3,7 @@ import datetime
 
 from django.forms.widgets import CheckboxSelectMultiple, MultiWidget, Select
 from django.utils.datastructures import MultiValueDict
+from django.utils.translation import ugettext
 
 class SelectCommaWidget(CheckboxSelectMultiple):
 
@@ -25,9 +26,9 @@ class OldSchoolDateWidget(MultiWidget):
 
     def __init__(self, attrs=None):
         widgets = (
-            Select(choices=([('', 'Day'),] + [(i,i) for i in range(1, 32)])),
-            Select(choices=([('', 'Month'),] + [(i,i) for i in range(1, 13)])),
-            Select(choices=([('', 'Year'),] + [(i,i) for i in reversed(range(datetime.datetime.now().year - 100, datetime.datetime.now().year - 4))])),
+            Select(choices=([('', ugettext('Day')),] + [(i,i) for i in range(1, 32)])),
+            Select(choices=([('', ugettext('Month')),] + [(i,i) for i in range(1, 13)])),
+            Select(choices=([('', ugettext('Year')),] + [(i,i) for i in reversed(range(datetime.datetime.now().year - 100, datetime.datetime.now().year - 4))])),
         )
         super(OldSchoolDateWidget, self).__init__(widgets, attrs)
 
