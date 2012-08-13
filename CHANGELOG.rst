@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+0.6.4
+-----
 #. Replace deprecated message_set call.
 
 0.6.3
