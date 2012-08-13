@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.6.4
+-----
+#. Replace deprecated message_set call.
+
 0.6.3
 -----
 #. Move FileSystemStorage listdir monkey patch to __init__.py so it is applied for collectstatic.

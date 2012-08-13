@@ -283,7 +283,8 @@ def create_blogpost(request):
         form = CreateBlogPostForm(request.POST, user=request.user, site=get_current_site(request)) 
         if form.is_valid():
             instance = form.save()
-            request.user.message_set.create(message=_("The blog post %s has been saved") % instance.title)
+            msg = _("The blog post %s has been saved") % instance.title
+            messages.success(request, msg, fail_silently=True)
             return HttpResponseRedirect('/')
     else:
         form = CreateBlogPostForm(user=request.user, site=get_current_site(request)) 
