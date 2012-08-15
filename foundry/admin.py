@@ -1,13 +1,17 @@
+import inspect
+
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
+from django.utils.importlib import import_module
 
 from preferences.admin import PreferencesAdmin
 from sites_groups.widgets import SitesGroupsWidget
 from jmbo.models import ModelBase
 from jmbo.admin import ModelBaseAdmin
+from jmbo.view_modifiers import ViewModifier
 
 from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
     NavbarLinkPosition, Navbar, GeneralPreferences, GeneralPreferences, \
@@ -124,10 +128,13 @@ class ListingAdminForm(forms.ModelForm):
         model = Listing
         fields = (
             'title', 'slug', 'subtitle', 'content_type', 'category', 'content',
-            'pinned', 'style', 'count', 'items_per_page', 
+            'pinned', 'style', 'count', 'items_per_page', 'view_modifier', 
             'display_title_tiled', 'sites'
         )       
-        widgets = {'sites': SitesGroupsWidget}
+        widgets = {
+            'sites': SitesGroupsWidget,
+            'view_modifier': forms.widgets.RadioSelect,
+        }
 
     def __init__(self, *args, **kwargs):
         super(ListingAdminForm, self).__init__(*args, **kwargs)
@@ -138,6 +145,22 @@ class ListingAdminForm(forms.ModelForm):
             if (obj.model_class() is not None) and issubclass(obj.model_class(), ModelBase):
                ids.append(obj.id) 
         self.fields['content_type']._set_queryset(ContentType.objects.filter(id__in=ids).order_by('name'))
+
+        # View modifiers. Inspect apps for modifiers. Iterate since there is 
+        # no registry.
+        choices = [('', 'No ordering or filtering')]
+        for app in settings.INSTALLED_APPS:
+            mod = import_module(app)
+            if hasattr(mod, 'view_modifiers'):
+                for name, klass in inspect.getmembers(mod.view_modifiers, inspect.isclass):
+                    if (klass is not ViewModifier) and issubclass(klass, ViewModifier):
+                        label = '%s (from %s)' % (name, app)
+                        if klass.__doc__:
+                            label = label + ' - ' + klass.__doc__
+                        choices.append((
+                            klass.__module__ + '.' + klass.__name__, label                           
+                        ))
+        self.fields['view_modifier'].widget.choices = choices
 
         # Order
         field = self.fields['content']

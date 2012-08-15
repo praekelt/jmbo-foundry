@@ -11,6 +11,7 @@ from django.contrib.comments.models import Comment as BaseComment
 from django.contrib.sites.models import Site
 from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
+from django.utils.importlib import import_module
 
 from ckeditor.fields import RichTextField
 from preferences.models import Preferences
@@ -239,6 +240,16 @@ Set to zero to display all items.""",
         default=0, 
         help_text="Number of items displayed on a page (excludes any pinned items). Set to zero to disable paging."
     )
+    view_modifier = models.CharField(
+        'Ordering and filtering',
+        max_length=255,
+        help_text="""A set of links to order or filter the listing, 
+eg. 'most liked' or 'most commented'. DefaultViewModifier provided by Jmbo works for 
+all listings; however, others may be very specific and not work with the listing.""",
+        blank=True,
+        null=True,
+        default=''
+    )
     display_title_tiled = models.BooleanField(
         "Display title if in a tile",
         default=True,
@@ -267,8 +278,7 @@ complex page."""
     def get_absolute_url(self):
         return reverse('listing-detail', args=[self.slug])
 
-    @property
-    def queryset(self):        
+    def queryset(self, request=None):
         q = self.content.all()
         if not q.exists():
             q = ModelBase.permitted.all()
@@ -277,8 +287,21 @@ complex page."""
             elif self.category:
                 q = q.filter(Q(primary_category=self.category)|Q(categories=self.category))
         q = q.exclude(id__in=self.pinned.all().values_list('id', flat=True))
+
+        if request and self.view_modifier:
+            mod, attr = self.view_modifier.rsplit('.', 1)
+            modifier = getattr(import_module(mod), attr)(request)
+            # Play along with existing Jmbo view modifier code. We use a shim 
+            # view for that.
+            class ViewShim: params = {}
+            view = ViewShim()            
+            view.params['queryset'] = q
+            modifier.modify(view)
+            q = view.params['queryset']
+
         if self.count:
             q = q[:self.count]
+
         return q
 
     @property

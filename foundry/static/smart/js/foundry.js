@@ -22,6 +22,8 @@ $(document).ready(function(){
         }
         var target_items = $('div.items:last', target);
         var target_pagination = $('div.pagination', target);
+        // Strip params. Already present in href.
+        url = url.split('?')[0];
         url = url + $(this).attr('href');
         $.get(
             url, 

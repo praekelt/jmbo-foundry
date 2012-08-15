@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. A listing now has an optional view modifier. This makes it possible to filter or order the listing.
+
 0.6.4
 -----
 #. Replace deprecated message_set call.
