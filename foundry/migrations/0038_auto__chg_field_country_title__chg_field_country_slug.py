@@ -151,6 +151,7 @@ class Migration(SchemaMigration):
             'display_title_tiled': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'items_per_page': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
+            'pinned': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'listing_pinned'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['jmbo.ModelBase']"}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32'}),
             'style': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
