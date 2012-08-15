@@ -149,7 +149,7 @@ class ListingNode(template.Node):
                 works. Essentially a record class."""
 
                 def __init__(self, queryset, **kwargs):                    
-                    self.queryset = queryset
+                    self.queryset = lambda: queryset
                     self.items_per_page = 0
                     for k, v in kwargs.items():
                         setattr(self, k, v)
@@ -327,7 +327,7 @@ class ListingQuerysetNode(template.Node):
         as_var = self.as_var.resolve(context)
         try:
             obj = Listing.permitted.get(slug=slug)
-            context[as_var] = obj.queryset
+            context[as_var] = obj.queryset(context['request'])
         except Listing.DoesNotExist:
             obj = None
             context[as_var] = None

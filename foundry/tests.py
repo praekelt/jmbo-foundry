@@ -63,7 +63,7 @@ class TestCase(unittest.TestCase):
 
     def test_listing(self):
         listing = getattr(self, 'posts-vertical-thumbnail')
-        self.failUnless(self.post1.modelbase_obj in listing.queryset.all())
+        self.failUnless(self.post1.modelbase_obj in listing.queryset().all())
 
     def test_pages(self):
         # Login, password reset
