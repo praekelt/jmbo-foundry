@@ -149,7 +149,7 @@ class ListingNode(template.Node):
                 works. Essentially a record class."""
 
                 def __init__(self, queryset, **kwargs):                    
-                    self.queryset = lambda: queryset
+                    self.queryset = lambda x: queryset
                     self.items_per_page = 0
                     for k, v in kwargs.items():
                         setattr(self, k, v)
