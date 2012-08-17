@@ -204,6 +204,7 @@ SIMPLE_AUTOCOMPLETE = {
 }
 
 STATICFILES_FINDERS = (
+    'foundry.finders.FileSystemLayerAwareFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
@@ -231,12 +232,12 @@ def compute_settings(sender):
     for layer in layers:
         for m in (module, sender):
             pth = os.path.join(os.path.dirname(m.__file__), 'templates', layer)
-            if pth not in sender.TEMPLATE_DIRS:
-                sender.TEMPLATE_DIRS.insert(0, pth)
+            #if pth not in sender.TEMPLATE_DIRS:
+            #    sender.TEMPLATE_DIRS.insert(0, pth)
 
-            pth = os.path.join(os.path.dirname(m.__file__), 'static', layer)
-            if pth not in sender.STATICFILES_DIRS:
-                sender.STATICFILES_DIRS.insert(0, pth)
+            #pth = os.path.join(os.path.dirname(m.__file__), 'static', layer)
+            #if pth not in sender.STATICFILES_DIRS:
+            #    sender.STATICFILES_DIRS.insert(0, pth)
 
 # An "inheriting" settings module must have this exact (uncommented) import.
 # from foundry import settings as foundry_settings
