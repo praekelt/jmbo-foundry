@@ -224,5 +224,3 @@ def compute_settings(sender):
 foundry.finders.FileSystemLayerAwareFinder is listed under \
 STATICFILES_FINDERS then you may safely remove the call to compute_settings \
 from your settings file.""", RuntimeWarning)
-
-compute_settings(sys.modules[__name__])
