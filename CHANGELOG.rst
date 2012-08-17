@@ -4,6 +4,9 @@ Changelog
 next
 ----
 #. A listing now has an optional view modifier. This makes it possible to filter or order the listing.
+#. `compute_settings` function is now redundant thanks to the introduction of `foundry.finders.FileSystemLayerAwareFinder`. Add this finder to STATICFILES_FINDERS as the first item.
+#. Gallery specific code ported to `jmbo-gallery`. `base_inner.html` has a new link to gallery CSS and JS. If you have a customized template then update accordingly.
+#. Up required `jmbo-gallery` to xxx.
 
 0.6.4
 -----

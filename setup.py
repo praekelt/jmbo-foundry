@@ -13,7 +13,7 @@ setup(
     install_requires = [
         # todo: eliminate dependencies handled by apps themselves
         'django-section',
-        'jmbo-gallery',
+        'jmbo-gallery', # >= 0.1 na release van gallery
         'django-googlesearch',
         'jmbo-music',
         'django-export',
