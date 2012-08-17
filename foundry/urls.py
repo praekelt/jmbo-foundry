@@ -30,16 +30,7 @@ v1_api.register(MenuResource())
 v1_api.register(PageResource())
 v1_api.register(BlogPostResource())
 
-urlpatterns = patterns('',    
-    # Pre-empt url call since we want to disable view modifiers for gallery.
-    url(r'^gallery/list/$', 'gallery.views.object_list', name='gallery_object_list'),
-    url(
-        r'^gallery/(?P<slug>[\w-]+)/$', 
-        'gallery.views.object_detail', 
-        {'view_modifier': []}, 
-        name='gallery_object_detail'
-    ),
-
+urlpatterns = patterns('',        
     # Pre-empt url call for comment post
     url(
         r'^comments/post/$',          
