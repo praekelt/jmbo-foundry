@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='0.6.4',
+    version='0.7',
     description='Jmbo foundry behaviour/templates app.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -13,7 +13,7 @@ setup(
     install_requires = [
         # todo: eliminate dependencies handled by apps themselves
         'django-section',
-        'jmbo-gallery',
+        'jmbo-gallery>=0.1',
         'django-googlesearch',
         'jmbo-music',
         'django-export',
@@ -55,9 +55,9 @@ setup(
     ],
     include_package_data=True,
     tests_require=[
-        'django-setuptest',
+        'django-setuptest>=0.1.2',
     ],
-    test_suite="setuptest.SetupTestSuite",
+    test_suite="setuptest.setuptest.SetupTestSuite",
     classifiers=[
         "Programming Language :: Python",
         "License :: OSI Approved :: BSD License",

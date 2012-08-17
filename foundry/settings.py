@@ -7,6 +7,8 @@ private settings before using it in a production environment.
 import os
 import sys
 from os import path
+import warnings
+
 
 FOUNDRY = {
     'has_javascript': True,
@@ -204,6 +206,7 @@ SIMPLE_AUTOCOMPLETE = {
 }
 
 STATICFILES_FINDERS = (
+    'foundry.finders.FileSystemLayerAwareFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
@@ -215,32 +218,9 @@ JMBO_ANALYTICS = {
 
 
 def compute_settings(sender):
-    """Settings computed from earlier values. Put in a function so other 
-    products can re-use it."""
-    try:
-        module = sys.modules[__name__]
-    except KeyError:
-        module = sender.foundry_settings
-
-    if not hasattr(sender, 'TEMPLATE_DIRS'):
-        setattr(sender, 'TEMPLATE_DIRS', [])
-    if not hasattr(sender, 'STATICFILES_DIRS'):
-        setattr(sender, 'STATICFILES_DIRS', [])
-    layers = list(sender.FOUNDRY['layers'])
-    layers.reverse()
-    for layer in layers:
-        for m in (module, sender):
-            pth = os.path.join(os.path.dirname(m.__file__), 'templates', layer)
-            if pth not in sender.TEMPLATE_DIRS:
-                sender.TEMPLATE_DIRS.insert(0, pth)
-
-            pth = os.path.join(os.path.dirname(m.__file__), 'static', layer)
-            if pth not in sender.STATICFILES_DIRS:
-                sender.STATICFILES_DIRS.insert(0, pth)
-
-# An "inheriting" settings module must have this exact (uncommented) import.
-# from foundry import settings as foundry_settings
-
-# An "inheriting" settings module must have this exact same line as the last
-# line in that module.
-compute_settings(sys.modules[__name__])    
+    """Function not required anymore since our template loader and static file
+    finder have become smarter."""
+    warnings.warn("""compute_settings is redundant. If \
+foundry.finders.FileSystemLayerAwareFinder is listed under \
+STATICFILES_FINDERS then you may safely remove the call to compute_settings \
+from your settings file.""", RuntimeWarning)

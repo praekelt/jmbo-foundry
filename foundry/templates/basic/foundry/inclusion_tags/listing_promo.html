@@ -13,6 +13,10 @@
         </div>
         {% endif %}
 
+        {% if view_modifier %}
+            {% view_modifier view_modifier %}
+        {% endif %}
+
         <div class="items">
         {% autopaginate object_list items_per_page %}
         {% for object in object_list %}

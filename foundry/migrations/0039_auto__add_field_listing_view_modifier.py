@@ -8,20 +8,16 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding field 'Listing.view_modifier'
+        db.add_column('foundry_listing', 'view_modifier',
+                      self.gf('django.db.models.fields.CharField')(default='', max_length=255, null=True, blank=True),
+                      keep_default=False)
 
-        # Changing field 'Country.title'
-        db.alter_column('foundry_country', 'title', self.gf('django.db.models.fields.CharField')(max_length=50))
-
-        # Changing field 'Country.slug'
-        db.alter_column('foundry_country', 'slug', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=50))
 
     def backwards(self, orm):
+        # Deleting field 'Listing.view_modifier'
+        db.delete_column('foundry_listing', 'view_modifier')
 
-        # Changing field 'Country.title'
-        db.alter_column('foundry_country', 'title', self.gf('django.db.models.fields.CharField')(max_length=32))
-
-        # Changing field 'Country.slug'
-        db.alter_column('foundry_country', 'slug', self.gf('django.db.models.fields.SlugField')(max_length=32, unique=True))
 
     models = {
         'auth.group': {
@@ -156,7 +152,8 @@ class Migration(SchemaMigration):
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32'}),
             'style': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'subtitle': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '256'})
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'view_modifier': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '255', 'null': 'True', 'blank': 'True'})
         },
         'foundry.member': {
             'Meta': {'object_name': 'Member', '_ormbases': ['auth.User']},
@@ -297,7 +294,7 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'}),
             'reflection_size': ('django.db.models.fields.FloatField', [], {'default': '0'}),
-            'reflection_strength': ('django.db.models.fields.FloatField', [], {'default': '0.59999999999999998'}),
+            'reflection_strength': ('django.db.models.fields.FloatField', [], {'default': '0.6'}),
             'sharpness': ('django.db.models.fields.FloatField', [], {'default': '1.0'}),
             'transpose_method': ('django.db.models.fields.CharField', [], {'max_length': '15', 'blank': 'True'})
         },

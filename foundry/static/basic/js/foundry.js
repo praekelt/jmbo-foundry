@@ -20,6 +20,8 @@ $(document).ready(function(){
             target = $(this).parents('div.foundry-listing:first');
             url = $(location).attr('href');
         }
+        // Strip params. Already present in href.
+        url = url.split('?')[0];
         url = url + $(this).attr('href');
         $.get(
             url, 
