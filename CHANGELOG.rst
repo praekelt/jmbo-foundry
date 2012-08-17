@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.7.1
+-----
+#. Hotfix. Remove references deprecated `jmbo-gallery` views.
+
 0.7
 ---
 #. A listing now has an optional view modifier. This makes it possible to filter or order the listing.
