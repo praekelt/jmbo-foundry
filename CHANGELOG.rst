@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.7.2
+-----
+#. Hotfix. Apps with empty URL patterns cause infinite recursion when adding a page.
+
 0.7.1
 -----
 #. Hotfix. Remove references deprecated `jmbo-gallery` views.
