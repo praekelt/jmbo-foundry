@@ -176,6 +176,14 @@ urlpatterns = patterns('',
         name='listing-detail'
     ),
 
+    # Listing feed
+    url(
+        r'^listing/(?P<slug>[\w-]+)/feed/$',
+        'foundry.feeds.listing_feed',
+        {},
+        name='listing-feed'
+    ),
+
     # Edit profile    
     url(r'^edit-profile/$',
         login_required(
