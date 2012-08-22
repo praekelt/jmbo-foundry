@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Patch django.contrib.sites.models.Site.__unicode__ so it returns name and not domain. The UI gets confusing since we have up to three sites comprising one logical mobi site.
+
 0.7.2
 -----
 #. Hotfix. Apps with empty URL patterns cause infinite recursion when adding a page.

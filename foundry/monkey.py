@@ -228,3 +228,14 @@ def CsrfTokenNode_render(self, context):
         return u''
 
 CsrfTokenNode.render = CsrfTokenNode_render
+
+
+"""Patch django.contrib.sites.models.Site.__unicode__ so it returns name and
+not domain. The UI gets confusing since we have up to three sites comprising
+one logical mobi site."""
+from django.contrib.sites.models import Site
+
+def Site__unicode__(self):
+    return self.name
+
+Site.__unicode__ = Site__unicode__    
