@@ -1,7 +1,7 @@
 Changelog
 =========
 
-next
+0.7.2
 -----
 #. Hotfix. Apps with empty URL patterns cause infinite recursion when adding a page.
 
