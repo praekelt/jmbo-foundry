@@ -7,7 +7,7 @@ def _build_view_names_recurse(url_patterns=None):
     """
     Returns a tuple of url pattern names suitable for use as field choices
     """
-    if not url_patterns:
+    if url_patterns is None:
         urlconf = settings.ROOT_URLCONF
         url_patterns = __import__(settings.ROOT_URLCONF, globals(), locals(), \
                 ['urlpatterns', ], -1).urlpatterns
