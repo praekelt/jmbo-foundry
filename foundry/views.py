@@ -1,4 +1,3 @@
-import datetime
 import random
 import urllib
 
@@ -23,6 +22,7 @@ from django.views.decorators.csrf import requires_csrf_token
 from django.dispatch import receiver
 from django.contrib.auth.signals import user_logged_in
 from django.db.models import Q
+from django.utils import timezone
 
 # Comment post required imports
 from django.contrib.comments.views.comments import CommentPostBadRequest
@@ -424,7 +424,7 @@ def set_session_expiry(sender, request, user, **kwargs):
     # Override session expiry date. We effectively ignore
     # SESSION_EXPIRE_AT_BROWSER_CLOSE.
     if request.REQUEST.get('remember_me'):
-        now = datetime.datetime.now()
+        now = timezone.now()
         expires = now.replace(year=now.year+10)
         request.session.set_expiry(expires)
     else:
