@@ -108,6 +108,7 @@ $(document).ready(function(){
                     $('div.comment-list').html(obj.html);
                     var el = $('textarea', form);
                     el.val('');
+                    $('#c'+obj.obj_id).attr('tabindex', -1).focus();
                 }
                 else
                     form.replaceWith(data);

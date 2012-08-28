@@ -463,6 +463,12 @@ class CommentForm(BaseCommentForm):
         else:
             self.fields['comment'].label = _('Post your comment')
 
+        # Change input type if smart is in layers. This is required because 
+        # smart phone virtual keyboards do not display a dismiss button for 
+        # textareas.
+        if 'smart' in settings.FOUNDRY['layers']:
+            self.fields['comment'].widget = forms.widgets.TextInput()
+
     def get_comment_model(self):
         return models.FoundryComment
 

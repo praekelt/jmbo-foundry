@@ -116,8 +116,9 @@ $(document).ready(function(){
                 {
                     var obj = $.parseJSON(data);
                     $('div.comment-list').html(obj.html);
-                    var el = $('textarea', form);
+                    var el = $('#id_comment');
                     el.val('');
+                    $('#c'+obj.obj_id).attr('tabindex', -1).focus();
                 }
                 else
                     form.replaceWith(data);

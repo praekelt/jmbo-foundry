@@ -257,7 +257,7 @@ def post_comment(request, next=None, using=None):
         context['object'] = target
         t = Template("{% load comments %} {% render_comment_list for object %}")
         html = t.render(context)
-        di = {'status': 'success', 'html': html}
+        di = {'status': 'success', 'html': html, 'obj_id': comment.id}
         return HttpResponse(simplejson.dumps(di))
         
 
