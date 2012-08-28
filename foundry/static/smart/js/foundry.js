@@ -118,7 +118,6 @@ $(document).ready(function(){
                     $('div.comment-list').html(obj.html);
                     var el = $('textarea', form);
                     el.val('');
-                    el.focus();
                 }
                 else
                     form.replaceWith(data);
