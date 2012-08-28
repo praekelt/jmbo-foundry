@@ -8,6 +8,7 @@ table.foundry-page-row tr {
 td.foundry-page-column {
     height: 100%;
     vertical-align: top;
+    padding: 0;
 }    
 td.foundry-page-column-1 {
     width: 6%;
@@ -55,7 +56,7 @@ td.foundry-page-column-15 {
     width: 90%;
 }    
 td.foundry-page-column-16 {
-    width: 96%;
+    width: 100%;
 }    
 
 div.foundry-page-tile {
