@@ -216,6 +216,7 @@ JMBO_ANALYTICS = {
     'google_analytics_id': '', 
 }
 
+PHOTOLOGUE_MAXBLOCK = 2 ** 20
 
 def compute_settings(sender):
     """Function not required anymore since our template loader and static file
