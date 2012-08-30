@@ -5,9 +5,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta name="description" content="{{ CURRENT_SITE.name }}" />
-    <meta property="og:title" content="{{ CURRENT_SITE.name }}" />
-    <meta property="og:description" content="{% block meta_description %}{{ DEFAULT_META_DESCRIPTION }}{% endblock %}" />
-    <meta property="og:image" content="{{ STATIC_URL }}images/logo.png" />
+	{% block extrameta %}
+	    <meta property="og:title" content="{{ CURRENT_SITE.name }}" />
+	    <meta property="og:description" content="{% block meta_description %}{{ DEFAULT_META_DESCRIPTION }}{% endblock %}" />
+	    <meta property="og:image" content="{{ STATIC_URL }}images/logo.png" />
+	{% endblock %}
     <title>{{ CURRENT_SITE.name }}</title>
     {% compress css %}
     <link href="{{ STATIC_URL }}css/main.css" rel="stylesheet" type="text/css" />
