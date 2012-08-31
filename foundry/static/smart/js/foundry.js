@@ -1,5 +1,9 @@
 $(document).ready(function(){
 
+    // Let fastclick add a touchstart/end click event 
+    // for more responsive touch interaction on smart devices
+    new FastClick(document.body);
+
     var last_activity_time = $.now();
 
     if ($.support.ajax)
