@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login, get_backends
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
-    HttpResponseServerError
+    HttpResponseServerError, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext, loader
 from django.views.generic import UpdateView
@@ -23,6 +23,10 @@ from django.dispatch import receiver
 from django.contrib.auth.signals import user_logged_in
 from django.db.models import Q
 from django.utils import timezone
+from django.template.loader import get_template_from_string
+from django.core.mail import EmailMultiAlternatives
+from django.template import Context
+from django.utils.html import strip_tags
 
 # Comment post required imports
 from django.contrib.comments.views.comments import CommentPostBadRequest
@@ -43,7 +47,7 @@ from jmbo.view_modifiers import DefaultViewModifier
 from preferences import preferences
 
 from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification, \
-    Member
+    Member, FoundryComment, CommentReport
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
     SearchForm, CreateBlogPostForm
 
@@ -268,6 +272,42 @@ def comment_reply_form(request):
     ).get_object_for_this_type(id=request.GET['oid'])
     extra = {'object': obj, 'next': request.GET['path_info']}
     return render_to_response('foundry/comment_reply_form.html', extra, context_instance=RequestContext(request))
+
+
+@login_required
+def report_comment(request, comment_id):
+    comment = get_object_or_404(FoundryComment, id=comment_id)
+
+    # Only create object if user is allowed to report
+    if comment.can_report(request):
+        CommentReport.objects.create(comment=comment, reporter=request.user)
+
+        # Send mail when 3 reports are reached. Re-use naughty word template.
+        if comment.commentreport_set.count() == 3:
+            from foundry.management.commands.report_naughty_words import TEMPLATE
+            site = get_current_site(request)
+            template = get_template_from_string(TEMPLATE)
+            c = dict(comments=[comment], site_domain=site.domain)
+            content = template.render(Context(c))
+            msg = EmailMultiAlternatives(
+                "Flagged comment on %s" % site.name, 
+                strip_tags(content), 
+                settings.DEFAULT_FROM_EMAIL, 
+                preferences.NaughtyWordPreferences.email_recipients.split()
+            )
+            msg.attach_alternative(content, 'text/html')
+            msg.send()
+
+    next = request.REQUEST.get('next')
+    response = HttpResponseRedirect(next or comment.content_object.get_absolute_url())
+    # Set cookie since it is very expensive to query whether a user may report
+    # a comment for each comment.
+    response.set_cookie(
+        'comment_report_%s' % comment.id,
+        value=1, 
+        max_age=7*86400
+    )
+    return response
 
 
 def chatroom_detail(request, slug):    
