@@ -23,6 +23,10 @@ from django.dispatch import receiver
 from django.contrib.auth.signals import user_logged_in
 from django.db.models import Q
 from django.utils import timezone
+from django.template.loader import get_template_from_string
+from django.core.mail import EmailMultiAlternatives
+from django.template import Context
+from django.utils.html import strip_tags
 
 # Comment post required imports
 from django.contrib.comments.views.comments import CommentPostBadRequest
@@ -277,6 +281,22 @@ def report_comment(request, comment_id):
     # Only create object if user is allowed to report
     if comment.can_report(request):
         CommentReport.objects.create(comment=comment, reporter=request.user)
+
+        # Send mail when 3 reports are reached. Re-use naughty word template.
+        if comment.commentreport_set.count() == 3:
+            from foundry.management.commands.report_naughty_words import TEMPLATE
+            site = get_current_site(request)
+            template = get_template_from_string(TEMPLATE)
+            c = dict(comments=[comment], site_domain=site.domain)
+            content = template.render(Context(c))
+            msg = EmailMultiAlternatives(
+                "Flagged comment on %s" % site.name, 
+                strip_tags(content), 
+                settings.DEFAULT_FROM_EMAIL, 
+                preferences.NaughtyWordPreferences.email_recipients.split()
+            )
+            msg.attach_alternative(content, 'text/html')
+            msg.send()
 
     next = request.REQUEST.get('next')
     response = HttpResponseRedirect(next or comment.content_object.get_absolute_url())
