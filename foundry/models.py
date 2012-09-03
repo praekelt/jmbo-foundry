@@ -791,6 +791,17 @@ class FoundryComment(BaseComment):
             # Happens when comment is not made by a member
             return None
 
+    def can_report(self, request):
+        return not self.commentreport_set.filter(reporter=request.user).exists()
+
+
+class CommentReport(models.Model):
+    comment = models.ForeignKey(FoundryComment)
+    reporter = models.ForeignKey(User)
+
+    def __unicode__(self):
+        return self.comment.comment
+
 
 class ChatRoom(ModelBase):
     pass
