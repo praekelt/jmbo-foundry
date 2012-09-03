@@ -282,14 +282,10 @@ def report_comment(request, comment_id):
     response = HttpResponseRedirect(next or comment.content_object.get_absolute_url())
     # Set cookie since it is very expensive to query whether a user may report
     # a comment for each comment.
-    ids = request.COOKIES.get('comment_report_ids', '0').split()
-    key = str(comment.id)
-    if key not in ids:
-        ids.append(key)
     response.set_cookie(
-        'comment_report_ids',
-        value=' '.join(ids), 
-        max_age=365*86400*20
+        'comment_report_%s' % comment.id,
+        value=1, 
+        max_age=7*86400
     )
     return response
 
