@@ -6,6 +6,7 @@ next
 #. Patch django.contrib.sites.models.Site.__unicode__ so it returns name and not domain. The UI gets confusing since we have up to three sites comprising one logical mobi site.
 #. Listings now have automatic RSS feeds.
 #. Comment form now fires up correct virtual keyboard for a smart phone.
+#. Logged in members can now flag offensive comments. After three flags a moderator is notified.
 
 0.7.2
 -----
