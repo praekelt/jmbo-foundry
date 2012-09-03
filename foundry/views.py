@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login, get_backends
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
-    HttpResponseServerError
+    HttpResponseServerError, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext, loader
 from django.views.generic import UpdateView
@@ -43,7 +43,7 @@ from jmbo.view_modifiers import DefaultViewModifier
 from preferences import preferences
 
 from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification, \
-    Member
+    Member, FoundryComment, CommentReport
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
     SearchForm, CreateBlogPostForm
 
@@ -268,6 +268,30 @@ def comment_reply_form(request):
     ).get_object_for_this_type(id=request.GET['oid'])
     extra = {'object': obj, 'next': request.GET['path_info']}
     return render_to_response('foundry/comment_reply_form.html', extra, context_instance=RequestContext(request))
+
+
+@login_required
+def report_comment(request, comment_id):
+    comment = get_object_or_404(FoundryComment, id=comment_id)
+
+    # Only create object if user is allowed to report
+    if comment.can_report(request):
+        CommentReport.objects.create(comment=comment, reporter=request.user)
+
+    next = request.REQUEST.get('next')
+    response = HttpResponseRedirect(next or comment.content_object.get_absolute_url())
+    # Set cookie since it is very expensive to query whether a user may report
+    # a comment for each comment.
+    ids = request.COOKIES.get('comment_report_ids', '0').split()
+    key = str(comment.id)
+    if key not in ids:
+        ids.append(key)
+    response.set_cookie(
+        'comment_report_ids',
+        value=' '.join(ids), 
+        max_age=365*86400*20
+    )
+    return response
 
 
 def chatroom_detail(request, slug):    
