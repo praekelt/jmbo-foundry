@@ -237,6 +237,14 @@ urlpatterns = patterns('',
         name='comment-reply-form'
     ),
 
+    # Report comment
+    url(
+        r'^report-comment/(?P<comment_id>\d+)/$',
+        'foundry.views.report_comment',
+        {},
+        name='report-comment'
+    ),
+
     # Chatroom detail
     url(
         r'^chatroom/(?P<slug>[\w-]+)/$',

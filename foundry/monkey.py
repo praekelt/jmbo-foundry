@@ -238,4 +238,9 @@ from django.contrib.sites.models import Site
 def Site__unicode__(self):
     return self.name
 
+def Site_title(self):
+    # Strip away (smart), (web) etc
+    return self.name.split('(')[0]
+
 Site.__unicode__ = Site__unicode__    
+Site.title = Site_title

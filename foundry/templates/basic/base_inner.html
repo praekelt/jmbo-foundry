@@ -6,11 +6,11 @@
 <head>
     <meta property="og:site_name" content="{{ CURRENT_SITE.name }}" />
     {% block extrameta %}
-    <meta property="og:title" content="{{ CURRENT_SITE.name }}" />
+    <meta property="og:title" content="{{ CURRENT_SITE.title }}" />
     <meta property="og:image" content="{{ STATIC_URL }}images/logo.jpg" />
     <meta property="og:description" content="Jmbo is a mobile-focused content delivery platform for the delivery of dynamic experiences to audiences in emerging markets." />
     {% endblock %}
-    <title>{{ CURRENT_SITE.name }}</title>
+    <title>{{ CURRENT_SITE.title }}</title>
     {% compress css %}
     <link href="{{ STATIC_URL }}css/main.css" rel="stylesheet" type="text/css" />
     <link href="{{ STATIC_URL }}css/tile.css" rel="stylesheet" type="text/css" />
