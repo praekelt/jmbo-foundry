@@ -69,27 +69,27 @@ $(document).ready(function(){
                     {% endif %}
                     <div class="meta">
                         <div class="byline">{% humanize_time_diff comment.submit_date _('ago') %}</div>
+                    </div>
+                    <div class="actions">
                         <!-- todo: Need can comment test -->
-                        <div class="actions">
-                            <div class="action">
-                                <a href="{% url comment-reply-form %}?content_type_id={{ comment.content_type_id }}&oid={{ comment.object_pk }}&path_info={{ request.META.PATH_INFO }}&my_messages={{ request.REQUEST.my_messages }}&paginate_by={{ request.REQUEST.paginate_by }}" 
-                                   class="comment-reply" 
-                                   comment_id="{{ comment.id }}" 
-                                   creator="{{ comment.creator.username }}">{% trans "Reply" %}
-                                </a>
-                            </div>
-                            {% if request.user.is_authenticated %}
-                                {% with comment.id|stringformat:"s" as comment_id %}
-                                {% with "comment_report_"|add:comment_id as key %}
-                                {% if not key in request.COOKIES %}
-                                    <div class="action">
-                                        <a href="{% url report-comment comment.id %}?next={{ request.META.PATH_INFO|add:"?"|add:request.META.QUERY_STRING|urlencode }}" onclick="return window.confirm('{% trans "Are you sure you want to report this comment?" %}');">{% trans "Report comment" %}</a>
-                                    </div>
-                                {% endif %}
-                                {% endwith %}
-                                {% endwith %}
-                            {% endif %}
+                        <div class="action">
+                            <a href="{% url comment-reply-form %}?content_type_id={{ comment.content_type_id }}&oid={{ comment.object_pk }}&path_info={{ request.META.PATH_INFO }}&my_messages={{ request.REQUEST.my_messages }}&paginate_by={{ request.REQUEST.paginate_by }}" 
+                               class="comment-reply" 
+                               comment_id="{{ comment.id }}" 
+                               creator="{{ comment.creator.username }}">{% trans "Reply" %}
+                            </a>
                         </div>
+                        {% if request.user.is_authenticated %}
+                            {% with comment.id|stringformat:"s" as comment_id %}
+                            {% with "comment_report_"|add:comment_id as key %}
+                            {% if not key in request.COOKIES %}
+                                <div class="action">
+                                    <a href="{% url report-comment comment.id %}?next={{ request.META.PATH_INFO|add:"?"|add:request.META.QUERY_STRING|urlencode }}" onclick="return window.confirm('{% trans "Are you sure you want to report this comment?" %}');">{% trans "Report comment" %}</a>
+                                </div>
+                            {% endif %}
+                            {% endwith %}
+                            {% endwith %}
+                        {% endif %}
                     </div>
                     <div class="comment">
                         <span class="creator">{{ comment.user.username|default:comment.name }}:</span> {{ comment.comment|urlize }}
