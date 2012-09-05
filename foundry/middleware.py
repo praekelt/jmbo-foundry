@@ -65,6 +65,17 @@ class AgeGateway:
             ):
             return response
 
+        # Exempted IP addresses
+        exempted_ips = preferences.GeneralPreferences.exempted_ips
+        if exempted_ips \
+            and (
+                re.match(
+                    r'|'.join(exempted_ips.split()), 
+                    request.META['REMOTE_ADDR']
+               ) is not None
+            ):
+            return response
+
         user = getattr(request, 'user', None)
         if (user is not None) and user.is_anonymous():
             if private_site:
