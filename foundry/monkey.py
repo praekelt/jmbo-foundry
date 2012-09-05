@@ -86,6 +86,8 @@ ErrorList.__unicode__ = errorlist_as_div
 
 
 """Patch photologue so PhotoSizeCache is layer aware"""
+import re
+
 from django.utils.functional import curry
 from django.conf import settings
 
@@ -103,7 +105,8 @@ def add_accessor_methods(self, *args, **kwargs):
         setattr(self, 'get_%s_filename' % size,
                 curry(self._get_SIZE_filename, size=size))
 
-        layer_size = '_'.join(size.split('_')[:-1]) + '_LAYER'
+        layers = settings.FOUNDRY['layers']
+        layer_size = re.sub(r'_(%s)$' % '|'.join(layers), '', size) + '_LAYER'
         setattr(self, 'get_%s_size' % layer_size,
                 curry(self._get_SIZE_size, size=layer_size))
         setattr(self, 'get_%s_photosize' % layer_size,
@@ -244,3 +247,18 @@ def Site_title(self):
 
 Site.__unicode__ = Site__unicode__    
 Site.title = Site_title
+
+
+"""Why are we patching a product we control? Because Jmbo itself is not layer
+aware."""
+from jmbo.models import ModelBase
+
+def ModelBase_image_detail_url(self):
+        method = 'get_%s_detail_url' % self.__class__.__name__.lower()
+        if hasattr(self, method):
+            method_layer = 'get_%s_detail_LAYER_url' % self.__class__.__name__.lower()
+            return getattr(self, method_layer)()
+        else:
+            return getattr(self, 'get_modelbase_detail_LAYER_url')()
+
+ModelBase.image_detail_url = ModelBase_image_detail_url
