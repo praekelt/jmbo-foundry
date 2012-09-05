@@ -7,7 +7,7 @@ next
 #. Listings now have automatic RSS feeds.
 #. Comment form now fires up correct virtual keyboard for a smart phone.
 #. Logged in members can now flag offensive comments. After three flags a moderator is notified.
-#. Some IP addresses can now be allowd to bypass the age gateway / private site. This allows the sharing of protected content via eg. Facebook and Twitter.
+#. Some IP addresses can now be allowed to bypass the age gateway / private site. This allows the sharing of protected content via eg. Facebook and Twitter.
 
 0.7.2
 -----
