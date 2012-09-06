@@ -1,6 +1,8 @@
 from django.contrib.syndication.views import Feed
 from django.shortcuts import get_object_or_404
 
+from jmbo.models import ModelBase
+
 from foundry.models import Listing, Page
 
 
@@ -19,6 +21,9 @@ class ListingFeed(Feed):
         return obj.get_absolute_url()
 
     def items(self, obj):
+        if not obj.enable_syndication:
+            return ModelBase.objects.none()
+
         qs = obj.queryset()
         limit = obj.items_per_page or 10
         return qs[:limit]

@@ -41,6 +41,11 @@ class AgeGateway:
         if re.match(PROTECTED_URLS_PATTERN, request.META['PATH_INFO']) is not None:
             return response
 
+        # Listing feeds also exempted
+        # todo: make the test more refined.
+        if request.META['PATH_INFO'].endswith('/feed/'):
+            return response
+
         # Now only do we hit the database
         # xxx: investigate preference caching. May want to hit the db less.
         private_site = preferences.GeneralPreferences.private_site

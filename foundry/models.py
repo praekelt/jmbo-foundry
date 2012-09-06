@@ -256,6 +256,7 @@ all listings; however, others may be very specific and not work with the listing
         help_text="""Display the title if used as a tile within a more 
 complex page."""
     )
+    enable_syndication = models.BooleanField(default=False)
     sites = models.ManyToManyField(
         'sites.Site',
         blank=True,
