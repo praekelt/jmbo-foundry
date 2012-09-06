@@ -26,7 +26,7 @@ class ListingResource(ModelResource):
 
         # Batching
         link = bundle.obj
-        qs = link.queryset        
+        qs = link.queryset()
         if link.items_per_page:
             # The seemingly strange page calculation is due to
             # django-paginations's middleware.
