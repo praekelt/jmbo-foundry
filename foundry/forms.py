@@ -464,8 +464,9 @@ class CreateBlogPostForm(forms.ModelForm):
         self.fields['content'].label = _("Content")
         
     def clean(self):
-        if len(BeautifulSoup(self.cleaned_data["content"]).findAll(True)) > 0:
-            raise forms.ValidationError(_('You are not permitted to embed HTML code inside a blog post.'))
+        if self.cleaned_data.has_key('content'):
+            if len(BeautifulSoup(self.cleaned_data['content']).findAll(True)) > 0:
+                raise forms.ValidationError(_('You are not permitted to embed HTML code inside a blog post.'))
         
         return self.cleaned_data
         
