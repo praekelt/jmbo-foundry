@@ -715,6 +715,9 @@ class FoundryComment(BaseComment):
     """Custom comment class"""
     in_reply_to = models.ForeignKey('self', null=True, blank=True, db_index=True)
     moderated = models.BooleanField(default=False, db_index=True)
+    
+    class Meta:
+        ordering =('-submit_date',)
 
     @property
     def replies(self):
