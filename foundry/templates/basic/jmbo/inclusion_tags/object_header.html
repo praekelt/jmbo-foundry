@@ -11,10 +11,6 @@ todo: This template must be backported to jmbo itself.
 
 	<div class="meta">
 
-        <div class="byline">
-            {% blocktrans %}By{% endblocktrans %} <a href="{{ object.owner.get_absolute_url }}">{{ object.owner }}</a> {% blocktrans %}on{% endblocktrans %} {{ object.created|date:"j F Y" }}
-        </div>
-
         {% if object.comments_enabled %}
         <div class="comments">
             {% with object.comment_count as total %}
@@ -28,6 +24,21 @@ todo: This template must be backported to jmbo itself.
             {% likes object %}
         </div>
         {% endif %}
+
+        <div class="sharing">
+            <div class="facebook">
+                <a href="http://www.facebook.com/sharer.php?u=http{% if request.is_secure %}s{%endif %}://{{ request.META.HTTP_HOST }}{{ object.get_absolute_url|iriencode }}&t={{ object.title|iriencode }}"
+                   target="blank">
+                   <img src="{{ STATIC_URL }}images/facebook_share.png" alt="{% trans "Share via Facebook" %}" />
+                </a>
+            </div>
+            <div class="twitter">
+                <a href="http://www.twitter.com/share?url=http{% if request.is_secure %}s{%endif %}://{{ request.META.HTTP_HOST }}{{ object.get_absolute_url|iriencode }}"
+                   target="blank">
+                   <img src="{{ STATIC_URL }}images/twitter_share.png" alt="{% trans "Share via Twitter" %}" />
+                </a>
+            </div>
+        </div>
 
     </div>
 

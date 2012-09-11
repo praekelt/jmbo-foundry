@@ -11,6 +11,7 @@ next
 #. Listing gets an optional RSS feed.
 #. Simplified paginator. No more breadcrumbs.
 #. Show less metadata in mobi listings.
+#. Ditch addthis sharing widget. It is too slow.
 
 0.7.2
 -----
