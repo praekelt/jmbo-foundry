@@ -12,6 +12,7 @@ next
 #. Simplified paginator. No more breadcrumbs.
 #. Show less metadata in mobi listings.
 #. Ditch addthis sharing widget. It is too slow.
+#. Simplified commenting and chatroom. Removed some navigation links.
 
 0.7.2
 -----

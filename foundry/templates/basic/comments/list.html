@@ -22,33 +22,7 @@ $(document).ready(function(){
 </script>
 {% endif %}
 
-{% if request.user.is_authenticated %}
-<div class="foundry-comments-messages-navbar">
-    <div class="items">
-        <div class="item first {% if not request.REQUEST.my_messages %}active{% endif %}">
-            <a href=".">{% trans "All messages" %}</a>
-        </div>
-        <div class="item last {% if request.REQUEST.my_messages %}active{% endif %}">
-            <a href="?my_messages=1">{% trans "My messages" %}</a>
-        </div>
-    </div>
-</div>
-{% endif %}
-
 {% with request.REQUEST.paginate_by|default:20|add:0 as paginate_by %}
-
-    <div class="foundry-comments-pages-navbar">
-        <div class="items">
-            <div class="item first">{% trans "Show" %}</div>
-            {% with '20 30 50'|as_list:'int' as li %}
-                {% for n in li %}
-                    <div class="item {% if paginate_by == n %}active{% endif %} {% if forloop.last %}last{% endif %}">
-                        <a href="?paginate_by={{ n }}{% if request.REQUEST.my_messages %}&my_messages=1{% endif %}">{{ n }}</a>
-                    </div>
-                {% endfor %}
-            {% endwith %}
-        </div>
-    </div>
 
     <div class="foundry-container foundry-comments-list">
     
@@ -68,23 +42,27 @@ $(document).ready(function(){
                     </div>
                     {% endif %}
                     <div class="meta">
-                        <div class="byline">{% humanize_time_diff comment.submit_date _('ago') %}</div>
+                        <div class="byline">{% humanize_time_diff comment.submit_date '' %}</div>
                     </div>
                     <div class="actions">
                         <!-- todo: Need can comment test -->
                         <div class="reply">
-                            <a href="{% url comment-reply-form %}?content_type_id={{ comment.content_type_id }}&oid={{ comment.object_pk }}&path_info={{ request.META.PATH_INFO }}&my_messages={{ request.REQUEST.my_messages }}&paginate_by={{ request.REQUEST.paginate_by }}" 
-                               class="comment-reply" 
-                               comment_id="{{ comment.id }}" 
-                               creator="{{ comment.creator.username }}">{% trans "Reply" %}
-                            </a>
+                            {% with request.POST.next|default:request.META.PATH_INFO as next %}
+                                <a href="{% url comment-reply-form %}?content_type_id={{ comment.content_type_id }}&oid={{ comment.object_pk }}&next={{ next }}&paginate_by={{ paginate_by }}" 
+                                   class="comment-reply" 
+                                   comment_id="{{ comment.id }}" 
+                                   creator="{{ comment.creator.username }}">{% trans "Reply" %}
+                                </a>
+                            {% endwith %}
                         </div>
                         {% if request.user.is_authenticated %}
                             {% with comment.id|stringformat:"s" as comment_id %}
                             {% with "comment_report_"|add:comment_id as key %}
                             {% if not key in request.COOKIES %}
                                 <div class="report">
-                                    <a href="{% url report-comment comment.id %}?next={{ request.META.PATH_INFO|add:"?"|add:request.META.QUERY_STRING|urlencode }}" onclick="return window.confirm('{% trans "Are you sure you want to report this comment?" %}');">{% trans "Report comment" %}</a>
+                                    {% with request.POST.next|default:request.META.PATH_INFO as next %}
+                                        <a href="{% url report-comment comment.id %}?next={{ next|add:"?"|add:request.META.QUERY_STRING|urlencode }}" onclick="return window.confirm('{% trans "Are you sure you want to report this?" %}');">{% trans "Report" %}</a>
+                                    {% endwith %}
                                 </div>
                             {% endif %}
                             {% endwith %}

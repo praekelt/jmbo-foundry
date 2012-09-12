@@ -457,17 +457,10 @@ class CommentForm(BaseCommentForm):
         self.fields['email'].initial = 'anonymous@jmbo.org'
 
         # Override label
-        instance = args[0]
-        if instance.class_name == 'ChatRoom':
-            self.fields['comment'].label = _('Post your message')
-        else:
-            self.fields['comment'].label = _('Post your comment')
+        self.fields['comment'].label = ''
 
-        # Change input type if smart is in layers. This is required because 
-        # smart phone virtual keyboards do not display a dismiss button for 
-        # textareas.
-        if 'smart' in settings.FOUNDRY['layers']:
-            self.fields['comment'].widget = forms.widgets.TextInput()
+        # Widget override not working in Meta class for some reason
+        self.fields['comment'].widget = forms.widgets.TextInput()
 
     def get_comment_model(self):
         return models.FoundryComment

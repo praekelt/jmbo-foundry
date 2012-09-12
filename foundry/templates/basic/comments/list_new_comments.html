@@ -1,27 +1,50 @@
 {% load jmbo_template_tags i18n %}
 
 {% for comment in comment_list %}
-   <div id="c{{ comment.id }}" class="item">
-       <div class="image">
-           {% if comment.creator.image %}
-               <img src="{{ comment.creator.get_thumbnail_LAYER_url }}" />
-           {% else %}
-               <img src="{{ STATIC_URL }}/images/anonymous.png" />
-           {% endif %}
-       </div>
-       <div class="meta">
-           <div class="byline">{% humanize_time_diff comment.submit_date _('ago') %}</div>
-           <!-- todo: Need can comment test -->
-           <a href="{% url comment-reply-form %}?content_type_id={{ comment.content_type_id }}&oid={{ comment.object_pk }}&path_info={{ request.META.PATH_INFO }}&my_messages={{ request.GET.my_messages }}&paginate_by={{ request.GET.paginate_by }}" 
-              class="comment-reply" 
-              comment_id="{{ comment.id }}" 
-              creator="{{ comment.creator.username }}">{% trans "Reply" %}
-           </a>
-       </div>
-       <div class="comment">
-           {{ comment.user.username|default:comment.name }}: {{ comment.comment|urlize }}
-       </div>
-   </div>
+    <div id="c{{ comment.id }}" class="item">
+        {% if comment.creator %}
+        <div class="image">                        
+            <a href="{% url user-detail comment.creator.username %}">
+            {% if comment.creator.image %}
+                <img src="{{ comment.creator.get_thumbnail_LAYER_url }}" />
+            {% else %}
+                <img src="{{ STATIC_URL }}/images/anonymous.png" />
+            {% endif %}
+            </a>
+        </div>
+        {% endif %}
+        <div class="meta">
+            <div class="byline">{% humanize_time_diff comment.submit_date '' %}</div>
+        </div>
+        <div class="actions">
+            <!-- todo: Need can comment test -->
+            <div class="reply">
+                {% with request.POST.next|default:request.META.PATH_INFO as next %}
+                    <a href="{% url comment-reply-form %}?content_type_id={{ comment.content_type_id }}&oid={{ comment.object_pk }}&next={{ next }}&paginate_by={{ paginate_by }}" 
+                       class="comment-reply" 
+                       comment_id="{{ comment.id }}" 
+                       creator="{{ comment.creator.username }}">{% trans "Reply" %}
+                    </a>
+                {% endwith %}
+            </div>
+            {% if request.user.is_authenticated %}
+                {% with comment.id|stringformat:"s" as comment_id %}
+                {% with "comment_report_"|add:comment_id as key %}
+                {% if not key in request.COOKIES %}
+                    <div class="report">
+                        {% with request.POST.next|default:request.META.PATH_INFO as next %}
+                            <a href="{% url report-comment comment.id %}?next={{ next|add:"?"|add:request.META.QUERY_STRING|urlencode }}" onclick="return window.confirm('{% trans "Are you sure you want to report this?" %}');">{% trans "Report" %}</a>
+                        {% endwith %}
+                    </div>
+                {% endif %}
+                {% endwith %}
+                {% endwith %}
+            {% endif %}
+        </div>
+        <div class="comment">
+            <span class="creator">{{ comment.user.username|default:comment.name }}:</span> {{ comment.comment|urlize }}
+        </div>
+    </div>
 {% endfor %}
 
 <div 
