@@ -2,7 +2,6 @@
 
 <div class="comment-list">
 
-{% if FOUNDRY.has_javascript %}
 <script type="text/javascript">
 $(document).ready(function(){
     $('a.comment-reply').live('click', function(event){
@@ -20,7 +19,6 @@ $(document).ready(function(){
     });
 });
 </script>
-{% endif %}
 
 {% with request.REQUEST.paginate_by|default:20|add:0 as paginate_by %}
 
@@ -58,13 +56,15 @@ $(document).ready(function(){
                         {% if request.user.is_authenticated %}
                             {% with comment.id|stringformat:"s" as comment_id %}
                             {% with "comment_report_"|add:comment_id as key %}
-                            {% if not key in request.COOKIES %}
-                                <div class="report">
+                            <div class="report">
+                                {% if not key in request.COOKIES %}
                                     {% with request.POST.next|default:request.META.PATH_INFO as next %}
                                         <a href="{% url report-comment comment.id %}?next={{ next|add:"?"|add:request.META.QUERY_STRING|urlencode }}" onclick="return window.confirm('{% trans "Are you sure you want to report this?" %}');">{% trans "Report" %}</a>
                                     {% endwith %}
-                                </div>
-                            {% endif %}
+                                {% else %}
+                                    {% trans "Reported" %}
+                                {% endif %}
+                            </div>
                             {% endwith %}
                             {% endwith %}
                         {% endif %}
@@ -74,14 +74,12 @@ $(document).ready(function(){
                     </div>
                 </div>
             {% endfor %}
-            {% if FOUNDRY.has_ajax %}
             <div 
                 class="comment-list-placeholder" 
                 content_type_id="{{ object.content_type_id }}" 
                 oid="{{ object.id }}"
                 last_comment_id="{{ foundry_last_comment_id }}">
             </div>
-            {% endif %}
         </div>
 
         {% paginate %}
