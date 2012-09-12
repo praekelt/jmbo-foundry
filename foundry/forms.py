@@ -443,8 +443,9 @@ class CommentForm(BaseCommentForm):
         return data
         
     def clean(self):
-        if len(BeautifulSoup(self.cleaned_data["comment"]).findAll(True)) > 0:
-            raise forms.ValidationError(_('You are not permitted to embed HTML code inside a comment.'))
+        if self.cleaned_data.has_key('comment'):
+            if len(BeautifulSoup(self.cleaned_data["comment"]).findAll(True)) > 0:
+                raise forms.ValidationError(_('You are not permitted to embed HTML code inside a comment.'))
         
         return self.cleaned_data
 
