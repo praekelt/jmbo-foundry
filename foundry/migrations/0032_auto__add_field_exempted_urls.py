@@ -12,7 +12,9 @@ class Migration(SchemaMigration):
         cursor = connection.cursor()
         try:
             cursor.execute('select exempted_urls from preferences_generalpreferences')
+            connection.close()
         except:
+            connection.close()
             db.add_column('preferences_generalpreferences', 'exempted_urls', self.gf('django.db.models.fields.TextField')(default=''), keep_default=False)
 
     def backwards(self, orm):
