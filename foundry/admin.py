@@ -129,7 +129,7 @@ class ListingAdminForm(forms.ModelForm):
         fields = (
             'title', 'slug', 'subtitle', 'content_type', 'category', 'content',
             'pinned', 'style', 'count', 'items_per_page', 'view_modifier', 
-            'display_title_tiled', 'sites'
+            'display_title_tiled', 'enable_syndication', 'sites'
         )       
         widgets = {
             'sites': SitesGroupsWidget,

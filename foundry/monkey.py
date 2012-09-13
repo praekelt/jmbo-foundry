@@ -86,6 +86,8 @@ ErrorList.__unicode__ = errorlist_as_div
 
 
 """Patch photologue so PhotoSizeCache is layer aware"""
+import re
+
 from django.utils.functional import curry
 from django.conf import settings
 
@@ -103,7 +105,8 @@ def add_accessor_methods(self, *args, **kwargs):
         setattr(self, 'get_%s_filename' % size,
                 curry(self._get_SIZE_filename, size=size))
 
-        layer_size = '_'.join(size.split('_')[:-1]) + '_LAYER'
+        layers = settings.FOUNDRY['layers']
+        layer_size = re.sub(r'_(%s)$' % '|'.join(layers), '', size) + '_LAYER'
         setattr(self, 'get_%s_size' % layer_size,
                 curry(self._get_SIZE_size, size=layer_size))
         setattr(self, 'get_%s_photosize' % layer_size,

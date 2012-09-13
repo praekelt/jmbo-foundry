@@ -11,14 +11,14 @@ class Migration(SchemaMigration):
         connection = db._get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('select exempted_urls from preferences_generalpreferences')
+            cursor.execute('select exempted_ips from preferences_generalpreferences')
             connection.close()
         except:
             connection.close()
-            db.add_column('preferences_generalpreferences', 'exempted_urls', self.gf('django.db.models.fields.TextField')(default=''), keep_default=False)
+            db.add_column('preferences_generalpreferences', 'exempted_ips', self.gf('django.db.models.fields.TextField')(default=''), keep_default=False)
 
     def backwards(self, orm):
-        db.delete_column('preferences_generalpreferences', 'exempted_urls')
+        db.delete_column('preferences_generalpreferences', 'exempted_ips')
 
     models = {
         'auth.group': {
@@ -102,14 +102,22 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'index': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
             'row': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Row']"}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'width': ('django.db.models.fields.PositiveIntegerField', [], {'default': '8'})
+        },
+        'foundry.commentreport': {
+            'Meta': {'object_name': 'CommentReport'},
+            'comment': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.FoundryComment']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'reporter': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
         'foundry.country': {
             'Meta': {'ordering': "('title',)", 'object_name': 'Country'},
+            'country_code': ('django.db.models.fields.CharField', [], {'max_length': '2', 'unique': 'True', 'null': 'True', 'db_index': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'minimum_age': ('django.db.models.fields.PositiveIntegerField', [], {'default': '18'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '32'})
+            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
         'foundry.defaultavatar': {
             'Meta': {'object_name': 'DefaultAvatar'},
@@ -130,6 +138,7 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "('title',)", 'object_name': 'Link'},
             'category': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['category.Category']", 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'subtitle': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'target_content_type': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'link_target_content_type'", 'null': 'True', 'to': "orm['contenttypes.ContentType']"}),
             'target_object_id': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
@@ -142,13 +151,16 @@ class Migration(SchemaMigration):
             'content': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['jmbo.ModelBase']", 'null': 'True', 'blank': 'True'}),
             'content_type': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['contenttypes.ContentType']", 'null': 'True', 'blank': 'True'}),
             'count': ('django.db.models.fields.IntegerField', [], {}),
+            'display_title_tiled': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'items_per_page': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
+            'pinned': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'listing_pinned'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['jmbo.ModelBase']"}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32'}),
             'style': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'subtitle': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '256'})
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'view_modifier': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '255', 'null': 'True', 'blank': 'True'})
         },
         'foundry.member': {
             'Meta': {'object_name': 'Member', '_ormbases': ['auth.User']},
@@ -161,6 +173,8 @@ class Migration(SchemaMigration):
             'facebook_id': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
             'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'blank': 'True'}),
             'mobile_number': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
+            'receive_email': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'receive_sms': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'twitter_username': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
             'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'}),
             'view_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'})

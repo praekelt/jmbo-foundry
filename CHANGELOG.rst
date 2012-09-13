@@ -7,6 +7,12 @@ next
 #. Listings now have automatic RSS feeds.
 #. Comment form now fires up correct virtual keyboard for a smart phone.
 #. Logged in members can now flag offensive comments. After three flags a moderator is notified.
+#. Some IP addresses can now be allowed to bypass the age gateway / private site. This allows the sharing of protected content via eg. Facebook and Twitter.
+#. Listing gets an optional RSS feed.
+#. Simplified paginator. No more breadcrumbs.
+#. Show less metadata in mobi listings.
+#. Ditch addthis sharing widget. It is too slow.
+#. Simplified commenting and chatroom. Removed some navigation links.
 
 0.7.2
 -----

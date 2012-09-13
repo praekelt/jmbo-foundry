@@ -356,10 +356,16 @@ class PasswordResetForm(BasePasswordResetForm):
         else:
             del self.fields['email']
         
-    def save(self, domain_override=None, email_template_name='registration/password_reset_email.html',
-             use_https=False, token_generator=default_token_generator, from_email=None, request=None):
+    def save(self, **kwargs):
         """Override entire method. Due to the layout of the original method we
         cannot do a super() call."""
+        domain_override = kwargs.get('domain_override', None)
+        email_template_name = kwargs.get('email_template_name', 'registration/password_reset_email.html')
+        use_https = kwargs.get('use_https', False)
+        token_generator = kwargs.get('token_generator', default_token_generator)
+        from_email = kwargs.get('from_email', None)
+        request = kwargs.get('request', None)
+        subject_template_name = kwargs.get('subject_template_name', 'registration/password_reset_subject.txt')
         from django.core.mail import send_mail
         for user in self.users_cache:
             if not domain_override:
@@ -457,17 +463,10 @@ class CommentForm(BaseCommentForm):
         self.fields['email'].initial = 'anonymous@jmbo.org'
 
         # Override label
-        instance = args[0]
-        if instance.class_name == 'ChatRoom':
-            self.fields['comment'].label = _('Post your message')
-        else:
-            self.fields['comment'].label = _('Post your comment')
+        self.fields['comment'].label = ''
 
-        # Change input type if smart is in layers. This is required because 
-        # smart phone virtual keyboards do not display a dismiss button for 
-        # textareas.
-        if 'smart' in settings.FOUNDRY['layers']:
-            self.fields['comment'].widget = forms.widgets.TextInput()
+        # Widget override not working in Meta class for some reason
+        self.fields['comment'].widget = forms.widgets.TextInput()
 
     def get_comment_model(self):
         return models.FoundryComment

@@ -256,6 +256,7 @@ all listings; however, others may be very specific and not work with the listing
         help_text="""Display the title if used as a tile within a more 
 complex page."""
     )
+    enable_syndication = models.BooleanField(default=False)
     sites = models.ManyToManyField(
         'sites.Site',
         blank=True,
@@ -367,6 +368,14 @@ class GeneralPreferences(Preferences):
 Age Gateway. Certain URLs like /login are already protected and do not need \
 to be listed. One entry per line. Matches are wildcard by default, eg. \
 /my-page will match /my-pages/the-red-one.'''
+    )
+    exempted_ips = models.TextField(
+        "Exempted IP addresses",
+        blank=True,
+        default='',
+        help_text='''IP address patterns that are exempted from the Private Site and \
+Age Gateway. Matches are wildcard by default, eg. \
+192.168.0 will match 192.168.0.5.'''
     )
     analytics_tags = models.TextField(
         null=True, 
