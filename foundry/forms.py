@@ -39,7 +39,7 @@ class TermsCheckboxInput(forms.widgets.CheckboxInput):
 
     def render(self, *args, **kwargs):
         result = super(TermsCheckboxInput, self).render(*args, **kwargs)
-        return result + ugettext("""I accept the <a href="/terms-and-conditions" target="external">terms and conditions</a>""")
+        return result + ugettext("""I accept the <a href="/terms-and-conditions/" target="external">terms and conditions</a>""")
 
 
 class RememberMeCheckboxInput(forms.widgets.CheckboxInput):
