@@ -356,10 +356,16 @@ class PasswordResetForm(BasePasswordResetForm):
         else:
             del self.fields['email']
         
-    def save(self, domain_override=None, email_template_name='registration/password_reset_email.html',
-             use_https=False, token_generator=default_token_generator, from_email=None, request=None):
+    def save(self, **kwargs):
         """Override entire method. Due to the layout of the original method we
         cannot do a super() call."""
+        domain_override = kwargs.get('domain_override', None)
+        email_template_name = kwargs.get('email_template_name', 'registration/password_reset_email.html')
+        use_https = kwargs.get('use_https', False)
+        token_generator = kwargs.get('token_generator', default_token_generator)
+        from_email = kwargs.get('from_email', None)
+        request = kwargs.get('request', None)
+        subject_template_name = kwargs.get('subject_template_name', 'registration/password_reset_subject.txt')
         from django.core.mail import send_mail
         for user in self.users_cache:
             if not domain_override:
