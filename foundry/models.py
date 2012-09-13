@@ -383,6 +383,21 @@ Age Gateway. Matches are wildcard by default, eg. \
         help_text="""May contain tags and javascript. Set this even if the 
 preference is for a mobile site."""
     )
+    exempted_user_agents = models.TextField(
+        "Exempted user agents",
+        blank=True,
+        default='Googlebot\nTwitterbot\nfacebookexternalhit\n',
+        help_text='''User agents patterns that are exempted from only the Age Gateway. 
+This is useful when wanting to share content that is protected by an age 
+gateway with eg. Facebook. Matches are wildcard by default, eg. \
+my-user-agent will match my-user-agent-version-two.'''
+    )
+    analytics_tags = models.TextField(
+        null=True, 
+        blank=True,
+        help_text="""May contain tags and javascript. Set this even if the 
+preference is for a mobile site."""
+    )
 
     class Meta:
         verbose_name_plural = 'General Preferences'

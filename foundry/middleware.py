@@ -81,6 +81,18 @@ class AgeGateway:
             ):
             return response
 
+        # Exempted user agents. Only applicable to age gateway.
+        if not private_site:
+            exempted_user_agents = preferences.GeneralPreferences.exempted_user_agents
+            if exempted_user_agents \
+                and (
+                    re.match(
+                        r'|'.join(exempted_user_agents.split()), 
+                        request.META['PATH_INFO']
+                   ) is not None
+                ):
+                return response
+
         user = getattr(request, 'user', None)
         if (user is not None) and user.is_anonymous():
             if private_site:
