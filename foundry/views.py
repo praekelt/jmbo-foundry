@@ -270,7 +270,7 @@ def comment_reply_form(request):
     obj = ContentType.objects.get(
         id=request.GET['content_type_id']
     ).get_object_for_this_type(id=request.GET['oid'])
-    extra = {'object': obj, 'next': request.GET['path_info']}
+    extra = {'object': obj, 'next': request.GET['next']}
     return render_to_response('foundry/comment_reply_form.html', extra, context_instance=RequestContext(request))
 
 
