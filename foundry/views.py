@@ -284,7 +284,7 @@ class Share(View):
             
             return HttpResponseRedirect(url)
         except:
-            return HttpResponseServerError('The request could ot be completed: Request Error.')
+            return Http404()
 
 # Caching duration matches the refresh rate
 @cache_page(30) 
