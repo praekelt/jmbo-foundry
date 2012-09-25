@@ -2,6 +2,7 @@
 We are not yet ready to rename django-profile, so copy and paste models.
 """
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
 from django.db import models
 
 from photologue.models import ImageModel
@@ -85,8 +86,8 @@ class AbstractPersonalProfile(models.Model):
         blank=True,
         null=True,
         choices=(
-            ('F', 'Female'),
-            ('M', 'Male'),
+            ('F', _('Female')),
+            ('M', _('Male')),
         )
     )
 
