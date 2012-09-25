@@ -80,6 +80,16 @@ class AbstractPersonalProfile(models.Model):
         null=True,
     )
     
+    gender = models.CharField(
+        max_length=1,
+        blank=True,
+        null=True,
+        choices=(
+            ('F', 'Female'),
+            ('M', 'Male'),
+        )
+    )
+
     about_me = models.TextField(
         blank=True,
         null=True,                                
