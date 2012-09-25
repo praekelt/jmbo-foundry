@@ -65,6 +65,11 @@ class AbstractLocationProfile(models.Model):
         blank=True,
         null=True,
     )
+    zipcode = models.CharField(
+        max_length=32,
+        blank=True,
+        null=True,
+    )
     province = models.CharField(
         max_length=256,
         blank=True,

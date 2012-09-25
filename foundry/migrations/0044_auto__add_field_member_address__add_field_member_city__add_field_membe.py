@@ -18,6 +18,11 @@ class Migration(SchemaMigration):
                       self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True),
                       keep_default=False)
 
+        # Adding field 'Member.zipcode'
+        db.add_column('foundry_member', 'zipcode',
+                      self.gf('django.db.models.fields.CharField')(max_length=32, null=True, blank=True),
+                      keep_default=False)
+
         # Adding field 'Member.province'
         db.add_column('foundry_member', 'province',
                       self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True),
@@ -35,6 +40,9 @@ class Migration(SchemaMigration):
 
         # Deleting field 'Member.city'
         db.delete_column('foundry_member', 'city')
+
+        # Deleting field 'Member.zipcode'
+        db.delete_column('foundry_member', 'zipcode')
 
         # Deleting field 'Member.province'
         db.delete_column('foundry_member', 'province')
@@ -241,7 +249,8 @@ class Migration(SchemaMigration):
             'receive_sms': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'twitter_username': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
             'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'}),
-            'view_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'})
+            'view_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
+            'zipcode': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'})
         },
         'foundry.menu': {
             'Meta': {'ordering': "('title', 'subtitle')", 'object_name': 'Menu'},
