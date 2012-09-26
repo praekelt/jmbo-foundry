@@ -20,6 +20,8 @@ from photologue.models import ImageModel
 from south.modelsinspector import add_introspection_rules
 from jmbo.utils import generate_slug
 from jmbo.models import ModelBase
+import secretballot
+from secretballot.models import Vote
 
 from foundry.profile_models import AbstractAvatarProfile, \
     AbstractSocialProfile, AbstractPersonalProfile, AbstractContactProfile, \
@@ -715,6 +717,23 @@ class FoundryComment(BaseComment):
     """Custom comment class"""
     in_reply_to = models.ForeignKey('self', null=True, blank=True, db_index=True)
     moderated = models.BooleanField(default=False, db_index=True)
+    likes_enabled = models.BooleanField(
+        verbose_name=_("Liking Enabled"),
+        help_text=_("Enable liking for this item. Likes will not display \
+when disabled."),
+        default=True,
+    )
+    anonymous_likes = models.BooleanField(
+        verbose_name=_("Anonymous Liking Enabled"),
+        help_text=_("Enable anonymous liking for this item."),
+        default=True,
+    )
+    likes_closed = models.BooleanField(
+        verbose_name=_("Liking Closed"),
+        help_text=_("Close liking for this item. Likes will still display, \
+but users won't be able to add new likes."),
+        default=False,
+    )
     
     class Meta:
         ordering =('-submit_date',)
@@ -744,6 +763,45 @@ class FoundryComment(BaseComment):
                                                                           self.comment)),
                                     content_object=self,
                                     image_object=self.user.member)
+
+    def can_vote(self, request):
+        """
+        Determnines whether or not the current user can vote.
+        Returns a bool as well as a string indicating the current vote status,
+        with vote status being one of: 'closed', 'disabled',
+        'auth_required', 'can_vote', 'voted'
+        """
+        # can't vote if liking is closed
+        if self.likes_closed:
+            return False, 'closed'
+
+        # can't vote if liking is disabled
+        if not self.likes_enabled:
+            return False, 'disabled'
+
+        # anonymous users can't vote if anonymous likes are disabled
+        if not request.user.is_authenticated() and not \
+                self.anonymous_likes:
+            return False, 'auth_required'
+
+        # return false if existing votes are found
+        if Vote.objects.filter(
+            object_id=self.id,
+            token=request.secretballot_token
+        ).count() == 0:
+            return True, 'can_vote'
+        else:
+            return False, 'voted'
+
+    @property
+    def vote_total(self):
+        """
+        Calculates vote total as total_upvotes - total_downvotes. We are
+        adding a method here instead of relying on django-secretballot's
+        addition since that doesn't work for subclasses.
+        """
+        return self.votes.filter(vote=+1).count() - \
+                self.votes.filter(vote=-1).count()
 
 
 class ChatRoom(ModelBase):
@@ -809,3 +867,10 @@ def check_slug(sender, **kwargs):
 
 # Custom fields to be handled by south
 add_introspection_rules([], ["^ckeditor\.fields\.RichTextField"])
+
+# enable voting for FoundryComment, but specify a different total name
+# so FoundryComment's vote_total method is not overwritten
+secretballot.enable_voting_on(
+    FoundryComment,
+    total_name="secretballot_added_vote_total"
+)
