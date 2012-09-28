@@ -39,6 +39,9 @@ from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
 from activity import constants as activity_constants
 from activity.models import UserActivity
 
+from likes import views as likes_views
+from likes.utils import can_vote
+
 def join(request):
     """Surface join form"""
     show_age_gateway = preferences.GeneralPreferences.show_age_gateway \
@@ -285,6 +288,21 @@ class Share(View):
             return HttpResponseRedirect(url)
         except:
             return Http404()
+
+def like(request, content_type, id, vote):
+    #content_type = content_type.replace("-", ".")
+    app, modelname = content_type.split('-')
+    object = ContentType.objects.get(app_label=app, model__iexact=modelname).model_class().objects.get(id=id)
+    
+    if can_vote(object, request.user, request):
+        UserActivity.track_activity(user=request.user.member,
+                                    activity=activity_constants.ACTIVITY_LIKED,
+                                    sub=ugettext('<a href="%s">%s</a>' % (object.get_absolute_url(),
+                                                                          object.title)),
+                                    content_object=object,
+                                    image_object=object)
+    return likes_views.like(request, content_type, id, vote)
+
 
 # Caching duration matches the refresh rate
 @cache_page(30) 

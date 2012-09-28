@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='0.5.3.unomena',
+    version='0.5.4.unomena',
     description='Jmbo foundry behaviour/templates app.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -39,12 +39,12 @@ setup(
                         'http://github.com/praekelt/jmbo-foundry/tarball/master#egg=jmbo-foundry',
                         'http://github.com/praekelt/jmbo-music/tarball/master#egg=jmbo-music',
                         'http://github.com/praekelt/jmbo-paste/tarball/master#egg=jmbo-paste',
-                        'http://github.com/praekelt/jmbo-poll/tarball/master#egg=jmbo-poll',
+                        'http://github.com/praekelt/jmbo-poll/tarball/0.0.7#egg=jmbo-poll-0.0.7',
                         'http://github.com/praekelt/jmbo-post/tarball/master#egg=jmbo-post',
                         'http://github.com/praekelt/jmbo-show/tarball/master#egg=jmbo-show',
                         'http://github.com/praekelt/jmbo-social/tarball/master#egg=jmbo-social',
                         'http://github.com/unomena/jmbo-friends/tarball/0.1.1.unomena#egg=jmbo-friends-0.1.1.unomena',
-                        'http://github.com/unomena/jmbo-activity/tarball/0.0.6#egg=jmbo-activity-0.0.6',
+                        'http://github.com/unomena/jmbo-activity/tarball/0.0.7#egg=jmbo-activity-0.0.7',
                         ],
     install_requires = [
         # todo: eliminate dependencies handled by apps themselves
@@ -86,7 +86,7 @@ setup(
         'django_compressor',
         'jmbo_analytics',
         'jmbo-friends==0.1.1.unomena',
-        'jmbo-activity==0.0.6',
+        'jmbo-activity==0.0.7',
         'jellyfish'
     ],
     include_package_data=True,
