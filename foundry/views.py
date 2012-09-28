@@ -32,7 +32,7 @@ from jmbo.view_modifiers import DefaultViewModifier
 from preferences import preferences
 
 from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification, \
-    Member, UserAgent
+    Member, UserAgent, FoundryComment
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
     SearchForm, CreateBlogPostForm
 
@@ -293,12 +293,13 @@ def like(request, content_type, id, vote):
     #content_type = content_type.replace("-", ".")
     app, modelname = content_type.split('-')
     object = ContentType.objects.get(app_label=app, model__iexact=modelname).model_class().objects.get(id=id)
-    
+    print isinstance(object, FoundryComment)
+    print '*******************************'
     if can_vote(object, request.user, request):
         UserActivity.track_activity(user=request.user.member,
                                     activity=activity_constants.ACTIVITY_LIKED,
                                     sub=ugettext('<a href="%s">%s</a>' % (object.get_absolute_url(),
-                                                                          object.title)),
+                                                                          object.comment if isinstance(object, FoundryComment) else object.title)),
                                     content_object=object,
                                     image_object=object)
     return likes_views.like(request, content_type, id, vote)
