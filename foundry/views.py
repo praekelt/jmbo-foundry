@@ -293,8 +293,7 @@ def like(request, content_type, id, vote):
     #content_type = content_type.replace("-", ".")
     app, modelname = content_type.split('-')
     object = ContentType.objects.get(app_label=app, model__iexact=modelname).model_class().objects.get(id=id)
-    print isinstance(object, FoundryComment)
-    print '*******************************'
+
     if can_vote(object, request.user, request):
         UserActivity.track_activity(user=request.user.member,
                                     activity=activity_constants.ACTIVITY_LIKED,
