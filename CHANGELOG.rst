@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.0
+---
 #. Patch django.contrib.sites.models.Site.__unicode__ so it returns name and not domain. The UI gets confusing since we have up to three sites comprising one logical mobi site.
 #. Listings now have automatic RSS feeds.
 #. Comment form now fires up correct virtual keyboard for a smart phone.
@@ -14,6 +14,7 @@ next
 #. Ditch addthis sharing widget. It is too slow.
 #. Simplified commenting and chatroom. Removed some navigation links.
 #. Some user agents can now be allowed to bypass the age gateway. This allows bots to crawl the site.
+#. Up required jmbo to 1.0.
 
 0.7.2
 -----
