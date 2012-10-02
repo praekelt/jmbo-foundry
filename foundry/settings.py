@@ -156,6 +156,7 @@ INSTALLED_APPS = (
     'analytics', # add to paster
     'gunicorn',
     'sites_groups',
+    'atlas',
     'tastypie',
     'django.contrib.auth',
     'django.contrib.comments',
@@ -164,6 +165,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     'django.contrib.admin',
 )
 
@@ -218,6 +220,10 @@ JMBO_ANALYTICS = {
 }
 
 PHOTOLOGUE_MAXBLOCK = 2 ** 20
+
+DJANGO_ATLAS = {
+    'google_maps_api_key': 'AIzaSyBvdwGsAn2h6tNI75M5cAcryln7rrTYqkk',
+}
 
 def compute_settings(sender):
     """Function not required anymore since our template loader and static file
