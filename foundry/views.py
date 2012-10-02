@@ -1,4 +1,3 @@
-import datetime
 import random
 import urllib
 
@@ -6,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login, get_backends
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
-    HttpResponseServerError
+    HttpResponseServerError, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext, loader
 from django.views.generic import UpdateView
@@ -23,6 +22,11 @@ from django.views.decorators.csrf import requires_csrf_token
 from django.dispatch import receiver
 from django.contrib.auth.signals import user_logged_in
 from django.db.models import Q
+from django.utils import timezone
+from django.template.loader import get_template_from_string
+from django.core.mail import EmailMultiAlternatives
+from django.template import Context
+from django.utils.html import strip_tags
 
 # Comment post required imports
 from django.contrib.comments.views.comments import CommentPostBadRequest
@@ -43,7 +47,7 @@ from jmbo.view_modifiers import DefaultViewModifier
 from preferences import preferences
 
 from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification, \
-    Member
+    Member, FoundryComment, CommentReport
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
     SearchForm, CreateBlogPostForm
 
@@ -257,7 +261,7 @@ def post_comment(request, next=None, using=None):
         context['object'] = target
         t = Template("{% load comments %} {% render_comment_list for object %}")
         html = t.render(context)
-        di = {'status': 'success', 'html': html}
+        di = {'status': 'success', 'html': html, 'obj_id': comment.id}
         return HttpResponse(simplejson.dumps(di))
         
 
@@ -266,8 +270,44 @@ def comment_reply_form(request):
     obj = ContentType.objects.get(
         id=request.GET['content_type_id']
     ).get_object_for_this_type(id=request.GET['oid'])
-    extra = {'object': obj, 'next': request.GET['path_info']}
+    extra = {'object': obj, 'next': request.GET['next']}
     return render_to_response('foundry/comment_reply_form.html', extra, context_instance=RequestContext(request))
+
+
+@login_required
+def report_comment(request, comment_id):
+    comment = get_object_or_404(FoundryComment, id=comment_id)
+
+    # Only create object if user is allowed to report
+    if comment.can_report(request):
+        CommentReport.objects.create(comment=comment, reporter=request.user)
+
+        # Send mail when 3 reports are reached. Re-use naughty word template.
+        if comment.commentreport_set.count() == 3:
+            from foundry.management.commands.report_naughty_words import TEMPLATE
+            site = get_current_site(request)
+            template = get_template_from_string(TEMPLATE)
+            c = dict(comments=[comment], site_domain=site.domain)
+            content = template.render(Context(c))
+            msg = EmailMultiAlternatives(
+                "Flagged comment on %s" % site.name, 
+                strip_tags(content), 
+                settings.DEFAULT_FROM_EMAIL, 
+                preferences.NaughtyWordPreferences.email_recipients.split()
+            )
+            msg.attach_alternative(content, 'text/html')
+            msg.send()
+
+    next = request.REQUEST.get('next')
+    response = HttpResponseRedirect(next or comment.content_object.get_absolute_url())
+    # Set cookie since it is very expensive to query whether a user may report
+    # a comment for each comment.
+    response.set_cookie(
+        'comment_report_%s' % comment.id,
+        value=1, 
+        max_age=7*86400
+    )
+    return response
 
 
 def chatroom_detail(request, slug):    
@@ -424,7 +464,7 @@ def set_session_expiry(sender, request, user, **kwargs):
     # Override session expiry date. We effectively ignore
     # SESSION_EXPIRE_AT_BROWSER_CLOSE.
     if request.REQUEST.get('remember_me'):
-        now = datetime.datetime.now()
+        now = timezone.now()
         expires = now.replace(year=now.year+10)
         request.session.set_expiry(expires)
     else:

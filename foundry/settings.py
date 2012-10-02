@@ -11,8 +11,6 @@ import warnings
 
 
 FOUNDRY = {
-    'has_javascript': True,
-    'has_ajax': True,
     'sms_gateway_api_key': '',
     'sms_gateway_password': '',
     'layers': ('basic',)
@@ -158,6 +156,7 @@ INSTALLED_APPS = (
     'analytics', # add to paster
     'gunicorn',
     'sites_groups',
+    'atlas',
     'tastypie',
     'django.contrib.auth',
     'django.contrib.comments',
@@ -166,6 +165,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     'django.contrib.admin',
 )
 
@@ -202,7 +202,10 @@ COMMENTS_APP = 'foundry'
 SIMPLE_AUTOCOMPLETE = {
     'auth.user': {'threshold': 20},
     'category.category': {'threshold':20},
-    'jmbo.modelbase': {'threshold':50}
+    'jmbo.modelbase': {
+        'threshold': 50, 
+        'duplicate_format_function': lambda item, model, content_type: item.as_leaf_class().content_type.name
+    }
 }
 
 STATICFILES_FINDERS = (
@@ -216,6 +219,11 @@ JMBO_ANALYTICS = {
     'google_analytics_id': '', 
 }
 
+PHOTOLOGUE_MAXBLOCK = 2 ** 20
+
+DJANGO_ATLAS = {
+    'google_maps_api_key': 'AIzaSyBvdwGsAn2h6tNI75M5cAcryln7rrTYqkk',
+}
 
 def compute_settings(sender):
     """Function not required anymore since our template loader and static file

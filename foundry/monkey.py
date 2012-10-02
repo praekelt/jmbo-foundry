@@ -86,6 +86,8 @@ ErrorList.__unicode__ = errorlist_as_div
 
 
 """Patch photologue so PhotoSizeCache is layer aware"""
+import re
+
 from django.utils.functional import curry
 from django.conf import settings
 
@@ -103,7 +105,8 @@ def add_accessor_methods(self, *args, **kwargs):
         setattr(self, 'get_%s_filename' % size,
                 curry(self._get_SIZE_filename, size=size))
 
-        layer_size = '_'.join(size.split('_')[:-1]) + '_LAYER'
+        layers = settings.FOUNDRY['layers']
+        layer_size = re.sub(r'_(%s)$' % '|'.join(layers), '', size) + '_LAYER'
         setattr(self, 'get_%s_size' % layer_size,
                 curry(self._get_SIZE_size, size=layer_size))
         setattr(self, 'get_%s_photosize' % layer_size,
@@ -228,3 +231,19 @@ def CsrfTokenNode_render(self, context):
         return u''
 
 CsrfTokenNode.render = CsrfTokenNode_render
+
+
+"""Patch django.contrib.sites.models.Site.__unicode__ so it returns name and
+not domain. The UI gets confusing since we have up to three sites comprising
+one logical mobi site."""
+from django.contrib.sites.models import Site
+
+def Site__unicode__(self):
+    return self.name
+
+def Site_title(self):
+    # Strip away (smart), (web) etc
+    return self.name.split('(')[0]
+
+Site.__unicode__ = Site__unicode__    
+Site.title = Site_title

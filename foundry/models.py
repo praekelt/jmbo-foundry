@@ -25,7 +25,8 @@ from jmbo.managers import DefaultManager
 
 from foundry.profile_models import AbstractAvatarProfile, \
     AbstractSocialProfile, AbstractPersonalProfile, \
-    AbstractContactProfile, AbstractSubscriptionProfile
+    AbstractContactProfile, AbstractSubscriptionProfile, \
+    AbstractLocationProfile
 from foundry.templatetags import listing_styles
 from foundry.managers import PermittedManager
 import foundry.monkey
@@ -256,6 +257,7 @@ all listings; however, others may be very specific and not work with the listing
         help_text="""Display the title if used as a tile within a more 
 complex page."""
     )
+    enable_syndication = models.BooleanField(default=False)
     sites = models.ManyToManyField(
         'sites.Site',
         blank=True,
@@ -367,6 +369,29 @@ class GeneralPreferences(Preferences):
 Age Gateway. Certain URLs like /login are already protected and do not need \
 to be listed. One entry per line. Matches are wildcard by default, eg. \
 /my-page will match /my-pages/the-red-one.'''
+    )
+    exempted_ips = models.TextField(
+        "Exempted IP addresses",
+        blank=True,
+        default='',
+        help_text='''IP address patterns that are exempted from the Private Site and \
+Age Gateway. Matches are wildcard by default, eg. \
+192.168.0 will match 192.168.0.5.'''
+    )
+    analytics_tags = models.TextField(
+        null=True, 
+        blank=True,
+        help_text="""May contain tags and javascript. Set this even if the 
+preference is for a mobile site."""
+    )
+    exempted_user_agents = models.TextField(
+        "Exempted user agents",
+        blank=True,
+        default='Googlebot\nTwitterbot\nfacebookexternalhit\n',
+        help_text='''User agents patterns that are exempted from only the Age Gateway. 
+This is useful when wanting to share content that is protected by an age 
+gateway with eg. Facebook. Matches are wildcard by default, eg. \
+my-user-agent will match my-user-agent-version-two.'''
     )
     analytics_tags = models.TextField(
         null=True, 
@@ -524,7 +549,7 @@ class Country(models.Model):
         return self.title
 
 
-class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersonalProfile, AbstractContactProfile, AbstractSubscriptionProfile):
+class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersonalProfile, AbstractContactProfile, AbstractSubscriptionProfile, AbstractLocationProfile):
     """Class that models the default user account. Subclassing is superior to profiles since 
     a site may conceivably have more than one type of user account, but the profile architecture 
     limits the entire site to a single type of profile."""
@@ -790,6 +815,17 @@ class FoundryComment(BaseComment):
         except Member.DoesNotExist:
             # Happens when comment is not made by a member
             return None
+
+    def can_report(self, request):
+        return not self.commentreport_set.filter(reporter=request.user).exists()
+
+
+class CommentReport(models.Model):
+    comment = models.ForeignKey(FoundryComment)
+    reporter = models.ForeignKey(User)
+
+    def __unicode__(self):
+        return self.comment.comment
 
 
 class ChatRoom(ModelBase):

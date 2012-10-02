@@ -1,5 +1,12 @@
 $(document).ready(function(){
 
+    // Let fastclick add a touchstart/end click event 
+    // for more responsive touch interaction on smart devices
+    new FastClick(document.body);
+    
+    $("a").bind("touchstart", function(e){$(this).addClass("touch-active");});
+    $("a").bind("touchend touchcancel", function(e){$(this).removeClass("touch-active");});
+
     var last_activity_time = $.now();
 
     if ($.support.ajax)
@@ -116,9 +123,9 @@ $(document).ready(function(){
                 {
                     var obj = $.parseJSON(data);
                     $('div.comment-list').html(obj.html);
-                    var el = $('textarea', form);
+                    var el = $('#id_comment');
                     el.val('');
-                    el.focus();
+                    $('#c'+obj.obj_id).attr('tabindex', -1).focus();
                 }
                 else
                     form.replaceWith(data);

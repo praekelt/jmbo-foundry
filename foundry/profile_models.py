@@ -2,6 +2,7 @@
 We are not yet ready to rename django-profile, so copy and paste models.
 """
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
 from django.db import models
 
 from photologue.models import ImageModel
@@ -64,6 +65,11 @@ class AbstractLocationProfile(models.Model):
         blank=True,
         null=True,
     )
+    zipcode = models.CharField(
+        max_length=32,
+        blank=True,
+        null=True,
+    )
     province = models.CharField(
         max_length=256,
         blank=True,
@@ -80,6 +86,16 @@ class AbstractPersonalProfile(models.Model):
         null=True,
     )
     
+    gender = models.CharField(
+        max_length=1,
+        blank=True,
+        null=True,
+        choices=(
+            ('F', _('Female')),
+            ('M', _('Male')),
+        )
+    )
+
     about_me = models.TextField(
         blank=True,
         null=True,                                

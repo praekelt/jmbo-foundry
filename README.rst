@@ -176,7 +176,7 @@ Layers
 ------
 
 A layer is a rendering target. `jmbo-foundry` defines four type of layers:
-basic, mid, smart and web. Templates, styling, javascript, images and even code
+basic, smart and web. Templates, styling, javascript, images and even code
 can all be different per payer. This enables optimal support for different
 devices from the same codebase.
 
@@ -184,9 +184,7 @@ Layers are arranged in this hierarchy.
 
                                 basic
                                 /   \
-                            mid     web
-                            /
-                        smart 
+                            smart     web
 
 If eg. the template my_page.html is not found in the web layer then it falls
 back to my_page.html from the basic layer. The basic layer must be complete.

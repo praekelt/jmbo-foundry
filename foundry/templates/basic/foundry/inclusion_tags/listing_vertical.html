@@ -10,6 +10,7 @@
         {% for object in pinned_list %}
             <div class="item {% if forloop.first %}first{% endif %} {% if forloop.last %}last{% endif %} item-{{ object.class_name|lower }}">
                 {% render_object object.as_leaf_class "list_item_pinned" %}
+                <div class="clear"></div>
             </div>
         {% endfor %}
         </div>
@@ -24,6 +25,7 @@
         {% for object in object_list %}
             <div class="item {% if forloop.first %}first{% endif %} {% if forloop.last %}last{% endif %} item-{{ object.class_name|lower }}">
                 {% render_object object.as_leaf_class "list_item" %}
+                <div class="clear"></div>
             </div>
         {% endfor %}
         </div>

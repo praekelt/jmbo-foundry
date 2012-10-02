@@ -11,6 +11,7 @@ PROTECTED_URLS_PATTERN = r'|'.join((
     reverse('age-gateway'), 
     reverse('join'), 
     reverse('login'), 
+    reverse('terms-and-conditions'), 
     '/auth/password_reset', 
     '/static', 
     '/admin'
@@ -41,6 +42,11 @@ class AgeGateway:
         if re.match(PROTECTED_URLS_PATTERN, request.META['PATH_INFO']) is not None:
             return response
 
+        # Listing feeds also exempted
+        # todo: make the test more refined.
+        if request.META['PATH_INFO'].endswith('/feed/'):
+            return response
+
         # Now only do we hit the database
         # xxx: investigate preference caching. May want to hit the db less.
         private_site = preferences.GeneralPreferences.private_site
@@ -64,6 +70,29 @@ class AgeGateway:
                ) is not None
             ):
             return response
+
+        # Exempted IP addresses
+        exempted_ips = preferences.GeneralPreferences.exempted_ips
+        if exempted_ips \
+            and (
+                re.match(
+                    r'|'.join(exempted_ips.split()), 
+                    request.META['REMOTE_ADDR']
+               ) is not None
+            ):
+            return response
+
+        # Exempted user agents. Only applicable to age gateway.
+        if not private_site:
+            exempted_user_agents = preferences.GeneralPreferences.exempted_user_agents
+            if exempted_user_agents \
+                and (
+                    re.match(
+                        r'|'.join(exempted_user_agents.split()), 
+                        request.META['PATH_INFO']
+                   ) is not None
+                ):
+                return response
 
         user = getattr(request, 'user', None)
         if (user is not None) and user.is_anonymous():

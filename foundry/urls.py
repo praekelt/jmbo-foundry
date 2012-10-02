@@ -176,6 +176,14 @@ urlpatterns = patterns('',
         name='listing-detail'
     ),
 
+    # Listing feed
+    url(
+        r'^listing/(?P<slug>[\w-]+)/feed/$',
+        'foundry.feeds.listing_feed',
+        {},
+        name='listing-feed'
+    ),
+
     # Edit profile    
     url(r'^edit-profile/$',
         login_required(
@@ -227,6 +235,14 @@ urlpatterns = patterns('',
         'foundry.views.comment_reply_form',
         {},
         name='comment-reply-form'
+    ),
+
+    # Report comment
+    url(
+        r'^report-comment/(?P<comment_id>\d+)/$',
+        'foundry.views.report_comment',
+        {},
+        name='report-comment'
     ),
 
     # Chatroom detail

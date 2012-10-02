@@ -17,7 +17,7 @@ from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
     NavbarLinkPosition, Navbar, GeneralPreferences, GeneralPreferences, \
     RegistrationPreferences, LoginPreferences, Member, DefaultAvatar, \
     PasswordResetPreferences, Country, Page, ChatRoom, BlogPost, Notification, \
-    FoundryComment, PageView, NaughtyWordPreferences
+    FoundryComment, CommentReport, PageView, NaughtyWordPreferences
 from foundry.widgets import SelectCommaWidget
 from foundry.utils import get_view_choices
 
@@ -129,7 +129,7 @@ class ListingAdminForm(forms.ModelForm):
         fields = (
             'title', 'slug', 'subtitle', 'content_type', 'category', 'content',
             'pinned', 'style', 'count', 'items_per_page', 'view_modifier', 
-            'display_title_tiled', 'sites'
+            'display_title_tiled', 'enable_syndication', 'sites'
         )       
         widgets = {
             'sites': SitesGroupsWidget,
@@ -313,6 +313,10 @@ class FoundryCommentAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'comment',)
 
 
+class CommentReportAdmin(admin.ModelAdmin):
+    list_display = ('id', 'comment', 'reporter')
+
+
 admin.site.register(Link, LinkAdmin)
 admin.site.register(Menu, MenuAdmin)
 admin.site.register(Navbar, NavbarAdmin)
@@ -330,3 +334,4 @@ admin.site.register(ChatRoom, ChatRoomAdmin)
 admin.site.register(BlogPost, BlogPostAdmin)
 admin.site.register(Notification, NotificationAdmin)
 admin.site.register(FoundryComment, FoundryCommentAdmin)
+admin.site.register(CommentReport, CommentReportAdmin)
