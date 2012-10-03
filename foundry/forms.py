@@ -226,7 +226,7 @@ be numbers. No spaces allowed. An example is +27821234567.")
                 self.fields[name].label = ""
                 self.fields.keyOrder.remove(name)
                 if self.fields.keyOrder[-1] == 'accept_terms':
-                    self.fields.keyOrder.insert(-1, name)
+                    self.fields.keyOrder.insert(-2, name)
                 else:
                     self.fields.keyOrder.append(name)
 
