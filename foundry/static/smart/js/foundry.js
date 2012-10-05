@@ -1,11 +1,13 @@
 $(document).ready(function(){
 
-    // Let fastclick add a touchstart/end click event 
-    // for more responsive touch interaction on smart devices
-    new FastClick(document.body);
-    
-    $("a").bind("touchstart", function(e){$(this).addClass("touch-active");});
-    $("a").bind("touchend touchcancel", function(e){$(this).removeClass("touch-active");});
+    if (typeof FastClick !== 'undefined') {
+        // Let fastclick add a touchstart/end click event 
+        // for more responsive touch interaction on smart devices
+        new FastClick(document.body);
+        
+        $("a").bind("touchstart", function(e){$(this).addClass("touch-active");});
+        $("a").bind("touchend touchcancel", function(e){$(this).removeClass("touch-active");});
+    }
 
     var last_activity_time = $.now();
 
