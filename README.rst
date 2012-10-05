@@ -182,9 +182,8 @@ devices from the same codebase.
 
 Layers are arranged in this hierarchy. 
 
-                                basic
-                                /   \
-                            smart     web
+  basic - smart
+  basic - web
 
 If eg. the template my_page.html is not found in the web layer then it falls
 back to my_page.html from the basic layer. The basic layer must be complete.
