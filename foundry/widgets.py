@@ -1,8 +1,11 @@
 import types
 import datetime
+import re
 
-from django.forms.widgets import CheckboxSelectMultiple, MultiWidget, Select
+from django.forms.widgets import CheckboxSelectMultiple, MultiWidget, Select, \
+    HiddenInput
 from django.utils.datastructures import MultiValueDict
+from django.utils import simplejson as json
 
 class SelectCommaWidget(CheckboxSelectMultiple):
 
@@ -42,3 +45,52 @@ class OldSchoolDateWidget(MultiWidget):
         if value is not None:
             return [value.day, value.month, value.year]
         return ['', '', '']
+
+
+class DragDropOrderingWidget(MultiWidget):
+    """Allows fields to be dragged and dropped to arrange their order"""
+    script = '''<script type="text/javascript">
+        $(document).ready(function() {
+            var input_el = $("#%s");
+            var list_el = input_el.next("ul.dragdrop");
+            list_el.dragsort({dragSelector: "span",
+                dragEnd: function() {
+                    var new_order = "{";
+                    list_el.children("li").each(function(index, el) {
+                        new_order += '"' + el.getAttribute("name") + '": ' + index + ','; 
+                    });
+                    input_el.val(new_order.substr(0, new_order.length - 1) + "}");
+                },
+                placeHolderTemplate: "<li></li>"});
+        });
+    </script>'''
+
+    class Media:
+        css = {
+            'all': ('admin/css/dragdrop.css',)
+        }
+        js = ('admin/thirdparty/jquery.dragsort-0.5.1.min.js', )
+
+    def __init__(self, attrs=None):
+        _widgets = (
+            HiddenInput,
+        )
+        super(DragDropOrderingWidget, self).__init__(_widgets, attrs)
+
+    def value_from_datadict(self, data, files, name):
+        return super(DragDropOrderingWidget, self).value_from_datadict(data, files, name)[0]
+
+    def decompress(self, value):
+        if isinstance(value, (list, tuple)):
+            self.key_order = json.loads(value[0])
+            return value
+        self.key_order = json.loads(value)
+        return [value]
+    
+    def format_output(self, rendered_widgets):
+        para = ""
+        for f in sorted(self.key_order.items(), key=lambda tup: tup[1]):
+            para += '''<li name="%s"><span>%s</span></li>''' % (f[0], f[0])
+        return u'''%s<ul class="dragdrop">%s</ul>%s''' % (rendered_widgets[0], para,
+            DragDropOrderingWidget.script % (re.search(r'id="(?P<id>\w+)"', rendered_widgets[0]).group('id')))
+        

@@ -1,0 +1,15 @@
+.dragdrop span {
+    display: inline-block;  
+    border: solid thin lightGrey; 
+    padding: 2px; 
+    width: 16em; 
+    text-align: center;
+}
+
+ul.dragdrop > li {
+    list-style: none;
+}
+
+.dragdrop span:hover{
+    background-color: #eee;
+}
