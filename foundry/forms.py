@@ -1,5 +1,6 @@
 import datetime
 import re
+from operator import itemgetter
 
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django import forms
@@ -219,6 +220,19 @@ Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
             self.fields['mobile_number'].help_text = _("The number must be in \
 international format and may start with a + sign. All other characters must \
 be numbers. No spaces allowed. An example is +27821234567.")
+
+        # Set order of fields
+        field_order = preferences.RegistrationPreferences.field_order
+        password_index = field_order['password']
+        field_order['password1'] = password_index
+        field_order['password2'] = password_index + 1
+        for key, val in field_order.items():
+            if key not in self.fields:
+                del field_order[key]
+            elif val > password_index and key != 'password2':
+                field_order[key] += 1
+        self.fields.keyOrder = sorted(field_order,
+            key=lambda key: field_order[key])
 
         # Place opt-in fields at bottom and remove labels
         for name in ('receive_email', 'receive_sms'):

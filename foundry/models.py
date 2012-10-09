@@ -454,20 +454,16 @@ class RegistrationPreferences(Preferences):
     @property
     def field_order(self):
         return json.loads(self.raw_field_order)
-        
-    @property
-    def ordered_fields(self):
-        pass
 
     def __init__(self, *args, **kwargs):
         super(RegistrationPreferences, self).__init__(*args, **kwargs)
         if not self.field_order:
-            all_fields = [f.name for f in Member._meta.fields if f.name != 'id']
             index = 0
             field_order_dict = {}
-            for f in all_fields:
-                field_order_dict[f] = index
-                index += 1
+            for f in Member._meta.fields:
+                if f.name != 'id':
+                    field_order_dict[f.name] = index
+                    index += 1
             self.raw_field_order = json.dumps(field_order_dict)
 
     def save(self, *args, **kwargs):

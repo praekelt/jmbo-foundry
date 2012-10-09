@@ -89,8 +89,8 @@ class DragDropOrderingWidget(MultiWidget):
     
     def format_output(self, rendered_widgets):
         para = ""
-        for f in sorted(self.key_order.items(), key=lambda tup: tup[1]):
-            para += '''<li name="%s"><span>%s</span></li>''' % (f[0], f[0])
+        for f in sorted(self.key_order, key=lambda key: self.key_order[key]):
+            para += '''<li name="%s"><span>%s</span></li>''' % (f, f)
         return u'''%s<ul class="dragdrop">%s</ul>%s''' % (rendered_widgets[0], para,
             DragDropOrderingWidget.script % (re.search(r'id="(?P<id>\w+)"', rendered_widgets[0]).group('id')))
         
