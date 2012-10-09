@@ -449,6 +449,8 @@ class AgeGatewayForm(forms.Form):
             expires = now.replace(year=now.year+10)
         response = HttpResponseRedirect('/')        
         response.set_cookie('age_gateway_passed', value=1, expires=expires)
+        response.set_cookie('age_gateway_values', value='%s-%s' % (self.cleaned_data['country'].country_code,
+            self.cleaned_data['date_of_birth'].strftime('%d-%m-%Y')), expires=expires)
         return response
 
     as_div = as_div
