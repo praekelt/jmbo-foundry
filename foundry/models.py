@@ -12,6 +12,7 @@ from django.contrib.sites.models import Site
 from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
 from django.utils.importlib import import_module
+from django.utils import simplejson as json
 
 from ckeditor.fields import RichTextField
 from preferences.models import Preferences
@@ -427,6 +428,13 @@ class RegistrationPreferences(Preferences):
         blank=True,
         help_text=_('Set fields which must be unique on the registration form.')
     )
+    raw_field_order = models.CharField(
+        'Field order',
+        max_length=1024,
+        default='{}',
+        blank=True,
+        help_text=_('Set the ordering of fields on the registration form (opt-in fields are always last).')
+    )
 
     class Meta:
         verbose_name_plural = 'Registration Preferences'
@@ -442,6 +450,21 @@ class RegistrationPreferences(Preferences):
     @property
     def unique_fields(self):
         return [s for s in self.raw_unique_fields.split(',') if s]
+    
+    @property
+    def field_order(self):
+        return json.loads(self.raw_field_order)
+
+    def __init__(self, *args, **kwargs):
+        super(RegistrationPreferences, self).__init__(*args, **kwargs)
+        if not self.field_order:
+            index = 0
+            field_order_dict = {}
+            for f in Member._meta.fields:
+                if f.name != 'id':
+                    field_order_dict[f.name] = index
+                    index += 1
+            self.raw_field_order = json.dumps(field_order_dict)
 
     def save(self, *args, **kwargs):
         # Unique fields must be unique! Check the existing members for possible

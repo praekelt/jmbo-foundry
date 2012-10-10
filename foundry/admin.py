@@ -18,7 +18,7 @@ from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
     RegistrationPreferences, LoginPreferences, Member, DefaultAvatar, \
     PasswordResetPreferences, Country, Page, ChatRoom, BlogPost, Notification, \
     FoundryComment, CommentReport, PageView, NaughtyWordPreferences
-from foundry.widgets import SelectCommaWidget
+from foundry.widgets import SelectCommaWidget, DragDropOrderingWidget
 from foundry.utils import get_view_choices
 
 
@@ -197,7 +197,8 @@ class RegistrationPreferencesAdminForm(forms.ModelForm):
         widgets = {
             'raw_display_fields':SelectCommaWidget,
             'raw_required_fields':SelectCommaWidget,
-            'raw_unique_fields':SelectCommaWidget
+            'raw_unique_fields':SelectCommaWidget,
+            'raw_field_order':DragDropOrderingWidget,
         }
 
     def __init__(self, *args, **kwargs):
