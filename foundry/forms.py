@@ -235,14 +235,14 @@ be numbers. No spaces allowed. An example is +27821234567.")
             key=lambda key: field_order[key])
 
         # Place opt-in fields at bottom and remove labels
-        for name in ('receive_email', 'receive_sms'):
+        for name in ('receive_email', 'receive_sms', 'remember_me', 'accept_terms'):
             if self.fields.has_key(name):
                 self.fields[name].label = ""
-                self.fields.keyOrder.remove(name)
-                if self.fields.keyOrder[-1] == 'accept_terms':
-                    self.fields.keyOrder.insert(-2, name)
-                else:
-                    self.fields.keyOrder.append(name)
+                try:
+                    self.fields.keyOrder.remove(name)
+                except ValueError:
+                    pass
+                self.fields.keyOrder.append(name)
 
     as_div = as_div
 
