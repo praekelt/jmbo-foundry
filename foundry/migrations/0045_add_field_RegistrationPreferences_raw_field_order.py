@@ -8,10 +8,17 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'RegistrationPreferences.raw_field_order'
-        db.add_column('preferences_registrationpreferences', 'raw_field_order',
-                      self.gf('django.db.models.fields.CharField')(default='{}', max_length=1024, blank=True),
-                      keep_default=False)
+        connection = db._get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('select raw_field_order from preferences_registrationpreferences')
+            connection.close()
+        except:
+            connection.close()
+            # Adding field 'RegistrationPreferences.raw_field_order'
+            db.add_column('preferences_registrationpreferences', 'raw_field_order',
+                        self.gf('django.db.models.fields.CharField')(default='{}', max_length=1024, blank=True),
+                        keep_default=False)
 
 
     def backwards(self, orm):
