@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='0.5.7.unomena',
+    version='0.5.8.unomena',
     description='Jmbo foundry behaviour/templates app.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -27,7 +27,7 @@ setup(
                         'http://github.com/praekelt/django-setuptest-recipe/tarball/master#egg=django-setuptest-recipe',
                         'http://github.com/praekelt/django-simple-autocomplete/tarball/master#egg=django-simple-autocomplete',
                         'http://github.com/praekelt/django-snippetscream/tarball/master#egg=django-snippetscream',
-                        'http://github.com/praekelt/jmbo/tarball/master#egg=jmbo',
+                        'http://github.com/unomena/jmbo/tarball/0.3.1.1#egg=jmbo-0.3.1.1',
                         'http://github.com/praekelt/jmbo-analytics/tarball/master#egg=jmbo-analytics',
                         'http://github.com/praekelt/jmbo-banner/tarball/master#egg=jmbo-banner',
                         'http://github.com/praekelt/jmbo-calendar/tarball/0.0.2#egg=jmbo-calendar-0.0.2',
@@ -58,7 +58,7 @@ setup(
         'django-snippetscream',
         'django-generate',
         'jmbo-calendar==0.0.2',
-        'jmbo',
+        'jmbo==0.3.1.1',
         'jmbo-chart',
         'django-recaptcha',
         'django-secretballot',
