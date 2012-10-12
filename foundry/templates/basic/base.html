@@ -58,9 +58,11 @@
 	        </div>
         {% endblock %}
         
-        {% if request.user.is_authenticated %}
-            {% suggested_friends request.user %}
-        {% endif %}
+        {% block suggested_friends %}
+	        {% if request.user.is_authenticated %}
+	            {% suggested_friends request.user %}
+	        {% endif %}
+        {% endblock %}
         
     </div>
 
