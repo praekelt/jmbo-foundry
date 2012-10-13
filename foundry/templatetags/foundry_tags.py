@@ -337,11 +337,14 @@ class ListingQuerysetNode(template.Node):
         return ''
 
 @register.inclusion_tag('friends/inclusion_tags/profile_blurb.html')
-def profile_blurb(user):
+def profile_blurb(user, page=None):
     """
     Displays the user's profile blurb and profile sub-menu.
     """
     return {'member' : user.member,
             'notifications' : Notification.objects.filter(member=user).count(),
             'unread_messages' : DirectMessage.objects.filter(to_member__id=user.id, state='sent').count(),
+            'page' : page,
             }
+    
+    
