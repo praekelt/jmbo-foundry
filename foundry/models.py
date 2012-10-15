@@ -820,11 +820,22 @@ class Notification(models.Model):
     def __unicode__(self):
         return str(self.id)
 
+class DownloadVariation(ModelBase):
+    """Model for downloads."""
+    points_required = models.PositiveSmallIntegerField(default=0)
+    file = models.FileField(upload_to='downloads/')
+    
+    def __unicode__(self):
+        return self.title
+    
+    class Meta:
+        ordering = ['points_required']
 
 class Download(ModelBase):
     """Model for downloads."""
     points_required = models.PositiveSmallIntegerField(default=0)
     file = models.FileField(upload_to='downloads/')
+    variations = models.ManyToManyField(DownloadVariation, null=True, blank=True)
     
     def __unicode__(self):
         return self.title
