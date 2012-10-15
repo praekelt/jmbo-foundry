@@ -1,11 +1,24 @@
-Jmbo Foundry User Guide
-=======================
+Jmbo Foundry
+============
+**Jmbo Foundry ties together the various Jmbo products enabling you to rapidly build multilingual web and mobi sites with the minimum amount of code and customization.**
 
-`jmbo-foundry` ties together the various jmbo products enabling you to rapidly build 
+.. contents:: Contents
+    :depth: 5
+
+Overview
+--------
+
+`jmbo-foundry` ties together the various Jmbo products enabling you to rapidly build 
 multilingual web and mobi sites with the minimum amount of code and customization.
 
 `jmbo-foundry` strives for a high level of through the web configuration. Much
 of the site's behaviour is configurable through the admin interface.
+
+Installation
+------------
+
+Use `jmbo-skeleton <http://pypi.python.org/pypi/jmbo-skeleton>`_ to set up a
+Jmbo environment. It is not recommended to install `jmbo-foundry` by itself.
 
 Sites
 -----
