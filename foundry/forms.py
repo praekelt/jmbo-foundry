@@ -1,5 +1,6 @@
 import datetime
 import re
+from operator import itemgetter
 
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django import forms
@@ -220,15 +221,28 @@ Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
 international format and may start with a + sign. All other characters must \
 be numbers. No spaces allowed. An example is +27821234567.")
 
+        # Set order of fields
+        field_order = preferences.RegistrationPreferences.field_order
+        password_index = field_order['password']
+        field_order['password1'] = password_index
+        field_order['password2'] = password_index + 1
+        for key, val in field_order.items():
+            if key not in self.fields:
+                del field_order[key]
+            elif val > password_index and key != 'password2':
+                field_order[key] += 1
+        self.fields.keyOrder = sorted(field_order,
+            key=lambda key: field_order[key])
+
         # Place opt-in fields at bottom and remove labels
-        for name in ('receive_email', 'receive_sms'):
+        for name in ('receive_email', 'receive_sms', 'remember_me', 'accept_terms'):
             if self.fields.has_key(name):
                 self.fields[name].label = ""
-                self.fields.keyOrder.remove(name)
-                if self.fields.keyOrder[-1] == 'accept_terms':
-                    self.fields.keyOrder.insert(-1, name)
-                else:
-                    self.fields.keyOrder.append(name)
+                try:
+                    self.fields.keyOrder.remove(name)
+                except ValueError:
+                    pass
+                self.fields.keyOrder.append(name)
 
     as_div = as_div
 
@@ -435,6 +449,8 @@ class AgeGatewayForm(forms.Form):
             expires = now.replace(year=now.year+10)
         response = HttpResponseRedirect('/')        
         response.set_cookie('age_gateway_passed', value=1, expires=expires)
+        response.set_cookie('age_gateway_values', value='%s-%s' % (self.cleaned_data['country'].country_code,
+            self.cleaned_data['date_of_birth'].strftime('%d-%m-%Y')), expires=expires)
         return response
 
     as_div = as_div
