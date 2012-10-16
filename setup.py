@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='0.5.14.unomena',
+    version='0.5.15.unomena',
     description='Jmbo foundry behaviour/templates app.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -35,7 +35,7 @@ setup(
                         'http://github.com/praekelt/jmbo-competition/tarball/0.0.5#egg=jmbo-competition-0.0.5',
                         'http://github.com/praekelt/jmbo-contact/tarball/master#egg=jmbo-contact',
                         'http://github.com/praekelt/jmbo-event/tarball/master#egg=jmbo-event',
-                        'http://github.com/praekelt/jmbo-gallery/tarball/master#egg=jmbo-gallery',
+                        'http://github.com/unomena/jmbo-gallery/tarball/0.0.4#egg=jmbo-gallery-0.0.4',
                         'http://github.com/praekelt/jmbo-foundry/tarball/master#egg=jmbo-foundry',
                         'http://github.com/praekelt/jmbo-music/tarball/master#egg=jmbo-music',
                         'http://github.com/praekelt/jmbo-paste/tarball/master#egg=jmbo-paste',
@@ -51,7 +51,7 @@ setup(
         'django-geckoboard',
         'django-analytics',
         'django-section',
-        'jmbo-gallery',
+        'jmbo-gallery==0.0.4',
         'django-googlesearch',
         'jmbo-music',
         'django-export',
