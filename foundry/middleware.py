@@ -105,14 +105,8 @@ class AgeGateway:
 
 
 class PaginationMiddleware:
-    """Our replacement for django-pagination PaginationMiddleware. It defaults
-    to the last page if no page is set on the request. A monkey patch in
-    monkey.py handles the negative page number."""
+    """Legacy middleware. It is now exactly the same as django-paginations's 
+    middleware. Will be marked for deprecation soon."""
 
     def process_request(self, request):       
-        page = -1
-        try:
-            page = int(request.REQUEST['page'])
-        except (KeyError, ValueError, TypeError):
-            pass
         request.__class__.page = page
