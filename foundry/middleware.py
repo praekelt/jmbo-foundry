@@ -104,9 +104,20 @@ class AgeGateway:
         return response            
 
 
-class PaginationMiddleware:
-    """Legacy middleware. It is now exactly the same as django-paginations's 
-    middleware. Will be marked for deprecation soon."""
+def get_page(self):
+    """
+    A function which will be monkeypatched onto the request to get the current
+    integer representing the current page.
+    """
+    try:
+        return int(self.REQUEST['page'])
+    except (KeyError, ValueError, TypeError):
+        return 1
 
-    def process_request(self, request):       
-        request.__class__.page = page
+
+class PaginationMiddleware(object):
+    """Legacy middleware. It is now exactly the same as django-paginations's 
+    middleware. Will be marked for deprecation soon along with get_page."""
+
+    def process_request(self, request):
+        request.__class__.page = property(get_page)
