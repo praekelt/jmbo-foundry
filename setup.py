@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='0.5.16.unomena',
+    version='0.5.17.unomena',
     description='Jmbo foundry behaviour/templates app.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -51,7 +51,7 @@ setup(
         'django-geckoboard',
         'django-analytics',
         'django-section',
-        'jmbo-gallery==0.0.4',
+        'jmbo-gallery==0.0.3',
         'django-googlesearch',
         'jmbo-music',
         'django-export',
