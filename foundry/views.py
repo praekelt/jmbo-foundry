@@ -1,5 +1,6 @@
 import random
 import urllib
+from datetime import datetime
 
 from django.conf import settings
 from django.contrib.auth import authenticate, login, get_backends
@@ -47,7 +48,7 @@ from jmbo.view_modifiers import DefaultViewModifier
 from preferences import preferences
 
 from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification, \
-    Member, FoundryComment, CommentReport
+    Member, FoundryComment, CommentReport, Country
 from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
     SearchForm, CreateBlogPostForm
 
@@ -56,8 +57,26 @@ def join(request):
     """Surface join form"""
     show_age_gateway = preferences.GeneralPreferences.show_age_gateway \
         and not request.COOKIES.get('age_gateway_passed')
+    # pass initial values where possible
+    initial = {}
+    age_gateway_values = request.COOKIES.get('age_gateway_values')
+    if age_gateway_values:
+        initial['country'] = Country.objects.get(country_code=age_gateway_values[0:2])
+        initial['dob'] = datetime.strptime(age_gateway_values[3:], '%d-%m-%Y')
+    if 'location' in request.session:
+        city = request.session['location']['city']
+        if 'country' not in initial or city.country.country_code == initial['country'].country_code:
+            try:
+                if 'country' not in initial:
+                    initial['country'] = Country.objects.get(country_code=city.country.country_code)
+                initial['city']  = city.name
+                initial['province'] = city.region.name if city.region else ''
+            # foundry countries and atlas aren't synced
+            except Country.DoesNotExist:
+                pass
+
     if request.method == 'POST':
-        form = JoinForm(request.POST, request.FILES, show_age_gateway=show_age_gateway) 
+        form = JoinForm(request.POST, request.FILES, show_age_gateway=show_age_gateway, initial=initial) 
         if form.is_valid():
             member = form.save()
             backend = get_backends()[0]
@@ -68,7 +87,7 @@ def join(request):
             messages.success(request, msg, fail_silently=True)
             return response
     else:
-        form = JoinForm(show_age_gateway=show_age_gateway) 
+        form = JoinForm(show_age_gateway=show_age_gateway, initial=initial) 
 
     extra = dict(form=form)
     return render_to_response('foundry/join.html', extra, context_instance=RequestContext(request))

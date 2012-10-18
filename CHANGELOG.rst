@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.0.1
+-----
+#. Make fields in registration form reorderable.
+#. Set initial values for location and age in registration form, when possible.
+#. Remove hack to django-autopaginate to allow last page as default view. We have our own replacement autopaginate tag now.
+
 1.0
 ---
 #. Patch django.contrib.sites.models.Site.__unicode__ so it returns name and not domain. The UI gets confusing since we have up to three sites comprising one logical mobi site.

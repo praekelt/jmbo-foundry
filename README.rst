@@ -1,11 +1,49 @@
-Jmbo Foundry User Guide
-=======================
+Jmbo Foundry
+============
+**Jmbo Foundry ties together the various Jmbo products enabling you to rapidly build multilingual web and mobi sites with the minimum amount of code and customization.**
 
-`jmbo-foundry` ties together the various jmbo products enabling you to rapidly build 
+.. contents:: Contents
+    :depth: 5
+
+Overview
+--------
+
+`jmbo-foundry` ties together the various Jmbo products enabling you to rapidly build 
 multilingual web and mobi sites with the minimum amount of code and customization.
 
 `jmbo-foundry` strives for a high level of through the web configuration. Much
 of the site's behaviour is configurable through the admin interface.
+
+Installation
+------------
+
+Use `jmbo-skeleton <http://pypi.python.org/pypi/jmbo-skeleton>`_ to set up a
+Jmbo environment. It is not recommended to install `jmbo-foundry` by itself.
+
+Supported Jmbo products
+-----------------------
+
+`jmbo-foundry` pulls in these Jmbo products.
+
++-----------------------------------------------------------------------+-------+-------+-----+------------+
+| Product                                                               | Basic | Smart | Web | Translated |
++=======================================================================+=======+=======+=====+============+
+|`jmbo <http://pypi.python.org/pypi/jmbo>`_                             |       |       |     | 100%       |
++-----------------------------------------------------------------------+-------+-------+-----+------------+
+|`jmbo-banner <http://pypi.python.org/pypi/jmbo-banner>`_               | x     |       |     | N/A        |
++-----------------------------------------------------------------------+-------+-------+-----+------------+
+|`jmbo-calendar <http://pypi.python.org/pypi/jmbo-calendar>`_           | x     |       |     | 0%         |
++-----------------------------------------------------------------------+-------+-------+-----+------------+
+|`jmbo-competition <http://pypi.python.org/pypi/jmbo-competition>`_     | x     | x     |     | 0%         |
++-----------------------------------------------------------------------+-------+-------+-----+------------+
+|`jmbo-downloads <http://pypi.python.org/pypi/jmbo-downloads>`_         | x     |       |     | 0%         |
++-----------------------------------------------------------------------+-------+-------+-----+------------+
+|`jmbo-gallery <http://pypi.python.org/pypi/jmbo-gallery>`_             | x     | x     | x   | 100%       |
++-----------------------------------------------------------------------+-------+-------+-----+------------+
+|`jmbo-poll <http://pypi.python.org/pypi/jmbo-poll>`_                   | x     |       |     | 100%       |
++-----------------------------------------------------------------------+-------+-------+-----+------------+
+|`jmbo-post <http://pypi.python.org/pypi/jmbo-post>`_                   | x     |       |     | 100%       |
++-----------------------------------------------------------------------+-------+-------+-----+------------+
 
 Sites
 -----
@@ -182,9 +220,8 @@ devices from the same codebase.
 
 Layers are arranged in this hierarchy. 
 
-                                basic
-                                /   \
-                            smart     web
+  basic - smart
+  basic - web
 
 If eg. the template my_page.html is not found in the web layer then it falls
 back to my_page.html from the basic layer. The basic layer must be complete.

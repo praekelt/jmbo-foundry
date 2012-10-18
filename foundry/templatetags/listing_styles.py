@@ -31,10 +31,6 @@ class AbstractBaseStyle(object):
             mod, attr = view_modifier.rsplit('.', 1)
             context['view_modifier'] = getattr(import_module(mod), attr)(request)
 
-        # Normailize paging
-        if getattr(request, 'page', 0) < 0:
-            setattr(request, 'page', 1)
-
         context['display_title'] = True
         if as_tile and not self.listing.display_title_tiled:
             context['display_title'] = False       
