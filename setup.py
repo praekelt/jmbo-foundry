@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='0.5.18.unomena',
+    version='0.5.19.unomena',
     description='Jmbo foundry behaviour/templates app.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -43,7 +43,7 @@ setup(
                         'http://github.com/praekelt/jmbo-post/tarball/master#egg=jmbo-post',
                         'http://github.com/praekelt/jmbo-show/tarball/master#egg=jmbo-show',
                         'http://github.com/praekelt/jmbo-social/tarball/master#egg=jmbo-social',
-                        'http://github.com/unomena/jmbo-friends/tarball/0.1.2.unomena#egg=jmbo-friends-0.1.2.unomena',
+                        'http://github.com/unomena/jmbo-friends/tarball/0.1.3.unomena#egg=jmbo-friends-0.1.3.unomena',
                         'http://github.com/unomena/jmbo-activity/tarball/0.0.8#egg=jmbo-activity-0.0.8',
                         ],
     install_requires = [
@@ -85,7 +85,7 @@ setup(
         'BeautifulSoup',
         'django_compressor',
         'jmbo_analytics',
-        'jmbo-friends==0.1.2.unomena',
+        'jmbo-friends==0.1.3.unomena',
         'jmbo-activity==0.0.8',
         'jellyfish'
     ],
