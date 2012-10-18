@@ -5,11 +5,14 @@ from django import template
 from django.core.cache import cache
 from django.core.urlresolvers import reverse, resolve, NoReverseMatch
 from django.template.loader import render_to_string
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.template.response import TemplateResponse
+from django.core.paginator import Paginator, InvalidPage
 from django.conf import settings
 
 from preferences import preferences
+from pagination.templatetags.pagination_tags import DEFAULT_PAGINATION, \
+    DEFAULT_ORPHANS, INVALID_PAGE_RAISES_404
 
 from foundry.models import Menu, Navbar, Listing, Page, Member
 from foundry.templatetags import listing_styles
@@ -333,3 +336,104 @@ class ListingQuerysetNode(template.Node):
             context[as_var] = None
 
         return ''
+
+
+# autopaginate template tag based on django-pagination tag, but can take an
+# offset parameter. This allows you to show the last page by default. 
+# Docstrings omitted for brevity. May be worthwhile to contribute to 
+# django-pagination. Our API is slightly different though. This can be 
+# overcome using assignment vars (eg. page_number=2).
+def do_autopaginate(parser, token):
+    """
+    Splits the arguments to the autopaginate tag and formats them correctly.
+    """
+    split = token.split_contents()
+    as_index = None
+    context_var = None
+    for i, bit in enumerate(split):
+        if bit == 'as':
+            as_index = i
+            break
+    if as_index is not None:
+        try:
+            context_var = split[as_index + 1]
+        except IndexError:
+            raise template.TemplateSyntaxError("Context variable assignment " +
+                "must take the form of {%% %r object.example_set.all ... as " +
+                "context_var_name %%}" % split[0])
+        del split[as_index:as_index + 2]
+    if len(split) == 2:
+        return AutoPaginateNode(split[1])
+    elif len(split) == 3:
+        return AutoPaginateNode(split[1], paginate_by=split[2], 
+            context_var=context_var)
+    elif len(split) == 4:
+        return AutoPaginateNode(split[1], paginate_by=split[2], 
+            page_number=split[3], context_var=context_var)
+    elif len(split) == 5:
+        try:
+            orphans = int(split[4])
+        except ValueError:
+            raise template.TemplateSyntaxError(u'Got %s, but expected integer.'
+                % split[4])
+        return AutoPaginateNode(split[1], paginate_by=split[2], page_number=split[3], 
+            orphans=orphans, context_var=context_var)
+    else:
+        raise template.TemplateSyntaxError('%r tag takes one required ' +
+            'argument and one optional argument' % split[0])
+
+
+class AutoPaginateNode(template.Node):
+    def __init__(self, queryset_var, paginate_by=DEFAULT_PAGINATION, 
+        page_number=0, orphans=DEFAULT_ORPHANS, context_var=None):
+        self.queryset_var = template.Variable(queryset_var)
+        if isinstance(paginate_by, int):
+            self.paginate_by = paginate_by
+        else:
+            self.paginate_by = template.Variable(paginate_by)
+        if isinstance(page_number, int):
+            self.page_number = page_number
+        else:
+            self.page_number = template.Variable(page_number)
+        self.orphans = orphans
+        self.context_var = context_var
+
+    def render(self, context):
+        key = self.queryset_var.var
+        value = self.queryset_var.resolve(context)
+        if isinstance(self.paginate_by, int):
+            paginate_by = self.paginate_by
+        else:
+            paginate_by = self.paginate_by.resolve(context)
+        if isinstance(self.page_number, int):
+            page_number = self.page_number
+        else:
+            page_number = self.page_number.resolve(context)
+
+        paginator = Paginator(value, paginate_by, self.orphans)
+
+        # Handle page_number. xxx - currently only -1 is handled.
+        p = context['request'].page
+        if not 'page' in context['request'].GET:
+            if page_number == -1:
+                p = paginator.num_pages
+
+        try:
+            page_obj = paginator.page(p)
+        except InvalidPage:
+            if INVALID_PAGE_RAISES_404:
+                raise Http404('Invalid page requested.  If DEBUG were set to ' +
+                    'False, an HTTP 404 page would have been shown instead.')
+            context[key] = []
+            context['invalid_page'] = True
+            return u''
+        if self.context_var is not None:
+            context[self.context_var] = page_obj.object_list
+        else:
+            context[key] = page_obj.object_list
+        context['paginator'] = paginator
+        context['page_obj'] = page_obj
+        return u''
+
+
+register.tag('autopaginate', do_autopaginate)

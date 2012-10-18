@@ -24,7 +24,7 @@ $(document).ready(function(){
 
     <div class="foundry-container foundry-comments-list">
     
-        {% autopaginate comment_list paginate_by %}
+        {% autopaginate comment_list paginate_by -1 %}
         <div class="items">
             {% for comment in comment_list %}
                 <div id="c{{ comment.id }}" class="item">
