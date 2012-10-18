@@ -45,6 +45,7 @@ from category.models import Category
 from jmbo.models import ModelBase
 from jmbo.generic.views import GenericObjectDetail, GenericObjectList
 from jmbo.view_modifiers import DefaultViewModifier
+from jmbo import USE_GIS
 from preferences import preferences
 
 from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification, \
@@ -63,7 +64,7 @@ def join(request):
     if age_gateway_values:
         initial['country'] = Country.objects.get(country_code=age_gateway_values[0:2])
         initial['dob'] = datetime.strptime(age_gateway_values[3:], '%d-%m-%Y')
-    if 'location' in request.session:
+    if USE_GIS and 'location' in request.session:
         city = request.session['location']['city']
         if 'country' not in initial or city.country.country_code == initial['country'].country_code:
             try:
