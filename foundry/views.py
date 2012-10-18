@@ -277,7 +277,7 @@ class Share(View):
             elif self.type == 'Twitter':
                 url = 'https://twitter.com/intent/tweet?original_referer=%s' % urllib.quote(current_url)
             else:
-                return Http404()
+                return Http404('Unknown share type.')
             
             UserActivity.track_activity(user=request.user,
                                         activity=activity_constants.ACTIVITY_SOCIAL_SHARE,
@@ -286,8 +286,8 @@ class Share(View):
                                                                                      self.type)))
             
             return HttpResponseRedirect(url)
-        except:
-            return Http404()
+        except Exception, e:
+            return Http404(e.message)
 
 def like(request, content_type, id, vote):
     #content_type = content_type.replace("-", ".")
