@@ -12,8 +12,7 @@ import post.urls
 
 from foundry.models import Page
 from foundry import views, forms
-from foundry.api import ListingResource, LinkResource, NavbarResource, \
-    MenuResource, PageResource, BlogPostResource
+from foundry.api import ListingResource
 
 admin.autodiscover()
 
@@ -24,11 +23,6 @@ except ImportError:
     pass
 
 v1_api.register(ListingResource())
-v1_api.register(LinkResource())
-v1_api.register(NavbarResource())
-v1_api.register(MenuResource())
-v1_api.register(PageResource())
-v1_api.register(BlogPostResource())
 
 urlpatterns = patterns('',        
     # Pre-empt url call for comment post
