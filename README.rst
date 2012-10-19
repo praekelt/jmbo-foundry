@@ -226,3 +226,46 @@ Layers are arranged in this hierarchy.
 If eg. the template my_page.html is not found in the web layer then it falls
 back to my_page.html from the basic layer. The basic layer must be complete.
 
+API
+---
+
+Get objects in a listing
+************************
+
+An HTTP GET request to `/api/v1/listing/<slug>/` will return JSON containing the objects in the listing, where the 
+listing is identified by its slug. The response will contain the following fields:
+
+objects
+    The objects in the listing, possibly of different types like images, posts and videos.
+
+meta
+    Navigation info for the listing. The `next` and `previous` fields contains URLs to retrieve the next or previous
+    page of objects. `total_count` is the number of objects in the listing across all pages.
+
+resource_uri
+    The listing's URI, i.e. the base URL of the listing GET request.
+
+title, subtitle, slug, style
+    Additional descriptive fields for the listing itself.
+
+There are 3 querystring parameters that can be part of the request URL: `format`, `page` and `as_leaf_class`. `format`
+is required and has to be set to 'json'. `page` must be set to an integer number. If it isn't specified it defaults to page 1.
+Lastly, `as_leaf_class` determines whether to include objects' child fields. It is false by default. To include the child
+fields, set `as_leaf_class` to 1.
+
+Example: `localhost:8000/api/v1/listing/listing-slug/?format=json&as_leaf_class=1`
+
+Get object detail
+*****************
+
+The base URL is `/api/v1/content/<slug>/`.
+
+Example: `localhost:8000/api/v1/content/object-slug/?format=json&as_leaf_class=1`
+
+Like an object
+**************
+
+To like an object, do a PUT request to `/api/v1/content/<slug>/` with the following JSON in the body: '{"like": 1}'.
+All objects have a `can_vote` field which indicates whether the user can like the object. `can_vote` takes into
+account whether liking is enabled/disabled and anonymous/authenticated for the particular object. If `can_vote` is false,
+all like requests will return HTTP 400 Bad Request.
