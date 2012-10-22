@@ -12,7 +12,7 @@ import post.urls
 
 from foundry.models import Page
 from foundry import views, forms
-from foundry.api import ListingResource
+from foundry.api import ListingResource, CommentResource
 
 admin.autodiscover()
 
@@ -23,6 +23,7 @@ except ImportError:
     pass
 
 v1_api.register(ListingResource())
+v1_api.register(CommentResource())
 
 urlpatterns = patterns('',        
     # Pre-empt url call for comment post

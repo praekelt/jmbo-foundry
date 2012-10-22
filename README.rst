@@ -262,6 +262,16 @@ The base URL is `/api/v1/content/<slug>/`.
 
 Example: `localhost:8000/api/v1/content/object-slug/?format=json&as_leaf_class=1`
 
+Comments
+~~~~~~~~
+
+Get the comments for an object by appending `comments/` to the base URL. The querystring parameters `limit` and `offset`
+control how many comments to retrieve and which index to start at, respectively.
+
+Example: `localhost:8000/api/v1/content/object-slug/comments/?format=json&limit=10&offset=20` - retrieve comments 20 through to
+30 for 'object-slug'
+
+
 Like an object
 **************
 

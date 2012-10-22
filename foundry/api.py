@@ -1,11 +1,14 @@
 from django.conf.urls.defaults import url
+from django.shortcuts import get_object_or_404
 
-from tastypie.resources import ModelResource
+from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 from tastypie import fields
-from jmbo.api import ModelBaseResource, SlugResource
+
+from jmbo.api import ModelBaseResource, SlugResource, ContentTypeResource
+from jmbo.models import ModelBase
 
 from foundry.models import Listing, Link, Navbar, Menu, Page, Row, Column, \
-    Tile, BlogPost
+    Tile, BlogPost, FoundryComment
 
 
 class ListingResource(SlugResource):
@@ -61,6 +64,30 @@ class ListingResource(SlugResource):
 
         return bundle
 
+
+class CommentResource(ModelResource):
+    content_type = fields.ForeignKey(ContentTypeResource, 'content_type')
+
+    class Meta:
+        queryset = FoundryComment.objects.all()
+        resource_name = 'comments'
+        allowed_methods = ['get']
+        # only expose these fields
+        fields = ('user_name', 'comment', 'submit_date', 'in_reply_to', 'moderated')
+        include_resource_uri = False
+        filtering = {'content_type': ALL_WITH_RELATIONS}
+        
+    def override_urls(self):
+        return [
+            url(r"^%s/(?P<slug>[\w-]+)/(?P<resource_name>%s)/$" % (ModelBaseResource._meta.resource_name, self._meta.resource_name),
+                self.wrap_view('dispatch_list'), name="api_dispatch_list"),
+        ]
+
+    def dispatch(self, request_type, request, **kwargs):
+        parent_obj = get_object_or_404(ModelBase, slug=kwargs.pop('slug'))
+        kwargs['content_type'] = parent_obj.content_type
+        kwargs['object_pk'] = parent_obj.pk
+        return super(CommentResource, self).dispatch(request_type, request, **kwargs)
 
 '''class LinkResource(ModelResource):
 
