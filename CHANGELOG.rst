@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Rename potentially confusing photosizes used in listing item templates. Old photisizes are retained for backward compatibility.
+
 1.0.1
 -----
 #. Make fields in registration form reorderable.

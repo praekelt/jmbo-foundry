@@ -4,9 +4,11 @@
 Layout similar to a classic iPod.
 {% endcomment %}
 
-<a href="{{ object.get_absolute_url }}">
-    <img src="{{ object.get_listing_horizontal_pinned_LAYER_url }}" alt="{{ object.title }}" />
-</a>
+<div class="image">
+    <a href="{{ object.get_absolute_url }}">
+        <img src="{{ object.get_modelbase_list_item_ipod_pinned_url }}" alt="{{ object.title }}" />
+    </a>
+</div>
 
 <div class="title">
     {% if object.categories.all.count %}<span class="category">{{ object.categories.all|join_titles }}:</span>{% endif %}
