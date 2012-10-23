@@ -6,7 +6,7 @@
         <ul id="slider">
         {% for object in object_list %}
             <li>
-                <img src="{{ object.get_listing_promo_LAYER_url }}" alt="{{ object.title }}" alt="{{ object.title }}" />
+                <img src="{{ object.get_modelbase_list_item_promo_url }}" alt="{{ object.title }}" alt="{{ object.title }}" />
                 <div class="info">
                     {% if object.categories.all.count %}<div class="subtitle">{{ object.categories.all|join_titles }}:</div>{% endif %}
                     <div class="title"><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></div>
