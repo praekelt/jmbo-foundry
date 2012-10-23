@@ -3,7 +3,7 @@ Changelog
 
 next
 ----
-#. Rename potentially confusing photosizes used in listing item templates. Old photisizes are retained for backward compatibility.
+#. Rename potentially confusing photosizes used in listing item templates. Old photisizes are retained for backward compatibility. If your app redefines a photosize for `listing_*` then you must update those photosize names.
 
 1.0.1
 -----
