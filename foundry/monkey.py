@@ -61,7 +61,7 @@ def add_accessor_methods(self, *args, **kwargs):
                 curry(self._get_SIZE_filename, size=size))
 
         layers = settings.FOUNDRY['layers']
-        layer_size = re.sub(r'_(%s)$' % '|'.join(layers), '', size) + '_LAYER'
+        layer_size = re.sub(r'_(%s)$' % '|'.join(layers), '', size)
         setattr(self, 'get_%s_size' % layer_size,
                 curry(self._get_SIZE_size, size=layer_size))
         setattr(self, 'get_%s_photosize' % layer_size,
@@ -69,6 +69,16 @@ def add_accessor_methods(self, *args, **kwargs):
         setattr(self, 'get_%s_url' % layer_size,
                 curry(self._get_SIZE_url, size=layer_size))
         setattr(self, 'get_%s_filename' % layer_size,
+                curry(self._get_SIZE_filename, size=layer_size))
+
+        # The _LAYER marker is legacy that needs to be maintained.
+        setattr(self, 'get_%s_LAYER_size' % layer_size,
+                curry(self._get_SIZE_size, size=layer_size))
+        setattr(self, 'get_%s_LAYER_photosize' % layer_size,
+                curry(self._get_SIZE_photosize, size=layer_size))
+        setattr(self, 'get_%s_LAYER_url' % layer_size,
+                curry(self._get_SIZE_url, size=layer_size))
+        setattr(self, 'get_%s_LAYER_filename' % layer_size,
                 curry(self._get_SIZE_filename, size=layer_size))
 
 ImageModel.add_accessor_methods = add_accessor_methods
