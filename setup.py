@@ -43,8 +43,8 @@ setup(
                         'http://github.com/praekelt/jmbo-post/tarball/master#egg=jmbo-post',
                         'http://github.com/praekelt/jmbo-show/tarball/master#egg=jmbo-show',
                         'http://github.com/praekelt/jmbo-social/tarball/master#egg=jmbo-social',
-                        'http://github.com/unomena/jmbo-friends/tarball/0.1.5.unomena#egg=jmbo-friends-0.1.5.unomena',
-                        'http://github.com/unomena/jmbo-activity/tarball/0.0.8#egg=jmbo-activity-0.0.8',
+                        'http://github.com/praekelt/jmbo-friends/tarball/unomena-dev#egg=jmbo-friends',
+                        'http://github.com/praekelt/jmbo-activity/tarball/0.0.8#egg=jmbo-activity-0.0.8',
                         ],
     install_requires = [
         # todo: eliminate dependencies handled by apps themselves
