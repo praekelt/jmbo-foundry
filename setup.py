@@ -44,7 +44,7 @@ setup(
                         'http://github.com/praekelt/jmbo-show/tarball/master#egg=jmbo-show',
                         'http://github.com/praekelt/jmbo-social/tarball/master#egg=jmbo-social',
                         'http://github.com/praekelt/jmbo-friends/tarball/unomena-dev#egg=jmbo-friends',
-                        'http://github.com/praekelt/jmbo-activity/tarball/0.0.8#egg=jmbo-activity-0.0.8',
+                        'http://github.com/praekelt/jmbo-activity/tarball/0.0.8#egg=jmbo-activity',
                         ],
     install_requires = [
         # todo: eliminate dependencies handled by apps themselves
@@ -85,7 +85,7 @@ setup(
         'BeautifulSoup',
         'django_compressor',
         'jmbo_analytics',
-        'jmbo-friends==0.1.5.unomena',
+        'jmbo-friends==0.0.6',
         'jmbo-activity==0.0.8',
         'jellyfish'
     ],
