@@ -43,7 +43,7 @@ setup(
                         'http://github.com/praekelt/jmbo-post/tarball/master#egg=jmbo-post',
                         'http://github.com/praekelt/jmbo-show/tarball/master#egg=jmbo-show',
                         'http://github.com/praekelt/jmbo-social/tarball/master#egg=jmbo-social',
-                        'http://github.com/praekelt/jmbo-friends/tarball/unomena-dev#egg=jmbo-friends-0.0.6',
+                        'http://github.com/praekelt/jmbo-friends/tarball/unomena-dev#egg=jmbo-friends-0.1.5.unomena',
                         'http://github.com/praekelt/jmbo-activity/tarball/0.0.8#egg=jmbo-activity-0.0.8',
                         ],
     install_requires = [
@@ -85,7 +85,7 @@ setup(
         'BeautifulSoup',
         'django_compressor',
         'jmbo_analytics',
-        'jmbo-friends==0.0.6',
+        'jmbo-friends==0.1.5.unomena',
         'jmbo-activity==0.0.8',
         'jellyfish'
     ],
