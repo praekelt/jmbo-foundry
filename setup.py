@@ -85,7 +85,7 @@ setup(
         'BeautifulSoup',
         'django_compressor',
         'jmbo_analytics',
-        'jmbo-friends==0.1.5.unomena',
+        'jmbo-friends>=0.1.5.unomena',
         'jmbo-activity==0.0.8',
         'jellyfish'
     ],
