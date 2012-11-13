@@ -859,7 +859,12 @@ class UserAgent(models.Model):
     """
     Records hits on a user agent.
     """
-    user_agent = models.CharField(max_length=256, null=True, blank=True)
+    user_agent = models.CharField(
+        db_index=True,
+        max_length=512,
+        null=True,
+        blank=True
+    )
     hits = models.IntegerField(default=0)
 
 
