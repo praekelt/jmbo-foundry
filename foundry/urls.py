@@ -39,6 +39,7 @@ urlpatterns = patterns('',
         name='comments-post-comment'
     ),
 
+    (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/static/images/favicon.ico'}),
     (r'^downloads/', include('downloads.urls')),
     (r'^friends/', include('friends.urls')),
     (r'^gallery/', include('gallery.urls')),
@@ -60,6 +61,7 @@ urlpatterns = patterns('',
     (r'^jmbo-analytics/', include('jmbo_analytics.urls')),
     (r'^api/', include(v1_api.urls)),
 
+    (r'^admin/', include('gallery.admin_urls')),
     (r'^admin/', include(admin.site.urls)),
 
     url(

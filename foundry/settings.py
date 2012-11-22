@@ -125,15 +125,13 @@ INSTALLED_APPS = (
     'foundry',
     'snippetscream',
     'generate',
-    'cal',
+    'jmbo_calendar',
     'jmbo',
     'photologue',
     'chart',
     'captcha',
     'secretballot',
-#    'richcomments', # re-evaluate this product. It needs to degrade to non-ajax as well.
     'publisher',
-#    'social',	# xxx: removed since can't download socialregistration-tokenstore tarball currently
     'category',
     'post',
     'likes',
@@ -141,7 +139,7 @@ INSTALLED_APPS = (
     'object_tools',
     'registration',
     'show',
-    'event',
+    'event', # will be removed when jmbo-show refactored
     'preferences',
     'banner',
     'competition',
