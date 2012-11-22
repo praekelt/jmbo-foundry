@@ -61,6 +61,7 @@ urlpatterns = patterns('',
     (r'^jmbo-analytics/', include('jmbo_analytics.urls')),
     (r'^api/', include(v1_api.urls)),
 
+    (r'^admin/', include('gallery.admin_urls')),
     (r'^admin/', include(admin.site.urls)),
 
     url(
