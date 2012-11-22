@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.1
+---
 #. Rename potentially confusing photosizes used in listing item templates. Old photosizes are retained for backward compatibility. If your app redefines a photosize for `listing_*` then you must update those photosize names.
 #. Handle favicon.ico requests so they do not 404.
 #. Include `jmbo-gallery` admin urls.
