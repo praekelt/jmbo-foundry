@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.utils.importlib import import_module
+from django.contrib.admin import SimpleListFilter
+from django.utils.translation import ugettext_lazy as _
 
 from preferences.admin import PreferencesAdmin
 from sites_groups.widgets import SitesGroupsWidget
@@ -309,9 +311,28 @@ class NotificationAdmin(admin.ModelAdmin):
     list_display = ('id', 'member', 'link', 'created')
 
 
+class JmboContentTypeListFilter(SimpleListFilter):
+    title = _("Jmbo content type")
+    parameter_name = 'jmbo_content_type'
+
+    def lookups(self, request, model_admin):
+        result = []
+        for obj in ContentType.objects.all().order_by('name'):
+            model = obj.model_class()
+            if (model is not None) and issubclass(model, ModelBase):
+                result.append((obj.name, str(obj)))
+        return result
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(content_type__model=self.value())
+        return queryset
+
+    
 class FoundryCommentAdmin(admin.ModelAdmin):
     list_display = ('id', 'content_object', 'user', 'comment')
     search_fields = ('user__username', 'comment',)
+    list_filter = (JmboContentTypeListFilter,)
 
 
 class CommentReportAdmin(admin.ModelAdmin):
