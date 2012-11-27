@@ -320,12 +320,13 @@ class JmboContentTypeListFilter(SimpleListFilter):
         for obj in ContentType.objects.all().order_by('name'):
             model = obj.model_class()
             if (model is not None) and issubclass(model, ModelBase):
-                result.append((obj.name, str(obj)))
+                result.append(('%s.%s' % (obj.app_label, obj.model), str(obj)))
         return result
 
     def queryset(self, request, queryset):
         if self.value():
-            return queryset.filter(content_type__model=self.value())
+            app_label, model = self.value().split('.')
+            return queryset.filter(content_type__app_label=app_label, content_type__model=model)
         return queryset
 
     
