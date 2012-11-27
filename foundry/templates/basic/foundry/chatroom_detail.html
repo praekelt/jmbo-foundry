@@ -2,5 +2,5 @@
 {% load jmbo_inclusion_tags %}
 
 {% block content %}
-    {% object_comments object %}
+    {% object_comments object.as_leaf_class %}
 {% endblock %}

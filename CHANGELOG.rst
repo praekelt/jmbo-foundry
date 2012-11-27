@@ -4,6 +4,7 @@ Changelog
 next
 ----
 #. Filter Foundry comments by content type in admin.
+#. Fix bug where comments were stored on superclass for ChatRoom.
 
 1.1
 ---
