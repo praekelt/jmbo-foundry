@@ -300,7 +300,12 @@ class PageAdmin(admin.ModelAdmin):
 
 
 class ChatRoomAdmin(ModelBaseAdmin):
-    pass
+    
+    def _actions(self, obj):
+        result = super(ChatRoomAdmin, self)._actions(obj)
+        return result + '<a href="/admin/foundry/foundrycomment/?object_pk=%s">View messages</a>' % obj.pk
+    _actions.short_description = 'Actions'
+    _actions.allow_tags = True
 
 
 class BlogPostAdmin(ModelBaseAdmin):
