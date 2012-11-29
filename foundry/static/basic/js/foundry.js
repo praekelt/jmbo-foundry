@@ -1,3 +1,6 @@
+if (typeof $ != 'undefined')
+{
+
 $(document).ready(function(){
 
     var last_activity_time = $.now();
@@ -137,3 +140,5 @@ $(document).ready(function(){
     }
 
 });
+
+}

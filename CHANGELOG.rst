@@ -6,6 +6,7 @@ next
 #. Filter Foundry comments by content type in admin.
 #. Remove redundant chatroom detail template. It caused a comment count bug.
 #. Allow social sharing of content even if it is a private site.
+#. Remove jquery from basic layer since it causes out of memory errors on some devices. We will in future look for an API compatible replacement.
 
 1.1
 ---
