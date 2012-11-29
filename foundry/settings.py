@@ -126,6 +126,7 @@ INSTALLED_APPS = (
     'snippetscream',
     'generate',
     'jmbo_calendar',
+    'jmbo_twitter',
     'jmbo',
     'photologue',
     'chart',

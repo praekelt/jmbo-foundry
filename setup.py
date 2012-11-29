@@ -52,6 +52,7 @@ setup(
         'jellyfish',
         'python-memcached',
 	    'jmbo-downloads',
+        'jmbo_twitter',
     ],
     include_package_data=True,
     tests_require=[
