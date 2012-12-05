@@ -55,8 +55,8 @@ from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
 
 def join(request):
     """Surface join form"""
-    show_age_gateway = preferences.GeneralPreferences.show_age_gateway \
-        and not request.COOKIES.get('age_gateway_passed')
+    show_age_gateway = preferences.GeneralPreferences.show_age_gateway
+    age_gateway_passed = bool(request.COOKIES.get('age_gateway_passed', False))
     # pass initial values where possible
     initial = {}
     age_gateway_values = request.COOKIES.get('age_gateway_values')
@@ -76,7 +76,7 @@ def join(request):
                 pass
 
     if request.method == 'POST':
-        form = JoinForm(request.POST, request.FILES, show_age_gateway=show_age_gateway, initial=initial) 
+        form = JoinForm(request.POST, request.FILES, show_age_gateway=show_age_gateway, age_gateway_passed=age_gateway_passed, initial=initial) 
         if form.is_valid():
             member = form.save()
             backend = get_backends()[0]
@@ -87,7 +87,7 @@ def join(request):
             messages.success(request, msg, fail_silently=True)
             return response
     else:
-        form = JoinForm(show_age_gateway=show_age_gateway, initial=initial) 
+        form = JoinForm(show_age_gateway=show_age_gateway, age_gateway_passed=age_gateway_passed, initial=initial) 
 
     extra = dict(form=form)
     return render_to_response('foundry/join.html', extra, context_instance=RequestContext(request))
