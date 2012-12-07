@@ -8,6 +8,7 @@ next
 #. Allow social sharing of content even if it is a private site.
 #. Remove jquery from basic layer since it causes out of memory errors on some devices. We will in future look for an API compatible replacement.
 #. Add `jmbo-twitter` as dependency.
+#. Provide three customizable listings to enable developers to easily add more listings.
 
 1.1
 ---
