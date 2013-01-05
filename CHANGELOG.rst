@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.1.1
+-----
 #. Filter Foundry comments by content type in admin.
 #. Remove redundant chatroom detail template. It caused a comment count bug.
 #. Allow social sharing of content even if it is a private site.
