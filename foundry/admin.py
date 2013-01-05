@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.utils.importlib import import_module
+from django.contrib.admin import SimpleListFilter
+from django.utils.translation import ugettext_lazy as _
 
 from preferences.admin import PreferencesAdmin
 from sites_groups.widgets import SitesGroupsWidget
@@ -298,7 +300,12 @@ class PageAdmin(admin.ModelAdmin):
 
 
 class ChatRoomAdmin(ModelBaseAdmin):
-    pass
+    
+    def _actions(self, obj):
+        result = super(ChatRoomAdmin, self)._actions(obj)
+        return result + '<a href="/admin/foundry/foundrycomment/?object_pk=%s">View messages</a>' % obj.pk
+    _actions.short_description = 'Actions'
+    _actions.allow_tags = True
 
 
 class BlogPostAdmin(ModelBaseAdmin):
@@ -309,9 +316,29 @@ class NotificationAdmin(admin.ModelAdmin):
     list_display = ('id', 'member', 'link', 'created')
 
 
+class JmboContentTypeListFilter(SimpleListFilter):
+    title = _("Jmbo content type")
+    parameter_name = 'jmbo_content_type'
+
+    def lookups(self, request, model_admin):
+        result = []
+        for obj in ContentType.objects.all().order_by('name'):
+            model = obj.model_class()
+            if (model is not None) and issubclass(model, ModelBase):
+                result.append(('%s.%s' % (obj.app_label, obj.model), str(obj)))
+        return result
+
+    def queryset(self, request, queryset):
+        if self.value():
+            app_label, model = self.value().split('.')
+            return queryset.filter(content_type__app_label=app_label, content_type__model=model)
+        return queryset
+
+    
 class FoundryCommentAdmin(admin.ModelAdmin):
     list_display = ('id', 'content_object', 'user', 'comment')
     search_fields = ('user__username', 'comment',)
+    list_filter = (JmboContentTypeListFilter,)
 
 
 class CommentReportAdmin(admin.ModelAdmin):

@@ -1,8 +1,6 @@
 from django.template.loader import render_to_string
 from django.utils.importlib import import_module
 
-from jmbo.models import ModelBase
-
 
 class AbstractBaseStyle(object):
 
@@ -16,6 +14,7 @@ class AbstractBaseStyle(object):
         # Check for pinned_queryset. It can be missing since listings can be 
         # called via the {% listing %} tag. The resulting proxy listing object 
         # does not neccessarily have the property.
+        from jmbo.models import ModelBase
         return getattr(self.listing, 'pinned_queryset', ModelBase.objects.none())
        
     def get_context_data(self, context, as_tile=False):
@@ -62,3 +61,15 @@ class VerticalThumbnail(AbstractBaseStyle):
 
 class Widget(AbstractBaseStyle):
     template_name = 'foundry/inclusion_tags/listing_widget.html'
+
+
+class CustomOne(AbstractBaseStyle):
+    template_name = 'foundry/inclusion_tags/listing_custom_one.html'
+
+
+class CustomTwo(AbstractBaseStyle):
+    template_name = 'foundry/inclusion_tags/listing_custom_two.html'
+
+
+class CustomThree(AbstractBaseStyle):
+    template_name = 'foundry/inclusion_tags/listing_custom_three.html'

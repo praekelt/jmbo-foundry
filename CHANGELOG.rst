@@ -1,6 +1,15 @@
 Changelog
 =========
 
+1.1.1
+-----
+#. Filter Foundry comments by content type in admin.
+#. Remove redundant chatroom detail template. It caused a comment count bug.
+#. Allow social sharing of content even if it is a private site.
+#. Remove jquery from basic layer since it causes out of memory errors on some devices. We will in future look for an API compatible replacement.
+#. Add `jmbo-twitter` as dependency.
+#. Provide three customizable listings to enable developers to easily add more listings.
+
 1.1
 ---
 #. Rename potentially confusing photosizes used in listing item templates. Old photosizes are retained for backward compatibility. If your app redefines a photosize for `listing_*` then you must update those photosize names.
