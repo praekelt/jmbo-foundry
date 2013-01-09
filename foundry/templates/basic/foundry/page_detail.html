@@ -2,6 +2,11 @@
 {% load foundry_tags %}
 
 {% block page_content %}
+    {% if object.css %}
+        <style type="text/css">
+            {{ object.css|safe }}
+        </style>
+    {% endif %}
     {% with object.rows_by_block_name.content as rows %}
         {% include "foundry/inclusion_tags/rows.html" %}
     {% endwith %}
