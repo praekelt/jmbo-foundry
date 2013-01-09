@@ -1,6 +1,11 @@
 Changelog
 =========
 
+next
+----
+#. Fix migration 0045 which would case South to complain about a previous set not being frozen.
+#. Page objects can now be styled with extra CSS. This is useful when using a page as a campaign.
+
 1.1.1
 -----
 #. Filter Foundry comments by content type in admin.
