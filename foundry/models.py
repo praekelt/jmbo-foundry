@@ -639,6 +639,12 @@ class Page(models.Model):
         db_index=True,
     )
     is_homepage = models.BooleanField(default=False, help_text="Tick if you want this page to be the site's homepage.")
+    css = models.TextField(
+        blank=True, 
+        null=True, 
+        help_text="""Additional styling to be applied to the page. This is \
+useful when using a page as a campaign."""
+    )
     sites = models.ManyToManyField(
         'sites.Site',
         blank=True,

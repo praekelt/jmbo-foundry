@@ -8,22 +8,16 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        connection = db._get_connection()
-        cursor = connection.cursor()
-        try:
-            cursor.execute('select raw_field_order from preferences_registrationpreferences')
-            connection.close()
-        except:
-            connection.close()
-            # Adding field 'RegistrationPreferences.raw_field_order'
-            db.add_column('preferences_registrationpreferences', 'raw_field_order',
-                        self.gf('django.db.models.fields.CharField')(default='{}', max_length=1024, blank=True),
-                        keep_default=False)
+        # Adding field 'Page.css'
+        db.add_column('foundry_page', 'css',
+                      self.gf('django.db.models.fields.TextField')(null=True, blank=True),
+                      keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting field 'RegistrationPreferences.raw_field_order'
-        db.delete_column('preferences_registrationpreferences', 'raw_field_order')
+        # Deleting field 'Page.css'
+        db.delete_column('foundry_page', 'css')
+
 
     models = {
         'atlas.city': {
@@ -95,7 +89,9 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "('title',)", 'object_name': 'Category'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['category.Category']", 'null': 'True', 'blank': 'True'}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255'}),
+            'subtitle': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         },
         'category.tag': {
@@ -272,6 +268,7 @@ class Migration(SchemaMigration):
         },
         'foundry.page': {
             'Meta': {'object_name': 'Page'},
+            'css': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_homepage': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
@@ -364,7 +361,7 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'}),
             'reflection_size': ('django.db.models.fields.FloatField', [], {'default': '0'}),
-            'reflection_strength': ('django.db.models.fields.FloatField', [], {'default': '0.59999999999999998'}),
+            'reflection_strength': ('django.db.models.fields.FloatField', [], {'default': '0.6'}),
             'sharpness': ('django.db.models.fields.FloatField', [], {'default': '1.0'}),
             'transpose_method': ('django.db.models.fields.CharField', [], {'max_length': '15', 'blank': 'True'})
         },
