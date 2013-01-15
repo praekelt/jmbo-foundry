@@ -140,7 +140,6 @@ INSTALLED_APPS = (
     'object_tools',
     'registration',
     'show',
-    'event', # will be removed when jmbo-show refactored
     'preferences',
     'banner',
     'competition',

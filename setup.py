@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='1.1.1',
+    version='1.1.2',
     description='Jmbo Foundry ties together the various Jmbo products enabling you to rapidly build multilingual web and mobi sites with the minimum amount of code and customization.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -20,7 +20,7 @@ setup(
         'django-snippetscream',
         'django-generate',
         'jmbo-calendar',
-        'jmbo>=1.0',
+        'jmbo>=1.0.2',
         'jmbo-chart',
         'django-recaptcha',
         'django-secretballot',
@@ -32,8 +32,7 @@ setup(
         'django-gizmo',
         'django-object-tools>=0.0.5',
         'django-registration',
-        'jmbo-show',
-        'jmbo-event',
+        'jmbo-show>=0.2',
         'django-preferences',
         'jmbo-banner>=0.0.6',
         'jmbo-competition',

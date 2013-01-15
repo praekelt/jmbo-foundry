@@ -45,18 +45,17 @@ urlpatterns = patterns('',
     (r'^gallery/', include('gallery.urls')),
     (r'^googlesearch/', include('googlesearch.urls')),
     (r'^music/', include('music.urls')),
-    (r'^jmbo/', include('jmbo.urls')),  # todo: paster makes this r'^$ which does not work
+    (r'^jmbo/', include('jmbo.urls')),
     (r'^chart/', include('chart.urls')),
     (r'^comments/', include('django.contrib.comments.urls')),
-#    (r'^richcomments/', include('richcomments.urls')), # re-evaluate this product. It needs to degrade to non-ajax as well.
     (r'^likes/', include('likes.urls')),
     (r'^object-tools/', include(object_tools.tools.urls)),
-    #(r'^show/', include('show.urls')),
+    (r'^show/', include('show.urls')),
     (r'^competition/', include('competition.urls')),
     (r'^ckeditor/', include('ckeditor.urls')),
     (r'^contact/', include('contact.urls')),
-    (r'^post/', include('post.urls')),	# todo: add to paster
-    (r'^poll/', include('poll.urls')),	# todo: add to paster
+    (r'^post/', include('post.urls')),
+    (r'^poll/', include('poll.urls')),
     (r'^simple-autocomplete/', include('simple_autocomplete.urls')),
     (r'^jmbo-analytics/', include('jmbo_analytics.urls')),
     (r'^api/', include(v1_api.urls)),
