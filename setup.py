@@ -52,6 +52,7 @@ setup(
         'python-memcached',
 	    'jmbo-downloads',
         'jmbo_twitter',
+        'django-social-auth',
     ],
     include_package_data=True,
     tests_require=[

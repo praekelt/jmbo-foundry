@@ -101,6 +101,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
     'preferences.context_processors.preferences_cp',
     'foundry.context_processors.foundry',
+    'social_auth.context_processors.social_auth_backends',
+    'social_auth.context_processors.social_auth_login_redirect',
 )
 
 # AppDirectoriesTypeLoader must be after filesystem loader
@@ -191,6 +193,7 @@ LOGIN_REDIRECT_URL = '/'    # check if inpaster
 
 # todo: add setting to foundry paster
 AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.facebook.FacebookBackend',
     'foundry.backends.MultiBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
@@ -223,6 +226,7 @@ DJANGO_ATLAS = {
     'google_maps_api_key': 'AIzaSyBvdwGsAn2h6tNI75M5cAcryln7rrTYqkk',
 }
 
+
 def compute_settings(sender):
     """Function not required anymore since our template loader and static file
     finder have become smarter."""
@@ -230,3 +234,9 @@ def compute_settings(sender):
 foundry.finders.FileSystemLayerAwareFinder is listed under \
 STATICFILES_FINDERS then you may safely remove the call to compute_settings \
 from your settings file.""", RuntimeWarning)
+
+
+SOCIAL_AUTH_USER_MODEL = 'foundry.models.Member'
+FACEBOOK_APP_ID = 'YOUR_FACEBOOK_APP_ID'
+FACEBOOK_API_SECRET = 'YOUR_FACEBOOK_API_SECRET'
+#FACEBOOK_EXTENDED_PERMISSIONS = ['email']
