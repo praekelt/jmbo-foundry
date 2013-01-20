@@ -52,7 +52,7 @@ setup(
         'python-memcached',
 	    'jmbo-downloads',
         'jmbo_twitter',
-        'django-social-auth',
+        'django-social-auth>=0.7.18',
     ],
     include_package_data=True,
     tests_require=[
