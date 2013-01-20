@@ -158,6 +158,7 @@ INSTALLED_APPS = (
     'sites_groups',
     'atlas',
     'tastypie',
+    'social_auth',
     'django.contrib.auth',
     'django.contrib.comments',
     'django.contrib.contenttypes',
