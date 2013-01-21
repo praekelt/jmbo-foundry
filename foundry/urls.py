@@ -105,12 +105,6 @@ urlpatterns = patterns('',
         {},
         name='join',
     ),
-    url(
-        r'^join-finish/$',
-        'foundry.views.join_finish',
-        {},
-        name='join-finish',
-    ),
     (r'^auth/', include('django.contrib.auth.urls')),
     url(
         r'^login/$',
@@ -196,6 +190,17 @@ urlpatterns = patterns('',
             )
         ),
         name='edit-profile'
+    ),
+
+    # Complete profile    
+    url(r'^complete-profile/$',
+        login_required(
+            views.EditProfile.as_view(
+                form_class=forms.EditProfileForm,
+                template_name='foundry/complete_profile.html'
+            )
+        ),
+        name='complete-profile'
     ),
 
     # Page detail

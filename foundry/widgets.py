@@ -3,7 +3,7 @@ import datetime
 import re
 
 from django.forms.widgets import CheckboxSelectMultiple, MultiWidget, Select, \
-    HiddenInput
+    HiddenInput, FileInput
 from django.utils.datastructures import MultiValueDict
 from django.utils.translation import ugettext
 from django.utils import simplejson as json
@@ -94,4 +94,18 @@ class DragDropOrderingWidget(MultiWidget):
             para += '''<li name="%s"><span>%s</span></li>''' % (f, f)
         return u'''%s<ul class="dragdrop">%s</ul>%s''' % (rendered_widgets[0], para,
             DragDropOrderingWidget.script % (re.search(r'id="(?P<id>\w+)"', rendered_widgets[0]).group('id')))
-        
+       
+
+class PrettyFileInput(FileInput):
+
+    current = None
+
+    def __init__(self, current=None, *args, **kwargs):
+        self.current = current
+        super(PrettyFileInput, self).__init__(*args, **kwargs)
+
+    def render(self, *args, **kwargs):
+        preamble = ""
+        if self.current:
+            preamble = ugettext("""<div class="pretty-file-input-current"><div class="title">Current:</div><div class="image"><img src="%s" /></div></div>""" % self.current)
+        return preamble + super(PrettyFileInput, self).render(*args, **kwargs)

@@ -26,7 +26,7 @@ from preferences import preferences
 from jmbo.forms import as_div
 
 from foundry import models
-from foundry.widgets import OldSchoolDateWidget
+from foundry.widgets import OldSchoolDateWidget, PrettyFileInput
 from foundry.ambientmobile import AmbientSMS, AmbientSMSError
 
 
@@ -252,45 +252,6 @@ be numbers. No spaces allowed. An example is +27821234567.")
     as_div = as_div
 
 
-class JoinFinishForm(forms.ModelForm):
-    """Show avatar selection form"""
-
-    class Meta:
-        model = models.Member
-        fields = ('image',)
-
-    def __init__(self, *args, **kwargs):
-        super(JoinFinishForm, self).__init__(*args, **kwargs)
-
-        self.fields['image'].label = _("Upload a picture")
-        self.fields['image'].help_text = _("JPG, GIF or PNG accepted. Square is best. Keep it under 1MB.")
-
-    @property
-    def default_avatars(self):
-        return models.DefaultAvatar.objects.all()
-
-    def clean(self):
-        cleaned_data = super(JoinFinishForm, self).clean()
-        if not cleaned_data.get('image'):
-            if not self.data.has_key('default_avatar_id'):
-                raise forms.ValidationError(_("Please upload or select a picture."))
-        return cleaned_data
-
-    def save(self, commit=True):
-        instance = super(JoinFinishForm, self).save(commit=commit)
-
-        # Set image from default avatar if required
-        if not instance.image and self.data.has_key('default_avatar_id'):
-            obj = models.DefaultAvatar.objects.get(id=self.data['default_avatar_id'])
-            instance.image = obj.image
-            if commit:
-                instance.save()
-
-        return instance
-
-    as_div = as_div
-
-
 class EditProfileForm(forms.ModelForm):
 
     class Meta:
@@ -298,7 +259,7 @@ class EditProfileForm(forms.ModelForm):
         widgets = {'dob': OldSchoolDateWidget}
         
     def __init__(self, *args, **kwargs):
-        self.base_fields['image'].widget = forms.FileInput()
+        self.base_fields['image'].widget = PrettyFileInput(current=kwargs['instance'].get_thumbnail_LAYER_url())        
         super(EditProfileForm, self).__init__(*args, **kwargs)
 
         # todo: need a preference member_edit_fields

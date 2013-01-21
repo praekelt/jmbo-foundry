@@ -49,8 +49,8 @@ from preferences import preferences
 
 from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification, \
     Member, FoundryComment, CommentReport, Country
-from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
-    SearchForm, CreateBlogPostForm
+from foundry.forms import JoinForm, AgeGatewayForm, TestForm, SearchForm, \
+    CreateBlogPostForm
 
 
 def join(request):
@@ -82,7 +82,7 @@ def join(request):
             backend = get_backends()[0]
             member.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
             login(request, member)            
-            response = HttpResponseRedirect(reverse('join-finish'))
+            response = HttpResponseRedirect(reverse('home'))
             msg = _("You have successfully signed up to the site.")
             messages.success(request, msg, fail_silently=True)
             return response
@@ -91,21 +91,6 @@ def join(request):
 
     extra = dict(form=form)
     return render_to_response('foundry/join.html', extra, context_instance=RequestContext(request))
-
-
-@login_required
-def join_finish(request):
-    """Surface join finish form"""
-    if request.method == 'POST':
-        form = JoinFinishForm(request.POST, request.FILES, instance=request.user) 
-        if form.is_valid():
-            member = form.save()            
-            return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
-    else:
-        form = JoinFinishForm(instance=request.user) 
-
-    extra = dict(form=form)
-    return render_to_response('foundry/join_finish.html', extra, context_instance=RequestContext(request))
 
 
 def age_gateway(request):

@@ -81,6 +81,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'foundry.middleware.AgeGateway',
+    'foundry.middleware.CheckProfileCompleteness',
     'django.contrib.messages.middleware.MessageMiddleware',
     'likes.middleware.SecretBallotUserIpUseragentMiddleware',
     'pagination.middleware.PaginationMiddleware',
@@ -240,4 +241,3 @@ from your settings file.""", RuntimeWarning)
 SOCIAL_AUTH_USER_MODEL = 'foundry.Member'
 FACEBOOK_APP_ID = 'YOUR_FACEBOOK_APP_ID'
 FACEBOOK_API_SECRET = 'YOUR_FACEBOOK_API_SECRET'
-#FACEBOOK_EXTENDED_PERMISSIONS = ['email']

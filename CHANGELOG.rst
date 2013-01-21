@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Use `django-social-auth` to authenticate against external providers.
+
 1.1.2
 -----
 #. Fix migration 0045 which would case South to complain about a previous set not being frozen.
