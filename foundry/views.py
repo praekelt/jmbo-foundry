@@ -1,6 +1,7 @@
 import random
 import urllib
 from datetime import datetime
+import warnings
 
 from django.conf import settings
 from django.contrib.auth import authenticate, login, get_backends
@@ -49,8 +50,8 @@ from preferences import preferences
 
 from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification, \
     Member, FoundryComment, CommentReport, Country
-from foundry.forms import JoinForm, AgeGatewayForm, TestForm, SearchForm, \
-    CreateBlogPostForm
+from foundry.forms import JoinForm, JoinFinishForm, AgeGatewayForm, TestForm, \
+    SearchForm, CreateBlogPostForm
 
 
 def join(request):
@@ -91,6 +92,26 @@ def join(request):
 
     extra = dict(form=form)
     return render_to_response('foundry/join.html', extra, context_instance=RequestContext(request))
+
+
+@login_required
+def join_finish(request):
+    """Surface join finish form"""
+
+    warnings.warn(
+        "join_finish will be deprecated in jmbo-foundry 1.2.", RuntimeWarning
+    )
+
+    if request.method == 'POST':
+        form = JoinFinishForm(request.POST, request.FILES, instance=request.user) 
+        if form.is_valid():
+            member = form.save()            
+            return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
+    else:
+        form = JoinFinishForm(instance=request.user) 
+
+    extra = dict(form=form)
+    return render_to_response('foundry/join_finish.html', extra, context_instance=RequestContext(request))
 
 
 def age_gateway(request):

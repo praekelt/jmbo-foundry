@@ -105,6 +105,12 @@ urlpatterns = patterns('',
         {},
         name='join',
     ),
+    url(
+        r'^join-finish/$',
+        'foundry.views.join_finish',
+        {},
+        name='join-finish',
+    ),
     (r'^auth/', include('django.contrib.auth.urls')),
     url(
         r'^login/$',
