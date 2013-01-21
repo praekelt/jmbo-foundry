@@ -17,6 +17,9 @@
         <span>{% trans "Not registered?" %} <a href="{% url join %}">{% trans "Sign up here" %}</a></span>
     </form>
 
+    <div class="external">
+        <a href="{% url socialauth_begin 'facebook' %}"><img src="${STATIC_URL}/images/facebook-connect.png" alt="Facebook" /></a>
+    </div>
+
 </div>
-<a href="{% url socialauth_begin 'facebook' %}">Facebook</a>
 {% endblock %}
