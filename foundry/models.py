@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse, Resolver404
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _, ugettext
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, UserManager
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.contrib.comments.models import Comment as BaseComment
@@ -578,7 +578,8 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersona
     limits the entire site to a single type of profile."""
 
     country = models.ForeignKey(Country, null=True, blank=True)
-    
+    objects = UserManager()
+   
     def __unicode__(self):
         return self.username
 

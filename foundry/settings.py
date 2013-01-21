@@ -237,8 +237,7 @@ STATICFILES_FINDERS then you may safely remove the call to compute_settings \
 from your settings file.""", RuntimeWarning)
 
 
-#import foundry.models
-#SOCIAL_AUTH_USER_MODEL = 'foundry.models.Member'
+SOCIAL_AUTH_USER_MODEL = 'foundry.Member'
 FACEBOOK_APP_ID = 'YOUR_FACEBOOK_APP_ID'
 FACEBOOK_API_SECRET = 'YOUR_FACEBOOK_API_SECRET'
 #FACEBOOK_EXTENDED_PERMISSIONS = ['email']
