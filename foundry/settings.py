@@ -102,8 +102,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
     'preferences.context_processors.preferences_cp',
     'foundry.context_processors.foundry',
-    'social_auth.context_processors.social_auth_backends',
-    'social_auth.context_processors.social_auth_login_redirect',
 )
 
 # AppDirectoriesTypeLoader must be after filesystem loader
