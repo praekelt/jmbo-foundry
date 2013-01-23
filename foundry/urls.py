@@ -59,6 +59,7 @@ urlpatterns = patterns('',
     (r'^simple-autocomplete/', include('simple_autocomplete.urls')),
     (r'^jmbo-analytics/', include('jmbo_analytics.urls')),
     (r'^api/', include(v1_api.urls)),
+    url(r'social-auth', include('social_auth.urls')),
 
     (r'^admin/', include('gallery.admin_urls')),
     (r'^admin/', include('jmbo_twitter.admin_urls')),
@@ -195,6 +196,17 @@ urlpatterns = patterns('',
             )
         ),
         name='edit-profile'
+    ),
+
+    # Complete profile    
+    url(r'^complete-profile/$',
+        login_required(
+            views.EditProfile.as_view(
+                form_class=forms.EditProfileForm,
+                template_name='foundry/complete_profile.html'
+            )
+        ),
+        name='complete-profile'
     ),
 
     # Page detail

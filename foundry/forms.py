@@ -26,7 +26,7 @@ from preferences import preferences
 from jmbo.forms import as_div
 
 from foundry import models
-from foundry.widgets import OldSchoolDateWidget
+from foundry.widgets import OldSchoolDateWidget, PrettyFileInput
 from foundry.ambientmobile import AmbientSMS, AmbientSMSError
 
 
@@ -298,7 +298,7 @@ class EditProfileForm(forms.ModelForm):
         widgets = {'dob': OldSchoolDateWidget}
         
     def __init__(self, *args, **kwargs):
-        self.base_fields['image'].widget = forms.FileInput()
+        self.base_fields['image'].widget = PrettyFileInput(current=kwargs['instance'].get_thumbnail_LAYER_url())        
         super(EditProfileForm, self).__init__(*args, **kwargs)
 
         # todo: need a preference member_edit_fields

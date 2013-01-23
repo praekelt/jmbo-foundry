@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse, Resolver404
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _, ugettext
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, UserManager
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.contrib.comments.models import Comment as BaseComment
@@ -16,6 +16,7 @@ from django.utils import simplejson as json
 
 from ckeditor.fields import RichTextField
 from preferences.models import Preferences
+from preferences import preferences
 from snippetscream import resolve_to_name
 from photologue.models import ImageModel
 from south.modelsinspector import add_introspection_rules
@@ -578,29 +579,27 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersona
     limits the entire site to a single type of profile."""
 
     country = models.ForeignKey(Country, null=True, blank=True)
-    
+    is_profile_complete = models.BooleanField(default=False, editable=False)
+    objects = UserManager()
+   
     def __unicode__(self):
         return self.username
 
     def save(self, *args, **kwargs):        
+        self.is_profile_complete = True
+        required_fields = preferences.RegistrationPreferences.required_fields
+        for name in required_fields:
+            if not getattr(self, name, None):
+                self.is_profile_complete = False
+                break
+
         super(Member, self).save(*args, **kwargs)
 
-        # Create / clear notifications on imcomplete / complete fields
-        link, dc = Link.objects.get_or_create(
-            title=ugettext("Set your profile picture"), view_name='join-finish'
-        )
         if not self.image:
             # Set a default avatar
             avatars = DefaultAvatar.objects.all().order_by('?')
             if avatars.exists():
-                self.image = avatars[0].image
-            Notification.objects.get_or_create(member=self, link=link)
-        else:
-            try:
-                notification = Notification.objects.get(member=self, link=link)
-                notification.delete()
-            except Notification.DoesNotExist:
-                pass
+                self.image = avatars[0].image                
 
     @property
     def last_5_comments(self):

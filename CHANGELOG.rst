@@ -1,6 +1,11 @@
 Changelog
 =========
 
+next
+----
+#. Use `django-social-auth` to authenticate against external providers.
+#. Drop the wizard style of registration. This is required for consistent UX when registering via Facebook.
+
 1.1.2
 -----
 #. Fix migration 0045 which would case South to complain about a previous set not being frozen.
