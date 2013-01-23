@@ -1,6 +1,7 @@
 import random
 import urllib
 from datetime import datetime
+import warnings
 
 from django.conf import settings
 from django.contrib.auth import authenticate, login, get_backends
@@ -82,7 +83,7 @@ def join(request):
             backend = get_backends()[0]
             member.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
             login(request, member)            
-            response = HttpResponseRedirect(reverse('join-finish'))
+            response = HttpResponseRedirect(reverse('home'))
             msg = _("You have successfully signed up to the site.")
             messages.success(request, msg, fail_silently=True)
             return response
@@ -96,6 +97,11 @@ def join(request):
 @login_required
 def join_finish(request):
     """Surface join finish form"""
+
+    warnings.warn(
+        "join_finish will be deprecated in jmbo-foundry 1.2.", RuntimeWarning
+    )
+
     if request.method == 'POST':
         form = JoinFinishForm(request.POST, request.FILES, instance=request.user) 
         if form.is_valid():
@@ -413,8 +419,10 @@ class EditProfile(UpdateView):
     
     def get_object(self):
         member = Member.objects.get(id=self.request.user.id)
-        self.success_url = reverse('member-detail', args=[member.username])
         return member
+
+    def get_success_url(self):
+        return reverse('member-detail', args=[self.object.username])
 
 
 # Caching duration matches the refresh rate

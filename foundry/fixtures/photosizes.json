@@ -531,5 +531,21 @@
             "pre_cache": false, 
             "quality": 90
         }
+    },
+    {
+        "pk": null, 
+        "model": "photologue.photosize", 
+        "fields": {
+            "name": "thumbnail_basic", 
+            "watermark": null, 
+            "increment_count": false, 
+            "effect": null, 
+            "crop": true, 
+            "height": 48, 
+            "width": 48, 
+            "upscale": false, 
+            "pre_cache": false, 
+            "quality": 90
+        }
     }
 ]

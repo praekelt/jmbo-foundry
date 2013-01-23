@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.1.3
+-----
+#. Use `django-social-auth` to authenticate against external providers.
+#. Drop the wizard style of registration. This is required for consistent UX when registering via Facebook.
+#. Listings no longer include unpublished items that are referenced by the Content or Pinned fields.
+
 1.1.2
 -----
 #. Fix migration 0045 which would case South to complain about a previous set not being frozen.

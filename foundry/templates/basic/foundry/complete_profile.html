@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+	<div class="complete-profile">
+	    <div class="title">{% trans "Complete your profile" %}</div>
+
+        <form action="{% url complete-profile %}" method="POST" class="foundry-form" enctype="multipart/form-data">   
+	        {% csrf_token %}
+            {{ form.as_div }}
+            <div class="buttons">
+                <input type="submit" value="{% trans "Save" %}" />
+            </div>
+        </form>
+	</div>  
+{% endblock %}

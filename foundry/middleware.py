@@ -6,6 +6,8 @@ from django.conf import settings
 
 from preferences import preferences
 
+from foundry.models import Member
+
 
 PROTECTED_URLS_PATTERN = r'|'.join((
     reverse('age-gateway'), 
@@ -120,3 +122,27 @@ class PaginationMiddleware(object):
 
     def process_request(self, request):
         request.__class__.page = property(get_page)
+
+
+class CheckProfileCompleteness:
+    """If user has any outstanding required fields then redirect. Must run
+    after AuthenticationMiddleware."""
+
+    def process_response(self, request, response):
+
+        if request.META['PATH_INFO'] == reverse('complete-profile'):
+            return response
+
+        # This check is only really required when running in debug mode
+        if request.META['PATH_INFO'].startswith(settings.MEDIA_URL):
+            return response
+
+        # Ignore ajax
+        if request.is_ajax():
+            return response
+
+        user = getattr(request, 'user', None)
+        if isinstance(user, Member) and not user.is_profile_complete:
+            return HttpResponseRedirect(reverse('complete-profile'))
+                
+        return response            
