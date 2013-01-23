@@ -58,6 +58,8 @@ class TestCase(unittest.TestCase):
             setattr(self, 'post%s' % i, post)
 
         # Listings
+
+        # Content-type
         content_type = ContentType.objects.get(app_label='post', model='post')
         listing_pvt, dc = Listing.objects.get_or_create(
             title='Posts vertical thumbnail', 
@@ -69,15 +71,38 @@ class TestCase(unittest.TestCase):
         listing_pvt.save()
         setattr(self, listing_pvt.slug, listing_pvt)
 
+        # Content points to only published content
+        listing_pc, dc = Listing.objects.get_or_create(
+            title='Published content', 
+            slug='published-content',
+            count=0, items_per_page=0, style='VerticalThumbnail',
+        )
+        listing_pc.content = [self.post1]
+        listing_pc.sites = [1]
+        listing_pc.save()
+        setattr(self, listing_pc.slug, listing_pc)
+
+        # Content points to unpublished content
         listing_upc, dc = Listing.objects.get_or_create(
             title='Unpublished content', 
             slug='unpublished-content',
             count=0, items_per_page=0, style='VerticalThumbnail',
         )
-        listing_upc.content = [self.post5]
+        listing_upc.content = [self.post1, self.post5]
         listing_upc.sites = [1]
         listing_upc.save()
         setattr(self, listing_upc.slug, listing_upc)
+
+        # Pinned items
+        listing_pinned, dc = Listing.objects.get_or_create(
+            title='Listing pinned', 
+            slug='listing-pinned',
+            count=0, items_per_page=0, style='VerticalThumbnail',
+        )
+        listing_pinned.pinned = [self.post1]
+        listing_pinned.sites = [1]
+        listing_pinned.save()
+        setattr(self, listing_pinned.slug, listing_pinned)
 
         setattr(self, '_initialized', 1)
 
@@ -85,10 +110,19 @@ class TestCase(unittest.TestCase):
         listing = getattr(self, 'posts-vertical-thumbnail')
         self.failUnless(self.post1.modelbase_obj in listing.queryset().all())
 
+    def test_listing_pc(self):
+        # Published content must be present in listing queryset
+        listing = getattr(self, 'published-content')
+        self.failUnless(self.post1.modelbase_obj in listing.queryset().all())
+
     def test_listing_upc(self):
         # Unpublished content must not be present in listing queryset
         listing = getattr(self, 'unpublished-content')
         self.failIf(self.post5.modelbase_obj in listing.queryset().all())
+
+    def test_listing_pinned(self):
+        listing = getattr(self, 'listing-pinned')
+        self.failIf(self.post1.modelbase_obj in listing.queryset().all())
 
     def test_pages(self):
         # Login, password reset

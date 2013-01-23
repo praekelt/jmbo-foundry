@@ -283,14 +283,16 @@ complex page."""
         return reverse('listing-detail', args=[self.slug])
 
     def queryset(self, request=None):
-        q = self.content.all()
+        q = ModelBase.permitted.filter(id__in=self.content.all())
         if not q.exists():
             q = ModelBase.permitted.all()
             if self.content_type.exists():
                 q = q.filter(content_type__in=self.content_type.all())
             elif self.category:
                 q = q.filter(Q(primary_category=self.category)|Q(categories=self.category))
-        q = q.exclude(id__in=self.pinned.all().values_list('id', flat=True))
+            else:
+                q = ModelBase.objects.none()
+        q = q.exclude(id__in=self.pinned.all())
 
         if request and self.view_modifier:
             mod, attr = self.view_modifier.rsplit('.', 1)
@@ -310,7 +312,7 @@ complex page."""
 
     @property
     def pinned_queryset(self):
-        return self.pinned.all()
+        return ModelBase.permitted.filter(id__in=self.pinned.all())
         
 
 class AbstractLinkPosition(models.Model):
