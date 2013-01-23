@@ -419,8 +419,10 @@ class EditProfile(UpdateView):
     
     def get_object(self):
         member = Member.objects.get(id=self.request.user.id)
-        self.success_url = reverse('member-detail', args=[member.username])
         return member
+
+    def get_success_url(self):
+        return reverse('member-detail', args=[self.object.username])
 
 
 # Caching duration matches the refresh rate
