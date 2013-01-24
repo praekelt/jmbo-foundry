@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Add optional CSS classes to page rows and columns.
+
 1.1.3
 -----
 #. Use `django-social-auth` to authenticate against external providers.

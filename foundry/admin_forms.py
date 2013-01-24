@@ -10,14 +10,14 @@ class RowEditAjaxForm(forms.ModelForm):
 
     class Meta:
         model = Row
-        fields = ('block_name',)
+        fields = ('block_name', 'class_name')
 
 
 class ColumnCreateAjaxForm(forms.ModelForm):
 
     class Meta:
         model = Column
-        fields = ('row', 'width', 'title', 'designation')
+        fields = ('row', 'width', 'title', 'designation', 'class_name')
         widgets = {
             'row':forms.widgets.HiddenInput, 
         }
@@ -38,7 +38,7 @@ class ColumnEditAjaxForm(forms.ModelForm):
 
     class Meta:
         model = Column
-        fields = ('row', 'width', 'title', 'designation')
+        fields = ('row', 'width', 'title', 'designation', 'class_name')
         widgets = {
             'row':forms.widgets.HiddenInput, 
         }
