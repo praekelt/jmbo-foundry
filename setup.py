@@ -53,6 +53,7 @@ setup(
 	    'jmbo-downloads',
         'jmbo_twitter',
         'django-social-auth>=0.7.18',
+        'django-dfp',
     ],
     include_package_data=True,
     tests_require=[
