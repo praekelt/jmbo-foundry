@@ -128,6 +128,11 @@ from django.core.urlresolvers import resolve, Resolver404
 from django.template.loader import render_to_string
 
 def BlockNode_render(self, context):
+    # Knowing when we are at a top-level node is surprisingly tricky due to 
+    # context being copied (and not referenced) during recursion. The address 
+    # method works reliably.
+    if not context.get('_foundry_root_context_address'):
+        context['_foundry_root_context_address'] = id(context)
     block_context = context.render_context.get(BLOCK_CONTEXT_KEY)
     context.push()
     if block_context is None:
@@ -145,17 +150,17 @@ def BlockNode_render(self, context):
         if push is not None:
             block_context.push(self.name, push)
     context.pop()
+   
+    if not getattr(context['request'], '_foundry_blocknode_marker', None) \
+        and (self.name == 'content') \
+        and (id(context) == context['_foundry_root_context_address']):
 
-    if (self.name == 'content') and not hasattr(context['request'], '_foundry_blocknode_marker'):
         # What view are we rendering?
         try:
             view_name = resolve(context['request'].META['PATH_INFO']).view_name
         except Resolver404:
             return result
-
-        # Mark to prevent recursion
-        setattr(context['request'], '_foundry_blocknode_marker', 1)
-
+    
         # Find page if any. Import here to prevent circular import.
         from foundry.models import Page, PageView
         # Use first permitted page that has row of required type
@@ -163,14 +168,18 @@ def BlockNode_render(self, context):
         for page in pages:
             rows = page.row_set.filter(has_left_or_right_column=True)
             if rows.exists():
+                # Mark to prevent recursion
+                setattr(context['request'], '_foundry_blocknode_marker', 1)
                 html = render_to_string(
-                    'foundry/inclusion_tags/rows.html', {'rows':[rows[0]], 'include_center_marker':1}, context
+                    'foundry/inclusion_tags/rows.html', 
+                    {'rows':[rows[0]], 'include_center_marker':1}, 
+                    context
                 )
                 return html.replace('_FOUNDRY_BLOCKNODE_PLACEHOLDER', result)
 
     return result
 
-#BlockNode.render = BlockNode_render
+BlockNode.render = BlockNode_render
 
 
 """Django wraps the already hidden CSRF token input in an invisible container. This causes problems on low-end handsets. 

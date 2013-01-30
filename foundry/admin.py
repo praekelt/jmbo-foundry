@@ -271,7 +271,7 @@ class PageViewForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(PageViewForm, self).__init__(*args, **kwargs)
         self.fields['view_name'].widget = forms.widgets.Select(
-            choices=[('', '')] + get_view_choices()
+            choices=[('', '')] + get_view_choices(simple=False)
         )
 
 

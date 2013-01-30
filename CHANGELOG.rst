@@ -4,6 +4,7 @@ Changelog
 next
 ----
 #. Add optional CSS classes to page rows and columns.
+#. Enable content block render monkey patch. This enables us to associate any named view with a particular page.
 
 1.1.3
 -----
