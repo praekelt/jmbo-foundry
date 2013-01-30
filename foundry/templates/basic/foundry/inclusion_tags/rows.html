@@ -7,7 +7,7 @@
             <td class="foundry-page-column foundry-page-column-{{ column.width }} {{ column.class_name }}">
                 {% if column.title %}<div class="title">{{ column.title }}</div>{% endif %}
 
-                {% if include_center_marker %}
+                {% if row.has_left_or_right_column %}
                     {% ifchanged column.designation %}
                         {% if not column.designation %}
                             _FOUNDRY_BLOCKNODE_PLACEHOLDER

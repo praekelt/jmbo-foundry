@@ -166,13 +166,13 @@ def BlockNode_render(self, context):
         # Use first permitted page that has row of required type
         pages = Page.permitted.filter(id__in=[o.page.id for o in PageView.objects.filter(view_name=view_name)])
         for page in pages:
-            rows = page.row_set.filter(has_left_or_right_column=True)
-            if rows.exists():
+            rows = page.rows_by_block_name.get('content', [])
+            if rows:
                 # Mark to prevent recursion
                 setattr(context['request'], '_foundry_blocknode_marker', 1)
                 html = render_to_string(
                     'foundry/inclusion_tags/rows.html', 
-                    {'rows':[rows[0]], 'include_center_marker':1}, 
+                    {'rows': rows}, 
                     context
                 )
                 return html.replace('_FOUNDRY_BLOCKNODE_PLACEHOLDER', result)

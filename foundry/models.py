@@ -684,7 +684,9 @@ class PageView(models.Model):
     """We need this bridging class for fast lookups"""
     page = models.ForeignKey(Page)
     view_name = models.CharField(
-        max_length=200, help_text='A view that uses the target page to render itself.',
+        max_length=200, 
+        help_text="""A view that will render its content area into a content \
+row defined for this page. Advanced usage.""",
     )
 
     def __unicode__(self):
