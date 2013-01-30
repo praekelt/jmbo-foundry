@@ -1,3 +1,4 @@
+from datetime import datetime
 import re
 
 from django.http import HttpResponseRedirect
@@ -145,4 +146,20 @@ class CheckProfileCompleteness:
         if isinstance(user, Member) and not user.is_profile_complete:
             return HttpResponseRedirect(reverse('complete-profile'))
                 
-        return response            
+        return response
+
+
+class LastSeen:
+    """Update a user's last seen field at most every 5 minutes."""
+
+    def process_response(self, request, response):
+        
+        # Update last_seen if the cookie has expired and this is an authenticated member
+        user = getattr(request, 'user', None)
+        if isinstance(user, Member) and not request.COOKIES.get('last_seen', None):
+            now = datetime.now()
+            user.last_seen = now
+            user.save()
+            response.set_cookie('last_seen', '1', max_age=300)
+        
+        return response
