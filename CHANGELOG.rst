@@ -1,9 +1,10 @@
 Changelog
 =========
 
-next
-----
+1.1.4
+-----
 #. Add optional CSS classes to page rows and columns.
+#. Add last_seen field to Member and a middleware to update this timestamp at most every 5 minutes.
 
 1.1.3
 -----
