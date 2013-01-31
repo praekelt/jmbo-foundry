@@ -85,7 +85,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'likes.middleware.SecretBallotUserIpUseragentMiddleware',
     'pagination.middleware.PaginationMiddleware',
-    'foundry.middleware.VerboseRequestMeta',                    
+    'foundry.middleware.VerboseRequestMeta',
+    'foundry.middleware.LastSeen',
     'django.middleware.transaction.TransactionMiddleware',
 )
 
