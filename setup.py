@@ -34,7 +34,7 @@ setup(
         'django-registration',
         'jmbo-show>=0.2',
         'django-preferences',
-        'jmbo-banner>=0.0.6',
+        'jmbo-banner>=0.2',
         'jmbo-competition',
         'jmbo-contact',
         'jmbo-poll',
@@ -53,7 +53,6 @@ setup(
 	    'jmbo-downloads',
         'jmbo_twitter',
         'django-social-auth>=0.7.18',
-        'django-dfp',                   # pulled in by jmbo-banner but leave until banner 0.1 is released to pypi
     ],
     include_package_data=True,
     tests_require=[
