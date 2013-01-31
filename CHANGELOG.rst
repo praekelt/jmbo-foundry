@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.1.5
+-----
+#. Newer version of `jmbo-banner` implies a DFP header to be added to the base template.
+
 1.1.4
 -----
 #. Add optional CSS classes to page rows and columns.
