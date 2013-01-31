@@ -53,7 +53,7 @@ setup(
 	    'jmbo-downloads',
         'jmbo_twitter',
         'django-social-auth>=0.7.18',
-        'django-dfp',
+        'django-dfp',                   # pulled in by jmbo-banner but leave until banner 0.1 is released to pypi
     ],
     include_package_data=True,
     tests_require=[
