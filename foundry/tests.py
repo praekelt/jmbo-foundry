@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.core import management
 from django.utils import unittest
 from django.contrib.contenttypes.models import ContentType
@@ -36,6 +38,8 @@ class TestCase(unittest.TestCase):
             username='editor',
             email='editor@test.com'
         )
+        self.editor.set_password("password")
+        self.editor.save()
 
         # Published posts
         for i in range(1, 5):
@@ -136,4 +140,14 @@ class TestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.failIf(response.content.find('foundry-listing-vertical-thumbnail') == -1)
         self.failIf(response.content.find('/post/post-1') == -1)
-
+    
+    def test_last_seen(self):
+        self.editor.last_seen = None
+        self.editor.save()
+        self.client.cookies.clear()
+        self.client.login(username="editor", password="password")
+        self.client.get("/")
+        last_seen = Member.objects.get(pk=self.editor.pk).last_seen
+        self.assertTrue(last_seen)
+        self.client.get("/")
+        self.assertEqual(Member.objects.get(pk=self.editor.pk).last_seen, last_seen)
