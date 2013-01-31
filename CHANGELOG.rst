@@ -1,9 +1,14 @@
 Changelog
 =========
 
+1.1.4
+-----
+#. Add optional CSS classes to page rows and columns.
+#. Add last_seen field to Member and a middleware to update this timestamp at most every 5 minutes.
+
 1.1.3
 -----
-#. Use `django-social-auth` to authenticate against external providers.
+#. Use `django-social-auth` to authenticate against external providers. You must add `social_auth` to `INSTALLED_APPS` and set `SOCIAL_AUTH_USER_MODEL = 'foundry.Member'` at the very least. See the django-social auth documentation for more settings.
 #. Drop the wizard style of registration. This is required for consistent UX when registering via Facebook.
 #. Listings no longer include unpublished items that are referenced by the Content or Pinned fields.
 

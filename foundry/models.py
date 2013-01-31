@@ -582,6 +582,7 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersona
 
     country = models.ForeignKey(Country, null=True, blank=True)
     is_profile_complete = models.BooleanField(default=False, editable=False)
+    last_seen = models.DateTimeField(null=True, editable=False)
     objects = UserManager()
    
     def __unicode__(self):
@@ -707,6 +708,10 @@ class Row(models.Model):
             page."
     )
     has_left_or_right_column = models.BooleanField(default=False, editable=False, db_index=True)
+    class_name = models.CharField(
+        max_length=200, null=True, blank=True,
+        help_text="One or more CSS classes that are applied to the row.",
+    )
 
     def save(self, *args, **kwargs):        
         if not self.id:
@@ -752,6 +757,10 @@ class Column(models.Model):
         ),        
         help_text="Applicable to content (green) rows. Used to display columns \
 to the left and right of the content block."
+    )
+    class_name = models.CharField(
+        max_length=200, null=True, blank=True,
+        help_text="One or more CSS classes that are applied to the column.",
     )
 
     def save(self, *args, **kwargs):        
