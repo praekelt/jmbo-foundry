@@ -91,7 +91,7 @@ class AgeGateway:
             and (
                 re.match(
                     r'|'.join(exempted_user_agents.split()), 
-                    request.META['HTTP_USER_AGENT']
+                    request.META.get('HTTP_USER_AGENT', '')
                ) is not None
             ):
             return response
