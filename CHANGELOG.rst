@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.1.7
+-----
+#. Hotfix release. Use safe method to get HTTP_USER_AGENT in middlewares since it might not be present.
+
 1.1.6
 -----
 #. Hotfix release. An url import went missing.
