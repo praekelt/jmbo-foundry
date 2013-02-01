@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.1.5
+-----
+#. Use safe method to get HTTP_USER_AGENT in middlewares since it might not be present.
+
 1.1.4
 -----
 #. Add optional CSS classes to page rows and columns.
