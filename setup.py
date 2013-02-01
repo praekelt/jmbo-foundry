@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='1.1.7',
+    version='1.1.8',
     description='Jmbo Foundry ties together the various Jmbo products enabling you to rapidly build multilingual web and mobi sites with the minimum amount of code and customization.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -34,7 +34,7 @@ setup(
         'django-registration',
         'jmbo-show>=0.2',
         'django-preferences',
-        'jmbo-banner>=0.0.6',
+        'jmbo-banner>=0.2',
         'jmbo-competition',
         'jmbo-contact',
         'jmbo-poll',

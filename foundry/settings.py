@@ -159,6 +159,7 @@ INSTALLED_APPS = (
     'atlas',
     'tastypie',
     'social_auth',
+    'dfp',
     'django.contrib.auth',
     'django.contrib.comments',
     'django.contrib.contenttypes',
