@@ -1,17 +1,24 @@
 Changelog
 =========
 
+1.1.8
+-----
+#. Restore version of `jmbo-banner` to 0.2.
+
 1.1.7
 -----
 #. Hotfix release. Use safe method to get HTTP_USER_AGENT in middlewares since it might not be present.
+#. Deprecated. Use 1.1.8.
 
 1.1.6
 -----
 #. Hotfix release. An url import went missing.
+#. Deprecated. Use 1.1.8.
 
 1.1.5
 -----
 #. Newer version of `jmbo-banner` implies a DFP header to be added to the base template.
+#. Deprecated. Use 1.1.8.
 
 1.1.4
 -----

@@ -34,7 +34,7 @@ setup(
         'django-registration',
         'jmbo-show>=0.2',
         'django-preferences',
-        'jmbo-banner>=0.0.6',
+        'jmbo-banner>=0.2',
         'jmbo-competition',
         'jmbo-contact',
         'jmbo-poll',
