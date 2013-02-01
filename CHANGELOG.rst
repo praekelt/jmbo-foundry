@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1.5
+1.1.7
 -----
 #. Use safe method to get HTTP_USER_AGENT in middlewares since it might not be present.
 
