@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Initial migration now depends on `jmbo-banner` migrations.
+
 1.1.8
 -----
 #. Restore version of `jmbo-banner` to 0.2.
