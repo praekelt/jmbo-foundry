@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.1.9
+-----
 #. Initial migration now depends on `jmbo-banner` migrations.
 
 1.1.8
