@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='1.1.8',
+    version='1.1.9',
     description='Jmbo Foundry ties together the various Jmbo products enabling you to rapidly build multilingual web and mobi sites with the minimum amount of code and customization.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -52,7 +52,7 @@ setup(
         'python-memcached',
 	    'jmbo-downloads',
         'jmbo_twitter',
-        'django-social-auth>=0.7.18',
+        'django-social-auth==0.7.18',   # 0.7.19 introduces a migration scoping bug
     ],
     include_package_data=True,
     tests_require=[
