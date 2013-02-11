@@ -52,7 +52,7 @@ setup(
         'python-memcached',
 	    'jmbo-downloads',
         'jmbo_twitter',
-        'django-social-auth>=0.7.18',
+        'django-social-auth==0.7.18',   # 0.7.19 introduces a migration scoping bug
     ],
     include_package_data=True,
     tests_require=[
