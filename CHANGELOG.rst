@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.1.10
+------
 #. The `jmbo-banner` migration dependency was not in the correct migration step. Fixed.
 
 1.1.9
