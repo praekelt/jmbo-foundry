@@ -582,7 +582,7 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersona
 
     country = models.ForeignKey(Country, null=True, blank=True)
     is_profile_complete = models.BooleanField(default=False, editable=False)
-    last_seen = models.DateTimeField(null=True, editable=False)
+    last_seen = models.DateTimeField(null=True, editable=False, db_index=True)
     objects = UserManager()
    
     def __unicode__(self):
