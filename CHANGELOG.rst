@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.1.11
+------
+#. Add an index on Member.last_seen - useful for fast online user queries.
+
 1.1.10
 ------
 #. The `jmbo-banner` migration dependency was not in the correct migration step. Fixed.
