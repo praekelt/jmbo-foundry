@@ -107,8 +107,9 @@ $(document).ready(function(){
                     target.html(data);
             }
         );
-        target.trigger({
-            type: "onListingRefresh"
+        $(document).trigger({
+            type: "onListingRefresh",
+            target: target
         });
     });
 
@@ -190,7 +191,7 @@ $(document).ready(function(){
 
     }
 
-$(document).bind("onListingRefresh", function(){alert($(this).html())});
+$(document).bind("onListingRefresh", function(event){alert(event.target)});
 
 });
 
