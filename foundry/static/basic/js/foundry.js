@@ -13,8 +13,8 @@ $(document).ready(function(){
         last_activity_time = $.now();
     });
 
-    // Ajaxify paging for (1) standalone listing (2) listing in a tile.
-    $('div.foundry-listing div.pagination a').live('click', function(e){
+    // Ajaxify paging and view modifier navigation for (1) standalone listing (2) listing in a tile.
+    $('div.foundry-listing div.pagination a, div.foundry-listing div.jmbo-view-modifier div.item a').live('click', function(e){
         e.preventDefault();
         var target = $(this).parents('div.foundry-page-tile:first');
         var url = target.attr('original_url');

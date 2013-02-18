@@ -1,7 +1,7 @@
 {% load foundry_tags i18n %}
 
 <div id="header">
-    <a href="/"><img src="{{ STATIC_URL }}images/logo.png" alt="" /></a>
+    <a href="/" name="logo"><img src="{{ STATIC_URL }}images/logo.png" alt="" /></a>
     <div class="buttons">
       {% if request.user.is_authenticated %}
         <span><a href="{% url member-detail request.user.username %}">{% trans "My profile" %}</a></span>
