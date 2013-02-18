@@ -105,12 +105,9 @@ $(document).ready(function(){
                 }
                 else
                     target.html(data);
+                $(document).trigger("onListingRefresh", [target]);
             }
         );
-        $(document).trigger({
-            type: "onListingRefresh",
-            target: target
-        });
     });
 
     var _submit_intercept_common = function(sender, event, target){
@@ -190,8 +187,6 @@ $(document).ready(function(){
     });
 
     }
-
-$(document).bind("onListingRefresh", function(event){alert(event.target)});
 
 });
 
