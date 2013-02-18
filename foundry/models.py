@@ -20,6 +20,8 @@ from preferences import preferences
 from snippetscream import resolve_to_name
 from photologue.models import ImageModel
 from south.modelsinspector import add_introspection_rules
+from haystack import indexes
+from haystack import site
 
 from jmbo.utils import generate_slug
 from jmbo.models import ModelBase
@@ -899,3 +901,16 @@ def check_slug(sender, **kwargs):
 
 # Custom fields to be handled by south
 add_introspection_rules([], ["^ckeditor\.fields\.RichTextField"])
+
+
+class ModelBaseIndex(indexes.SearchIndex, indexes.Indexable):
+    description = indexes.CharField(document=True)
+
+    def xget_model(self):
+        return ModelBase
+
+    def xindex_queryset(self, using=None):
+        """Used when the entire index for model is updated."""
+        return self.get_model().objects.filter(pub_date__lte=datetime.datetime.now())
+
+site.register(ModelBase, ModelBaseindex)

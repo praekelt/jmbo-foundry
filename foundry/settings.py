@@ -160,6 +160,7 @@ INSTALLED_APPS = (
     'tastypie',
     'social_auth',
     'dfp',
+    'haystack',
     'django.contrib.auth',
     'django.contrib.comments',
     'django.contrib.contenttypes',
@@ -241,3 +242,15 @@ from your settings file.""", RuntimeWarning)
 SOCIAL_AUTH_USER_MODEL = 'foundry.Member'
 FACEBOOK_APP_ID = 'YOUR_FACEBOOK_APP_ID'
 FACEBOOK_API_SECRET = 'YOUR_FACEBOOK_API_SECRET'
+
+HAYSTACK_SEARCH_ENGINE = 'xapian'
+HAYSTACK_XAPIAN_PATH = '%s/xapian_index' % BUILDOUT_PATH
+HAYSTACK_SITECONF = 'foundry.search_sites'
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.xapian_backend.XapianEngine',
+        'PATH': '%s/xapian_index' % BUILDOUT_PATH
+    },
+}
+
