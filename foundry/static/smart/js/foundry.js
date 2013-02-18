@@ -55,6 +55,7 @@ $(document).ready(function(){
                     var content = $('div.pagination', el);
                     target_pagination.replaceWith(content);
                 }
+                $(document).trigger("onListingRefresh", [target]);
             }
         );
     });
@@ -85,6 +86,7 @@ $(document).ready(function(){
                 }
                 else
                     target.html(data);
+                $(document).trigger("onListingRefresh", [target]);
             }
         );
     });

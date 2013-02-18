@@ -105,6 +105,7 @@ $(document).ready(function(){
                 }
                 else
                     target.html(data);
+                $(document).trigger("onListingRefresh", [target]);
             }
         );
     });
