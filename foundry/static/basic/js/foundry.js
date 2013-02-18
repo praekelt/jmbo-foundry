@@ -1,17 +1,83 @@
+var basic_ajax = {
+    XMLHttpFactories: [
+        function () {return new XMLHttpRequest()},
+        function () {return new ActiveXObject("Msxml2.XMLHTTP")},
+        function () {return new ActiveXObject("Msxml3.XMLHTTP")},
+        function () {return new ActiveXObject("Microsoft.XMLHTTP")}
+    ],
+
+    sendRequest: function(url, callback, errback, postData) {
+        var req = basic_ajax.createXMLHTTPObject();
+        if (!req) return;
+        var method = (postData) ? "POST" : "GET";
+        req.open(method,url,true);
+        if (postData)
+            req.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+        req.onreadystatechange = function () {
+            if (req.readyState != 4) return;
+            if (req.status != 200 && req.status != 304) {
+                if (errback) errback(req);
+                return;
+            }
+            callback(req);
+        }
+        if (req.readyState == 4) return;
+        req.send(postData);
+    },
+
+    createXMLHTTPObject: function() {
+        var xmlhttp = false;
+        for (var i=0;i<basic_ajax.XMLHttpFactories.length;i++) {
+            try {
+                xmlhttp = basic_ajax.XMLHttpFactories[i]();
+            }
+            catch (e) {
+                continue;
+            }
+            break;
+        }
+        return xmlhttp;
+    },
+};
+
+window.onload = function() {
+
+    var last_activity_time = (new Date).getTime();
+
+    // Update last activity time
+    document.onmousemove = function(event){
+        last_activity_time = (new Date).getTime();
+    };
+        
+    // Load new comments and chats
+    function load_new_comments(){
+        if ((new Date).getTime() - last_activity_time < 30000) {
+            var els = document.getElementsByTagName('*');
+            for(var i = els.length - 1; i > -1; i--) {
+                var el = els[i];
+                if (el.tagName.toUpperCase() == 'DIV' && el.className.indexOf('comment-list-placeholder') > -1) {
+                    var url = '/fetch-new-comments-ajax/' + el.getAttribute('content_type_id') + '/' + el.getAttribute('oid') + '/' + el.getAttribute('last_comment_id') + '/';
+                    basic_ajax.sendRequest(url, function(xml_obj) {
+                        if (xml_obj.responseText)
+                            el.outerHTML = xml_obj.responseText;
+                    });
+                    break;
+                }
+            }
+        }
+        window.setTimeout(load_new_comments, 15000);
+    }
+    window.setTimeout(load_new_comments, 15000);
+    
+};
+
 if (typeof $ != 'undefined')
 {
 
 $(document).ready(function(){
 
-    var last_activity_time = $.now();
-
     if ($.support.ajax)
     {
-
-    // Update last activity time
-    $(document).mousemove(function(event){
-        last_activity_time = $.now();
-    });
 
     // Ajaxify paging and view modifier navigation for (1) standalone listing (2) listing in a tile.
     $('div.foundry-listing div.pagination a, div.foundry-listing div.jmbo-view-modifier div.item a').live('click', function(e){
@@ -121,24 +187,6 @@ $(document).ready(function(){
             }
         })
     });
-
-    // Load new comments and chats
-    function load_new_comments(){
-        if ($.now() - last_activity_time < 30000)
-            $('div.comment-list-placeholder').each(function(index){
-                var el = $(this);
-                var url = '/fetch-new-comments-ajax/' + el.attr('content_type_id') + '/' + el.attr('oid') + '/' + el.attr('last_comment_id') + '/';
-                $.get(
-                    url, 
-                    {}, 
-                    function(data){
-                        if (data)
-                            el.replaceWith(data);
-                    }
-                );
-            });
-    }
-    setInterval(load_new_comments, 30000);
 
     }
 
