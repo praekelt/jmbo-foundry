@@ -41,6 +41,9 @@ $(document).ready(function(){
                     target.html(data);
             }
         );
+        target.trigger({
+            type: "onListingRefresh"
+        });
     });
 
     var _submit_intercept_common = function(sender, event, target){
@@ -138,6 +141,8 @@ $(document).ready(function(){
     setInterval(load_new_comments, 30000);
 
     }
+
+$(document).bind("onListingRefresh", function(){alert($(this).html())});
 
 });
 
