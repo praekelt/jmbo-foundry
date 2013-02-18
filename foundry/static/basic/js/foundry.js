@@ -52,10 +52,10 @@ window.onload = function() {
     // Load new comments and chats
     function load_new_comments(){
         if ((new Date).getTime() - last_activity_time < 30000) {
-            var els = document.getElementsByTagName('*');
+            var els = document.getElementsByTagName('div');
             for(var i = els.length - 1; i > -1; i--) {
                 var el = els[i];
-                if (el.tagName.toUpperCase() == 'DIV' && el.className.indexOf('comment-list-placeholder') > -1) {
+                if (el.className.indexOf('comment-list-placeholder') > -1) {
                     var url = '/fetch-new-comments-ajax/' + el.getAttribute('content_type_id') + '/' + el.getAttribute('oid') + '/' + el.getAttribute('last_comment_id') + '/';
                     basic_ajax.sendRequest(url, function(xml_obj) {
                         if (xml_obj.responseText)
