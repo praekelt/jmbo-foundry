@@ -7,6 +7,7 @@ next
 #. Basic ajax comment loading until jQuery-replacement is added.
 #. Add name attribute to logo anchor so it is possible to jump to top of page.
 #. Ajaxify view modifier navigation on listings.
+#. Use `django-dfp>=0.2` which works across all browsers.
 
 1.1.11
 ------

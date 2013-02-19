@@ -29,7 +29,6 @@
     <script src="{{ STATIC_URL }}js/promo.js" type="text/javascript"></script>
     <script src="{{ STATIC_URL }}js/custom.js" type="text/javascript"></script>
     {% endcompress %}
-    {% dfp_header %}
     {% block extra-head %}
     {% endblock %}
 </head>
@@ -77,5 +76,6 @@
         <img src="{% google_analytics %}" width="0" height="0" />
     </noscript>
 
+    {% dfp_footer %}
 </body>
 </html>
