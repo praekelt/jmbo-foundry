@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.1.12
+------
 #. Fire `onListingRefresh` event when listing is updated via ajax. Extra `target` parameter is passed to handler.
 #. Basic ajax comment loading until jQuery-replacement is added.
 #. Add name attribute to logo anchor so it is possible to jump to top of page.
