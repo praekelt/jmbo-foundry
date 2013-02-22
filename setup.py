@@ -34,7 +34,7 @@ setup(
         'django-registration',
         'jmbo-show>=0.2',
         'django-preferences',
-        'jmbo-banner>=0.2',
+        'jmbo-banner>=0.2.2',
         'jmbo-competition',
         'jmbo-contact',
         'jmbo-poll',
@@ -53,7 +53,6 @@ setup(
 	    'jmbo-downloads',
         'jmbo_twitter',
         'django-social-auth==0.7.18',   # 0.7.19 introduces a migration scoping bug
-        'django-dfp>=0.2',              # Remove when jmbo-banner ups its requirement
     ],
     include_package_data=True,
     tests_require=[
