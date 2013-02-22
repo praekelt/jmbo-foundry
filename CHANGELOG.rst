@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.1.13
+------
 #. Use `django-banner>=0.2.2`. DFP banners loaded by ajax will now work.
 
 1.1.12
