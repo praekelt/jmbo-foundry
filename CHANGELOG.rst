@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.1.13
+------
+#. Use `django-banner>=0.2.2`. DFP banners loaded by ajax will now work.
+
 1.1.12
 ------
 #. Fire `onListingRefresh` event when listing is updated via ajax. Extra `target` parameter is passed to handler.
