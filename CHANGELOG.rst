@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.1.14
+------
+#. Exclude gallery images from search results.
+#. Include URLs from `jmbo-gallery`.
+
 1.1.13
 ------
 #. Use `django-banner>=0.2.2`. DFP banners loaded by ajax will now work.
