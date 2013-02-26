@@ -47,6 +47,7 @@ from jmbo.models import ModelBase
 from jmbo.generic.views import GenericObjectDetail, GenericObjectList
 from jmbo.view_modifiers import DefaultViewModifier
 from preferences import preferences
+from gallery.models import GalleryImage
 
 from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification, \
     Member, FoundryComment, CommentReport, Country
@@ -170,7 +171,8 @@ def search_results(request):
     if search_term:
         q1 = Q(title__icontains=search_term)
         q2 = Q(description__icontains=search_term)
-        queryset = ModelBase.permitted.filter(q1|q2)
+        ct = ContentType.objects.get_for_model(GalleryImage)
+        queryset = ModelBase.permitted.filter(q1|q2).exclude(content_type=ct)
     else:
         queryset = ModelBase.objects.none()
     extra = dict(
