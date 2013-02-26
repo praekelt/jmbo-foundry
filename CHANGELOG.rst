@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.1.14
+------
 #. Exclude gallery images from search results.
 #. Include URLs from `jmbo-gallery`.
 
