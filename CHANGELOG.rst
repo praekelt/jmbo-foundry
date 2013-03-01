@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.1.15
+------
+#. The Open Graph site description can now be set under General Preferences.
+#. Allow dot in username.
+
 1.1.14
 ------
 #. Exclude gallery images from search results.

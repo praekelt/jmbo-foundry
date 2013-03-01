@@ -358,6 +358,12 @@ class NavbarLinkPosition(AbstractLinkPosition):
 class GeneralPreferences(Preferences):
     __module__ = 'preferences.models'
 
+    site_description = models.CharField(
+        max_length=512, 
+        null=True,
+        blank=True,
+        help_text="A sentence describing the site."
+    )
     about_us = RichTextField(null=True, blank=True)
     terms_and_conditions = RichTextField(null=True, blank=True)
     privacy_policy = RichTextField(null=True, blank=True)
