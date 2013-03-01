@@ -309,7 +309,7 @@ urlpatterns = patterns('',
         name='user-detail'
     ),
 
-    # Member detail page
+    # Member detail page. Legacy page. jmbo-friends member-detail will resolve first.
 #    url(
 #        r'^members/(?P<username>[\w-]+)/$',
 #        'foundry.views.member_detail',
