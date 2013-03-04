@@ -1,9 +1,9 @@
-from datetime import datetime
 import re
 
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.utils import timezone
 
 from preferences import preferences
 
@@ -157,7 +157,7 @@ class LastSeen:
         # Update last_seen if the cookie has expired and this is an authenticated member
         user = getattr(request, 'user', None)
         if isinstance(user, Member) and not request.COOKIES.get('last_seen', None):
-            user.last_seen = datetime.now()
+            user.last_seen = timezone.now()
             user.save()
             response.set_cookie('last_seen', '1', max_age=300)
         
