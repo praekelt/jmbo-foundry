@@ -314,6 +314,7 @@ class BlogPostAdmin(ModelBaseAdmin):
 
 class NotificationAdmin(admin.ModelAdmin):
     list_display = ('id', 'member', 'link', 'created')
+    raw_id_fields = ('member',)
 
 
 class JmboContentTypeListFilter(SimpleListFilter):
