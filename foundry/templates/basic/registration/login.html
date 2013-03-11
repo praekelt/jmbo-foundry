@@ -18,9 +18,11 @@
     </form>
 
     <div class="social-buttons">
+        {% if FOUNDRY_HAS_FACEBOOK_CONNECT %}
         <div>
             <a href="{% url socialauth_begin 'facebook' %}" class="facebook"><span></span>{% trans "Sign in with Facebook" %}</a>
         </div>
+        {% endif %}
     </div>
 
 </div>

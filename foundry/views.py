@@ -488,6 +488,7 @@ def test_redirect(request):
     return render_to_response('foundry/test_form.html', extra, context_instance=RequestContext(request))
 
 
+# todo: move to eventhandlers.py
 @receiver(user_logged_in)
 def set_session_expiry(sender, request, user, **kwargs):
     # Override session expiry date. We effectively ignore

@@ -31,6 +31,7 @@ from foundry.profile_models import AbstractAvatarProfile, \
     AbstractLocationProfile
 from foundry.templatetags import listing_styles
 from foundry.managers import PermittedManager
+import foundry.eventhandlers
 import foundry.monkey
 
 
@@ -890,6 +891,7 @@ class Notification(models.Model):
         return str(self.id)
 
 
+# todo: move to eventhandlers.py
 @receiver(m2m_changed)
 def check_slug(sender, **kwargs):
     """Slug must be unique per site"""
