@@ -4,6 +4,7 @@ Changelog
 next
 ----
 #. Map as many fields as possible to member when doing Facebook Connect.
+#. Twitter Oauth is now standard functionality.
 
 1.1.15
 ------
