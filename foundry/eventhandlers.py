@@ -4,7 +4,8 @@ import dateutil.parser
 from django.core.files import File
 
 from social_auth.signals import pre_update
-from social_auth.backends.facebook import FacebookBackend, TwitterBackend
+from social_auth.backends.facebook import FacebookBackend
+from social_auth.backends.twitter import TwitterBackend
 
 
 def facebook_extra_values(sender, user, response, details, **kwargs):
