@@ -1,6 +1,11 @@
 Changelog
 =========
 
+next
+----
+#. Map as many fields as possible to member when doing Facebook Connect.
+#. Twitter Oauth is now standard functionality.
+
 1.1.15
 ------
 #. The Open Graph site description can now be set under General Preferences.

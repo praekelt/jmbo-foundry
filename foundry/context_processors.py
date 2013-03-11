@@ -10,4 +10,6 @@ def foundry(request):
         'CURRENT_SITE': get_current_site(request),
         'ANALYTICS_TAGS': preferences.GeneralPreferences.analytics_tags,
         'SITE_DESCRIPTION': preferences.GeneralPreferences.site_description,
+        'FOUNDRY_HAS_FACEBOOK_CONNECT': getattr(settings, 'FACEBOOK_APP_ID', '') != '',
+        'FOUNDRY_HAS_TWITTER_OAUTH': getattr(settings, 'TWITTER_CONSUMER_KEY', '') != '',
     }
