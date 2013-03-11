@@ -15,19 +15,21 @@ def facebook_extra_values(sender, user, response, details, **kwargs):
         'bio': 'about_me',
         'gender': 'gender',
         'birthday': 'dob'
+    }
 
     for key, fieldname in mapping.items():
-        value = details.get(key, '')
+        value = details.get(key, None)
 
         # Sanitize some fields
         if key == 'gender':
             if value:
                 value = value[0]
         elif key == 'birthday':
-            try:
-                value = dateutil.parser.parse(value)
-            except ValueError:
-                value = None
+            if value:
+                try:
+                    value = dateutil.parser.parse(value)
+                except ValueError:
+                    pass
 
         if value:
             setattr(user, fieldname, value)
