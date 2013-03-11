@@ -31,12 +31,12 @@ div.social-buttons a.facebook {
     
 }
 div.social-buttons a.twitter {
-    background-color: #536A97;
-    background: -webkit-linear-gradient(top, #536A97, #3D5382);
-    background: -moz-linear-gradient(top, #536A97, #3D5382);
-    background: -o-linear-gradient(top, #536A97, #3D5382);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#536a97',endColorstr='#4f77a7');
-    background-image: -ms-linear-gradient(#536A97, #3D5382);
+    background-color: #5EAADC;
+    background: -webkit-linear-gradient(top, #5EAADC, #3D5382);
+    background: -moz-linear-gradient(top, #5EAADC, #3D5382);
+    background: -o-linear-gradient(top, #5EAADC, #3D5382);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5EAADC',endColorstr='#4f77a7');
+    background-image: -ms-linear-gradient(#5EAADC, #3D5382);
     color: #fff;    
 }
 div.social-buttons a span {
