@@ -30,6 +30,15 @@ div.social-buttons a.facebook {
     color: #fff;
     
 }
+div.social-buttons a.twitter {
+    background-color: #536A97;
+    background: -webkit-linear-gradient(top, #536A97, #3D5382);
+    background: -moz-linear-gradient(top, #536A97, #3D5382);
+    background: -o-linear-gradient(top, #536A97, #3D5382);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#536a97',endColorstr='#4f77a7');
+    background-image: -ms-linear-gradient(#536A97, #3D5382);
+    color: #fff;    
+}
 div.social-buttons a span {
     display: inline-block;
     vertical-align: middle;
@@ -37,6 +46,11 @@ div.social-buttons a span {
 }
 div.social-buttons a.facebook span {
     background: url(../images/facebook-connect-button.png) 0 10px no-repeat;
+    width: 36px;
+    height: 45px;
+}
+div.social-buttons a.twitter span {
+    background: url(../images/twitter-oauth-button.png) 0 10px no-repeat;
     width: 36px;
     height: 45px;
 }
