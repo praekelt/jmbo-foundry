@@ -242,3 +242,5 @@ from your settings file.""", RuntimeWarning)
 SOCIAL_AUTH_USER_MODEL = 'foundry.Member'
 #FACEBOOK_APP_ID = ''
 #FACEBOOK_API_SECRET = ''
+#TWITTER_CONSUMER_KEY = ''
+#TWITTER_CONSUMER_SECRET = ''

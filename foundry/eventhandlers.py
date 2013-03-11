@@ -4,7 +4,7 @@ import dateutil.parser
 from django.core.files import File
 
 from social_auth.signals import pre_update
-from social_auth.backends.facebook import FacebookBackend
+from social_auth.backends.facebook import FacebookBackend, TwitterBackend
 
 
 def facebook_extra_values(sender, user, response, details, **kwargs):
@@ -43,3 +43,16 @@ def facebook_extra_values(sender, user, response, details, **kwargs):
     return True
 
 pre_update.connect(facebook_extra_values, sender=FacebookBackend)
+
+
+def twitter_extra_values(sender, user, response, details, **kwargs):
+    
+    # Image
+    username = details['username']
+    url = 'https://api.twitter.com/1/users/profile_image?%s=hedleyroos&size=bigger' % username
+    tempfile = urlretrieve(url)
+    user.image.save('%s.jpg' % username, File(open(tempfile[0])))
+
+    return True
+
+pre_update.connect(twitter_extra_values, sender=TwitterBackend)
