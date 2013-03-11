@@ -196,6 +196,7 @@ LOGIN_REDIRECT_URL = '/'    # check if inpaster
 # todo: add setting to foundry paster
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.facebook.FacebookBackend',
+    'social_auth.backends.twitter.TwitterBackend',
     'foundry.backends.MultiBackend',
     'django.contrib.auth.backends.ModelBackend',
 )

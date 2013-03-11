@@ -50,7 +50,7 @@ def twitter_extra_values(sender, user, response, details, **kwargs):
     
     # Image
     username = details['username']
-    url = 'https://api.twitter.com/1/users/profile_image?%s=hedleyroos&size=bigger' % username
+    url = 'https://api.twitter.com/1/users/profile_image?username=%s&size=bigger' % username
     tempfile = urlretrieve(url)
     user.image.save('%s.jpg' % username, File(open(tempfile[0])))
 
