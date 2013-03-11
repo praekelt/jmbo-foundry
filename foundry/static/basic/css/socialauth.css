@@ -32,11 +32,11 @@ div.social-buttons a.facebook {
 }
 div.social-buttons a.twitter {
     background-color: #5EAADC;
-    background: -webkit-linear-gradient(top, #5EAADC, #3D5382);
-    background: -moz-linear-gradient(top, #5EAADC, #3D5382);
-    background: -o-linear-gradient(top, #5EAADC, #3D5382);
+    background: -webkit-linear-gradient(top, #5EAADC, #4797D3);
+    background: -moz-linear-gradient(top, #5EAADC, #4797D3);
+    background: -o-linear-gradient(top, #5EAADC, #4797D3);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5EAADC',endColorstr='#4f77a7');
-    background-image: -ms-linear-gradient(#5EAADC, #3D5382);
+    background-image: -ms-linear-gradient(#5EAADC, #4797D3);
     color: #fff;    
 }
 div.social-buttons a span {
