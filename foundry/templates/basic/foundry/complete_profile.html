@@ -2,6 +2,14 @@
 
 {% load i18n %}
 
+{% if not messages %}
+{% block message %}
+    <ul class="messagelist">
+        <li class="info">{% trans "Oops! We need some more details to complete your registration. Please complete your profile below." %}</a>
+    </ul>
+{% endblock %}
+{% endif %}
+
 {% block content %}
 	<div class="complete-profile">
 	    <div class="title">{% trans "Complete your profile" %}</div>
