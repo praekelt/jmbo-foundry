@@ -5,6 +5,7 @@ next
 ----
 #. Map as many fields as possible to member when doing Facebook Connect.
 #. Twitter Oauth is now standard functionality.
+#. `base_inner.html` provides now has an extratitle block.
 
 1.1.15
 ------
