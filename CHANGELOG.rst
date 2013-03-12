@@ -6,6 +6,7 @@ next
 #. Map as many fields as possible to member when doing Facebook Connect.
 #. Twitter Oauth is now standard functionality.
 #. `base_inner.html` provides now has an extratitle block.
+#. A comment posted to eg. basic will now show up in the other layers comprising the same logical site.
 
 1.1.15
 ------
