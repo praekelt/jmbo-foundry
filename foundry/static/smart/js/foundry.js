@@ -22,13 +22,8 @@ $(document).ready(function(){
     // Ajaxify paging for (1) standalone listing (2) listing in a tile.
     $('div.foundry-listing div.pagination a').live('click', function(e){
         e.preventDefault();
-        var target = $(this).parents('div.foundry-page-tile:first');
-        var url = target.attr('original_url');
-        if (!target.length)
-        {
-            target = $(this).parents('div.foundry-listing:first');
-            url = $(location).attr('href');
-        }
+        target = $(this).parents('div.foundry-listing:first');
+        url = $(location).attr('href');
         var target_items = $('div.items:last', target);
         var target_pagination = $('div.pagination', target);
         // Strip params. Already present in href.
@@ -42,9 +37,9 @@ $(document).ready(function(){
                 {
                     // Markup that contains fluff. We want only the content.
                     var el = $('<div>' + data + '</div>');                   
-                    var content = $('div#content div.items:last div.item', el);
+                    var content = $('div.foundry-listing:first div.items:last div.item', el);
                     target_items.append(content);
-                    var content = $('div#content div.pagination', el);
+                    var content = $('div.foundry-listing:first div.pagination', el);
                     target_pagination.replaceWith(content);
                 }
                 else

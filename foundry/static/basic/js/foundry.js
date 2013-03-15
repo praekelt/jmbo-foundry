@@ -1,3 +1,6 @@
+/* jQuery is too large to load on some basic devices so this script contains
+ * both classic XMLHttpRequest code and jQuery ajax. */
+
 var basic_ajax = {
     XMLHttpFactories: [
         function () {return new XMLHttpRequest()},
@@ -82,13 +85,8 @@ $(document).ready(function(){
     // Ajaxify paging and view modifier navigation for (1) standalone listing (2) listing in a tile.
     $('div.foundry-listing div.pagination a, div.foundry-listing div.jmbo-view-modifier div.item a').live('click', function(e){
         e.preventDefault();
-        var target = $(this).parents('div.foundry-page-tile:first');
-        var url = target.attr('original_url');
-        if (!target.length)
-        {
-            target = $(this).parents('div.foundry-listing:first');
-            url = $(location).attr('href');
-        }
+        target = $(this).parents('div.foundry-listing:first');
+        url = $(location).attr('href');
         // Strip params. Already present in href.
         url = url.split('?')[0];
         url = url + $(this).attr('href');
@@ -98,10 +96,10 @@ $(document).ready(function(){
             function(data){
                 if (data.search('id="content"') != -1)
                 {
-                    // Markup that contains fluff. We want only the content.
+                    // Markup that contains fluff. We want only the listing.
                     var el = $('<div>' + data + '</div>');                   
-                    var content = $('div#content', el);
-                    target.html(content.html());
+                    var listing = $('div.foundry-listing:first', el);
+                    target.html(listing.html());
                 }
                 else
                     target.html(data);
