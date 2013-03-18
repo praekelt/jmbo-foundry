@@ -1,6 +1,8 @@
 import inspect
+import re
 
 from django.core.urlresolvers import reverse, Resolver404
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _, ugettext
@@ -33,6 +35,10 @@ from foundry.templatetags import listing_styles
 from foundry.managers import PermittedManager
 import foundry.eventhandlers
 import foundry.monkey
+
+
+# regex that identifies scripts in text
+SCRIPT_REGEX = re.compile(r"""(<script[^>]*>)|(<[^>]* on[a-z]+=['"].*?['"][^>]*)""", flags=re.DOTALL)
 
 
 class Link(models.Model):
@@ -880,7 +886,12 @@ class ChatRoom(ModelBase):
 
 class BlogPost(ModelBase):
     content = RichTextField(_("Content"))
-    
+
+    def save(self, *args, **kwargs):
+        if SCRIPT_REGEX.search(self.content):
+            raise RuntimeError("Script in content!")
+        super(BlogPost, self).save(*args, **kwargs)
+
 
 class Notification(models.Model):
     member = models.ForeignKey(Member)

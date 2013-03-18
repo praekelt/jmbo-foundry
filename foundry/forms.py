@@ -513,6 +513,12 @@ class CreateBlogPostForm(forms.ModelForm):
         # applied. Workaround.
         self.fields['content'].label = _("Content")
 
+    def clean_content(self):
+        content = self.cleaned_data['content']
+        if models.SCRIPT_REGEX.search(content):
+            raise forms.ValidationError(_("The content contains scripting. Scripts are not allowed."))
+        return content
+
     def save(self, commit=True):    
         instance = super(CreateBlogPostForm, self).save(commit=commit)
         # Set owner, publish to current site
