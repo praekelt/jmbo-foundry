@@ -520,7 +520,8 @@ class CreateBlogPostForm(forms.ModelForm):
         instance.sites = [self.site]
         instance.state = 'published'
         if commit:
-            instance.save()
+            # don't do model clean because it was done in form clean
+            instance.save(clean=False)
         return instance            
 
     as_div = as_div

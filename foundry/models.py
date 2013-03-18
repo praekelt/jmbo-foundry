@@ -1,6 +1,8 @@
 import inspect
+import re
 
 from django.core.urlresolvers import reverse, Resolver404
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _, ugettext
@@ -879,8 +881,21 @@ class ChatRoom(ModelBase):
 
 
 class BlogPost(ModelBase):
+    # regex that identifies scripts in text
+    SCRIPT_TAG_REGEX = re.compile(r"""(<script[^>]*>)|(<[^>]* on[a-z]+=['"].*?['"][^>]*)""", flags=re.DOTALL)
+
     content = RichTextField(_("Content"))
-    
+
+    def clean_fields(self, exclude):
+        super(BlogPost, self).clean_fields(exclude=exclude)
+        if BlogPost.SCRIPT_TAG_REGEX.search(self.content):
+            raise ValidationError({'content': [_("The post content contains scripting. Scripts are not allowed.")]})
+
+    def save(self, clean=True, *args, **kwargs):
+        if clean:
+            self.full_clean()
+        super(BlogPost, self).save(*args, **kwargs)
+
 
 class Notification(models.Model):
     member = models.ForeignKey(Member)
