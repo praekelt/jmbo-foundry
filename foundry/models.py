@@ -37,6 +37,10 @@ import foundry.eventhandlers
 import foundry.monkey
 
 
+# regex that identifies scripts in text
+SCRIPT_REGEX = re.compile(r"""(<script[^>]*>)|(<[^>]* on[a-z]+=['"].*?['"][^>]*)""", flags=re.DOTALL)
+
+
 class Link(models.Model):
     title = models.CharField(
         max_length=256,
@@ -881,13 +885,10 @@ class ChatRoom(ModelBase):
 
 
 class BlogPost(ModelBase):
-    # regex that identifies scripts in text
-    SCRIPT_TAG_REGEX = re.compile(r"""(<script[^>]*>)|(<[^>]* on[a-z]+=['"].*?['"][^>]*)""", flags=re.DOTALL)
-
     content = RichTextField(_("Content"))
 
     def save(self, *args, **kwargs):
-        if BlogPost.SCRIPT_TAG_REGEX.search(self.content):
+        if SCRIPT_REGEX.search(self.content):
             raise RuntimeError("Script in content!")
         super(BlogPost, self).save(*args, **kwargs)
 

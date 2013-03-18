@@ -515,7 +515,7 @@ class CreateBlogPostForm(forms.ModelForm):
 
     def clean_content(self):
         content = self.cleaned_data['content']
-        if models.BlogPost.SCRIPT_TAG_REGEX.search(content):
+        if models.SCRIPT_REGEX.search(content):
             raise forms.ValidationError(_("The content contains scripting. Scripts are not allowed."))
         return content
 
