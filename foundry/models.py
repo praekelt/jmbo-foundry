@@ -886,14 +886,9 @@ class BlogPost(ModelBase):
 
     content = RichTextField(_("Content"))
 
-    def clean_fields(self, exclude):
-        super(BlogPost, self).clean_fields(exclude=exclude)
+    def save(self, *args, **kwargs):
         if BlogPost.SCRIPT_TAG_REGEX.search(self.content):
-            raise ValidationError({'content': [_("The post content contains scripting. Scripts are not allowed.")]})
-
-    def save(self, clean=True, *args, **kwargs):
-        if clean:
-            self.full_clean()
+            raise RuntimeError("Script in content!")
         super(BlogPost, self).save(*args, **kwargs)
 
 
