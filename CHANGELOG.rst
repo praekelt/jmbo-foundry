@@ -3,6 +3,8 @@ Changelog
 
 next
 ----
+#. Ensure that `user_logged_in` signal is dispatched when a user joins.
+#. Don't allow the creation of a `BlogPost` where the `content` field contains scripting.
 #. Map as many fields as possible to member when doing Facebook Connect.
 #. Twitter Oauth is now standard functionality.
 #. `base_inner.html` provides now has an extratitle block.
