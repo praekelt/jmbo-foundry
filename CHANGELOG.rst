@@ -9,6 +9,7 @@ next
 #. Twitter Oauth is now standard functionality.
 #. `base_inner.html` provides now has an extratitle block.
 #. A comment posted to eg. basic will now show up in the other layers comprising the same logical site.
+#. Flatpages are now part of our standard set of products.
 
 1.1.15
 ------

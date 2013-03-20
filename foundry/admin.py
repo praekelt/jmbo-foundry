@@ -7,8 +7,12 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.utils.importlib import import_module
 from django.contrib.admin import SimpleListFilter
+from django.contrib.flatpages.models import FlatPage
+from django.contrib.flatpages.admin import FlatPageAdmin as FlatPageAdminOld
+from django.contrib.flatpages.admin import FlatpageForm as FlatpageFormOld
 from django.utils.translation import ugettext_lazy as _
 
+from ckeditor.widgets import CKEditorWidget
 from preferences.admin import PreferencesAdmin
 from sites_groups.widgets import SitesGroupsWidget
 from jmbo.models import ModelBase
@@ -345,6 +349,18 @@ class CommentReportAdmin(admin.ModelAdmin):
     list_display = ('id', 'comment', 'reporter')
 
 
+# Override the flatpages admin form to use CKEditor
+class FlatpageForm(FlatpageFormOld):
+    content = forms.CharField(widget=CKEditorWidget)
+
+    class Meta:
+        model = FlatPage
+
+
+class FlatPageAdmin(FlatPageAdminOld):
+    form = FlatpageForm
+
+
 admin.site.register(Link, LinkAdmin)
 admin.site.register(Menu, MenuAdmin)
 admin.site.register(Navbar, NavbarAdmin)
@@ -363,3 +379,6 @@ admin.site.register(BlogPost, BlogPostAdmin)
 admin.site.register(Notification, NotificationAdmin)
 admin.site.register(FoundryComment, FoundryCommentAdmin)
 admin.site.register(CommentReport, CommentReportAdmin)
+# We have to unregister the normal admin, and then reregister ours
+admin.site.unregister(FlatPage)
+admin.site.register(FlatPage, FlatPageAdmin)

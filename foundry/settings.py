@@ -87,6 +87,7 @@ MIDDLEWARE_CLASSES = (
     'pagination.middleware.PaginationMiddleware',
     'foundry.middleware.VerboseRequestMeta',
     'foundry.middleware.LastSeen',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
 )
 
@@ -163,6 +164,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.comments',
     'django.contrib.contenttypes',
+    'django.contrib.flatpages',
     'django.contrib.humanize',
     'django.contrib.sessions',
     'django.contrib.sites',

@@ -433,6 +433,9 @@ urlpatterns = patterns('',
 
 urlpatterns += staticfiles_urlpatterns()
 
+# Flatpages must be last
+urlpatterns += patterns('', ('r^/', include('django.contrib.flatpages.urls')))
+
 handler500 = 'foundry.views.server_error'
 
 if settings.DEBUG:
