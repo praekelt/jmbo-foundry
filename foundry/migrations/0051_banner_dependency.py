@@ -217,7 +217,6 @@ class Migration(SchemaMigration):
             'is_profile_complete': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'last_seen': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
             'mobile_number': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
-            'nickname': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
             'province': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'receive_email': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'receive_sms': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
