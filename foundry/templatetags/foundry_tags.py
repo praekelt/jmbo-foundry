@@ -1,4 +1,5 @@
 import types
+import hashlib
 from BeautifulSoup import BeautifulSoup
 
 from django import template
@@ -8,6 +9,7 @@ from django.template.loader import render_to_string
 from django.http import HttpResponse, Http404
 from django.template.response import TemplateResponse
 from django.core.paginator import Paginator, InvalidPage
+from django.contrib.sites.models import get_current_site
 from django.conf import settings
 
 from preferences import preferences
@@ -437,3 +439,57 @@ class AutoPaginateNode(template.Node):
 
 
 register.tag('autopaginate', do_autopaginate)
+
+
+@register.tag('foundrycache')
+def do_foundrycache(parser, token):
+    nodelist = parser.parse(('endfoundrycache',))
+    parser.delete_first_token()
+    tokens = token.contents.split()
+    if len(tokens) < 2:
+        raise template.TemplateSyntaxError(
+            '''foundry_cache tag requires an argument that is an instance of a \
+subclass of CachingMixin'''
+        )
+    return FoundryCacheNode(nodelist, tokens[1])
+
+
+class FoundryCacheNode(template.Node):
+
+    def __init__(self, nodelist, obj):
+        self.nodelist = nodelist
+        self.obj = template.Variable(obj)
+
+    def render(self, context):
+        """Based on Django's default cache template tag"""
+        obj = self.obj.resolve(context)
+
+        if obj.enable_caching:
+            request = context['request']
+            user = getattr(request, 'user', None)
+
+            # Compute a key from cache_type 
+            k = ''
+            if obj.cache_type == 'anonymous_only':
+                # If authenticated then bypass caching
+                if getattr(user, 'is_authenticated', lambda: False)():
+                    return self.nodelist.render(context)
+                k = 'anon'
+            elif obj.cache_type == 'anonymous_and_authenticated':
+                k = getattr(user, 'is_anonymous', lambda: True)() and 'anon' or 'auth'
+            elif obj.cache_type == 'per_user':
+                k = getattr(user, 'username', 'anon')
+
+            vary_on = [obj.id, k, get_current_site(request).id, request.META.get('QUERY_STRING', '')]
+
+            # Build a unicode key for this fragment and all vary-on's
+            args = hashlib.md5(u':'.join([str(v) for v in vary_on if v]))
+            cache_key = 'template.foundrycache.%s.%s' % (obj.__class__.__name__, args.hexdigest())
+
+            value = cache.get(cache_key)
+            if value is None:
+                value = self.nodelist.render(context)
+                cache.set(cache_key, value, obj.cache_timeout)
+            return value
+
+        return self.nodelist.render(context)
