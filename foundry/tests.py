@@ -1,4 +1,5 @@
 from datetime import datetime
+from time import sleep
 
 from django.core import management
 from django.utils import unittest
@@ -9,7 +10,7 @@ from django.core.urlresolvers import reverse
 
 from post.models import Post
 
-from foundry.models import Member, Listing
+from foundry.models import Member, Listing, Page, Row, Column, Tile
 
 
 class Client(BaseClient):
@@ -108,7 +109,21 @@ class TestCase(unittest.TestCase):
         listing_pinned.save()
         setattr(self, listing_pinned.slug, listing_pinned)
 
+        # Page with row, column and tile
+        page, dc = Page.objects.get_or_create(title='A page', slug='a-page')
+        page.sites = [1]
+        page.save()
+        setattr(self, page.slug, page)
+        row, dc = Row.objects.get_or_create(id=1, page=page)
+        column, dc = Column.objects.get_or_create(id=1, row=row)
+        tile, dc = Tile.objects.get_or_create(id=1, column=column)
+        tile.view_name = 'test-plain-response'
+        tile.enable_caching = True
+        tile.cache_timeout = 5
+        tile.save()
+
         setattr(self, '_initialized', 1)
+
 
     def test_listing_pvt(self):
         listing = getattr(self, 'posts-vertical-thumbnail')
@@ -151,3 +166,20 @@ class TestCase(unittest.TestCase):
         self.assertTrue(last_seen)
         self.client.get("/")
         self.assertEqual(Member.objects.get(pk=self.editor.pk).last_seen, last_seen)
+
+    def test_caching(self):
+        # Render page and grab timestamp in template
+        response = self.client.get('/page/a-page/')
+        control_now_string = response.content.split('NOW_MARKER')[1]
+
+        # Next call must still be cached
+        sleep(2)
+        response = self.client.get('/page/a-page/')
+        now_string = response.content.split('NOW_MARKER')[1]
+        self.assertEqual(now_string, control_now_string)
+
+        # Next call the cache must be expired
+        sleep(4)
+        response = self.client.get('/page/a-page/')
+        now_string = response.content.split('NOW_MARKER')[1]
+        self.assertNotEqual(now_string, control_now_string)

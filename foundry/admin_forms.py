@@ -10,14 +10,20 @@ class RowEditAjaxForm(forms.ModelForm):
 
     class Meta:
         model = Row
-        fields = ('block_name', 'class_name')
+        fields = (
+            'block_name', 'class_name', 'enable_caching', 'cache_type', 
+            'cache_timeout'
+        )
 
 
 class ColumnCreateAjaxForm(forms.ModelForm):
 
     class Meta:
         model = Column
-        fields = ('row', 'width', 'title', 'designation', 'class_name')
+        fields = (
+            'row', 'width', 'title', 'designation', 'class_name', 
+            'enable_caching', 'cache_type', 'cache_timeout'
+        )
         widgets = {
             'row':forms.widgets.HiddenInput, 
         }
@@ -38,7 +44,10 @@ class ColumnEditAjaxForm(forms.ModelForm):
 
     class Meta:
         model = Column
-        fields = ('row', 'width', 'title', 'designation', 'class_name')
+        fields = (
+            'row', 'width', 'title', 'designation', 'class_name', 
+            'enable_caching', 'cache_type', 'cache_timeout'
+        )
         widgets = {
             'row':forms.widgets.HiddenInput, 
         }
@@ -61,7 +70,8 @@ class TileEditAjaxForm(forms.ModelForm):
         model = Tile
         fields = (
             'column', 'target', 'view_name', 'class_name', 'enable_ajax',
-            'condition_expression'
+            'condition_expression', 'enable_caching', 'cache_type', 
+            'cache_timeout'
         )
         widgets = {
             'column':forms.widgets.HiddenInput, 
@@ -119,4 +129,3 @@ class TileEditAjaxForm(forms.ModelForm):
             instance.save()
 
         return instance
-

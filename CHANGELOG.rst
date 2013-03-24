@@ -10,6 +10,7 @@ next
 #. `base_inner.html` provides now has an extratitle block.
 #. A comment posted to eg. basic will now show up in the other layers comprising the same logical site.
 #. Flatpages are now part of our standard set of products.
+#. Through-the-web configurable caching for rows, columns, tiles, menus and navbars.
 
 1.1.15
 ------

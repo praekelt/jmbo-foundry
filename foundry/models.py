@@ -34,6 +34,7 @@ from foundry.profile_models import AbstractAvatarProfile, \
 from foundry.templatetags import listing_styles
 from foundry.managers import PermittedManager
 import foundry.eventhandlers
+from foundry.mixins import CachingMixin
 import foundry.monkey
 
 
@@ -125,7 +126,7 @@ class Link(models.Model):
         return active
 
 
-class Menu(models.Model):
+class Menu(CachingMixin):
     """A tile menu contains ordered links"""
     title = models.CharField(max_length=255)
     subtitle = models.CharField(
@@ -160,7 +161,7 @@ class Menu(models.Model):
             return self.title
 
 
-class Navbar(models.Model):
+class Navbar(CachingMixin):
     """A tile navbar contains ordered links"""
     title = models.CharField(max_length=255, help_text='This title is not displayed on the site.')
     subtitle = models.CharField(
@@ -705,7 +706,7 @@ class PageView(models.Model):
         return '%s > %s' % (self.page.title, self.view_name)
 
 
-class Row(models.Model):
+class Row(CachingMixin):
     page = models.ForeignKey(Page)
     index = models.PositiveIntegerField(default=0, editable=False)
     block_name = models.CharField(
@@ -749,7 +750,7 @@ class Row(models.Model):
         return max([o.render_height+8 for o in self.columns] + [0]) + 44
 
     
-class Column(models.Model):
+class Column(CachingMixin):
     row = models.ForeignKey(Row)
     index = models.PositiveIntegerField(default=0, editable=False)
     width = models.PositiveIntegerField(default=8)    
@@ -798,7 +799,7 @@ to the left and right of the content block."
         return sum([o.render_height+8 for o in self.tiles]) + 44
 
 
-class Tile(models.Model):
+class Tile(CachingMixin):
     column = models.ForeignKey(Column)
     index = models.PositiveIntegerField(default=0, editable=False)
 
