@@ -126,7 +126,7 @@ class Link(models.Model):
         return active
 
 
-class Menu(models.Model):
+class Menu(CachingMixin):
     """A tile menu contains ordered links"""
     title = models.CharField(max_length=255)
     subtitle = models.CharField(
@@ -161,7 +161,7 @@ class Menu(models.Model):
             return self.title
 
 
-class Navbar(models.Model):
+class Navbar(CachingMixin):
     """A tile navbar contains ordered links"""
     title = models.CharField(max_length=255, help_text='This title is not displayed on the site.')
     subtitle = models.CharField(

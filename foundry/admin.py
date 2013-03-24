@@ -108,7 +108,17 @@ class MenuAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     inlines = [MenuLinkPositionInline]
     list_display = ('title', 'subtitle')
-   
+    fieldsets = (
+        (None, {'fields': ('title', 'subtitle', 'slug', 'sites')}),
+        (
+            'Caching', 
+            {
+                'fields': ('enable_caching', 'cache_type', 'cache_timeout'),
+                'classes': ()
+            }
+        ),
+    )
+  
 
 class NavbarLinkPositionInline(admin.StackedInline):
     model = NavbarLinkPosition
@@ -126,6 +136,16 @@ class NavbarAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     inlines = [NavbarLinkPositionInline]
     list_display = ('title', 'subtitle')
+    fieldsets = (
+        (None, {'fields': ('title', 'subtitle', 'slug', 'sites')}),
+        (
+            'Caching', 
+            {
+                'fields': ('enable_caching', 'cache_type', 'cache_timeout'),
+                'classes': ()
+            }
+        ),
+    )
 
 
 class ListingAdminForm(forms.ModelForm):

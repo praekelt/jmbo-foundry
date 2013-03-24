@@ -1,3 +1,6 @@
+{% load foundry_tags %}
+
+{% foundrycache object %} 
 {% if object_list %}
     <div class="foundry-container foundry-menu">
         {% if object.display_title %}<div class="title">{{ object.title }}</div>{% endif %}
@@ -10,3 +13,4 @@
         </div>
     </div>
 {% endif %}
+{% endfoundrycache %}

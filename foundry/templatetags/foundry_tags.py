@@ -68,7 +68,7 @@ class MenuNode(template.Node):
 
         extra = {'object':obj, 'object_list':object_list}
 
-        return render_to_string('foundry/inclusion_tags/menu.html', extra)
+        return render_to_string('foundry/inclusion_tags/menu.html', extra, context)
 
 
 @register.tag
@@ -110,7 +110,7 @@ class NavbarNode(template.Node):
         extra['object_list'] = object_list
         extra['active_link'] = active_link
 
-        return render_to_string('foundry/inclusion_tags/navbar.html', extra)
+        return render_to_string('foundry/inclusion_tags/navbar.html', extra, context)
 
 
 @register.tag
