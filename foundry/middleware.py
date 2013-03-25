@@ -13,11 +13,13 @@ from foundry.models import Member
 PROTECTED_URLS_PATTERN = r'|'.join((
     reverse('age-gateway'), 
     reverse('join'), 
-    reverse('login'), 
+    reverse('login'),
+    reverse('logout'),
+    reverse('password_reset'),
     reverse('terms-and-conditions'), 
-    '/auth/password_reset', 
-    '/static', 
-    '/admin'
+    '/auth/password_reset/', 
+    '/static/', 
+    '/admin/',
 ))
 
 
