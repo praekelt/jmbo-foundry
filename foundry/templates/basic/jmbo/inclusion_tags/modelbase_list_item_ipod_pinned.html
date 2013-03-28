@@ -11,7 +11,7 @@ Layout similar to a classic iPod.
 </div>
 
 <div class="title">
-    {% if object.categories.all.count %}<span class="category">{{ object.categories.all|join_titles }}:</span>{% endif %}
+    {% if object.categories.all.exists %}<span class="category">{{ object.categories.all|join_titles }}:</span>{% endif %}
     <a href="{{ object.get_absolute_url }}">{{ object.title }}</a>
 </div>
 
