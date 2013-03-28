@@ -12,7 +12,6 @@ from django.core.paginator import Paginator, InvalidPage
 from django.contrib.sites.models import get_current_site
 from django.conf import settings
 
-from preferences import preferences
 from pagination.templatetags.pagination_tags import DEFAULT_PAGINATION, \
     DEFAULT_ORPHANS, INVALID_PAGE_RAISES_404
 
@@ -59,7 +58,7 @@ class MenuNode(template.Node):
             return ''
 
         object_list = []
-        for o in obj.menulinkposition_set.all().order_by('position'):
+        for o in obj.menulinkposition_set.select_related().all().order_by('position'):
             if o.condition_expression_result(context['request']):          
                 # Glue name and class_name to o.link
                 o.link.name = o.name
@@ -98,7 +97,7 @@ class NavbarNode(template.Node):
 
         object_list = []
         active_link = None
-        for o in obj.navbarlinkposition_set.all().order_by('position'):
+        for o in obj.navbarlinkposition_set.select_related().all().order_by('position'):
             if o.condition_expression_result(context['request']):
                 # Glue name and class_name to o.link
                 o.link.name = o.name

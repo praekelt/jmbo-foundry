@@ -11,6 +11,7 @@ next
 #. A comment posted to eg. basic will now show up in the other layers comprising the same logical site.
 #. Flatpages are now part of our standard set of products.
 #. Through-the-web configurable caching for rows, columns, tiles, menus and navbars.
+#. Identify poorly performing areas and optimize code.
 
 1.1.15
 ------
