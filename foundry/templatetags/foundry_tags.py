@@ -234,9 +234,10 @@ class TileNode(template.Node):
 
     def render(self, context):
         tile = self.tile.resolve(context)
+        request = context['request']
 
         # Evaluate condition
-        if not tile.condition_expression_result(context['request']):
+        if not tile.condition_expression_result(request):
             return ''
 
         if tile.view_name:
@@ -251,11 +252,12 @@ class TileNode(template.Node):
                 return "No reverse match for %s" % tile.view_name
             view, args, kwargs = resolve(url)
 
-            # Set recursion guard flag
-            setattr(context['request'], '_foundry_suppress_rows_tag', 1)            
-            # Call the view. Let any error propagate.
+            # Set recursion guard flag and render only content block flag
+            setattr(request, '_foundry_suppress_rows_tag', 1)            
+            setattr(request, 'render_only_content_block', True)
             html = ''
-            result = view(context['request'], *args, **kwargs)
+            # Call the view. Let any error propagate.
+            result = view(request, *args, **kwargs)
             if isinstance(result, TemplateResponse):
                 # The result of a generic view
                 result.render()
@@ -263,14 +265,15 @@ class TileNode(template.Node):
             elif isinstance(result, HttpResponse):
                 # Old-school view
                 html = result.content
-            # Clear flag  
-            # xxx: something may clear the flag. Need to investigate more 
+            # Clear flags  
+            # xxx: something may clear the flags. Need to investigate more 
             # incase of thread safety problem.
-            if hasattr(context['request'], '_foundry_suppress_rows_tag'):           
-                delattr(context['request'], '_foundry_suppress_rows_tag')
+            if hasattr(request, '_foundry_suppress_rows_tag'):           
+                delattr(request, '_foundry_suppress_rows_tag')
+            if hasattr(request, 'render_only_content_block'):           
+                delattr(request, 'render_only_content_block')
 
-            # Extract content div. Currently there is no way to instruct a 
-            # view to render only the content block, hence this.
+            # Extract content div if any
             soup = BeautifulSoup(html)
             content = soup.find('div', id='content')        
             if content:
