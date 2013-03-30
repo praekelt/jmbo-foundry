@@ -182,16 +182,29 @@ class RowsNode(template.Node):
         self.block_name = template.Variable(block_name)
 
     def render(self, context):
+        request = context['request']
+
         # Recursion guard flag. Set by TileNode.
-        if hasattr(context['request'], '_foundry_suppress_rows_tag'):
+        if hasattr(request, '_foundry_suppress_rows_tag'):
             return
 
         block_name = self.block_name.resolve(context)
 
-        pages = Page.permitted.filter(is_homepage=True)
-        if pages.exists():
-            page = pages[0]
-            rows = page.rows_by_block_name.get(block_name, [])
+        # Cache homepage rows_by_block_name on request. It can't change during
+        # a request.
+        empty_marker = None
+        key = '_foundry_rowsnode_rows_by_block_name'
+        rows_by_block_name = getattr(request, key, empty_marker)
+        if rows_by_block_name is empty_marker:
+            pages = Page.permitted.filter(is_homepage=True)
+            if pages.exists():
+                rows_by_block_name = pages[0].rows_by_block_name
+            else:
+                rows_by_block_name = []
+            setattr(request, key, rows_by_block_name)
+
+        if rows_by_block_name:
+            rows = rows_by_block_name.get(block_name, [])
             if rows:
                 # We have customized rows for the block. Use them.
                 return render_to_string(
