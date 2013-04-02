@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.1.16
+------
 #. Ensure that `user_logged_in` signal is dispatched when a user joins.
 #. Don't allow the creation of a `BlogPost` where the `content` field contains scripting.
 #. Map as many fields as possible to member when doing Facebook Connect.
