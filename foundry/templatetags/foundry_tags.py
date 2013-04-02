@@ -1,4 +1,5 @@
 import types
+import hashlib
 from BeautifulSoup import BeautifulSoup
 
 from django import template
@@ -8,9 +9,9 @@ from django.template.loader import render_to_string
 from django.http import HttpResponse, Http404
 from django.template.response import TemplateResponse
 from django.core.paginator import Paginator, InvalidPage
+from django.contrib.sites.models import get_current_site
 from django.conf import settings
 
-from preferences import preferences
 from pagination.templatetags.pagination_tags import DEFAULT_PAGINATION, \
     DEFAULT_ORPHANS, INVALID_PAGE_RAISES_404
 
@@ -57,7 +58,7 @@ class MenuNode(template.Node):
             return ''
 
         object_list = []
-        for o in obj.menulinkposition_set.all().order_by('position'):
+        for o in obj.menulinkposition_set.select_related().all().order_by('position'):
             if o.condition_expression_result(context['request']):          
                 # Glue name and class_name to o.link
                 o.link.name = o.name
@@ -66,7 +67,7 @@ class MenuNode(template.Node):
 
         extra = {'object':obj, 'object_list':object_list}
 
-        return render_to_string('foundry/inclusion_tags/menu.html', extra)
+        return render_to_string('foundry/inclusion_tags/menu.html', extra, context)
 
 
 @register.tag
@@ -96,7 +97,7 @@ class NavbarNode(template.Node):
 
         object_list = []
         active_link = None
-        for o in obj.navbarlinkposition_set.all().order_by('position'):
+        for o in obj.navbarlinkposition_set.select_related().all().order_by('position'):
             if o.condition_expression_result(context['request']):
                 # Glue name and class_name to o.link
                 o.link.name = o.name
@@ -108,7 +109,7 @@ class NavbarNode(template.Node):
         extra['object_list'] = object_list
         extra['active_link'] = active_link
 
-        return render_to_string('foundry/inclusion_tags/navbar.html', extra)
+        return render_to_string('foundry/inclusion_tags/navbar.html', extra, context)
 
 
 @register.tag
@@ -181,16 +182,29 @@ class RowsNode(template.Node):
         self.block_name = template.Variable(block_name)
 
     def render(self, context):
+        request = context['request']
+
         # Recursion guard flag. Set by TileNode.
-        if hasattr(context['request'], '_foundry_suppress_rows_tag'):
+        if hasattr(request, '_foundry_suppress_rows_tag'):
             return
 
         block_name = self.block_name.resolve(context)
 
-        pages = Page.permitted.filter(is_homepage=True)
-        if pages.count():
-            page = pages[0]
-            rows = page.rows_by_block_name.get(block_name, [])
+        # Cache homepage rows_by_block_name on request. It can't change during
+        # a request.
+        empty_marker = None
+        key = '_foundry_rowsnode_rows_by_block_name'
+        rows_by_block_name = getattr(request, key, empty_marker)
+        if rows_by_block_name is empty_marker:
+            pages = Page.permitted.filter(is_homepage=True)
+            if pages.exists():
+                rows_by_block_name = pages[0].rows_by_block_name
+            else:
+                rows_by_block_name = []
+            setattr(request, key, rows_by_block_name)
+
+        if rows_by_block_name:
+            rows = rows_by_block_name.get(block_name, [])
             if rows:
                 # We have customized rows for the block. Use them.
                 return render_to_string(
@@ -220,9 +234,10 @@ class TileNode(template.Node):
 
     def render(self, context):
         tile = self.tile.resolve(context)
+        request = context['request']
 
         # Evaluate condition
-        if not tile.condition_expression_result(context['request']):
+        if not tile.condition_expression_result(request):
             return ''
 
         if tile.view_name:
@@ -237,11 +252,12 @@ class TileNode(template.Node):
                 return "No reverse match for %s" % tile.view_name
             view, args, kwargs = resolve(url)
 
-            # Set recursion guard flag
-            setattr(context['request'], '_foundry_suppress_rows_tag', 1)            
-            # Call the view. Let any error propagate.
+            # Set recursion guard flag and render only content block flag
+            setattr(request, '_foundry_suppress_rows_tag', 1)            
+            setattr(request, 'render_only_content_block', True)
             html = ''
-            result = view(context['request'], *args, **kwargs)
+            # Call the view. Let any error propagate.
+            result = view(request, *args, **kwargs)
             if isinstance(result, TemplateResponse):
                 # The result of a generic view
                 result.render()
@@ -249,14 +265,15 @@ class TileNode(template.Node):
             elif isinstance(result, HttpResponse):
                 # Old-school view
                 html = result.content
-            # Clear flag  
-            # xxx: something may clear the flag. Need to investigate more 
+            # Clear flags  
+            # xxx: something may clear the flags. Need to investigate more 
             # incase of thread safety problem.
-            if hasattr(context['request'], '_foundry_suppress_rows_tag'):           
-                delattr(context['request'], '_foundry_suppress_rows_tag')
+            if hasattr(request, '_foundry_suppress_rows_tag'):           
+                delattr(request, '_foundry_suppress_rows_tag')
+            if hasattr(request, 'render_only_content_block'):           
+                delattr(request, 'render_only_content_block')
 
-            # Extract content div. Currently there is no way to instruct a 
-            # view to render only the content block, hence this.
+            # Extract content div if any
             soup = BeautifulSoup(html)
             content = soup.find('div', id='content')        
             if content:
@@ -437,3 +454,57 @@ class AutoPaginateNode(template.Node):
 
 
 register.tag('autopaginate', do_autopaginate)
+
+
+@register.tag('foundrycache')
+def do_foundrycache(parser, token):
+    nodelist = parser.parse(('endfoundrycache',))
+    parser.delete_first_token()
+    tokens = token.contents.split()
+    if len(tokens) < 2:
+        raise template.TemplateSyntaxError(
+            '''foundry_cache tag requires an argument that is an instance of a \
+subclass of CachingMixin'''
+        )
+    return FoundryCacheNode(nodelist, tokens[1])
+
+
+class FoundryCacheNode(template.Node):
+
+    def __init__(self, nodelist, obj):
+        self.nodelist = nodelist
+        self.obj = template.Variable(obj)
+
+    def render(self, context):
+        """Based on Django's default cache template tag"""
+        obj = self.obj.resolve(context)
+
+        if obj.enable_caching:
+            request = context['request']
+            user = getattr(request, 'user', None)
+
+            # Compute a key from cache_type 
+            k = ''
+            if obj.cache_type == 'anonymous_only':
+                # If authenticated then bypass caching
+                if getattr(user, 'is_authenticated', lambda: False)():
+                    return self.nodelist.render(context)
+                k = 'anon'
+            elif obj.cache_type == 'anonymous_and_authenticated':
+                k = getattr(user, 'is_anonymous', lambda: True)() and 'anon' or 'auth'
+            elif obj.cache_type == 'per_user':
+                k = getattr(user, 'username', 'anon')
+
+            vary_on = [obj.id, k, get_current_site(request).id, request.META.get('QUERY_STRING', '')]
+
+            # Build a unicode key for this fragment and all vary-on's
+            args = hashlib.md5(u':'.join([str(v) for v in vary_on if v]))
+            cache_key = 'template.foundrycache.%s.%s' % (obj.__class__.__name__, args.hexdigest())
+
+            value = cache.get(cache_key)
+            if value is None:
+                value = self.nodelist.render(context)
+                cache.set(cache_key, value, obj.cache_timeout)
+            return value
+
+        return self.nodelist.render(context)

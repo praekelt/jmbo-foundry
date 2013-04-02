@@ -1,6 +1,8 @@
 import inspect
+import re
 
 from django.core.urlresolvers import reverse, Resolver404
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _, ugettext
@@ -31,7 +33,28 @@ from foundry.profile_models import AbstractAvatarProfile, \
     AbstractLocationProfile
 from foundry.templatetags import listing_styles
 from foundry.managers import PermittedManager
+import foundry.eventhandlers
+from foundry.mixins import CachingMixin
 import foundry.monkey
+
+
+# regex that identifies scripts in text
+SCRIPT_REGEX = re.compile(r"""(<script[^>]*>)|(<[^>]* on[a-z]+=['"].*?['"][^>]*)""", flags=re.DOTALL)
+
+
+class AttributeAdapter:
+    """Adapter that allows attributes to be added or overridden on an object"""
+
+    def __init__(self, obj, **kwargs):
+        self._obj = obj
+        self._attributes = {}
+        for k, v in kwargs.items():
+            self._attributes[k] = v
+    
+    def __getattr__(self, key):
+        if key in self._attributes:
+            return self._attributes[key]
+        return getattr(self._obj, key)
 
 
 class Link(models.Model):
@@ -118,7 +141,7 @@ class Link(models.Model):
         return active
 
 
-class Menu(models.Model):
+class Menu(CachingMixin):
     """A tile menu contains ordered links"""
     title = models.CharField(max_length=255)
     subtitle = models.CharField(
@@ -153,7 +176,7 @@ class Menu(models.Model):
             return self.title
 
 
-class Navbar(models.Model):
+class Navbar(CachingMixin):
     """A tile navbar contains ordered links"""
     title = models.CharField(max_length=255, help_text='This title is not displayed on the site.')
     subtitle = models.CharField(
@@ -671,7 +694,32 @@ useful when using a page as a campaign."""
 
     @property
     def rows(self):
-        return self.row_set.all().order_by('index')
+        """Fetch rows, columns and tiles in a single query"""
+        # Organize into a structure
+        struct = {}
+        tiles = Tile.objects.select_related().filter(column__row__page=self).order_by('index')
+        for tile in tiles:
+            row = tile.column.row
+            if row not in struct:
+                struct.setdefault(row, {})
+            column = tile.column
+            if column not in struct[row]:
+                struct[row].setdefault(column, [])
+            struct[row][column].append(tile)
+
+        # Sort rows and columns in the structure
+        result = []
+        keys_row = struct.keys()
+        keys_row.sort(lambda a, b: cmp(a.index, b.index))
+        for row in keys_row:
+            keys_column = struct[row].keys()
+            keys_column.sort(lambda a, b: cmp(a.index, b.index))
+            column_objs = []
+            for column in keys_column:
+                column_objs.append(AttributeAdapter(column, tiles=struct[row][column]))
+            result.append(AttributeAdapter(row, columns=column_objs))
+
+        return result
 
     @property
     def rows_by_block_name(self):
@@ -686,7 +734,7 @@ useful when using a page as a campaign."""
     def render_height(self):
         return sum([o.render_height+20 for o in self.rows])
 
-
+    
 class PageView(models.Model):
     """We need this bridging class for fast lookups"""
     page = models.ForeignKey(Page)
@@ -698,7 +746,7 @@ class PageView(models.Model):
         return '%s > %s' % (self.page.title, self.view_name)
 
 
-class Row(models.Model):
+class Row(CachingMixin):
     page = models.ForeignKey(Page)
     index = models.PositiveIntegerField(default=0, editable=False)
     block_name = models.CharField(
@@ -735,14 +783,31 @@ class Row(models.Model):
 
     @property
     def columns(self):
-        return self.column_set.all().order_by('index')
+        """Fetch columns and tiles in a single query"""
+        # Organize into a structure
+        struct = {}
+        tiles = Tile.objects.select_related().filter(column__row=self).order_by('index')
+        for tile in tiles:
+            column = tile.column
+            if column not in struct:
+                struct.setdefault(column, [])
+            struct[column].append(tile)
+
+        # Sort columns in the structure
+        result = []
+        keys_column = struct.keys()
+        keys_column.sort(lambda a, b: cmp(a.index, b.index))
+        for column in keys_column:
+            result.append(AttributeAdapter(column, tiles=struct[column]))
+
+        return result
 
     @property
     def render_height(self):
         return max([o.render_height+8 for o in self.columns] + [0]) + 44
+  
 
-    
-class Column(models.Model):
+class Column(CachingMixin):
     row = models.ForeignKey(Row)
     index = models.PositiveIntegerField(default=0, editable=False)
     width = models.PositiveIntegerField(default=8)    
@@ -791,7 +856,7 @@ to the left and right of the content block."
         return sum([o.render_height+8 for o in self.tiles]) + 44
 
 
-class Tile(models.Model):
+class Tile(CachingMixin):
     column = models.ForeignKey(Column)
     index = models.PositiveIntegerField(default=0, editable=False)
 
@@ -879,7 +944,12 @@ class ChatRoom(ModelBase):
 
 class BlogPost(ModelBase):
     content = RichTextField(_("Content"))
-    
+
+    def save(self, *args, **kwargs):
+        if SCRIPT_REGEX.search(self.content):
+            raise RuntimeError("Script in content!")
+        super(BlogPost, self).save(*args, **kwargs)
+
 
 class Notification(models.Model):
     member = models.ForeignKey(Member)
@@ -890,6 +960,7 @@ class Notification(models.Model):
         return str(self.id)
 
 
+# todo: move to eventhandlers.py
 @receiver(m2m_changed)
 def check_slug(sender, **kwargs):
     """Slug must be unique per site"""

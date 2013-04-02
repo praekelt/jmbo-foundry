@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load foundry_tags %}
 
+{% block extratitle %}{% if not object.is_homepage %} - {{ object.title }}{% endif %}{% endblock %}
+
 {% block page_content %}
     {% if object.css %}
         <style type="text/css">

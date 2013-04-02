@@ -21,6 +21,7 @@ from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.db.models import DateField
 from django.conf import settings
+from django.utils import timezone
 
 from preferences import preferences
 from jmbo.forms import as_div
@@ -450,7 +451,7 @@ class AgeGatewayForm(forms.Form):
         """Set cookie"""
         expires = None
         if self.cleaned_data['remember_me']:            
-            now = datetime.datetime.now()
+            now = timezone.now()
             expires = now.replace(year=now.year+10)
         response = HttpResponseRedirect('/')        
         response.set_cookie('age_gateway_passed', value=1, expires=expires)
@@ -511,6 +512,12 @@ class CreateBlogPostForm(forms.ModelForm):
         # There is some bug in Django that does not allow translation to be
         # applied. Workaround.
         self.fields['content'].label = _("Content")
+
+    def clean_content(self):
+        content = self.cleaned_data['content']
+        if models.SCRIPT_REGEX.search(content):
+            raise forms.ValidationError(_("The content contains scripting. Scripts are not allowed."))
+        return content
 
     def save(self, commit=True):    
         instance = super(CreateBlogPostForm, self).save(commit=commit)

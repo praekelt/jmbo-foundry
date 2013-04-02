@@ -1,23 +1,24 @@
-from datetime import datetime
 import re
 
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.conf import settings
-
-from preferences import preferences
+from django.utils import timezone
 
 from foundry.models import Member
+from foundry.utils import get_preference
 
 
 PROTECTED_URLS_PATTERN = r'|'.join((
     reverse('age-gateway'), 
     reverse('join'), 
-    reverse('login'), 
+    reverse('login'),
+    reverse('logout'),
+    reverse('password_reset'),
     reverse('terms-and-conditions'), 
-    '/auth/password_reset', 
-    '/static', 
-    '/admin'
+    '/auth/password_reset/', 
+    '/static/', 
+    '/admin/',
 ))
 
 
@@ -50,10 +51,9 @@ class AgeGateway:
         if request.META['PATH_INFO'].endswith('/feed/'):
             return response
 
-        # Now only do we hit the database
-        # xxx: investigate preference caching. May want to hit the db less.
-        private_site = preferences.GeneralPreferences.private_site
-        show_age_gateway = preferences.GeneralPreferences.show_age_gateway
+        # Now only do we possibly hit the database
+        private_site = get_preference('GeneralPreferences', 'private_site')
+        show_age_gateway = get_preference('GeneralPreferences', 'show_age_gateway')
 
         # Check trivial case
         if not (private_site or show_age_gateway):
@@ -64,7 +64,7 @@ class AgeGateway:
             return response
 
         # Exempted URLs
-        exempted_urls = preferences.GeneralPreferences.exempted_urls        
+        exempted_urls = get_preference('GeneralPreferences', 'exempted_urls')
         if exempted_urls \
             and (
                 re.match(
@@ -75,7 +75,7 @@ class AgeGateway:
             return response
 
         # Exempted IP addresses
-        exempted_ips = preferences.GeneralPreferences.exempted_ips
+        exempted_ips = get_preference('GeneralPreferences', 'exempted_ips')
         if exempted_ips \
             and (
                 re.match(
@@ -86,7 +86,7 @@ class AgeGateway:
             return response
 
         # Exempted user agents
-        exempted_user_agents = preferences.GeneralPreferences.exempted_user_agents
+        exempted_user_agents = get_preference('GeneralPreferences', 'exempted_user_agents')
         if exempted_user_agents \
             and (
                 re.match(
@@ -157,7 +157,7 @@ class LastSeen:
         # Update last_seen if the cookie has expired and this is an authenticated member
         user = getattr(request, 'user', None)
         if isinstance(user, Member) and not request.COOKIES.get('last_seen', None):
-            user.last_seen = datetime.now()
+            user.last_seen = timezone.now()
             user.save()
             response.set_cookie('last_seen', '1', max_age=300)
         
