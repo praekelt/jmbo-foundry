@@ -182,16 +182,29 @@ class RowsNode(template.Node):
         self.block_name = template.Variable(block_name)
 
     def render(self, context):
+        request = context['request']
+
         # Recursion guard flag. Set by TileNode.
-        if hasattr(context['request'], '_foundry_suppress_rows_tag'):
+        if hasattr(request, '_foundry_suppress_rows_tag'):
             return
 
         block_name = self.block_name.resolve(context)
 
-        pages = Page.permitted.filter(is_homepage=True)
-        if pages.exists():
-            page = pages[0]
-            rows = page.rows_by_block_name.get(block_name, [])
+        # Cache homepage rows_by_block_name on request. It can't change during
+        # a request.
+        empty_marker = None
+        key = '_foundry_rowsnode_rows_by_block_name'
+        rows_by_block_name = getattr(request, key, empty_marker)
+        if rows_by_block_name is empty_marker:
+            pages = Page.permitted.filter(is_homepage=True)
+            if pages.exists():
+                rows_by_block_name = pages[0].rows_by_block_name
+            else:
+                rows_by_block_name = []
+            setattr(request, key, rows_by_block_name)
+
+        if rows_by_block_name:
+            rows = rows_by_block_name.get(block_name, [])
             if rows:
                 # We have customized rows for the block. Use them.
                 return render_to_string(
@@ -221,9 +234,10 @@ class TileNode(template.Node):
 
     def render(self, context):
         tile = self.tile.resolve(context)
+        request = context['request']
 
         # Evaluate condition
-        if not tile.condition_expression_result(context['request']):
+        if not tile.condition_expression_result(request):
             return ''
 
         if tile.view_name:
@@ -238,11 +252,12 @@ class TileNode(template.Node):
                 return "No reverse match for %s" % tile.view_name
             view, args, kwargs = resolve(url)
 
-            # Set recursion guard flag
-            setattr(context['request'], '_foundry_suppress_rows_tag', 1)            
-            # Call the view. Let any error propagate.
+            # Set recursion guard flag and render only content block flag
+            setattr(request, '_foundry_suppress_rows_tag', 1)            
+            setattr(request, 'render_only_content_block', True)
             html = ''
-            result = view(context['request'], *args, **kwargs)
+            # Call the view. Let any error propagate.
+            result = view(request, *args, **kwargs)
             if isinstance(result, TemplateResponse):
                 # The result of a generic view
                 result.render()
@@ -250,14 +265,15 @@ class TileNode(template.Node):
             elif isinstance(result, HttpResponse):
                 # Old-school view
                 html = result.content
-            # Clear flag  
-            # xxx: something may clear the flag. Need to investigate more 
+            # Clear flags  
+            # xxx: something may clear the flags. Need to investigate more 
             # incase of thread safety problem.
-            if hasattr(context['request'], '_foundry_suppress_rows_tag'):           
-                delattr(context['request'], '_foundry_suppress_rows_tag')
+            if hasattr(request, '_foundry_suppress_rows_tag'):           
+                delattr(request, '_foundry_suppress_rows_tag')
+            if hasattr(request, 'render_only_content_block'):           
+                delattr(request, 'render_only_content_block')
 
-            # Extract content div. Currently there is no way to instruct a 
-            # view to render only the content block, hence this.
+            # Extract content div if any
             soup = BeautifulSoup(html)
             content = soup.find('div', id='content')        
             if content:
