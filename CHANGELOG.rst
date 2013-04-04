@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.1.16.1
+--------
 #. Hotfix. foundrycache template tag was using wrong class to compute key.
 
 1.1.16
