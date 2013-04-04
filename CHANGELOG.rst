@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Hotfix. foundrycache template tag was using wrong class to compute key.
+
 1.1.16
 ------
 #. Ensure that `user_logged_in` signal is dispatched when a user joins.

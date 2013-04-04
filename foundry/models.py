@@ -42,8 +42,8 @@ import foundry.monkey
 SCRIPT_REGEX = re.compile(r"""(<script[^>]*>)|(<[^>]* on[a-z]+=['"].*?['"][^>]*)""", flags=re.DOTALL)
 
 
-class AttributeAdapter:
-    """Adapter that allows attributes to be added or overridden on an object"""
+class AttributeWrapper:
+    """Wrapper that allows attributes to be added or overridden on an object"""
 
     def __init__(self, obj, **kwargs):
         self._obj = obj
@@ -56,6 +56,11 @@ class AttributeAdapter:
             return self._attributes[key]
         return getattr(self._obj, key)
 
+    @property
+    def klass(self):
+        """Can't override __class__ and making it a property also does not
+        work. Could be because of Django metaclasses."""
+        return self._obj.__class__
 
 class Link(models.Model):
     title = models.CharField(
@@ -716,8 +721,8 @@ useful when using a page as a campaign."""
             keys_column.sort(lambda a, b: cmp(a.index, b.index))
             column_objs = []
             for column in keys_column:
-                column_objs.append(AttributeAdapter(column, tiles=struct[row][column]))
-            result.append(AttributeAdapter(row, columns=column_objs))
+                column_objs.append(AttributeWrapper(column, tiles=struct[row][column]))
+            result.append(AttributeWrapper(row, columns=column_objs))
 
         return result
 
@@ -798,7 +803,7 @@ class Row(CachingMixin):
         keys_column = struct.keys()
         keys_column.sort(lambda a, b: cmp(a.index, b.index))
         for column in keys_column:
-            result.append(AttributeAdapter(column, tiles=struct[column]))
+            result.append(AttributeWrapper(column, tiles=struct[column]))
 
         return result
 

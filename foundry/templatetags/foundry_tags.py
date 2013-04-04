@@ -499,7 +499,7 @@ class FoundryCacheNode(template.Node):
 
             # Build a unicode key for this fragment and all vary-on's
             args = hashlib.md5(u':'.join([str(v) for v in vary_on if v]))
-            cache_key = 'template.foundrycache.%s.%s' % (obj.__class__.__name__, args.hexdigest())
+            cache_key = 'template.foundrycache.%s.%s' % (getattr(obj, 'klass', obj.__class__).__name__, args.hexdigest())
 
             value = cache.get(cache_key)
             if value is None:
