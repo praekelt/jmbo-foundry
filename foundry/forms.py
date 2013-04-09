@@ -425,7 +425,7 @@ class PasswordResetForm(BasePasswordResetForm):
 
 class AgeGatewayForm(forms.Form):
     country = forms.ModelChoiceField(queryset=models.Country.objects.all())
-    date_of_birth = forms.DateField(widget=OldSchoolDateWidget)
+    date_of_birth = forms.DateField(widget=OldSchoolDateWidget, label=_("Date of birth"))
     remember_me = forms.BooleanField(required=False, initial=True, label="", widget=RememberMeCheckboxInput)
 
     def clean(self):
