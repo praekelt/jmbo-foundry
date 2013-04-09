@@ -250,11 +250,6 @@ be numbers. No spaces allowed. An example is +27821234567.")
                     pass
                 self.fields.keyOrder.append(name)
 
-        # Translate all labels that haven't been translated
-        for name, field in self.fields.iteritems():
-            if isinstance(field.label, basestring) and field.label:
-                field.label = _(field.label)
-
     as_div = as_div
 
 

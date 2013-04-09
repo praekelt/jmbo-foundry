@@ -614,7 +614,7 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersona
     a site may conceivably have more than one type of user account, but the profile architecture 
     limits the entire site to a single type of profile."""
 
-    country = models.ForeignKey(Country, null=True, blank=True)
+    country = models.ForeignKey(Country, null=True, blank=True, verbose_name=_('Country'))
     is_profile_complete = models.BooleanField(default=False, editable=False)
     last_seen = models.DateTimeField(null=True, editable=False, db_index=True)
     objects = UserManager()
