@@ -240,7 +240,7 @@ be numbers. No spaces allowed. An example is +27821234567.")
         self.fields.keyOrder = sorted(field_order,
             key=lambda key: field_order[key])
 
-        # Place opt-in fields at bottom and remove labels
+        # Place opt-in fields at bottom and remove their labels
         for name in ('receive_email', 'receive_sms', 'remember_me', 'accept_terms'):
             if self.fields.has_key(name):
                 self.fields[name].label = ""
@@ -249,6 +249,11 @@ be numbers. No spaces allowed. An example is +27821234567.")
                 except ValueError:
                     pass
                 self.fields.keyOrder.append(name)
+
+        # Translate all labels that haven't been translated
+        for name, field in self.fields.iteritems():
+            if isinstance(field.label, basestring) and field.label:
+                field.label = _(field.label)
 
     as_div = as_div
 
