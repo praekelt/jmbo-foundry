@@ -109,7 +109,7 @@ class MenuAdmin(admin.ModelAdmin):
     inlines = [MenuLinkPositionInline]
     list_display = ('title', 'subtitle')
     fieldsets = (
-        (None, {'fields': ('title', 'subtitle', 'slug', 'sites')}),
+        (None, {'fields': ('title', 'subtitle', 'slug', 'sites', 'display_title')}),
         (
             'Caching', 
             {
