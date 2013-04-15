@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Web promo listing now displays pinned items.
+
 1.1.16.1
 --------
 #. Hotfix. foundrycache template tag was using wrong class to compute key.
