@@ -24,6 +24,9 @@ class AbstractBaseStyle(object):
         context['pinned_list'] = self.get_pinned_queryset()
         context['listing'] = self.listing
         context['items_per_page'] = self.listing.items_per_page or 100
+        context['identifier'] = getattr(self.listing, 'id', None) \
+            or getattr(self.listing, 'identifier', '')
+
         context['view_modifier'] = None
         view_modifier = getattr(self.listing, 'view_modifier', None)
         if view_modifier:

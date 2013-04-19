@@ -94,6 +94,9 @@ $(document).ready(function(){
             target = $(this).parents('div.foundry-listing:first');
             url = $(location).attr('href');
         }
+        var listing_dom_id = target.attr('id');
+        if (listing_dom_id == "foundry-listing-")
+            listing_dom_id = null;
         // Strip params. Already present in href.
         url = url.split('?')[0];
         url = url + $(this).attr('href');
@@ -104,8 +107,13 @@ $(document).ready(function(){
                 if (data.search('id="content"') != -1)
                 {
                     // Markup that contains fluff. We want only the content.
-                    var el = $('<div>' + data + '</div>');                   
-                    var content = $('div#content div.foundry-listing:first', el);
+                    var el = $('<div>' + data + '</div>');
+                    // If the listing can be identified then use that, else use
+                    // first available one.
+                    if (listing_dom_id) 
+                        var content = $('#' + listing_dom_id, el);
+                    else
+                        var content = $('div#content div.foundry-listing:first', el);
                     target.html(content.html());
                 }
                 else
