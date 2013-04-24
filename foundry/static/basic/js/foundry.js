@@ -104,20 +104,15 @@ $(document).ready(function(){
             url, 
             {}, 
             function(data){
-                if (data.search('id="content"') != -1)
-                {
-                    // Markup that contains fluff. We want only the content.
-                    var el = $('<div>' + data + '</div>');
-                    // If the listing can be identified then use that, else use
-                    // first available one.
-                    if (listing_dom_id) 
-                        var content = $('#' + listing_dom_id, el);
-                    else
-                        var content = $('div#content div.foundry-listing:first', el);
-                    target.html(content.html());
-                }
+                // Markup contains fluff. We want only the content.
+                var el = $('<div>' + data + '</div>');
+                // If the listing can be identified then use that, else use
+                // first available one.
+                if (listing_dom_id) 
+                    var content = $('#' + listing_dom_id, el);
                 else
-                    target.html(data);
+                    var content = $('div#content div.foundry-listing:first', el);
+                target.html(content.html());
                 $(document).trigger("onListingRefresh", [target]);
             }
         );
