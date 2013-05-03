@@ -5,6 +5,7 @@ next
 ----
 #. Web promo listing now displays pinned items.
 #. Make ajax pagination more robust.
+#. Allow @ in username.
 
 1.1.16.1
 --------
