@@ -514,7 +514,7 @@ class RegistrationPreferences(Preferences):
             if len(values) != len(set(values)):
                 raise RuntimeError(
                     "Cannot set %s to be unique since there is more than one \
-member with the same %s." % (fieldname, fieldname)
+member with the same %s %s." % (fieldname, fieldname, values[0])
                 )
         super(RegistrationPreferences, self).save(*args, **kwargs)
 
