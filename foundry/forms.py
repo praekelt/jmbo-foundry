@@ -240,7 +240,7 @@ be numbers. No spaces allowed. An example is +27821234567.")
         self.fields.keyOrder = sorted(field_order,
             key=lambda key: field_order[key])
 
-        # Place opt-in fields at bottom and remove labels
+        # Place opt-in fields at bottom and remove their labels
         for name in ('receive_email', 'receive_sms', 'remember_me', 'accept_terms'):
             if self.fields.has_key(name):
                 self.fields[name].label = ""
@@ -425,7 +425,7 @@ class PasswordResetForm(BasePasswordResetForm):
 
 class AgeGatewayForm(forms.Form):
     country = forms.ModelChoiceField(queryset=models.Country.objects.all())
-    date_of_birth = forms.DateField(widget=OldSchoolDateWidget)
+    date_of_birth = forms.DateField(widget=OldSchoolDateWidget, label=_("Date of birth"))
     remember_me = forms.BooleanField(required=False, initial=True, label="", widget=RememberMeCheckboxInput)
 
     def clean(self):

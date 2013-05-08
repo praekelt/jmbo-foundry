@@ -28,11 +28,13 @@ class AbstractSocialProfile(models.Model):
         abstract = True
     
     facebook_id = models.CharField(
+        verbose_name=_('Facebook ID'),
         max_length=128,
         blank=True, 
         null=True,
     )
     twitter_username = models.CharField(
+        verbose_name=_('Twitter username'),
         max_length=128,
         blank=True,
         null=True,
@@ -57,20 +59,24 @@ class AbstractLocationProfile(models.Model):
         abstract = True
     
     address = models.TextField(
+        verbose_name=_('Address'),
         blank=True,
         null=True,
     )
     city = models.CharField(
+        verbose_name=_('City'),
         max_length=256,
         blank=True,
         null=True,
     )
     zipcode = models.CharField(
+        verbose_name=_('Zipcode'),
         max_length=32,
         blank=True,
         null=True,
     )
     province = models.CharField(
+        verbose_name=_('Province'),
         max_length=256,
         blank=True,
         null=True,
@@ -81,12 +87,13 @@ class AbstractPersonalProfile(models.Model):
         abstract = True
     
     dob = models.DateField(
-        verbose_name="Date of Birth",
+        verbose_name=_("Date of Birth"),
         blank=True,
         null=True,
     )
     
     gender = models.CharField(
+        verbose_name=_("Gender"),
         max_length=1,
         blank=True,
         null=True,
@@ -97,6 +104,7 @@ class AbstractPersonalProfile(models.Model):
     )
 
     about_me = models.TextField(
+        verbose_name=_("About me"),
         blank=True,
         null=True,                                
     )
@@ -106,6 +114,7 @@ class AbstractContactProfile(models.Model):
         abstract = True
    
     mobile_number = models.CharField(
+        verbose_name=_("Mobile number"),
         max_length=64,
         blank=True,
         null=True,
@@ -116,9 +125,11 @@ class AbstractSubscriptionProfile(models.Model):
         abstract = True
     
     receive_sms = models.BooleanField(
+        verbose_name=_("Receive sms"),
         default=False,
     )
     receive_email = models.BooleanField(
+        verbose_name=_("Receive email"),
         default=False,
     )
 

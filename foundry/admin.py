@@ -1,5 +1,6 @@
 import inspect
 
+from django.db.models import CharField
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.models import User
@@ -109,7 +110,7 @@ class MenuAdmin(admin.ModelAdmin):
     inlines = [MenuLinkPositionInline]
     list_display = ('title', 'subtitle')
     fieldsets = (
-        (None, {'fields': ('title', 'subtitle', 'slug', 'sites')}),
+        (None, {'fields': ('title', 'subtitle', 'slug', 'sites', 'display_title')}),
         (
             'Caching', 
             {
@@ -232,9 +233,28 @@ class RegistrationPreferencesAdminForm(forms.ModelForm):
         protected_fields = ('id', 'username', 'password')
         choices = [(unicode(f.name), f.name) for f in Member._meta.fields if f.name not in protected_fields]
         self.fields['raw_display_fields'].widget.choices = choices
+        choices = [(unicode(f.name), f.name) for f in Member._meta.fields if (f.name not in protected_fields and isinstance(f, CharField))]
         self.fields['raw_unique_fields'].widget.choices = choices
         choices = [(f.name, f.name) for f in Member._meta.fields if f.blank and (f.name not in protected_fields)]
         self.fields['raw_required_fields'].widget.choices = choices
+
+    def clean(self):
+        cleaned_data = super(RegistrationPreferencesAdminForm, self).clean()
+        # Unique fields must be unique! Check the existing members for possible
+        # duplicate values. For example, if mobile number was not a unique
+        # field before but it is now, then there may not be two members with
+        # the same mobile number.
+        unique_fields = [s for s in cleaned_data['raw_unique_fields'].split(',') if s]
+        for fieldname in unique_fields:            
+            values = Member.objects.exclude(**{fieldname: None}).exclude(**{fieldname: ''}).values_list(fieldname, flat=True)
+            if values:
+                # set removes duplicates from a list
+                if len(values) != len(set(values)):
+                    raise forms.ValidationError(
+                        "Cannot set %s to be unique since there is more than one \
+    member with the same %s %s." % (fieldname, fieldname, values[0])
+                    )
+        return cleaned_data
 
 
 class RegistrationPreferencesAdmin(PreferencesAdmin):

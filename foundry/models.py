@@ -509,12 +509,12 @@ class RegistrationPreferences(Preferences):
         # field before but it is now, then there may not be two members with
         # the same mobile number.
         for fieldname in self.unique_fields:            
-            values = Member.objects.exclude(**{fieldname: None}).values_list(fieldname, flat=True)
+            values = Member.objects.exclude(**{fieldname: None}).exclude(**{fieldname: ''}).values_list(fieldname, flat=True)
             # set removes duplicates from a list
             if len(values) != len(set(values)):
                 raise RuntimeError(
                     "Cannot set %s to be unique since there is more than one \
-member with the same %s." % (fieldname, fieldname)
+member with the same %s %s." % (fieldname, fieldname, values[0])
                 )
         super(RegistrationPreferences, self).save(*args, **kwargs)
 
@@ -614,7 +614,7 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersona
     a site may conceivably have more than one type of user account, but the profile architecture 
     limits the entire site to a single type of profile."""
 
-    country = models.ForeignKey(Country, null=True, blank=True)
+    country = models.ForeignKey(Country, null=True, blank=True, verbose_name=_('Country'))
     is_profile_complete = models.BooleanField(default=False, editable=False)
     last_seen = models.DateTimeField(null=True, editable=False, db_index=True)
     objects = UserManager()

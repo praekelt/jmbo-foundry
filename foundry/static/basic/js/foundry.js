@@ -82,13 +82,21 @@ $(document).ready(function(){
     // Ajaxify paging and view modifier navigation for (1) standalone listing (2) listing in a tile.
     $('div.foundry-listing div.pagination a, div.foundry-listing div.jmbo-view-modifier div.item a').live('click', function(e){
         e.preventDefault();
-        var target = $(this).parents('div.foundry-page-tile:first');
-        var url = target.attr('original_url');
-        if (!target.length)
+        // todo: need a better way to identify target. Ad-hoc listing may need a name.
+        var url_provider = $(this).parents('div.foundry-page-tile:first');
+        if (url_provider.length)
+        {
+            var url = url_provider.attr('original_url');
+            var target = $('div.foundry-listing:first', url_provider);
+        }
+        else
         {
             target = $(this).parents('div.foundry-listing:first');
             url = $(location).attr('href');
         }
+        var listing_dom_id = target.attr('id');
+        if (listing_dom_id == "foundry-listing-")
+            listing_dom_id = null;
         // Strip params. Already present in href.
         url = url.split('?')[0];
         url = url + $(this).attr('href');
@@ -96,15 +104,15 @@ $(document).ready(function(){
             url, 
             {}, 
             function(data){
-                if (data.search('id="content"') != -1)
-                {
-                    // Markup that contains fluff. We want only the content.
-                    var el = $('<div>' + data + '</div>');                   
-                    var content = $('div#content', el);
-                    target.html(content.html());
-                }
+                // Markup contains fluff. We want only the content.
+                var el = $('<div>' + data + '</div>');
+                // If the listing can be identified then use that, else use
+                // first available one.
+                if (listing_dom_id) 
+                    var content = $('#' + listing_dom_id, el);
                 else
-                    target.html(data);
+                    var content = $('div#content div.foundry-listing:first', el);
+                target.html(content.html());
                 $(document).trigger("onListingRefresh", [target]);
             }
         );
