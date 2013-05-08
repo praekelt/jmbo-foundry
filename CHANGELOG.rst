@@ -6,6 +6,7 @@ next
 #. Web promo listing now displays pinned items.
 #. Make ajax pagination more robust.
 #. Allow @ in username.
+#. Friendlier admin form when setting required fields in Registration Preferences.
 
 1.1.16.1
 --------
