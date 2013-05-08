@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.1.17
+------
 #. Web promo listing now displays pinned items.
 #. Make ajax pagination more robust.
 #. Allow @ in username.
