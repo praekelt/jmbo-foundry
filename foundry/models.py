@@ -245,11 +245,12 @@ class Listing(models.Model):
         blank=True,
         null=True,
     )
-    category = models.ForeignKey(
+    categories = models.ManyToManyField(
         'category.Category',
-        help_text="Category for which to collect items.",
+        help_text="Categories for which to collect items.",
         blank=True,
         null=True,
+        related_name='listing_categories'
     )
     pinned = models.ManyToManyField(
         'jmbo.ModelBase',
@@ -316,8 +317,10 @@ complex page."""
             q = ModelBase.permitted.all()
             if self.content_type.exists():
                 q = q.filter(content_type__in=self.content_type.all())
-            elif self.category:
-                q = q.filter(Q(primary_category=self.category)|Q(categories=self.category))
+            elif self.categories.exists():
+                q1 = Q(primary_category__in=self.categories.all())
+                q2 = Q(categories=self.categories.all())
+                q = q.filter(q1|q2)
             else:
                 q = ModelBase.objects.none()
         q = q.exclude(id__in=self.pinned.all())
@@ -341,7 +344,7 @@ complex page."""
     @property
     def pinned_queryset(self):
         return ModelBase.permitted.filter(id__in=self.pinned.all())
-        
+
 
 class AbstractLinkPosition(models.Model):
     link = models.ForeignKey(Link)

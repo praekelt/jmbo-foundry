@@ -154,7 +154,7 @@ class ListingAdminForm(forms.ModelForm):
     class Meta:
         model = Listing
         fields = (
-            'title', 'slug', 'subtitle', 'content_type', 'category', 'content',
+            'title', 'slug', 'subtitle', 'content_type', 'categories', 'content',
             'pinned', 'style', 'count', 'items_per_page', 'view_modifier', 
             'display_title_tiled', 'enable_syndication', 'sites'
         )       
@@ -196,11 +196,11 @@ class ListingAdminForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super(ListingAdminForm, self).clean()
         n = 0
-        for fieldname in ('content_type', 'content', 'category'):
+        for fieldname in ('content_type', 'content', 'categories'):
             if cleaned_data[fieldname]:
                 if n:
                     raise forms.ValidationError(
-                        "You may set at most one of content type, content or category."
+                        "You may set at most one of content type, content or categories."
                     )
                 n += 1
         return cleaned_data
