@@ -9,6 +9,7 @@ from django.test.client import Client as BaseClient, FakePayload, \
 from django.core.urlresolvers import reverse
 from django.contrib.auth.signals import user_logged_in
 
+from preferences import preferences
 from post.models import Post
 
 from foundry.models import Member, Listing, Page, Row, Column, Tile
@@ -124,6 +125,20 @@ class TestCase(unittest.TestCase):
         tile.cache_timeout = 5
         tile.save()
 
+        # A few members
+        member, dc = Member.objects.get_or_create(username='jannie')
+        member.email = 'jannie@aaa.com'
+        member.save()
+        setattr(self, 'jannie', member)
+        member, dc = Member.objects.get_or_create(username='pietie')
+        member.email = 'pietie@aaa.com'
+        member.save()
+        setattr(self, 'pietie', member)
+        member, dc = Member.objects.get_or_create(username='klaas')
+        member.email = ''
+        member.save()
+        setattr(self, 'klaas', member)
+
         setattr(self, '_initialized', 1)
 
 
@@ -188,3 +203,24 @@ class TestCase(unittest.TestCase):
         response = self.client.get('/page/a-page/')
         now_string = response.content.split('NOW_MARKER')[1]
         self.assertNotEqual(now_string, control_now_string)
+
+    def test_registration_preferences(self):
+        rp = preferences.RegistrationPreferences
+
+        # Initialize
+        rp.raw_unique_fields = 'email'
+        rp.save()
+
+        # Cause a collision
+        self.klaas.email = 'jannie@aaa.com'
+        self.klaas.save()
+        rp.raw_unique_fields = 'email'
+        self.assertRaises(RuntimeError, rp.save)
+
+        # Empty emails do not cause collisions
+        self.jannie.email = ''
+        self.jannie.save()
+        self.klaas.email = ''
+        self.klaas.save()
+        rp.raw_unique_fields = 'email'
+        rp.save()
