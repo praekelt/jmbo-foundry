@@ -87,7 +87,9 @@ MIDDLEWARE_CLASSES = (
     'pagination.middleware.PaginationMiddleware',
     'foundry.middleware.VerboseRequestMeta',
     'foundry.middleware.LastSeen',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 # A tuple of callables that are used to populate the context in RequestContext. 
@@ -163,12 +165,14 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.comments',
     'django.contrib.contenttypes',
+    'django.contrib.flatpages',
     'django.contrib.humanize',
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'django.contrib.admin',
+    'debug_toolbar',
 )
 
 # Your ReCaptcha provided public key.
@@ -196,6 +200,7 @@ LOGIN_REDIRECT_URL = '/'    # check if inpaster
 # todo: add setting to foundry paster
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.facebook.FacebookBackend',
+    'social_auth.backends.twitter.TwitterBackend',
     'foundry.backends.MultiBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
@@ -238,6 +243,11 @@ STATICFILES_FINDERS then you may safely remove the call to compute_settings \
 from your settings file.""", RuntimeWarning)
 
 
+# See django-socialauth project for all settings
 SOCIAL_AUTH_USER_MODEL = 'foundry.Member'
-FACEBOOK_APP_ID = 'YOUR_FACEBOOK_APP_ID'
-FACEBOOK_API_SECRET = 'YOUR_FACEBOOK_API_SECRET'
+#FACEBOOK_APP_ID = ''
+#FACEBOOK_API_SECRET = ''
+#TWITTER_CONSUMER_KEY = ''
+#TWITTER_CONSUMER_SECRET = ''
+
+INTERNAL_IPS = ('127.0.0.1',)

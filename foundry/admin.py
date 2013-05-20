@@ -1,5 +1,6 @@
 import inspect
 
+from django.db.models import CharField
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.models import User
@@ -7,8 +8,12 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.utils.importlib import import_module
 from django.contrib.admin import SimpleListFilter
+from django.contrib.flatpages.models import FlatPage
+from django.contrib.flatpages.admin import FlatPageAdmin as FlatPageAdminOld
+from django.contrib.flatpages.admin import FlatpageForm as FlatpageFormOld
 from django.utils.translation import ugettext_lazy as _
 
+from ckeditor.widgets import CKEditorWidget
 from preferences.admin import PreferencesAdmin
 from sites_groups.widgets import SitesGroupsWidget
 from jmbo.models import ModelBase
@@ -104,7 +109,17 @@ class MenuAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     inlines = [MenuLinkPositionInline]
     list_display = ('title', 'subtitle')
-   
+    fieldsets = (
+        (None, {'fields': ('title', 'subtitle', 'slug', 'sites', 'display_title')}),
+        (
+            'Caching', 
+            {
+                'fields': ('enable_caching', 'cache_type', 'cache_timeout'),
+                'classes': ()
+            }
+        ),
+    )
+  
 
 class NavbarLinkPositionInline(admin.StackedInline):
     model = NavbarLinkPosition
@@ -122,6 +137,16 @@ class NavbarAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     inlines = [NavbarLinkPositionInline]
     list_display = ('title', 'subtitle')
+    fieldsets = (
+        (None, {'fields': ('title', 'subtitle', 'slug', 'sites')}),
+        (
+            'Caching', 
+            {
+                'fields': ('enable_caching', 'cache_type', 'cache_timeout'),
+                'classes': ()
+            }
+        ),
+    )
 
 
 class ListingAdminForm(forms.ModelForm):
@@ -208,9 +233,28 @@ class RegistrationPreferencesAdminForm(forms.ModelForm):
         protected_fields = ('id', 'username', 'password')
         choices = [(unicode(f.name), f.name) for f in Member._meta.fields if f.name not in protected_fields]
         self.fields['raw_display_fields'].widget.choices = choices
+        choices = [(unicode(f.name), f.name) for f in Member._meta.fields if (f.name not in protected_fields and isinstance(f, CharField))]
         self.fields['raw_unique_fields'].widget.choices = choices
         choices = [(f.name, f.name) for f in Member._meta.fields if f.blank and (f.name not in protected_fields)]
         self.fields['raw_required_fields'].widget.choices = choices
+
+    def clean(self):
+        cleaned_data = super(RegistrationPreferencesAdminForm, self).clean()
+        # Unique fields must be unique! Check the existing members for possible
+        # duplicate values. For example, if mobile number was not a unique
+        # field before but it is now, then there may not be two members with
+        # the same mobile number.
+        unique_fields = [s for s in cleaned_data['raw_unique_fields'].split(',') if s]
+        for fieldname in unique_fields:            
+            values = Member.objects.exclude(**{fieldname: None}).exclude(**{fieldname: ''}).values_list(fieldname, flat=True)
+            if values:
+                # set removes duplicates from a list
+                if len(values) != len(set(values)):
+                    raise forms.ValidationError(
+                        "Cannot set %s to be unique since there is more than one \
+    member with the same %s %s." % (fieldname, fieldname, values[0])
+                    )
+        return cleaned_data
 
 
 class RegistrationPreferencesAdmin(PreferencesAdmin):
@@ -346,6 +390,18 @@ class CommentReportAdmin(admin.ModelAdmin):
     list_display = ('id', 'comment', 'reporter')
 
 
+# Override the flatpages admin form to use CKEditor
+class FlatpageForm(FlatpageFormOld):
+    content = forms.CharField(widget=CKEditorWidget)
+
+    class Meta:
+        model = FlatPage
+
+
+class FlatPageAdmin(FlatPageAdminOld):
+    form = FlatpageForm
+
+
 admin.site.register(Link, LinkAdmin)
 admin.site.register(Menu, MenuAdmin)
 admin.site.register(Navbar, NavbarAdmin)
@@ -364,3 +420,6 @@ admin.site.register(BlogPost, BlogPostAdmin)
 admin.site.register(Notification, NotificationAdmin)
 admin.site.register(FoundryComment, FoundryCommentAdmin)
 admin.site.register(CommentReport, CommentReportAdmin)
+# We have to unregister the normal admin, and then reregister ours
+admin.site.unregister(FlatPage)
+admin.site.register(FlatPage, FlatPageAdmin)

@@ -7,16 +7,56 @@ from django.db import models
 
 class Migration(SchemaMigration):
 
-    depends_on = (
-        ("banner", "0001_initial"),
-    )
-
     def forwards(self, orm):
-        pass
+        # Adding field 'Navbar.enable_caching'
+        db.add_column('foundry_navbar', 'enable_caching',
+                      self.gf('django.db.models.fields.BooleanField')(default=False),
+                      keep_default=False)
+
+        # Adding field 'Navbar.cache_type'
+        db.add_column('foundry_navbar', 'cache_type',
+                      self.gf('django.db.models.fields.CharField')(default='all_users', max_length=32),
+                      keep_default=False)
+
+        # Adding field 'Navbar.cache_timeout'
+        db.add_column('foundry_navbar', 'cache_timeout',
+                      self.gf('django.db.models.fields.PositiveIntegerField')(default=60),
+                      keep_default=False)
+
+        # Adding field 'Menu.enable_caching'
+        db.add_column('foundry_menu', 'enable_caching',
+                      self.gf('django.db.models.fields.BooleanField')(default=False),
+                      keep_default=False)
+
+        # Adding field 'Menu.cache_type'
+        db.add_column('foundry_menu', 'cache_type',
+                      self.gf('django.db.models.fields.CharField')(default='all_users', max_length=32),
+                      keep_default=False)
+
+        # Adding field 'Menu.cache_timeout'
+        db.add_column('foundry_menu', 'cache_timeout',
+                      self.gf('django.db.models.fields.PositiveIntegerField')(default=60),
+                      keep_default=False)
 
 
     def backwards(self, orm):
-        pass
+        # Deleting field 'Navbar.enable_caching'
+        db.delete_column('foundry_navbar', 'enable_caching')
+
+        # Deleting field 'Navbar.cache_type'
+        db.delete_column('foundry_navbar', 'cache_type')
+
+        # Deleting field 'Navbar.cache_timeout'
+        db.delete_column('foundry_navbar', 'cache_timeout')
+
+        # Deleting field 'Menu.enable_caching'
+        db.delete_column('foundry_menu', 'enable_caching')
+
+        # Deleting field 'Menu.cache_type'
+        db.delete_column('foundry_menu', 'cache_type')
+
+        # Deleting field 'Menu.cache_timeout'
+        db.delete_column('foundry_menu', 'cache_timeout')
 
 
     models = {
@@ -103,7 +143,7 @@ class Migration(SchemaMigration):
         },
         'comments.comment': {
             'Meta': {'ordering': "('submit_date',)", 'object_name': 'Comment', 'db_table': "'django_comments'"},
-            'comment': ('django.db.models.fields.TextField', [], {'max_length': '256'}),
+            'comment': ('django.db.models.fields.TextField', [], {'max_length': '3000'}),
             'content_type': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'content_type_set_for_comment'", 'to': "orm['contenttypes.ContentType']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'ip_address': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'}),
@@ -135,8 +175,11 @@ class Migration(SchemaMigration):
         },
         'foundry.column': {
             'Meta': {'object_name': 'Column'},
+            'cache_timeout': ('django.db.models.fields.PositiveIntegerField', [], {'default': '60'}),
+            'cache_type': ('django.db.models.fields.CharField', [], {'default': "'all_users'", 'max_length': '32'}),
             'class_name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'designation': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '32', 'null': 'True', 'blank': 'True'}),
+            'enable_caching': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'index': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
             'row': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Row']"}),
@@ -215,7 +258,7 @@ class Migration(SchemaMigration):
             'gender': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'}),
             'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'blank': 'True'}),
             'is_profile_complete': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_seen': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
+            'last_seen': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'db_index': 'True'}),
             'mobile_number': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
             'province': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'receive_email': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
@@ -227,7 +270,10 @@ class Migration(SchemaMigration):
         },
         'foundry.menu': {
             'Meta': {'ordering': "('title', 'subtitle')", 'object_name': 'Menu'},
+            'cache_timeout': ('django.db.models.fields.PositiveIntegerField', [], {'default': '60'}),
+            'cache_type': ('django.db.models.fields.CharField', [], {'default': "'all_users'", 'max_length': '32'}),
             'display_title': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'enable_caching': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32'}),
@@ -246,6 +292,9 @@ class Migration(SchemaMigration):
         },
         'foundry.navbar': {
             'Meta': {'ordering': "('title', 'subtitle')", 'object_name': 'Navbar'},
+            'cache_timeout': ('django.db.models.fields.PositiveIntegerField', [], {'default': '60'}),
+            'cache_type': ('django.db.models.fields.CharField', [], {'default': "'all_users'", 'max_length': '32'}),
+            'enable_caching': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32'}),
@@ -288,7 +337,10 @@ class Migration(SchemaMigration):
         'foundry.row': {
             'Meta': {'object_name': 'Row'},
             'block_name': ('django.db.models.fields.CharField', [], {'default': "'content'", 'max_length': '32'}),
+            'cache_timeout': ('django.db.models.fields.PositiveIntegerField', [], {'default': '60'}),
+            'cache_type': ('django.db.models.fields.CharField', [], {'default': "'all_users'", 'max_length': '32'}),
             'class_name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'enable_caching': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'has_left_or_right_column': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'index': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
@@ -296,10 +348,13 @@ class Migration(SchemaMigration):
         },
         'foundry.tile': {
             'Meta': {'object_name': 'Tile'},
+            'cache_timeout': ('django.db.models.fields.PositiveIntegerField', [], {'default': '60'}),
+            'cache_type': ('django.db.models.fields.CharField', [], {'default': "'all_users'", 'max_length': '32'}),
             'class_name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'column': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Column']"}),
             'condition_expression': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'enable_ajax': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'enable_caching': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'index': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
             'target_content_type': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'tile_target_content_type'", 'null': 'True', 'to': "orm['contenttypes.ContentType']"}),

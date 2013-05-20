@@ -81,8 +81,7 @@ def join(request):
         form = JoinForm(request.POST, request.FILES, show_age_gateway=show_age_gateway, age_gateway_passed=age_gateway_passed, initial=initial) 
         if form.is_valid():
             member = form.save()
-            backend = get_backends()[0]
-            member.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+            member = authenticate(username=member.username, password=form.cleaned_data['password1'])
             login(request, member)            
             response = HttpResponseRedirect(reverse('home'))
             msg = _("You have successfully signed up to the site.")
@@ -488,6 +487,7 @@ def test_redirect(request):
     return render_to_response('foundry/test_form.html', extra, context_instance=RequestContext(request))
 
 
+# todo: move to eventhandlers.py
 @receiver(user_logged_in)
 def set_session_expiry(sender, request, user, **kwargs):
     # Override session expiry date. We effectively ignore

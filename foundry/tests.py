@@ -1,4 +1,5 @@
 from datetime import datetime
+from time import sleep
 
 from django.core import management
 from django.utils import unittest
@@ -6,10 +7,13 @@ from django.contrib.contenttypes.models import ContentType
 from django.test.client import Client as BaseClient, FakePayload, \
     RequestFactory
 from django.core.urlresolvers import reverse
+from django.contrib.auth.signals import user_logged_in
 
+from preferences import preferences
 from post.models import Post
 
-from foundry.models import Member, Listing
+from foundry.models import Member, Listing, Page, Row, Column, Tile
+from foundry import views
 
 
 class Client(BaseClient):
@@ -108,7 +112,35 @@ class TestCase(unittest.TestCase):
         listing_pinned.save()
         setattr(self, listing_pinned.slug, listing_pinned)
 
+        # Page with row, column and tile
+        page, dc = Page.objects.get_or_create(title='A page', slug='a-page')
+        page.sites = [1]
+        page.save()
+        setattr(self, page.slug, page)
+        row, dc = Row.objects.get_or_create(id=1, page=page)
+        column, dc = Column.objects.get_or_create(id=1, row=row)
+        tile, dc = Tile.objects.get_or_create(id=1, column=column)
+        tile.view_name = 'test-plain-response'
+        tile.enable_caching = True
+        tile.cache_timeout = 5
+        tile.save()
+
+        # A few members
+        member, dc = Member.objects.get_or_create(username='jannie')
+        member.email = 'jannie@aaa.com'
+        member.save()
+        setattr(self, 'jannie', member)
+        member, dc = Member.objects.get_or_create(username='pietie')
+        member.email = 'pietie@aaa.com'
+        member.save()
+        setattr(self, 'pietie', member)
+        member, dc = Member.objects.get_or_create(username='klaas')
+        member.email = ''
+        member.save()
+        setattr(self, 'klaas', member)
+
         setattr(self, '_initialized', 1)
+
 
     def test_listing_pvt(self):
         listing = getattr(self, 'posts-vertical-thumbnail')
@@ -140,14 +172,55 @@ class TestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.failIf(response.content.find('foundry-listing-vertical-thumbnail') == -1)
         self.failIf(response.content.find('/post/post-1') == -1)
-    
+
     def test_last_seen(self):
         self.editor.last_seen = None
         self.editor.save()
         self.client.cookies.clear()
+        # login sends dud request without REQUEST dict
+        user_logged_in.disconnect(views.set_session_expiry)
         self.client.login(username="editor", password="password")
+        user_logged_in.connect(views.set_session_expiry)
         self.client.get("/")
         last_seen = Member.objects.get(pk=self.editor.pk).last_seen
         self.assertTrue(last_seen)
         self.client.get("/")
         self.assertEqual(Member.objects.get(pk=self.editor.pk).last_seen, last_seen)
+
+    def test_caching(self):
+        # Render page and grab timestamp in template
+        response = self.client.get('/page/a-page/')
+        control_now_string = response.content.split('NOW_MARKER')[1]
+
+        # Next call must still be cached
+        sleep(2)
+        response = self.client.get('/page/a-page/')
+        now_string = response.content.split('NOW_MARKER')[1]
+        self.assertEqual(now_string, control_now_string)
+
+        # Next call the cache must be expired
+        sleep(4)
+        response = self.client.get('/page/a-page/')
+        now_string = response.content.split('NOW_MARKER')[1]
+        self.assertNotEqual(now_string, control_now_string)
+
+    def test_registration_preferences(self):
+        rp = preferences.RegistrationPreferences
+
+        # Initialize
+        rp.raw_unique_fields = 'email'
+        rp.save()
+
+        # Cause a collision
+        self.klaas.email = 'jannie@aaa.com'
+        self.klaas.save()
+        rp.raw_unique_fields = 'email'
+        self.assertRaises(RuntimeError, rp.save)
+
+        # Empty emails do not cause collisions
+        self.jannie.email = ''
+        self.jannie.save()
+        self.klaas.email = ''
+        self.klaas.save()
+        rp.raw_unique_fields = 'email'
+        rp.save()

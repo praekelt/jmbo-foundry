@@ -303,7 +303,7 @@ urlpatterns = patterns('',
 
     # User detail page
     url(
-        r'^users/(?P<username>[\.\w-]+)/$', 
+        r'^users/(?P<username>[@\.\w-]+)/$', 
         'foundry.views.user_detail', 
         {},
         name='user-detail'
@@ -432,6 +432,9 @@ urlpatterns = patterns('',
 )
 
 urlpatterns += staticfiles_urlpatterns()
+
+# Flatpages must be last
+urlpatterns += patterns('', ('r^/', include('django.contrib.flatpages.urls')))
 
 handler500 = 'foundry.views.server_error'
 

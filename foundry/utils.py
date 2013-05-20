@@ -1,7 +1,11 @@
+from django.core.cache import cache
 from django.conf import settings
+
+from preferences import preferences
 
 
 _foundry_utils_cache = {}
+
 
 def _build_view_names_recurse(url_patterns=None):
     """
@@ -38,3 +42,14 @@ def get_view_choices():
         result.sort()
         _foundry_utils_cache['get_view_choices'] = result
     return _foundry_utils_cache['get_view_choices']
+
+
+def get_preference(klass_name, attr):    
+    #import pdb;pdb.set_trace()
+    key = 'jmbo_foundry' + klass_name + attr
+    empty_marker = '__empty__'
+    v = cache.get(key, empty_marker)
+    if v == empty_marker:
+        v = getattr(getattr(preferences, klass_name), attr)
+        cache.set(key, v, 60)
+    return v

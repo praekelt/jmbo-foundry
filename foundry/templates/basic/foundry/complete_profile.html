@@ -6,6 +6,10 @@
 	<div class="complete-profile">
 	    <div class="title">{% trans "Complete your profile" %}</div>
 
+        <div class="helptext">
+            {% trans "Oops! We need some more details to complete your registration. Please complete your profile below." %}
+        </div>
+
         <form action="{% url complete-profile %}" method="POST" class="foundry-form" enctype="multipart/form-data">   
 	        {% csrf_token %}
             {{ form.as_div }}

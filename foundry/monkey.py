@@ -1,3 +1,41 @@
+"""Patch BaseCommentNode queryset method so comments are not constrained to
+only one site. Our convention is that basic, smart and web site ids always fall
+into a certain numerical range.  Use this fact to relax the query."""
+
+from django.contrib.comments.templatetags.comments import BaseCommentNode
+from django.utils.encoding import smart_unicode
+from django.conf import settings
+
+def BaseCommentNode_get_query_set(self, context):
+        ctype, object_pk = self.get_target_ctype_pk(context)
+        if not object_pk:
+            return self.comment_model.objects.none()
+
+        # Compute site id range
+        i = settings.SITE_ID / 10
+        site_ids = range(i * 10 + 1, (i + 1) * 10)
+
+        qs = self.comment_model.objects.filter(
+            content_type = ctype,
+            object_pk    = smart_unicode(object_pk),
+            site__pk__in = site_ids,
+        )
+
+        # The is_public and is_removed fields are implementation details of the
+        # built-in comment model's spam filtering system, so they might not
+        # be present on a custom comment model subclass. If they exist, we
+        # should filter on them.
+        field_names = [f.name for f in self.comment_model._meta.fields]
+        if 'is_public' in field_names:
+            qs = qs.filter(is_public=True)
+        if getattr(settings, 'COMMENTS_HIDE_REMOVED', True) and 'is_removed' in field_names:
+            qs = qs.filter(is_removed=False)
+
+        return qs
+
+BaseCommentNode.get_query_set = BaseCommentNode_get_query_set
+
+
 """CommentListNode must be able to return only comments related to the
 authenticated user. Add a method to the class."""
 
@@ -5,7 +43,7 @@ from django.db.models import Q
 from django.db.models.aggregates import Max
 from django.contrib.comments.templatetags.comments import CommentListNode
 
-def get_query_set(self, context):
+def CommentListNode_get_query_set(self, context):
     qs = super(CommentListNode, self).get_query_set(context)
     if context['request'].REQUEST.get('my_messages'):
         user = context['request'].user
@@ -19,7 +57,7 @@ def get_query_set(self, context):
 
     return qs
 
-CommentListNode.get_query_set = get_query_set
+CommentListNode.get_query_set = CommentListNode_get_query_set
 
 
 """Django forms displays errors in a <ul> tag and provides no easy mechanism to

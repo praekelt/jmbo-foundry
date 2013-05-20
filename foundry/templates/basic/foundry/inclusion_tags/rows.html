@@ -1,9 +1,12 @@
 {% load foundry_tags %}
 
 {% for row in rows %}
+
+    {% foundrycache row %} 
     <table class="foundry-page-row {{ row.class_name }}" cellspacing="0">
         <tr>
         {% for column in row.columns %}
+            {% foundrycache column %} 
             <td class="foundry-page-column foundry-page-column-{{ column.width }} {{ column.class_name }}">
                 {% if column.title %}<div class="title">{{ column.title }}</div>{% endif %}
 
@@ -15,13 +18,18 @@
                     {% endifchanged %}
                 {% endif %}
                 {% for tile in column.tiles %}
+                    {% foundrycache tile %} 
                     <div class="foundry-page-tile {{ tile.class_name }} {% if tile.enable_ajax %}foundry-enable-ajax{% endif %}"
                          original_url="{% tile_url tile %}">
                         {% tile tile %}
                     </div>
+                    {% endfoundrycache %}
                 {% endfor %}                
             </td>
+            {% endfoundrycache %}
         {% endfor %}
         </tr>
     </table>
+    {% endfoundrycache %}
+
 {% endfor %}

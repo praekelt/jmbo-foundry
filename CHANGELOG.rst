@@ -1,6 +1,29 @@
 Changelog
 =========
 
+1.1.17
+------
+#. Web promo listing now displays pinned items.
+#. Make ajax pagination more robust.
+#. Allow @ in username.
+#. Friendlier admin form when setting required fields in Registration Preferences.
+
+1.1.16.1
+--------
+#. Hotfix. foundrycache template tag was using wrong class to compute key.
+
+1.1.16
+------
+#. Ensure that `user_logged_in` signal is dispatched when a user joins.
+#. Don't allow the creation of a `BlogPost` where the `content` field contains scripting.
+#. Map as many fields as possible to member when doing Facebook Connect.
+#. Twitter Oauth is now standard functionality.
+#. `base_inner.html` provides now has an extratitle block.
+#. A comment posted to eg. basic will now show up in the other layers comprising the same logical site.
+#. Flatpages are now part of our standard set of products.
+#. Through-the-web configurable caching for rows, columns, tiles, menus and navbars.
+#. Identify poorly performing areas and optimize code.
+
 1.1.15
 ------
 #. The Open Graph site description can now be set under General Preferences.
