@@ -12,6 +12,7 @@ from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.admin import FlatPageAdmin as FlatPageAdminOld
 from django.contrib.flatpages.admin import FlatpageForm as FlatpageFormOld
 from django.utils.translation import ugettext_lazy as _
+from django.utils.html import strip_tags
 
 from ckeditor.widgets import CKEditorWidget
 from preferences.admin import PreferencesAdmin
@@ -27,6 +28,8 @@ from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
     FoundryComment, CommentReport, PageView, NaughtyWordPreferences
 from foundry.widgets import SelectCommaWidget, DragDropOrderingWidget
 from foundry.utils import get_view_choices
+
+BLOGPOST_PREVIEW_SIZE = 256
 
 
 class LinkAdminForm(forms.ModelForm):
@@ -353,11 +356,26 @@ class ChatRoomAdmin(ModelBaseAdmin):
 
 
 class BlogPostAdmin(ModelBaseAdmin):
-    pass
+    list_display = ('title', 'preview', 'publish_on', 'retract_on', \
+        '_get_absolute_url', 'owner', 'created', '_actions'
+    )
+
+    def preview(self, obj):
+        preview = strip_tags(obj.content)
+        if len(preview) > BLOGPOST_PREVIEW_SIZE:
+            try:
+                pos = preview.rindex(" ", 0, BLOGPOST_PREVIEW_SIZE)
+            except ValueError:  # in case there is no space
+                pos = BLOGPOST_PREVIEW_SIZE
+            preview = preview[:pos] + '...'
+        return preview
+    preview.short_description = 'Preview'
+    preview.allow_tags = True
 
 
 class NotificationAdmin(admin.ModelAdmin):
     list_display = ('id', 'member', 'link', 'created')
+    raw_id_fields = ('member',)
 
 
 class JmboContentTypeListFilter(SimpleListFilter):
