@@ -28,6 +28,8 @@ from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
 from foundry.widgets import SelectCommaWidget, DragDropOrderingWidget
 from foundry.utils import get_view_choices
 
+BLOGPOST_PREVIEW_SIZE = 500
+
 
 class LinkAdminForm(forms.ModelForm):
     view_name = forms.ChoiceField(
@@ -353,7 +355,19 @@ class ChatRoomAdmin(ModelBaseAdmin):
 
 
 class BlogPostAdmin(ModelBaseAdmin):
-    pass
+    list_display = ('title', 'preview', 'publish_on', 'retract_on', \
+        '_get_absolute_url', 'owner', 'created', '_actions'
+    )
+
+    def preview(self, obj):
+        preview = obj.content
+        if len(preview) > BLOGPOST_PREVIEW_SIZE:
+            pos = preview.rfind(" ", 0, BLOGPOST_PREVIEW_SIZE)
+            if pos > -1:
+                preview = preview[:pos] + '...'
+        return preview
+    preview.short_description = 'Preview'
+    preview.allow_tags = True
 
 
 class NotificationAdmin(admin.ModelAdmin):
