@@ -61,7 +61,29 @@ pre_update.connect(twitter_extra_values, sender=TwitterBackend)
 
 
 def google_extra_values(sender, user, response, details, **kwargs):
-    
+    mapping = {
+        'email': 'email',
+        'given_name': 'first_name',
+        'family_name': 'last_name', 
+        'gender': 'gender',
+    }
+
+    for key, fieldname in mapping.items():
+        value = details.get(key, None)
+
+        # Sanitize some fields
+        if key == 'gender':
+            if value:
+                value = value[0]
+        if value:
+            setattr(user, fieldname, value)
+
+    # Image
+    url = details.get('picture', None)
+    if url:
+        tempfile = urlretrieve(url)
+        user.image.save('%s.jpg' % username, File(open(tempfile[0])))
+   
     return True
 
 pre_update.connect(google_extra_values, sender=GoogleOAuth2Backend)
