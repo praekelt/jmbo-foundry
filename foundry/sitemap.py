@@ -2,6 +2,7 @@ from django.contrib.sites.models import get_current_site
 from django.core.paginator import EmptyPage, PageNotAnInteger
 from django.http import Http404
 from django.template.response import TemplateResponse
+from django.views.decorators.cache import cache_page
 from django.contrib.sitemaps import Sitemap, FlatPageSitemap
 
 from foundry.models import Navbar, Menu
@@ -9,6 +10,7 @@ from foundry.models import Navbar, Menu
 
 """Slight adaptation of default Django sitemaps view passes request to callable
 site object"""
+@cache_page(60*5)
 def sitemap(request, sitemaps, section=None,
             template_name='sitemap.xml', mimetype='application/xml'):
     req_protocol = 'https' if request.is_secure() else 'http'
