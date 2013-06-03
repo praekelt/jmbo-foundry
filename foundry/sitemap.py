@@ -50,15 +50,18 @@ class BaseLinkSitemap(Sitemap):
         raise NotImplementedError
 
     def items(self):
-        processed = []
+        added = []
         links = []
+        linkposition_set = None
         for obj in self.get_containers():
-            for o in obj.navbarlinkposition_set.select_related().all().order_by('position'):
-                if o.link.id in processed:
-                    continue
-                if o.condition_expression_result(self.request):
+            if linkposition_set is None:
+                linkposition_set = getattr(obj, obj.__class__.__name__.lower() \
+                    + 'linkposition_set')
+            for o in linkposition_set.select_related().all().order_by('position'):
+                if o.condition_expression_result(self.request) \
+                    and (o.link.id not in added):
                     links.append(o.link)
-                processed.append(o.link.id)
+                    added.append(o.link.id)
         return links
 
 
