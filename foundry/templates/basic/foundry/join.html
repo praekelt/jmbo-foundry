@@ -27,7 +27,7 @@
         {% endif %}
         {% if FOUNDRY_HAS_GOOGLE_OAUTH2 %}
         <div>
-            <a href="{% url socialauth_begin 'google' %}" class="google"><span></span>{% trans "Sign in with Google" %}</a>
+            <a href="{% url socialauth_begin 'google-oauth2' %}" class="google"><span></span>{% trans "Sign in with Google" %}</a>
         </div>
         {% endif %}
     </div>
