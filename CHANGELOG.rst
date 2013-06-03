@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Generate XML and HTML sitemaps from the main navigation elements.
+
 1.1.17
 ------
 #. Web promo listing now displays pinned items.

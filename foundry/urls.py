@@ -14,6 +14,8 @@ from foundry.models import Page
 from foundry import views, forms
 from foundry.api import ListingResource, LinkResource, NavbarResource, \
     MenuResource, PageResource, BlogPostResource
+from foundry.sitemap import sitemaps
+
 
 admin.autodiscover()
 
@@ -61,6 +63,7 @@ urlpatterns = patterns('',
     (r'^api/', include(v1_api.urls)),
     (r'^banner/', include('banner.urls')),
     (r'^calendar/', include('jmbo_calendar.urls')),
+    (r'^sitemap\.xml$', 'foundry.sitemap.sitemap', {'sitemaps': sitemaps}),
     url(r'social-auth', include('social_auth.urls')),
 
     (r'^admin/', include('gallery.admin_urls')),
