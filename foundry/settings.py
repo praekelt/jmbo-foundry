@@ -201,6 +201,7 @@ LOGIN_REDIRECT_URL = '/'    # check if inpaster
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.facebook.FacebookBackend',
     'social_auth.backends.twitter.TwitterBackend',
+    'social_auth.backends.google.GoogleOAuth2Backend',
     'foundry.backends.MultiBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
@@ -249,5 +250,7 @@ SOCIAL_AUTH_USER_MODEL = 'foundry.Member'
 #FACEBOOK_API_SECRET = ''
 #TWITTER_CONSUMER_KEY = ''
 #TWITTER_CONSUMER_SECRET = ''
+#GOOGLE_CONSUMER_KEY = ''
+#GOOGLE_CONSUMER_SECRET = ''
 
 INTERNAL_IPS = ('127.0.0.1',)
