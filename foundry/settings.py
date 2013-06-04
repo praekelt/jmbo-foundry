@@ -171,6 +171,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.staticfiles',
     'django.contrib.gis',
+    'django.contrib.sitemaps',
     'django.contrib.admin',
     'debug_toolbar',
 )
