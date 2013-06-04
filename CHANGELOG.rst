@@ -4,6 +4,7 @@ Changelog
 next
 ----
 #. Generate XML and HTML sitemaps from the main navigation elements.
+#. Change listing to accept multiple categories. A South data migration is involved and should work without issue, but it is recommended to backup your database.
 
 1.1.17
 ------
