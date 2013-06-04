@@ -61,6 +61,9 @@ pre_update.connect(twitter_extra_values, sender=TwitterBackend)
 
 
 def google_extra_values(sender, user, response, details, **kwargs):
+    # Refer to
+    # https://developers.google.com/accounts/docs/OAuth2Login#authenticationuriparameters
+    # for parameters
     mapping = {
         'email': 'email',
         'given_name': 'first_name',
