@@ -7,12 +7,14 @@ from django.contrib.contenttypes.models import ContentType
 from django.test.client import Client as BaseClient, FakePayload, \
     RequestFactory
 from django.core.urlresolvers import reverse
+from django.contrib.auth.signals import user_logged_in
 
 from preferences import preferences
 from category.models import Category
 from post.models import Post
 
 from foundry.models import Member, Listing, Page, Row, Column, Tile
+from foundry import views
 
 
 class Client(BaseClient):
@@ -202,12 +204,15 @@ class TestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.failIf(response.content.find('foundry-listing-vertical-thumbnail') == -1)
         self.failIf(response.content.find('/post/post-1') == -1)
-    
+
     def test_last_seen(self):
         self.editor.last_seen = None
         self.editor.save()
         self.client.cookies.clear()
+        # login sends dud request without REQUEST dict
+        user_logged_in.disconnect(views.set_session_expiry)
         self.client.login(username="editor", password="password")
+        user_logged_in.connect(views.set_session_expiry)
         self.client.get("/")
         last_seen = Member.objects.get(pk=self.editor.pk).last_seen
         self.assertTrue(last_seen)
