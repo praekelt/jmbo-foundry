@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Change listing to accept multiple categories. A South data migration is involved and should work without issue, but it is recommended to backup your database.
+
 1.1.17
 ------
 #. Web promo listing now displays pinned items.
