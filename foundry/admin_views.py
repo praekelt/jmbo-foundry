@@ -175,9 +175,9 @@ def persist_sort_ajax(request):
     model = get_model('foundry', model_name)
     obj = model.objects.get(id=int(request.REQUEST['id']))
     if model_name == 'row':
-        objs = [o for o in obj.page.rows]
+        objs = [o for o in obj.page.rows_admin]
     elif model_name == 'column':
-        objs = [o for o in obj.row.columns]
+        objs = [o for o in obj.row.columns_admin]
     elif model_name == 'tile':
         objs = [o for o in obj.column.tiles]
     objs.insert(int(request.REQUEST['index']), objs.pop(objs.index(obj)))

@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Hotfix. Fix bug where page change form did not display rows.
+
 1.1.18
 ------
 #. Change listing to accept multiple categories. A South data migration is involved and should work without issue, but it is recommended to backup your database.
