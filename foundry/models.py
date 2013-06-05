@@ -730,6 +730,10 @@ useful when using a page as a campaign."""
         return result
 
     @property
+    def rows_admin(self):
+        return self.row_set.all().order_by('index')
+
+    @property
     def rows_by_block_name(self):
         """Return rows grouped by block_name."""
         result = {}
@@ -740,7 +744,7 @@ useful when using a page as a campaign."""
 
     @property
     def render_height(self):
-        return sum([o.render_height+20 for o in self.rows])
+        return sum([o.render_height+20 for o in self.rows_admin])
 
     
 class PageView(models.Model):
@@ -811,8 +815,12 @@ class Row(CachingMixin):
         return result
 
     @property
+    def columns_admin(self):
+        return self.column_set.all().order_by('index')
+
+    @property
     def render_height(self):
-        return max([o.render_height+8 for o in self.columns] + [0]) + 44
+        return max([o.render_height+8 for o in self.columns_admin] + [0]) + 44
   
 
 class Column(CachingMixin):

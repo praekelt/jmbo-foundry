@@ -3,7 +3,7 @@ $(document).ready(function(){
     if (typeof FastClick !== 'undefined') {
         // Let fastclick add a touchstart/end click event 
         // for more responsive touch interaction on smart devices
-        new FastClick(document.body);
+        FastClick.attach(document.body);
         
         $("a").bind("touchstart", function(e){$(this).addClass("touch-active");});
         $("a").bind("touchend touchcancel", function(e){$(this).removeClass("touch-active");});

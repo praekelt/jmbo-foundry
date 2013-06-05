@@ -429,14 +429,14 @@
 
     <a href="#" id="new-row">New row</a>
     <ul id="rows" class="sortable" style="height: {{ adminform.form.instance.render_height }}px;">
-        {% for row in adminform.form.instance.rows %}
+        {% for row in adminform.form.instance.rows_admin %}
             <li class="xui-state-default block-{{row.block_name }}" id="row-{{ row.id }}" row_id="{{ row.id }}" style="height: {{ row.render_height }}px;">
                 &middot;<a href="#" class="new-column">New column</a><br />
                 &middot;<a href="#" class="row-edit-launcher">Edit row</a></br>
                 &middot;<a href="#" class="row-delete">Delete row {{ row.index }}</a></br>
 
                 <ul class="sortable columns">
-                {% for column in row.columns %}
+                {% for column in row.columns_admin %}
                     <li class="xui-state-default" id="column-{{ column.id }}" column_id="{{ column.id }}" style="width: {{ column.render_width }}px; height: {{ column.render_height }}px;">
                         &middot;<a href="#" class="new-tile">New tile</a><br />
                         &middot;<a href="#" class="column-edit-launcher">Edit column</a></br>
