@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.1.18.1
+--------
 #. Hotfix. Fix bug where page change form did not display rows.
 
 1.1.18
