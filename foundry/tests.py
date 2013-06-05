@@ -7,11 +7,14 @@ from django.contrib.contenttypes.models import ContentType
 from django.test.client import Client as BaseClient, FakePayload, \
     RequestFactory
 from django.core.urlresolvers import reverse
+from django.contrib.auth.signals import user_logged_in
 
 from preferences import preferences
+from category.models import Category
 from post.models import Post
 
 from foundry.models import Member, Listing, Page, Row, Column, Tile
+from foundry import views
 
 
 class Client(BaseClient):
@@ -43,12 +46,26 @@ class TestCase(unittest.TestCase):
         self.editor.set_password("password")
         self.editor.save()
 
+        # Categories
+        for i in range(1, 5):
+            cat, dc = Category.objects.get_or_create(
+                title='Category %s' % i, slug='cat%s' % i
+            ) 
+            cat.sites = [1]
+            cat.save()
+            setattr(self, 'cat%s' % i, cat)
+
         # Published posts
         for i in range(1, 5):
             post, dc = Post.objects.get_or_create(
                 title='Post %s' % i, content='<b>aaa</b>',
                 owner=self.editor, state='published',
             )
+            # Toggle between categories and primary category
+            if i % 2 == 1:
+                post.categories = [getattr(self, 'cat%s' % i)]
+            else:
+                post.primary_category = getattr(self, 'cat%s' % i)
             post.sites = [1]
             post.save()
             setattr(self, 'post%s' % i, post)
@@ -110,6 +127,17 @@ class TestCase(unittest.TestCase):
         listing_pinned.save()
         setattr(self, listing_pinned.slug, listing_pinned)
 
+        # Listing with categories
+        listing_categories, dc = Listing.objects.get_or_create(
+            title='Listing categories', 
+            slug='listing-categories',
+            count=0, items_per_page=0, style='VerticalThumbnail',
+        )
+        listing_categories.categories = [self.cat1, self.cat2]
+        listing_categories.sites = [1]
+        listing_categories.save()
+        setattr(self, listing_categories.slug, listing_categories)
+
         # Page with row, column and tile
         page, dc = Page.objects.get_or_create(title='A page', slug='a-page')
         page.sites = [1]
@@ -158,6 +186,12 @@ class TestCase(unittest.TestCase):
         listing = getattr(self, 'listing-pinned')
         self.failIf(self.post1.modelbase_obj in listing.queryset().all())
 
+    def test_listing_categories(self):
+        listing = getattr(self, 'listing-categories')
+        self.failUnless(self.post1.modelbase_obj in listing.queryset().all())
+        self.failUnless(self.post2.modelbase_obj in listing.queryset().all())
+        self.failIf(self.post3.modelbase_obj in listing.queryset().all())
+
     def test_pages(self):
         # Login, password reset
         for name in ('login', 'password_reset'):
@@ -170,12 +204,15 @@ class TestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.failIf(response.content.find('foundry-listing-vertical-thumbnail') == -1)
         self.failIf(response.content.find('/post/post-1') == -1)
-    
+
     def test_last_seen(self):
         self.editor.last_seen = None
         self.editor.save()
         self.client.cookies.clear()
+        # login sends dud request without REQUEST dict
+        user_logged_in.disconnect(views.set_session_expiry)
         self.client.login(username="editor", password="password")
+        user_logged_in.connect(views.set_session_expiry)
         self.client.get("/")
         last_seen = Member.objects.get(pk=self.editor.pk).last_seen
         self.assertTrue(last_seen)

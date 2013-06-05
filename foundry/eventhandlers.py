@@ -6,6 +6,7 @@ from django.core.files import File
 from social_auth.signals import pre_update
 from social_auth.backends.facebook import FacebookBackend
 from social_auth.backends.twitter import TwitterBackend
+from social_auth.backends.google import GoogleOAuth2Backend
 
 
 def facebook_extra_values(sender, user, response, details, **kwargs):
@@ -57,3 +58,35 @@ def twitter_extra_values(sender, user, response, details, **kwargs):
     return True
 
 pre_update.connect(twitter_extra_values, sender=TwitterBackend)
+
+
+def google_extra_values(sender, user, response, details, **kwargs):
+    # Refer to
+    # https://developers.google.com/accounts/docs/OAuth2Login#authenticationuriparameters
+    # for parameters
+    mapping = {
+        'email': 'email',
+        'given_name': 'first_name',
+        'family_name': 'last_name', 
+        'gender': 'gender',
+    }
+
+    for key, fieldname in mapping.items():
+        value = details.get(key, None)
+
+        # Sanitize some fields
+        if key == 'gender':
+            if value:
+                value = value[0]
+        if value:
+            setattr(user, fieldname, value)
+
+    # Image
+    url = details.get('picture', None)
+    if url:
+        tempfile = urlretrieve(url)
+        user.image.save('%s.jpg' % username, File(open(tempfile[0])))
+   
+    return True
+
+pre_update.connect(google_extra_values, sender=GoogleOAuth2Backend)

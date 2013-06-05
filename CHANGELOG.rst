@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.1.18
+------
+#. Change listing to accept multiple categories. A South data migration is involved and should work without issue, but it is recommended to backup your database.
+#. Generate intentionally simple XML sitemap from the main navigation elements.
+#. Offer Google Oauth2 login.
+
 1.1.17
 ------
 #. Web promo listing now displays pinned items.
