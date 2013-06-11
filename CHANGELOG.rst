@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Protect comment creation against manually crafted POSTs.
+
 1.1.18.1
 --------
 #. Hotfix. Fix bug where page change form did not display rows.
