@@ -5,9 +5,6 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.utils import timezone
 
-from secretballot.middleware import SecretBallotIpUseragentMiddleware as \
-    BaseSecretBallotIpUseragentMiddleware
-
 from foundry.models import Member
 from foundry.utils import get_preference
 
@@ -165,12 +162,3 @@ class LastSeen:
             response.set_cookie('last_seen', '1', max_age=300)
         
         return response
-
-
-class SecretBallotIpUseragentMiddleware(BaseSecretBallotIpUseragentMiddleware):
-    """Workaround until
-    https://github.com/sunlightlabs/django-secretballot/pull/10 is merged."""
-
-    def generate_token(self, request):
-        s = ''.join((request.META['REMOTE_ADDR'], request.META.get('HTTP_USER_AGENT', '')))
-        return md5(s).hexdigest()

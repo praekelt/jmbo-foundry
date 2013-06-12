@@ -4,7 +4,6 @@ Changelog
 next
 ----
 #. Protect comment creation against manually crafted POSTs.
-#. Add replacement middleware for secretballot until https://github.com/sunlightlabs/django-secretballot/pull/10 is merged.
 
 1.1.18.1
 --------
