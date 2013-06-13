@@ -45,8 +45,7 @@ def get_view_choices():
 
 
 def get_preference(klass_name, attr):    
-    #import pdb;pdb.set_trace()
-    key = 'jmbo_foundry' + klass_name + attr
+    key = 'jmbo_foundry' + str(settings.SITE_ID) + klass_name + attr
     empty_marker = '__empty__'
     v = cache.get(key, empty_marker)
     if v == empty_marker:

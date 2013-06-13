@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Remove potential `get_preference` cache key collision.
+
 1.1.18.2
 --------
 #. Protect comment creation against manually crafted POSTs.
