@@ -41,7 +41,6 @@ class TestCase(unittest.TestCase):
         cls.client = Client()
 
         # Post-syncdb steps
-        management.call_command('migrate', interactive=False)
         management.call_command('load_photosizes', interactive=False)
 
         # Editor
