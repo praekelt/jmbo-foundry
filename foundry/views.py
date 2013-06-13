@@ -251,6 +251,15 @@ def post_comment(request, next=None, using=None):
             RequestContext(request, {})
         )
 
+    # If target is a Jmbo object then an extra check is required. No need for a
+    # nice error since this can only fail if someone tries to handcraft a POST.
+    if isinstance(target, ModelBase):
+        can_comment, reason = target.can_comment(request)
+        if not can_comment:
+            raise RuntimeError(
+                "Commenting on target is not allowed (reason = %s)" % reason
+            )
+
     # Otherwise create the comment
     comment = form.get_comment_object()
     comment.ip_address = request.META.get("REMOTE_ADDR", None)
