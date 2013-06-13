@@ -8,13 +8,21 @@ from django.test.client import Client as BaseClient, FakePayload, \
     RequestFactory
 from django.core.urlresolvers import reverse
 from django.contrib.auth.signals import user_logged_in
+import django.contrib.sites.models
+from django.contrib.sites.models import Site
+from django.conf import settings
 
 from preferences import preferences
+from preferences.models import Preferences
 from category.models import Category
 from post.models import Post
 
 from foundry.models import Member, Listing, Page, Row, Column, Tile
 from foundry import views
+from foundry.utils import get_preference
+
+
+DATABASE_READY = False
 
 
 class Client(BaseClient):
@@ -35,8 +43,11 @@ class TestCase(unittest.TestCase):
         self.client = Client()
 
         # Post-syncdb steps
-        management.call_command('migrate', interactive=False)
-        management.call_command('load_photosizes', interactive=False)
+        global DATABASE_READY
+        if not DATABASE_READY:
+            management.call_command('migrate', interactive=False)
+            management.call_command('load_photosizes', interactive=False)
+            DATABASE_READY = True
 
         # Editor
         self.editor, dc = Member.objects.get_or_create(
@@ -45,6 +56,9 @@ class TestCase(unittest.TestCase):
         )
         self.editor.set_password("password")
         self.editor.save()
+
+        # Add an extra site
+        site, dc = Site.objects.get_or_create(name='mobi', domain='mobi.com')
 
         # Categories
         for i in range(1, 5):
@@ -256,3 +270,25 @@ class TestCase(unittest.TestCase):
         self.klaas.save()
         rp.raw_unique_fields = 'email'
         rp.save()
+
+    def test_get_preference(self):
+        # Set about us for each site
+        gp1 = preferences.GeneralPreferences
+        gp1.about_us = 'gp1'
+        gp1.save()
+        settings.SITE_ID = 2
+        django.contrib.sites.models.SITE_CACHE = {}
+        gp2 = preferences.GeneralPreferences
+        gp2.about_us = 'gp2'
+        gp2.save()
+        settings.SITE_ID = 1
+        django.contrib.sites.models.SITE_CACHE = {}
+       
+        # Test that there is no cache key collision
+        about1 = get_preference('GeneralPreferences', 'about_us')
+        settings.SITE_ID = 2
+        django.contrib.sites.models.SITE_CACHE = {}
+        about2 = get_preference('GeneralPreferences', 'about_us')
+        settings.SITE_ID = 1
+        django.contrib.sites.models.SITE_CACHE = {}
+        self.assertNotEqual(about1, about2)
