@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.1.18.2
+--------
 #. Protect comment creation against manually crafted POSTs.
 
 1.1.18.1
