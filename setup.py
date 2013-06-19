@@ -53,6 +53,7 @@ setup(
 	    'jmbo-downloads',
         'jmbo_twitter',
         'django-social-auth==0.7.18',   # 0.7.19 introduces a migration scoping bug
+        'jmbo_sitemap',
     ],
     include_package_data=True,
     tests_require=[

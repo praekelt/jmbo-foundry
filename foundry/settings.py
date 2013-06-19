@@ -150,6 +150,7 @@ INSTALLED_APPS = (
     'ckeditor',
     'contact',
     'poll', # add to paster
+    'jmbo_sitemap',
     'simple_autocomplete', # custom
     'pagination', # custom
     'south', # custom - add to paster
