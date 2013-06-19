@@ -14,7 +14,6 @@ from foundry.models import Page
 from foundry import views, forms
 from foundry.api import ListingResource, LinkResource, NavbarResource, \
     MenuResource, PageResource, BlogPostResource
-from foundry.sitemap import sitemaps
 
 
 admin.autodiscover()
@@ -42,6 +41,7 @@ urlpatterns = patterns('',
     ),
 
     (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/static/images/favicon.ico'}),
+    (r'^', include('jmbo_sitemap.urls')),
     (r'^downloads/', include('downloads.urls')),
     (r'^friends/', include('friends.urls')),
     (r'^gallery/', include('gallery.urls')),
@@ -63,7 +63,6 @@ urlpatterns = patterns('',
     (r'^api/', include(v1_api.urls)),
     (r'^banner/', include('banner.urls')),
     (r'^calendar/', include('jmbo_calendar.urls')),
-    (r'^sitemap\.xml$', 'foundry.sitemap.sitemap', {'sitemaps': sitemaps}),
     url(r'social-auth', include('social_auth.urls')),
 
     (r'^admin/', include('gallery.admin_urls')),
