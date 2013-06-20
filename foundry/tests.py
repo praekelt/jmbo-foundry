@@ -8,13 +8,18 @@ from django.test.client import Client as BaseClient, FakePayload, \
     RequestFactory
 from django.core.urlresolvers import reverse
 from django.contrib.auth.signals import user_logged_in
+import django.contrib.sites.models
+from django.contrib.sites.models import Site
+from django.conf import settings
 
 from preferences import preferences
+from preferences.models import Preferences
 from category.models import Category
 from post.models import Post
 
 from foundry.models import Member, Listing, Page, Row, Column, Tile
 from foundry import views
+from foundry.utils import get_preference
 
 
 class Client(BaseClient):
@@ -30,21 +35,24 @@ class Client(BaseClient):
 
 class TestCase(unittest.TestCase):
 
-    def setUp(self):
-        self.request = RequestFactory()
-        self.client = Client()
+    @classmethod  
+    def setUpClass(cls):
+        cls.request = RequestFactory()
+        cls.client = Client()
 
         # Post-syncdb steps
-        management.call_command('migrate', interactive=False)
         management.call_command('load_photosizes', interactive=False)
 
         # Editor
-        self.editor, dc = Member.objects.get_or_create(
+        cls.editor, dc = Member.objects.get_or_create(
             username='editor',
             email='editor@test.com'
         )
-        self.editor.set_password("password")
-        self.editor.save()
+        cls.editor.set_password("password")
+        cls.editor.save()
+
+        # Add an extra site
+        site, dc = Site.objects.get_or_create(name='mobi', domain='mobi.com')
 
         # Categories
         for i in range(1, 5):
@@ -53,32 +61,32 @@ class TestCase(unittest.TestCase):
             ) 
             cat.sites = [1]
             cat.save()
-            setattr(self, 'cat%s' % i, cat)
+            setattr(cls, 'cat%s' % i, cat)
 
         # Published posts
         for i in range(1, 5):
             post, dc = Post.objects.get_or_create(
                 title='Post %s' % i, content='<b>aaa</b>',
-                owner=self.editor, state='published',
+                owner=cls.editor, state='published',
             )
             # Toggle between categories and primary category
             if i % 2 == 1:
-                post.categories = [getattr(self, 'cat%s' % i)]
+                post.categories = [getattr(cls, 'cat%s' % i)]
             else:
-                post.primary_category = getattr(self, 'cat%s' % i)
+                post.primary_category = getattr(cls, 'cat%s' % i)
             post.sites = [1]
             post.save()
-            setattr(self, 'post%s' % i, post)
+            setattr(cls, 'post%s' % i, post)
 
         # Unpublished posts
         for i in range(5,7):
             post, dc = Post.objects.get_or_create(
                 title='Post %s' % i, content='<b>aaa</b>',
-                owner=self.editor, state='unpublished',
+                owner=cls.editor, state='unpublished',
             )
             post.sites = [1]
             post.save()
-            setattr(self, 'post%s' % i, post)
+            setattr(cls, 'post%s' % i, post)
 
         # Listings
 
@@ -92,7 +100,7 @@ class TestCase(unittest.TestCase):
         listing_pvt.content_type = [content_type]
         listing_pvt.sites = [1]
         listing_pvt.save()
-        setattr(self, listing_pvt.slug, listing_pvt)
+        setattr(cls, listing_pvt.slug, listing_pvt)
 
         # Content points to only published content
         listing_pc, dc = Listing.objects.get_or_create(
@@ -100,10 +108,10 @@ class TestCase(unittest.TestCase):
             slug='published-content',
             count=0, items_per_page=0, style='VerticalThumbnail',
         )
-        listing_pc.content = [self.post1]
+        listing_pc.content = [cls.post1]
         listing_pc.sites = [1]
         listing_pc.save()
-        setattr(self, listing_pc.slug, listing_pc)
+        setattr(cls, listing_pc.slug, listing_pc)
 
         # Content points to unpublished content
         listing_upc, dc = Listing.objects.get_or_create(
@@ -111,10 +119,10 @@ class TestCase(unittest.TestCase):
             slug='unpublished-content',
             count=0, items_per_page=0, style='VerticalThumbnail',
         )
-        listing_upc.content = [self.post1, self.post5]
+        listing_upc.content = [cls.post1, cls.post5]
         listing_upc.sites = [1]
         listing_upc.save()
-        setattr(self, listing_upc.slug, listing_upc)
+        setattr(cls, listing_upc.slug, listing_upc)
 
         # Pinned items
         listing_pinned, dc = Listing.objects.get_or_create(
@@ -122,10 +130,10 @@ class TestCase(unittest.TestCase):
             slug='listing-pinned',
             count=0, items_per_page=0, style='VerticalThumbnail',
         )
-        listing_pinned.pinned = [self.post1]
+        listing_pinned.pinned = [cls.post1]
         listing_pinned.sites = [1]
         listing_pinned.save()
-        setattr(self, listing_pinned.slug, listing_pinned)
+        setattr(cls, listing_pinned.slug, listing_pinned)
 
         # Listing with categories
         listing_categories, dc = Listing.objects.get_or_create(
@@ -133,16 +141,16 @@ class TestCase(unittest.TestCase):
             slug='listing-categories',
             count=0, items_per_page=0, style='VerticalThumbnail',
         )
-        listing_categories.categories = [self.cat1, self.cat2]
+        listing_categories.categories = [cls.cat1, cls.cat2]
         listing_categories.sites = [1]
         listing_categories.save()
-        setattr(self, listing_categories.slug, listing_categories)
+        setattr(cls, listing_categories.slug, listing_categories)
 
         # Page with row, column and tile
         page, dc = Page.objects.get_or_create(title='A page', slug='a-page')
         page.sites = [1]
         page.save()
-        setattr(self, page.slug, page)
+        setattr(cls, page.slug, page)
         row, dc = Row.objects.get_or_create(id=1, page=page)
         column, dc = Column.objects.get_or_create(id=1, row=row)
         tile, dc = Tile.objects.get_or_create(id=1, column=column)
@@ -155,17 +163,15 @@ class TestCase(unittest.TestCase):
         member, dc = Member.objects.get_or_create(username='jannie')
         member.email = 'jannie@aaa.com'
         member.save()
-        setattr(self, 'jannie', member)
+        setattr(cls, 'jannie', member)
         member, dc = Member.objects.get_or_create(username='pietie')
         member.email = 'pietie@aaa.com'
         member.save()
-        setattr(self, 'pietie', member)
+        setattr(cls, 'pietie', member)
         member, dc = Member.objects.get_or_create(username='klaas')
         member.email = ''
         member.save()
-        setattr(self, 'klaas', member)
-
-        setattr(self, '_initialized', 1)
+        setattr(cls, 'klaas', member)
 
 
     def test_listing_pvt(self):
@@ -256,3 +262,25 @@ class TestCase(unittest.TestCase):
         self.klaas.save()
         rp.raw_unique_fields = 'email'
         rp.save()
+
+    def test_get_preference(self):
+        # Set about us for each site
+        gp1 = preferences.GeneralPreferences
+        gp1.about_us = 'gp1'
+        gp1.save()
+        settings.SITE_ID = 2
+        django.contrib.sites.models.SITE_CACHE = {}
+        gp2 = preferences.GeneralPreferences
+        gp2.about_us = 'gp2'
+        gp2.save()
+        settings.SITE_ID = 1
+        django.contrib.sites.models.SITE_CACHE = {}
+       
+        # Test that there is no cache key collision
+        about1 = get_preference('GeneralPreferences', 'about_us')
+        settings.SITE_ID = 2
+        django.contrib.sites.models.SITE_CACHE = {}
+        about2 = get_preference('GeneralPreferences', 'about_us')
+        settings.SITE_ID = 1
+        django.contrib.sites.models.SITE_CACHE = {}
+        self.assertNotEqual(about1, about2)

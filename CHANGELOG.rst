@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.1.19
+------
+#. Remove potential `get_preference` cache key collision.
+#. Port XML sitemap over to `jmbo-sitemap`.
+
 1.1.18.2
 --------
 #. Protect comment creation against manually crafted POSTs.
