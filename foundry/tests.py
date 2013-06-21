@@ -2,7 +2,7 @@ from datetime import datetime
 from time import sleep
 
 from django.core import management
-from django.utils import unittest
+from django.test import TestCase as BaseTestCase
 from django.contrib.contenttypes.models import ContentType
 from django.test.client import Client as BaseClient, FakePayload, \
     RequestFactory
@@ -33,7 +33,7 @@ class Client(BaseClient):
         return result
 
 
-class TestCase(unittest.TestCase):
+class TestCase(BaseTestCase):
 
     @classmethod  
     def setUpClass(cls):
