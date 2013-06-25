@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.1.19.2
+--------
+#. Really do what is stated in 1.1.19.1.
+
 1.1.19.1
 --------
 #. Found a critical error in legacy Jmbo code that is triggered by `jmbo-sitemap` URL pattern. Remove `jmbo-sitemap` URL patterns.
