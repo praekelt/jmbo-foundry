@@ -1,9 +1,10 @@
 Changelog
 =========
 
-next
-----
+1.1.19.3
+--------
 #. Use `django-setuptest` 0.1.4. It handles South migrations correctly.
+#. Use workaround so `jmbo-sitemap` works correctly again.
 
 1.1.19.2
 --------
