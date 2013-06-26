@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
 from preferences import preferences
+from jmbo_sitemap import sitemaps
 from jmbo.urls import v1_api
 # Trivial imports so resource registration works
 import post.urls
@@ -31,6 +32,7 @@ v1_api.register(MenuResource())
 v1_api.register(PageResource())
 v1_api.register(BlogPostResource())
 
+
 urlpatterns = patterns('',        
     # Pre-empt url call for comment post
     url(
@@ -41,7 +43,25 @@ urlpatterns = patterns('',
     ),
 
     (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/static/images/favicon.ico'}),
-    #(r'^', include('jmbo_sitemap.urls')),
+
+    # Unidentified issue with Jmbo URLPatternItem class means 
+    # (r'^', include('jmbo_sitemap.urls')) causes error. Use a workaround.
+    url(
+        r'^sitemap\.xml$', 
+        'jmbo_sitemap.sitemap', 
+        {'sitemaps': sitemaps}, 
+        name='sitemap'
+    ), 
+    url(
+        r'^sitemap/$',
+        'django.views.generic.simple.direct_to_template',
+        {
+            'template': 'jmbo_sitemap/sitemap.html', 
+            'extra_context': {'content': lambda: preferences.HTMLSitemap.content}
+        },
+        name='html-sitemap'
+    ),
+
     (r'^downloads/', include('downloads.urls')),
     (r'^friends/', include('friends.urls')),
     (r'^gallery/', include('gallery.urls')),
