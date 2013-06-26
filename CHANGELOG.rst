@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Use `django-setuptest` 0.1.4. It handles South migrations correctly.
+
 1.1.19.2
 --------
 #. Really do what is stated in 1.1.19.1.
