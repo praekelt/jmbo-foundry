@@ -319,7 +319,7 @@ complex page."""
                 q = q.filter(content_type__in=self.content_type.all())
             elif self.categories.exists():
                 q1 = Q(primary_category__in=self.categories.all())
-                q2 = Q(categories=self.categories.all())
+                q2 = Q(categories__in=self.categories.all())
                 q = q.filter(q1|q2)
             else:
                 q = ModelBase.objects.none()
