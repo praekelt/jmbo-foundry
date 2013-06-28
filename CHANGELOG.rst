@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Cache individual comments on comment list.
+
 1.1.19.3
 --------
 #. Use `django-setuptest` 0.1.4. It handles South migrations correctly.
