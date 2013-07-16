@@ -4,6 +4,7 @@ Changelog
 next
 ----
 #. Provide two more custom listing styles.
+#. Listings can now be filtered by tag.
 
 1.1.19.3
 --------
