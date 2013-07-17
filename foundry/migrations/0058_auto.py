@@ -9,18 +9,17 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         # Adding M2M table for field tags on 'Listing'
-        m2m_table_name = db.shorten_name('foundry_listing_tags')
-        db.create_table(m2m_table_name, (
+        db.create_table('foundry_listing_tags', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('listing', models.ForeignKey(orm['foundry.listing'], null=False)),
             ('tag', models.ForeignKey(orm['category.tag'], null=False))
         ))
-        db.create_unique(m2m_table_name, ['listing_id', 'tag_id'])
+        db.create_unique('foundry_listing_tags', ['listing_id', 'tag_id'])
 
 
     def backwards(self, orm):
         # Removing M2M table for field tags on 'Listing'
-        db.delete_table(db.shorten_name('foundry_listing_tags'))
+        db.delete_table('foundry_listing_tags')
 
 
     models = {
