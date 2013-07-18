@@ -50,7 +50,7 @@ class AttributeWrapper:
         self._attributes = {}
         for k, v in kwargs.items():
             self._attributes[k] = v
-    
+
     def __getattr__(self, key):
         if key in self._attributes:
             return self._attributes[key]
@@ -97,7 +97,7 @@ class Link(models.Model):
         help_text='URL to which this link will redirect.',
         blank=True,
         null=True,
-    )    
+    )
 
     class Meta:
         ordering = ('title', 'subtitle')
@@ -195,7 +195,7 @@ class Navbar(CachingMixin):
         max_length=32,
         db_index=True,
     )
-    
+
     sites = models.ManyToManyField(
         'sites.Site',
         blank=True,
@@ -205,7 +205,7 @@ class Navbar(CachingMixin):
 
     objects = DefaultManager()
     permitted = PermittedManager()
-    
+
     class Meta:
         ordering = ('title', 'subtitle')
 
@@ -252,16 +252,23 @@ class Listing(models.Model):
         null=True,
         related_name='listing_categories'
     )
+    tags = models.ManyToManyField(
+        'category.Tag',
+        help_text="Tags for which to collect items.",
+        blank=True,
+        null=True,
+        related_name='listing_tags'
+    )
     pinned = models.ManyToManyField(
         'jmbo.ModelBase',
-        help_text="""Individual items to pin to the top of the listing. These 
+        help_text="""Individual items to pin to the top of the listing. These
 items are visible across all pages when navigating the listing.""",
         blank=True,
         null=True,
         related_name='listing_pinned',
     )
     count = models.IntegerField(
-        help_text="""Number of items to display (excludes any pinned items). 
+        help_text="""Number of items to display (excludes any pinned items).
 Set to zero to display all items.""",
     )
     style = models.CharField(
@@ -269,14 +276,14 @@ Set to zero to display all items.""",
         max_length=64
     )
     items_per_page = models.PositiveIntegerField(
-        default=0, 
+        default=0,
         help_text="Number of items displayed on a page (excludes any pinned items). Set to zero to disable paging."
     )
     view_modifier = models.CharField(
         'Ordering and filtering',
         max_length=255,
-        help_text="""A set of links to order or filter the listing, 
-eg. 'most liked' or 'most commented'. DefaultViewModifier provided by Jmbo works for 
+        help_text="""A set of links to order or filter the listing,
+eg. 'most liked' or 'most commented'. DefaultViewModifier provided by Jmbo works for
 all listings; however, others may be very specific and not work with the listing.""",
         blank=True,
         null=True,
@@ -285,7 +292,7 @@ all listings; however, others may be very specific and not work with the listing
     display_title_tiled = models.BooleanField(
         "Display title if in a tile",
         default=True,
-        help_text="""Display the title if used as a tile within a more 
+        help_text="""Display the title if used as a tile within a more
 complex page."""
     )
     enable_syndication = models.BooleanField(default=False)
@@ -295,10 +302,10 @@ complex page."""
         null=True,
         help_text='Sites that this listing will appear on.',
     )
-    
+
     objects = DefaultManager()
     permitted = PermittedManager()
-    
+
     class Meta:
         ordering = ('title', 'subtitle')
 
@@ -321,6 +328,8 @@ complex page."""
                 q1 = Q(primary_category__in=self.categories.all())
                 q2 = Q(categories__in=self.categories.all())
                 q = q.filter(q1|q2)
+            elif self.tags.exists():
+                q = q.filter(tags__in=self.tags.all())
             else:
                 q = ModelBase.objects.none()
         q = q.exclude(id__in=self.pinned.all())
@@ -328,10 +337,10 @@ complex page."""
         if request and self.view_modifier:
             mod, attr = self.view_modifier.rsplit('.', 1)
             modifier = getattr(import_module(mod), attr)(request)
-            # Play along with existing Jmbo view modifier code. We use a shim 
+            # Play along with existing Jmbo view modifier code. We use a shim
             # view for that.
             class ViewShim: params = {}
-            view = ViewShim()            
+            view = ViewShim()
             view.params['queryset'] = q
             modifier.modify(view)
             q = view.params['queryset']
@@ -390,7 +399,7 @@ class GeneralPreferences(Preferences):
     __module__ = 'preferences.models'
 
     site_description = models.CharField(
-        max_length=512, 
+        max_length=512,
         null=True,
         blank=True,
         help_text="A sentence describing the site."
@@ -420,24 +429,24 @@ Age Gateway. Matches are wildcard by default, eg. \
 192.168.0 will match 192.168.0.5.'''
     )
     analytics_tags = models.TextField(
-        null=True, 
+        null=True,
         blank=True,
-        help_text="""May contain tags and javascript. Set this even if the 
+        help_text="""May contain tags and javascript. Set this even if the
 preference is for a mobile site."""
     )
     exempted_user_agents = models.TextField(
         "Exempted user agents",
         blank=True,
         default='Googlebot\nTwitterbot\nfacebookexternalhit\n',
-        help_text='''User agents patterns that are exempted from only the Age Gateway. 
-This is useful when wanting to share content that is protected by an age 
+        help_text='''User agents patterns that are exempted from only the Age Gateway.
+This is useful when wanting to share content that is protected by an age
 gateway with eg. Facebook. Matches are wildcard by default, eg. \
 my-user-agent will match my-user-agent-version-two.'''
     )
     analytics_tags = models.TextField(
-        null=True, 
+        null=True,
         blank=True,
-        help_text="""May contain tags and javascript. Set this even if the 
+        help_text="""May contain tags and javascript. Set this even if the
 preference is for a mobile site."""
     )
 
@@ -450,20 +459,20 @@ class RegistrationPreferences(Preferences):
 
     raw_display_fields = models.CharField(
         'Display fields',
-        max_length=256, 
+        max_length=256,
         default='',
         help_text=_('Fields to display on the registration form.')
     )
     raw_required_fields = models.CharField(
         'Required fields',
-        max_length=256, 
+        max_length=256,
         default='',
         blank=True,
         help_text=_('Set fields which are not required by default as required on the registration form.')
     )
     raw_unique_fields = models.CharField(
         'Unique fields',
-        max_length=256, 
+        max_length=256,
         default='',
         blank=True,
         help_text=_('Set fields which must be unique on the registration form.')
@@ -490,7 +499,7 @@ class RegistrationPreferences(Preferences):
     @property
     def unique_fields(self):
         return [s for s in self.raw_unique_fields.split(',') if s]
-    
+
     @property
     def field_order(self):
         return json.loads(self.raw_field_order)
@@ -511,7 +520,7 @@ class RegistrationPreferences(Preferences):
         # duplicate values. For example, if mobile number was not a unique
         # field before but it is now, then there may not be two members with
         # the same mobile number.
-        for fieldname in self.unique_fields:            
+        for fieldname in self.unique_fields:
             values = Member.objects.exclude(**{fieldname: None}).exclude(**{fieldname: ''}).values_list(fieldname, flat=True)
             # set removes duplicates from a list
             if len(values) != len(set(values)):
@@ -527,7 +536,7 @@ class LoginPreferences(Preferences):
 
     raw_login_fields = models.CharField(
         'Login fields',
-        max_length=32, 
+        max_length=32,
         default='username',
         choices=(
             ('username', _('Username only')),
@@ -551,7 +560,7 @@ class PasswordResetPreferences(Preferences):
     __module__ = 'preferences.models'
 
     lookup_field = models.CharField(
-        max_length=32, 
+        max_length=32,
         default='email',
         choices=(
             ('email', _('Email address')),
@@ -573,7 +582,7 @@ class NaughtyWordPreferences(Preferences):
 Weight must be a value from 1 to 10.'''
     )
     threshold = models.PositiveIntegerField(
-        default=5, 
+        default=5,
         help_text="""An item is deemed suspect if its weighted score exceeds \
 this value."""
     )
@@ -613,19 +622,19 @@ class Country(models.Model):
 
 
 class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersonalProfile, AbstractContactProfile, AbstractSubscriptionProfile, AbstractLocationProfile):
-    """Class that models the default user account. Subclassing is superior to profiles since 
-    a site may conceivably have more than one type of user account, but the profile architecture 
+    """Class that models the default user account. Subclassing is superior to profiles since
+    a site may conceivably have more than one type of user account, but the profile architecture
     limits the entire site to a single type of profile."""
 
     country = models.ForeignKey(Country, null=True, blank=True, verbose_name=_('Country'))
     is_profile_complete = models.BooleanField(default=False, editable=False)
     last_seen = models.DateTimeField(null=True, editable=False, db_index=True)
     objects = UserManager()
-   
+
     def __unicode__(self):
         return self.username
 
-    def save(self, *args, **kwargs):        
+    def save(self, *args, **kwargs):
         self.is_profile_complete = True
         required_fields = preferences.RegistrationPreferences.required_fields
         for name in required_fields:
@@ -639,7 +648,7 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersona
             # Set a default avatar
             avatars = DefaultAvatar.objects.all().order_by('?')
             if avatars.exists():
-                self.image = avatars[0].image                
+                self.image = avatars[0].image
 
     @property
     def last_5_comments(self):
@@ -655,7 +664,7 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersona
     def has_notifications(self):
         """Return true if member has notifications"""
         return self.notification_set.all().exists()
-    
+
 
 class DefaultAvatar(ImageModel):
     """A set of avatars users can choose from"""
@@ -679,8 +688,8 @@ class Page(models.Model):
     )
     is_homepage = models.BooleanField(default=False, help_text="Tick if you want this page to be the site's homepage.")
     css = models.TextField(
-        blank=True, 
-        null=True, 
+        blank=True,
+        null=True,
         help_text="""Additional styling to be applied to the page. This is \
 useful when using a page as a campaign."""
     )
@@ -746,7 +755,7 @@ useful when using a page as a campaign."""
     def render_height(self):
         return sum([o.render_height+20 for o in self.rows_admin])
 
-    
+
 class PageView(models.Model):
     """We need this bridging class for fast lookups"""
     page = models.ForeignKey(Page)
@@ -762,13 +771,13 @@ class Row(CachingMixin):
     page = models.ForeignKey(Page)
     index = models.PositiveIntegerField(default=0, editable=False)
     block_name = models.CharField(
-        max_length=32, 
+        max_length=32,
         default='content',
         choices=(
             ('header', _('Header')),
             ('content', _('Content')),
             ('footer', _('Footer')),
-        ),        
+        ),
         help_text="The Django base template block that this row is rendered \
             within. It is only applicable if the page is set to be the home \
             page."
@@ -779,7 +788,7 @@ class Row(CachingMixin):
         help_text="One or more CSS classes that are applied to the row.",
     )
 
-    def save(self, *args, **kwargs):        
+    def save(self, *args, **kwargs):
         if not self.id:
             self.index = self.page.row_set.count()
 
@@ -821,12 +830,12 @@ class Row(CachingMixin):
     @property
     def render_height(self):
         return max([o.render_height+8 for o in self.columns_admin] + [0]) + 44
-  
+
 
 class Column(CachingMixin):
     row = models.ForeignKey(Row)
     index = models.PositiveIntegerField(default=0, editable=False)
-    width = models.PositiveIntegerField(default=8)    
+    width = models.PositiveIntegerField(default=8)
     title = models.CharField(
         max_length=256,
         null=True,
@@ -834,14 +843,14 @@ class Column(CachingMixin):
         help_text='The title is rendered at the top of a column.',
     )
     designation = models.CharField(
-        max_length=32, 
+        max_length=32,
         null=True,
         blank=True,
         default='',
         choices=(
             ('left', _('Left')),
             ('right', _('Right')),
-        ),        
+        ),
         help_text="Applicable to content (green) rows. Used to display columns \
 to the left and right of the content block."
     )
@@ -850,7 +859,7 @@ to the left and right of the content block."
         help_text="One or more CSS classes that are applied to the column.",
     )
 
-    def save(self, *args, **kwargs):        
+    def save(self, *args, **kwargs):
         if not self.id:
             self.index = self.row.column_set.count()
         super(Column, self).save(*args, **kwargs)
@@ -881,7 +890,7 @@ class Tile(CachingMixin):
     target = generic.GenericForeignKey('target_content_type', 'target_object_id')
 
     view_name = models.CharField(
-        max_length=200, 
+        max_length=200,
         null=True,
         blank=True,
         help_text="""A view to be rendered in this tile. This view is \
@@ -900,7 +909,7 @@ it works - you cannot break anything.""",
         help_text='A python expression. Variable request is in scope.'
     )
 
-    def save(self, *args, **kwargs):        
+    def save(self, *args, **kwargs):
         if not self.id:
             self.index = self.column.tile_set.count()
         super(Tile, self).save(*args, **kwargs)

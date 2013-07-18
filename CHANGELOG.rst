@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.1.20
+------
+#. Provide two more custom listing styles.
+#. Listings can now be filtered by tag.
+
 1.1.19.3
 --------
 #. Use `django-setuptest` 0.1.4. It handles South migrations correctly.
