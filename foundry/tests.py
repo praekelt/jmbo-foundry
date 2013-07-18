@@ -16,6 +16,7 @@ from preferences import preferences
 from preferences.models import Preferences
 from category.models import Category, Tag
 from post.models import Post
+from gallery.models import Gallery
 
 from foundry.models import Member, Listing, Page, Row, Column, Tile
 from foundry import views
@@ -98,6 +99,21 @@ class TestCase(BaseTestCase):
             post.save()
             setattr(cls, 'post%s' % i, post)
 
+        # Published galleries
+        for i in range(1, 5):
+            gallery, dc = Gallery.objects.get_or_create(
+                title='Gallery %s' % i, owner=cls.editor, state='published',
+            )
+            # Toggle between categories and primary category
+            if i % 2 == 1:
+                gallery.categories = [getattr(cls, 'cat%s' % i)]
+                gallery.tags = [getattr(cls, 'tag%s' % i)]
+            else:
+                gallery.primary_category = getattr(cls, 'cat%s' % i)
+            gallery.sites = [1]
+            gallery.save()
+            setattr(cls, 'gallery%s' % i, Gallery)
+
         # Listings
 
         # Content-type
@@ -167,6 +183,20 @@ class TestCase(BaseTestCase):
         listing_tags.save()
         setattr(cls, listing_tags.slug, listing_tags)
 
+        # Listing with content_type, categories and tags
+        content_type = ContentType.objects.get(app_label='post', model='post')
+        listing_all, dc = Listing.objects.get_or_create(
+            title='Listing all filters',
+            slug='listing-all-filters',
+            count=0, items_per_page=0, style='VerticalThumbnail',
+        )
+        listing_all.content_type = [content_type]
+        listing_all.categories = [cls.cat1, cls.cat2]
+        listing_all.tags = [cls.tag1, cls.tag2]
+        listing_all.sites = [1]
+        listing_all.save()
+        setattr(cls, listing_all.slug, listing_all)
+
         # Page with row, column and tile
         page, dc = Page.objects.get_or_create(title='A page', slug='a-page')
         page.sites = [1]
@@ -223,6 +253,13 @@ class TestCase(BaseTestCase):
         listing = getattr(self, 'listing-tags')
         self.failUnless(self.post1.modelbase_obj in listing.queryset().all())
         self.failIf(self.post2.modelbase_obj in listing.queryset().all())
+
+    def test_listing_all_filters(self):
+        listing = getattr(self, 'listing-all-filters')
+        self.failUnless(self.post1.modelbase_obj in listing.queryset().all())
+        self.failIf(self.post2.modelbase_obj in listing.queryset().all())
+        self.failIf(self.post3.modelbase_obj in listing.queryset().all())
+        self.failIf(self.gallery1.modelbase_obj in listing.queryset().all())
 
     def test_pages(self):
         # Login, password reset

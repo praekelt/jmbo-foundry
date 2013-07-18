@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Content type, categories and tags fields on listings are now ANDed when evaluating the listing.
+
 1.1.20
 ------
 #. Provide two more custom listing styles.
