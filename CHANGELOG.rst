@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.1.20
+------
 #. Provide two more custom listing styles.
 #. Listings can now be filtered by tag.
 
