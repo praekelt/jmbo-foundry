@@ -113,8 +113,8 @@ Note that both fields are case-sensitive."
         return self.cleaned_data
 
     as_div = as_div
-    
-    
+
+
 class JoinForm(UserCreationForm):
     """Custom join form"""
     accept_terms = forms.BooleanField(required=True, label="", widget=TermsCheckboxInput)
@@ -174,9 +174,9 @@ Please supply a different %(pretty_name)s.") % {'pretty_name': pretty_name}
         self.show_age_gateway = kwargs.pop('show_age_gateway')
         self.age_gateway_passed = kwargs.pop('age_gateway_passed')
         super(JoinForm, self).__init__(*args, **kwargs)
-       
+
         # Set date widget for date field
-        for name, field in self.fields.items():            
+        for name, field in self.fields.items():
             if isinstance(field, forms.fields.DateField):
                 field.widget = OldSchoolDateWidget()
 
@@ -190,14 +190,14 @@ Please supply a different %(pretty_name)s.") % {'pretty_name': pretty_name}
             # if the user is re-entering their dob, it needs to be re-validated using country
             elif 'dob' in display_fields and 'country' not in display_fields:
                 display_fields.append('country')
-                    
+
         for name, field in self.fields.items():
             # Skip over protected fields
             if name in ('id', 'username', 'password1', 'password2', 'accept_terms', 'remember_me'):
                 continue
             if name not in display_fields:
                 del self.fields[name]
-            
+
         # Set some fields required
         required_fields = preferences.RegistrationPreferences.required_fields
         if self.show_age_gateway and 'dob' in display_fields:
@@ -297,9 +297,9 @@ class EditProfileForm(forms.ModelForm):
     class Meta:
         model = models.Member
         widgets = {'dob': OldSchoolDateWidget}
-        
+
     def __init__(self, *args, **kwargs):
-        self.base_fields['image'].widget = PrettyFileInput(current=kwargs['instance'].get_thumbnail_LAYER_url())        
+        self.base_fields['image'].widget = PrettyFileInput(current=kwargs['instance'].get_thumbnail_LAYER_url())
         super(EditProfileForm, self).__init__(*args, **kwargs)
 
         # todo: need a preference member_edit_fields
@@ -323,7 +323,7 @@ class EditProfileForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(EditProfileForm, self).clean()
-        
+
         # Validate required fields
         required_fields = preferences.RegistrationPreferences.required_fields
         for name in required_fields:
@@ -375,7 +375,7 @@ class PasswordResetForm(BasePasswordResetForm):
             del self.fields['mobile_number']
         else:
             del self.fields['email']
-        
+
     def save(self, **kwargs):
         """Override entire method. Due to the layout of the original method we
         cannot do a super() call."""
@@ -407,12 +407,12 @@ class PasswordResetForm(BasePasswordResetForm):
             content = t.render(Context(c))
             if self.fields.has_key('email'):
                 send_mail(
-                    _("Password reset on %s") % site_name, 
+                    _("Password reset on %s") % site_name,
                     content, from_email, [user.email]
                 )
             else:
                 sms = AmbientSMS(
-                    settings.FOUNDRY['sms_gateway_api_key'], 
+                    settings.FOUNDRY['sms_gateway_api_key'],
                     settings.FOUNDRY['sms_gateway_password']
                 )
                 try:
@@ -450,10 +450,10 @@ class AgeGatewayForm(forms.Form):
     def save(self, request):
         """Set cookie"""
         expires = None
-        if self.cleaned_data['remember_me']:            
+        if self.cleaned_data['remember_me']:
             now = timezone.now()
             expires = now.replace(year=now.year+10)
-        response = HttpResponseRedirect('/')        
+        response = HttpResponseRedirect('/')
         response.set_cookie('age_gateway_passed', value=1, expires=expires)
         response.set_cookie('age_gateway_values', value='%s-%s' % (self.cleaned_data['country'].country_code,
             self.cleaned_data['date_of_birth'].strftime('%d-%m-%Y')), expires=expires)
@@ -479,7 +479,7 @@ class CommentForm(BaseCommentForm):
         self.fields['url'].widget = forms.widgets.HiddenInput()
 
         # Set to anonymous values since we do not have either the request or a
-        # user object to use at this stage. We don't care about these values 
+        # user object to use at this stage. We don't care about these values
         # if user is set on a comment object.
         self.fields['name'].initial = 'Anonymous'
         self.fields['email'].initial = 'anonymous@jmbo.org'
@@ -489,6 +489,16 @@ class CommentForm(BaseCommentForm):
 
         # Widget override not working in Meta class for some reason
         self.fields['comment'].widget = forms.widgets.TextInput()
+
+    def clean_comment(self):
+        comment = super(CommentForm, self).clean_comment()
+
+        # Strip to prevent whitespace comments
+        comment = comment.strip()
+        if not comment:
+            raise forms.ValidationError(_("This field is required."))
+
+        return comment
 
     def get_comment_model(self):
         return models.FoundryComment
@@ -519,7 +529,7 @@ class CreateBlogPostForm(forms.ModelForm):
             raise forms.ValidationError(_("The content contains scripting. Scripts are not allowed."))
         return content
 
-    def save(self, commit=True):    
+    def save(self, commit=True):
         instance = super(CreateBlogPostForm, self).save(commit=commit)
         # Set owner, publish to current site
         instance.owner = self.user
@@ -527,7 +537,7 @@ class CreateBlogPostForm(forms.ModelForm):
         instance.state = 'published'
         if commit:
             instance.save()
-        return instance            
+        return instance
 
     as_div = as_div
 

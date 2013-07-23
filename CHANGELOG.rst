@@ -4,6 +4,7 @@ Changelog
 next
 ----
 #. Content type, categories and tags fields on listings are now ANDed when evaluating the listing.
+#. Do not allow comments containing only spaces.
 
 1.1.20
 ------
