@@ -197,18 +197,6 @@ class ListingAdminForm(forms.ModelForm):
         field = self.fields['content']
         field._set_queryset(field._queryset.order_by('title'))
 
-    def clean(self):
-        cleaned_data = super(ListingAdminForm, self).clean()
-        n = 0
-        for fieldname in ('content_type', 'content', 'categories', 'tags'):
-            if cleaned_data[fieldname]:
-                if n:
-                    raise forms.ValidationError(
-                        "You may set at most one of content type, content, categories or tags."
-                    )
-                n += 1
-        return cleaned_data
-
 
 class ListingAdmin(admin.ModelAdmin):
     form = ListingAdminForm

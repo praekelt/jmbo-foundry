@@ -241,7 +241,8 @@ class Listing(models.Model):
     )
     content = models.ManyToManyField(
         'jmbo.ModelBase',
-        help_text="Individual items to display.",
+        help_text="""Individual items to display. Setting this will ignore \
+any setting for <i>Content Type</i>, <i>Categories</i> and <i>Tags</i>.""",
         blank=True,
         null=True,
     )
@@ -322,15 +323,19 @@ complex page."""
         q = ModelBase.permitted.filter(id__in=self.content.all())
         if not q.exists():
             q = ModelBase.permitted.all()
+            one_match = False
             if self.content_type.exists():
                 q = q.filter(content_type__in=self.content_type.all())
-            elif self.categories.exists():
+                one_match = True
+            if self.categories.exists():
                 q1 = Q(primary_category__in=self.categories.all())
                 q2 = Q(categories__in=self.categories.all())
                 q = q.filter(q1|q2)
-            elif self.tags.exists():
+                one_match = True
+            if self.tags.exists():
                 q = q.filter(tags__in=self.tags.all())
-            else:
+                one_match = True
+            if not one_match:
                 q = ModelBase.objects.none()
         q = q.exclude(id__in=self.pinned.all())
 
