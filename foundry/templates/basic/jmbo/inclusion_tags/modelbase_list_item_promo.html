@@ -1,3 +1,5 @@
 {% load jmbo_template_tags foundry_tags %}
 
-<a href="{{ object.get_absolute_url }}"><img src="{{ object.get_modelbase_list_item_promo_url }}" alt="{{ object.title }}" alt="{{ object.title }}" /></a>
+{% jmbocache 3600 'modelbase-list-item-promo-inclusion' object.id object.modified %}
+    <a href="{{ object.get_absolute_url }}"><img src="{{ object.get_modelbase_list_item_promo_url }}" alt="{{ object.title }}" alt="{{ object.title }}" /></a>
+{% endjmbocache %}

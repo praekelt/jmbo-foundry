@@ -199,3 +199,10 @@ $(document).ready(function(){
 });
 
 }
+
+function hedley(){
+    //var iframe = document.getElementById('google_ads_iframe_/7938/Jacaranda_FM-Web/Galleries/Video_0').contentWindow;
+    //alert(iframe.document.body.innerText);
+    var el = $('iframe:first');
+    alert(el.attr('src'));
+}
