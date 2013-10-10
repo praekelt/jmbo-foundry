@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.1.23
+------
+#. Fix template error in `modelbase_list_item_ipod.html`.
+
 1.1.22
 ------
 #. Fix bug where it was possible for an event handler to change the default avatar during user registration.

@@ -15,6 +15,6 @@ Layout similar to a classic iPod.
         {% if object.categories.all.exists %}<span class="category">{{ object.categories.all|join_titles }}:</span>{% endif %}
         <a href="{{ object.get_absolute_url }}">{{ object.title }}</a>
     </div>
-{% endjmbocache $}
+{% endjmbocache %}
 
 {% include "includes/list_meta.html" %}
