@@ -1,5 +1,6 @@
 from datetime import datetime
 from time import sleep
+import inspect
 
 from django.core import management
 from django.test import TestCase as BaseTestCase
@@ -21,6 +22,7 @@ from gallery.models import Gallery
 from foundry.models import Member, Listing, Page, Row, Column, Tile
 from foundry import views
 from foundry.utils import get_preference
+from foundry.templatetags import listing_styles
 
 
 class Client(BaseClient):
@@ -197,6 +199,20 @@ class TestCase(BaseTestCase):
         listing_all.save()
         setattr(cls, listing_all.slug, listing_all)
 
+        # Listings for each style
+        content_type = ContentType.objects.get(app_label='post', model='post')
+        for style, dc in inspect.getmembers(listing_styles, inspect.isclass):
+            if style != 'AbstractBaseStyle':
+                listing, dc = Listing.objects.get_or_create(
+                    title='Listing %s' % style,
+                    slug='listing-%s' % style.lower(),
+                    count=0, items_per_page=0, style=style,
+                )
+                listing.pinned = [cls.post1]
+                listing.sites = [1]
+                listing.save()
+                setattr(cls, listing.slug, listing)
+
         # Page with row, column and tile
         page, dc = Page.objects.get_or_create(title='A page', slug='a-page')
         page.sites = [1]
@@ -260,6 +276,13 @@ class TestCase(BaseTestCase):
         self.failIf(self.post2.modelbase_obj in listing.queryset().all())
         self.failIf(self.post3.modelbase_obj in listing.queryset().all())
         self.failIf(self.gallery1.modelbase_obj in listing.queryset().all())
+
+    def test_listing_styles(self):
+        """Confirm the listings of each style render"""
+        for style, dc in inspect.getmembers(listing_styles, inspect.isclass):
+            if style != 'AbstractBaseStyle':
+                response = self.client.get('/listing/listing-%s/' % style.lower())
+                self.assertEqual(response.status_code, 200)
 
     def test_pages(self):
         # Login, password reset

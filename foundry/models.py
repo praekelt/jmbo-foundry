@@ -653,7 +653,13 @@ class Member(User, AbstractAvatarProfile, AbstractSocialProfile, AbstractPersona
             # Set a default avatar
             avatars = DefaultAvatar.objects.all().order_by('?')
             if avatars.exists():
-                self.image = avatars[0].image
+                # Note you must use the name attribute else the assignment is
+                # by reference. Any event handler that does self.image.save
+                # will then change the default avatar.
+                self.image.name = avatars[0].image.name
+                # Recursion prevented because predicate is changed
+                self.save()
+
 
     @property
     def last_5_comments(self):

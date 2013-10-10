@@ -13,7 +13,7 @@ def facebook_extra_values(sender, user, response, details, **kwargs):
     mapping = {
         'email': 'email',
         'first_name': 'first_name',
-        'last_name': 'last_name', 
+        'last_name': 'last_name',
         'bio': 'about_me',
         'gender': 'gender',
         'birthday': 'dob'
@@ -48,7 +48,7 @@ pre_update.connect(facebook_extra_values, sender=FacebookBackend)
 
 
 def twitter_extra_values(sender, user, response, details, **kwargs):
-    
+
     # Image
     username = details['username']
     url = 'https://api.twitter.com/1/users/profile_image/%s?size=bigger' % username
@@ -67,7 +67,7 @@ def google_extra_values(sender, user, response, details, **kwargs):
     mapping = {
         'email': 'email',
         'given_name': 'first_name',
-        'family_name': 'last_name', 
+        'family_name': 'last_name',
         'gender': 'gender',
     }
 
@@ -86,7 +86,7 @@ def google_extra_values(sender, user, response, details, **kwargs):
     if url:
         tempfile = urlretrieve(url)
         user.image.save('%s.jpg' % username, File(open(tempfile[0])))
-   
+
     return True
 
 pre_update.connect(google_extra_values, sender=GoogleOAuth2Backend)

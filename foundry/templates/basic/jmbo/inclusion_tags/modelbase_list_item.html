@@ -1,8 +1,10 @@
 {% load jmbo_template_tags foundry_tags i18n %}
 
-<div class="title">
-    {% if object.categories.all.exists %}<span class="category">{{ object.categories.all|join_titles }}:</span>{% endif %}
-    <a href="{{ object.get_absolute_url }}">{{ object.title }}</a>
-</div>
+{% jmbocache 3600 'modelbase-list-item-inclusion' object.id object.modified %}
+    <div class="title">
+        {% if object.categories.all.exists %}<span class="category">{{ object.categories.all|join_titles }}:</span>{% endif %}
+        <a href="{{ object.get_absolute_url }}">{{ object.title }}</a>
+    </div>
+{% endjmbocache %}
 
 {% include "includes/list_meta.html" %}

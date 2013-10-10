@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.1.22
+------
+#. Fix bug where it was possible for an event handler to change the default avatar during user registration.
+#. Cache individual listing item templates.
+
 1.1.21
 ------
 #. Content type, categories and tags fields on listings are now ANDed when evaluating the listing.
