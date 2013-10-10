@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.1.22
+------
 #. Fix bug where it was possible for an event handler to change the default avatar during user registration.
 #. Cache individual listing item templates.
 
