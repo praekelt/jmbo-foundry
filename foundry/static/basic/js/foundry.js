@@ -48,7 +48,7 @@ window.onload = function() {
     document.onmousemove = function(event){
         last_activity_time = (new Date).getTime();
     };
-        
+
     // Load new comments and chats
     function load_new_comments(){
         if ((new Date).getTime() - last_activity_time < 30000) {
@@ -68,7 +68,7 @@ window.onload = function() {
         window.setTimeout(load_new_comments, 15000);
     }
     window.setTimeout(load_new_comments, 15000);
-    
+
 };
 
 if (typeof $ != 'undefined')
@@ -80,7 +80,7 @@ $(document).ready(function(){
     {
 
     // Ajaxify paging and view modifier navigation for (1) standalone listing (2) listing in a tile.
-    $('div.foundry-listing div.pagination a, div.foundry-listing div.jmbo-view-modifier div.item a').live('click', function(e){
+    $(document).on('click', 'div.foundry-listing div.pagination a, div.foundry-listing div.jmbo-view-modifier div.item a', function(e){
         e.preventDefault();
         // todo: need a better way to identify target. Ad-hoc listing may need a name.
         var url_provider = $(this).parents('div.foundry-page-tile:first');
@@ -101,14 +101,14 @@ $(document).ready(function(){
         url = url.split('?')[0];
         url = url + $(this).attr('href');
         $.get(
-            url, 
-            {}, 
+            url,
+            {},
             function(data){
                 // Markup contains fluff. We want only the content.
                 var el = $('<div>' + data + '</div>');
                 // If the listing can be identified then use that, else use
                 // first available one.
-                if (listing_dom_id) 
+                if (listing_dom_id)
                     var content = $('#' + listing_dom_id, el);
                 else
                     var content = $('div#content div.foundry-listing:first', el);
@@ -130,7 +130,7 @@ $(document).ready(function(){
             data: data,
             async: false,
             type: 'POST',
-            cache: false,                    
+            cache: false,
             success: function(data){
                 if (data.indexOf('{') == 0)
                 {
@@ -142,7 +142,7 @@ $(document).ready(function(){
                     if (data.search('id="content"') != -1)
                     {
                         // Markup that contains fluff. We want only the content.
-                        var el = $('<div>' + data + '</div>');                   
+                        var el = $('<div>' + data + '</div>');
                         var content = $('div#content', el);
                         target.html(content.html());
                     }
@@ -154,21 +154,21 @@ $(document).ready(function(){
 
     // Intercept tile form submit for contained items (eg. a listing). The heading must be preserved.
     // An example is a tile containing a listing of polls.
-    $('div.foundry-enable-ajax .foundry-container form').live('submit', function(event){
+    $(document).on('submit', 'div.foundry-enable-ajax .foundry-container form', function(event){
         event.stopImmediatePropagation();
         var target = $(this).parents('div.item:first');
         _submit_intercept_common(this, event, target);
     });
 
-    // Intercept tile form submit for views with a form. 
+    // Intercept tile form submit for views with a form.
     // An example is a normal standalone form like site_contact.
-    $('div.foundry-enable-ajax form').live('submit', function(event){
+    $(document).on('submit', 'div.foundry-enable-ajax form', function(event){
         var target = $(this).parents('div.foundry-enable-ajax:first');
         _submit_intercept_common(this, event, target);
     });
 
     // Post a comment
-    $('form.comment-form').live('submit', function(event){
+    $(document).on('submit', 'form.comment-form', function(event){
         event.preventDefault();
         var form = $(this);
         var url = $(this).attr('action');
@@ -178,7 +178,7 @@ $(document).ready(function(){
             data: data,
             async: false,
             type: 'POST',
-            cache: false,                    
+            cache: false,
             success: function(data){
                 if (data.indexOf('{') == 0)
                 {
@@ -198,11 +198,4 @@ $(document).ready(function(){
 
 });
 
-}
-
-function hedley(){
-    //var iframe = document.getElementById('google_ads_iframe_/7938/Jacaranda_FM-Web/Galleries/Video_0').contentWindow;
-    //alert(iframe.document.body.innerText);
-    var el = $('iframe:first');
-    alert(el.attr('src'));
 }

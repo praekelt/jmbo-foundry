@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Move to jQuery 1.10.2 as recommended version. If you have customized and static Javascript resources you will have to update them manually.
+
 1.1.23
 ------
 #. Fix template error in `modelbase_list_item_ipod.html`.
