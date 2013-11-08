@@ -28,7 +28,7 @@ setup(
         'django-publisher',
         'django-category',
         'jmbo-post>=0.1.2',
-        'django-likes',
+        'django-likes>=0.1',
         'django-gizmo',
         'django-object-tools>=0.0.5',
         'django-registration',
