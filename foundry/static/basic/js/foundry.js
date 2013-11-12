@@ -118,6 +118,26 @@ $(document).ready(function(){
         );
     });
 
+    // Ajaxify comment pagination.
+    $(document).on('click', 'div.foundry-comments-list div.pagination a', function(e){
+        e.preventDefault();
+        target = $(this).parents('div.foundry-comments-list:first');
+        url = $(location).attr('href');
+        // Strip params. Already present in href.
+        url = url.split('?')[0];
+        url = url + $(this).attr('href');
+        $.get(
+            url,
+            {},
+            function(data){
+                // Markup contains fluff. We want only the content.
+                var el = $('<div>' + data + '</div>');
+                var content = $('div#content div.foundry-comments-list:first', el);
+                target.html(content.html());
+            }
+        );
+    });
+
     var _submit_intercept_common = function(sender, event, target){
         // Common functionality
         event.preventDefault();
