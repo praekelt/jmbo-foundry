@@ -123,13 +123,13 @@ ImageModel.add_accessor_methods = add_accessor_methods
 
 
 class LayerAwareSizes(dict):
-    
+
     def get(self, key):
         result = None
 
         # Handle legacy LAYER marker
         if key.endswith('_LAYER'):
-            key = key.replace('_LAYER', '') 
+            key = key.replace('_LAYER', '')
 
         # Iterate over layers
         for layer in settings.FOUNDRY['layers']:
@@ -211,7 +211,7 @@ def BlockNode_render(self, context):
 #BlockNode.render = BlockNode_render
 
 
-"""Django wraps the already hidden CSRF token input in an invisible container. This causes problems on low-end handsets. 
+"""Django wraps the already hidden CSRF token input in an invisible container. This causes problems on low-end handsets.
 https://code.djangoproject.com/ticket/18484"""
 from django.template.defaulttags import CsrfTokenNode
 from django.utils.safestring import mark_safe
@@ -248,5 +248,5 @@ def Site_title(self):
     # Strip away (smart), (web) etc
     return self.name.split('(')[0]
 
-Site.__unicode__ = Site__unicode__    
+Site.__unicode__ = Site__unicode__
 Site.title = Site_title

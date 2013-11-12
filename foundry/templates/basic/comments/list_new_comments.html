@@ -3,7 +3,7 @@
 {% for comment in comment_list %}
     <div id="c{{ comment.id }}" class="item">
         {% if comment.creator %}
-        <div class="image">                        
+        <div class="image">
             <a href="{% url user-detail comment.creator.username %}">
             {% if comment.creator.image %}
                 <img src="{{ comment.creator.get_thumbnail_LAYER_url }}" />
@@ -20,9 +20,9 @@
             <!-- todo: Need can comment test -->
             <div class="reply">
                 {% with request.POST.next|default:request.META.PATH_INFO as next %}
-                    <a href="{% url comment-reply-form %}?content_type_id={{ comment.content_type_id }}&oid={{ comment.object_pk }}&next={{ next }}&paginate_by={{ paginate_by }}" 
-                       class="comment-reply" 
-                       comment_id="{{ comment.id }}" 
+                    <a href="{% url comment-reply-form %}?content_type_id={{ comment.content_type_id }}&oid={{ comment.object_pk }}&next={{ next }}&paginate_by={{ paginate_by }}"
+                       class="comment-reply"
+                       comment_id="{{ comment.id }}"
                        creator="{{ comment.creator.username }}">{% trans "Reply" %}
                     </a>
                 {% endwith %}
@@ -49,9 +49,9 @@
     </div>
 {% endfor %}
 
-<div 
-    class="comment-list-placeholder" 
-    content_type_id="{{ object.content_type_id }}" 
+<div
+    class="comment-list-placeholder"
+    content_type_id="{{ object.content_type_id }}"
     oid="{{ object.id }}"
     last_comment_id="{{ foundry_last_comment_id }}">
 </div>

@@ -78,17 +78,17 @@ def join(request):
                 pass
 
     if request.method == 'POST':
-        form = JoinForm(request.POST, request.FILES, show_age_gateway=show_age_gateway, age_gateway_passed=age_gateway_passed, initial=initial) 
+        form = JoinForm(request.POST, request.FILES, show_age_gateway=show_age_gateway, age_gateway_passed=age_gateway_passed, initial=initial)
         if form.is_valid():
             member = form.save()
             member = authenticate(username=member.username, password=form.cleaned_data['password1'])
-            login(request, member)            
+            login(request, member)
             response = HttpResponseRedirect(reverse('home'))
             msg = _("You have successfully signed up to the site.")
             messages.success(request, msg, fail_silently=True)
             return response
     else:
-        form = JoinForm(show_age_gateway=show_age_gateway, age_gateway_passed=age_gateway_passed, initial=initial) 
+        form = JoinForm(show_age_gateway=show_age_gateway, age_gateway_passed=age_gateway_passed, initial=initial)
 
     extra = dict(form=form)
     return render_to_response('foundry/join.html', extra, context_instance=RequestContext(request))
@@ -103,12 +103,12 @@ def join_finish(request):
     )
 
     if request.method == 'POST':
-        form = JoinFinishForm(request.POST, request.FILES, instance=request.user) 
+        form = JoinFinishForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
-            member = form.save()            
+            member = form.save()
             return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
     else:
-        form = JoinFinishForm(instance=request.user) 
+        form = JoinFinishForm(instance=request.user)
 
     extra = dict(form=form)
     return render_to_response('foundry/join_finish.html', extra, context_instance=RequestContext(request))
@@ -117,12 +117,12 @@ def join_finish(request):
 def age_gateway(request):
     """Surface age gateway form"""
     if request.method == 'POST':
-        form = AgeGatewayForm(request.POST) 
+        form = AgeGatewayForm(request.POST)
         if form.is_valid():
             # Method save returns a response
             return form.save(request)
     else:
-        form = AgeGatewayForm() 
+        form = AgeGatewayForm()
 
     extra = dict(form=form)
     return render_to_response('foundry/age_gateway.html', extra, context_instance=RequestContext(request))
@@ -152,14 +152,14 @@ def page_detail(request, slug):
 
 def search(request):
     if request.method == 'POST':
-        form = SearchForm(request.POST) 
+        form = SearchForm(request.POST)
         if form.is_valid():
             param = urllib.quote(form.cleaned_data['search_term'])
             return HttpResponseRedirect(
                 reverse('search-results') + '?search_term=' + param
             )
     else:
-        form = SearchForm() 
+        form = SearchForm()
 
     extra = dict(form=form)
     return render_to_response('foundry/search.html', extra, context_instance=RequestContext(request))
@@ -176,7 +176,7 @@ def search_results(request):
         queryset = ModelBase.objects.none()
     extra = dict(
         items_per_page=10,
-        search_term=search_term, 
+        search_term=search_term,
         queryset=queryset
     )
     return render_to_response('foundry/search_results.html', extra, context_instance=RequestContext(request))
@@ -185,7 +185,7 @@ def search_results(request):
 @require_POST
 def post_comment(request, next=None, using=None):
     """
-    Adapted from django.contrib.comments. Preview functionality removed and 
+    Adapted from django.contrib.comments. Preview functionality removed and
     made ajax aware.
     """
     # Fill out some initial data fields from an authenticated user, if present
@@ -298,7 +298,7 @@ def post_comment(request, next=None, using=None):
         html = t.render(context)
         di = {'status': 'success', 'html': html, 'obj_id': comment.id}
         return HttpResponse(simplejson.dumps(di))
-        
+
 
 def comment_reply_form(request):
     # This view is used when the browser has no javascript support
@@ -325,9 +325,9 @@ def report_comment(request, comment_id):
             c = dict(comments=[comment], site_domain=site.domain)
             content = template.render(Context(c))
             msg = EmailMultiAlternatives(
-                "Flagged comment on %s" % site.name, 
-                strip_tags(content), 
-                settings.DEFAULT_FROM_EMAIL, 
+                "Flagged comment on %s" % site.name,
+                strip_tags(content),
+                settings.DEFAULT_FROM_EMAIL,
                 preferences.NaughtyWordPreferences.email_recipients.split()
             )
             msg.attach_alternative(content, 'text/html')
@@ -339,13 +339,13 @@ def report_comment(request, comment_id):
     # a comment for each comment.
     response.set_cookie(
         'comment_report_%s' % comment.id,
-        value=1, 
+        value=1,
         max_age=7*86400
     )
     return response
 
 
-def chatroom_detail(request, slug):    
+def chatroom_detail(request, slug):
     chatroom = get_object_or_404(ChatRoom, slug=slug)
     extra = {}
     extra['object'] = chatroom
@@ -355,14 +355,14 @@ def chatroom_detail(request, slug):
 @login_required
 def create_blogpost(request):
     if request.method == 'POST':
-        form = CreateBlogPostForm(request.POST, user=request.user, site=get_current_site(request)) 
+        form = CreateBlogPostForm(request.POST, user=request.user, site=get_current_site(request))
         if form.is_valid():
             instance = form.save()
             msg = _("The blog post %s has been saved") % instance.title
             messages.success(request, msg, fail_silently=True)
             return HttpResponseRedirect('/')
     else:
-        form = CreateBlogPostForm(user=request.user, site=get_current_site(request)) 
+        form = CreateBlogPostForm(user=request.user, site=get_current_site(request))
 
     extra = dict(form=form)
     return render_to_response('foundry/create_blogpost.html', extra, context_instance=RequestContext(request))
@@ -426,7 +426,7 @@ def member_detail(request, username):
 
 
 class EditProfile(UpdateView):
-    
+
     def get_object(self):
         member = Member.objects.get(id=self.request.user.id)
         return member
@@ -436,9 +436,9 @@ class EditProfile(UpdateView):
 
 
 # Caching duration matches the refresh rate
-@cache_page(30) 
+@cache_page(30)
 def fetch_new_comments_ajax(request, content_type_id, oid, last_comment_id):
-    # xxx: not happy with this function. The idea was to re-use comment fetch 
+    # xxx: not happy with this function. The idea was to re-use comment fetch
     # logic but it feels slow.
     # Re-use template tag to fetch results
     context = RequestContext(request)
@@ -453,7 +453,7 @@ def fetch_new_comments_ajax(request, content_type_id, oid, last_comment_id):
         return HttpResponse('')
 
     # Restrict object list to only newer comments
-    # Stupid stupid django comments makes comment_list a list, so I can't 
+    # Stupid stupid django comments makes comment_list a list, so I can't
     # filter it through the API.
     #context['comment_list'] = context['comment_list'].filter(id__gt=int(last_comment_id))
     li = []
@@ -474,11 +474,11 @@ def server_error(request, template_name='500.html'):
 # Views for testing
 def test_plain_response(request):
     if request.method == 'POST':
-        form = TestForm(request.POST) 
+        form = TestForm(request.POST)
         if form.is_valid():
             return HttpResponse('Success')
     else:
-        form = TestForm() 
+        form = TestForm()
 
     extra = dict(title='Plain', form=form)
     return render_to_response('foundry/test_form.html', extra, context_instance=RequestContext(request))
@@ -486,11 +486,11 @@ def test_plain_response(request):
 
 def test_redirect(request):
     if request.method == 'POST':
-        form = TestForm(request.POST) 
+        form = TestForm(request.POST)
         if form.is_valid():
             return HttpResponseRedirect('/lorem-ipsum')
     else:
-        form = TestForm() 
+        form = TestForm()
 
     extra = dict(title='Redirect', form=form)
     return render_to_response('foundry/test_form.html', extra, context_instance=RequestContext(request))
