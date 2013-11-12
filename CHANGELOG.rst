@@ -5,6 +5,7 @@ next
 ----
 #. Move to jQuery 1.10.2 as recommended version. If you have customized and static Javascript resources you will have to update them manually.
 #. Use a newer version of AnythingSlider.
+#. Allow form class to be passed to join view.
 
 1.1.23
 ------
