@@ -296,7 +296,11 @@ class EditProfileForm(forms.ModelForm):
 
     class Meta:
         model = models.Member
-        widgets = {'dob': OldSchoolDateWidget}
+        widgets = {
+            'dob': OldSchoolDateWidget,
+            'receive_email': EmailOptInCheckboxInput,
+            'receive_sms': SMSOptInCheckboxInput
+        }
 
     def __init__(self, *args, **kwargs):
         self.base_fields['image'].widget = PrettyFileInput(current=kwargs['instance'].get_thumbnail_LAYER_url())
