@@ -60,6 +60,30 @@ $(document).ready(function(){
         );
     });
 
+    // Ajaxify comment pagination.
+    $(document).on('click', 'div.foundry-comments-list div.pagination a', function(e){
+        e.preventDefault();
+        target = $(this).parents('div.foundry-comments-list:first');
+        var target_items = $('div.items:last', target);
+        var target_pagination = $('div.pagination', target);
+        url = $(location).attr('href');
+        // Strip params. Already present in href.
+        url = url.split('?')[0];
+        url = url + $(this).attr('href');
+        $.get(
+            url,
+            {},
+            function(data){
+                // Markup contains fluff. We want only the content.
+                var el = $('<div>' + data + '</div>');
+                var content = $('div#content div.items:last div.item', el);
+                target_items.append(content);
+                var content = $('div#content div.pagination', el);
+                target_pagination.replaceWith(content);
+            }
+        );
+    });
+
     // Ajaxify view modifier navigation for (1) standalone listing (2) listing in a tile.
     $(document).on('click', 'div.foundry-listing div.jmbo-view-modifier div.item a', function(e){
         e.preventDefault();
