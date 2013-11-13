@@ -76,9 +76,9 @@ $(document).ready(function(){
             function(data){
                 // Markup contains fluff. We want only the content.
                 var el = $('<div>' + data + '</div>');
-                var content = $('div#content div.items:last div.item', el);
+                var content = $('div#content div.foundry-comments-list div.items:last div.item', el);
                 target_items.append(content);
-                var content = $('div#content div.pagination', el);
+                var content = $('div#content div.foundry-comments-list div.pagination', el);
                 target_pagination.replaceWith(content);
             }
         );
