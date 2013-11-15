@@ -329,7 +329,6 @@ class EditProfileForm(forms.ModelForm):
         cleaned_data = super(EditProfileForm, self).clean()
 
         # Validate unique fields
-        print self.instance.id
         unique_fields = preferences.RegistrationPreferences.unique_fields
         for name in unique_fields:
             value = self.cleaned_data.get(name, None)
