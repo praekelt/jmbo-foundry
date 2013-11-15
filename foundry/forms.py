@@ -328,13 +328,6 @@ class EditProfileForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super(EditProfileForm, self).clean()
 
-        # Validate required fields
-        required_fields = preferences.RegistrationPreferences.required_fields
-        for name in required_fields:
-            value = self.cleaned_data.get(name, None)
-            if not value:
-                message = _("This field is required.")
-
         # Validate unique fields
         print self.instance.id
         unique_fields = preferences.RegistrationPreferences.unique_fields
@@ -342,7 +335,7 @@ class EditProfileForm(forms.ModelForm):
             value = self.cleaned_data.get(name, None)
             if value is not None:
                 di = {'%s__iexact' % name:value}
-                if models.Member.objects.filter(**di).exclude(id=self.instance.id).count() > 0:
+                if models.Member.objects.filter(**di).exclude(id=self.instance.id).exists():
                     pretty_name = self.fields[name].label.lower()
                     message =_("The %(pretty_name)s is already in use. \
 Please supply a different %(pretty_name)s." % {'pretty_name': pretty_name}
