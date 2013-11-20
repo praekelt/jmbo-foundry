@@ -294,6 +294,8 @@ class JoinFinishForm(forms.ModelForm):
 
 class EditProfileForm(forms.ModelForm):
 
+    protected_fields = ('id',)
+
     class Meta:
         model = models.Member
         widgets = {
@@ -313,7 +315,7 @@ class EditProfileForm(forms.ModelForm):
                 display_fields.append(extra)
         for name, field in self.fields.items():
             # Skip over protected fields
-            if name in ('id',):
+            if name in self.protected_fields:
                 continue
             if name not in display_fields:
                 del self.fields[name]
