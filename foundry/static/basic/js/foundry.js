@@ -210,6 +210,10 @@ $(document).ready(function(){
                 }
                 else
                     form.replaceWith(data);
+            },
+            complete: function(){
+                // Clear in reply to in all cases
+                $('#id_in_reply_to').val('');
             }
         })
     });
