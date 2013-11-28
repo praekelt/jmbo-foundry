@@ -27,7 +27,7 @@ $(document).ready(function(){
         <div class="items">
             {% for comment in comment_list %}
                 {% get_can_report_comment comment as 'can_report_comment' %}
-                {% cache 3600 'comment-list-comment' comment.id can_report_comment request.user.id %}
+                {% jmbocache 3600 'comment-list-comment' comment.id can_report_comment request.user.id %}
                 <div id="c{{ comment.id }}" class="item {% if comment.in_reply_to %}child{% endif %}">
                     {% if comment.creator %}
                     <div class="image">
@@ -68,7 +68,7 @@ $(document).ready(function(){
                         <span class="creator">{{ comment.user.username|default:comment.name }}:</span> {{ comment.comment|urlize }}
                     </div>
                 </div>
-                {% endcache %}
+                {% endjmbocache %}
             {% endfor %}
             <div
                 class="comment-list-placeholder"
