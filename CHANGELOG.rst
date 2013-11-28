@@ -3,7 +3,30 @@ Changelog
 
 next
 ----
+#. Move to jQuery 1.10.2 as recommended version. If you have customized and static Javascript resources you will have to update them manually.
+#. Use a newer version of AnythingSlider.
+#. Allow form class to be passed to join view.
 #. Cache individual comments on comment list.
+
+1.1.23
+------
+#. Fix template error in `modelbase_list_item_ipod.html`.
+
+1.1.22
+------
+#. Fix bug where it was possible for an event handler to change the default avatar during user registration.
+#. Cache individual listing item templates.
+
+1.1.21
+------
+#. Content type, categories and tags fields on listings are now ANDed when evaluating the listing.
+#. Do not allow comments containing only spaces.
+
+1.1.20
+------
+#. Provide two more custom listing styles.
+#. Listings can now be filtered by tag.
+>>>>>>> develop
 
 1.1.19.3
 --------

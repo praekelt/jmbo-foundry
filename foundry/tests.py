@@ -1,5 +1,6 @@
 from datetime import datetime
 from time import sleep
+import inspect
 
 from django.core import management
 from django.test import TestCase as BaseTestCase
@@ -14,12 +15,14 @@ from django.conf import settings
 
 from preferences import preferences
 from preferences.models import Preferences
-from category.models import Category
+from category.models import Category, Tag
 from post.models import Post
+from gallery.models import Gallery
 
 from foundry.models import Member, Listing, Page, Row, Column, Tile
 from foundry import views
 from foundry.utils import get_preference
+from foundry.templatetags import listing_styles
 
 
 class Client(BaseClient):
@@ -35,7 +38,7 @@ class Client(BaseClient):
 
 class TestCase(BaseTestCase):
 
-    @classmethod  
+    @classmethod
     def setUpClass(cls):
         cls.request = RequestFactory()
         cls.client = Client()
@@ -58,10 +61,19 @@ class TestCase(BaseTestCase):
         for i in range(1, 5):
             cat, dc = Category.objects.get_or_create(
                 title='Category %s' % i, slug='cat%s' % i
-            ) 
+            )
             cat.sites = [1]
             cat.save()
             setattr(cls, 'cat%s' % i, cat)
+
+        # Tags
+        for i in range(1, 5):
+            tag, dc = Tag.objects.get_or_create(
+                title='Tag %s' % i, slug='tag%s' % i
+            )
+            tag.sites = [1]
+            tag.save()
+            setattr(cls, 'tag%s' % i, tag)
 
         # Published posts
         for i in range(1, 5):
@@ -72,6 +84,7 @@ class TestCase(BaseTestCase):
             # Toggle between categories and primary category
             if i % 2 == 1:
                 post.categories = [getattr(cls, 'cat%s' % i)]
+                post.tags = [getattr(cls, 'tag%s' % i)]
             else:
                 post.primary_category = getattr(cls, 'cat%s' % i)
             post.sites = [1]
@@ -88,12 +101,27 @@ class TestCase(BaseTestCase):
             post.save()
             setattr(cls, 'post%s' % i, post)
 
+        # Published galleries
+        for i in range(1, 5):
+            gallery, dc = Gallery.objects.get_or_create(
+                title='Gallery %s' % i, owner=cls.editor, state='published',
+            )
+            # Toggle between categories and primary category
+            if i % 2 == 1:
+                gallery.categories = [getattr(cls, 'cat%s' % i)]
+                gallery.tags = [getattr(cls, 'tag%s' % i)]
+            else:
+                gallery.primary_category = getattr(cls, 'cat%s' % i)
+            gallery.sites = [1]
+            gallery.save()
+            setattr(cls, 'gallery%s' % i, Gallery)
+
         # Listings
 
         # Content-type
         content_type = ContentType.objects.get(app_label='post', model='post')
         listing_pvt, dc = Listing.objects.get_or_create(
-            title='Posts vertical thumbnail', 
+            title='Posts vertical thumbnail',
             slug='posts-vertical-thumbnail',
             count=0, items_per_page=0, style='VerticalThumbnail',
         )
@@ -104,7 +132,7 @@ class TestCase(BaseTestCase):
 
         # Content points to only published content
         listing_pc, dc = Listing.objects.get_or_create(
-            title='Published content', 
+            title='Published content',
             slug='published-content',
             count=0, items_per_page=0, style='VerticalThumbnail',
         )
@@ -115,7 +143,7 @@ class TestCase(BaseTestCase):
 
         # Content points to unpublished content
         listing_upc, dc = Listing.objects.get_or_create(
-            title='Unpublished content', 
+            title='Unpublished content',
             slug='unpublished-content',
             count=0, items_per_page=0, style='VerticalThumbnail',
         )
@@ -126,7 +154,7 @@ class TestCase(BaseTestCase):
 
         # Pinned items
         listing_pinned, dc = Listing.objects.get_or_create(
-            title='Listing pinned', 
+            title='Listing pinned',
             slug='listing-pinned',
             count=0, items_per_page=0, style='VerticalThumbnail',
         )
@@ -137,14 +165,53 @@ class TestCase(BaseTestCase):
 
         # Listing with categories
         listing_categories, dc = Listing.objects.get_or_create(
-            title='Listing categories', 
+            title='Listing categories',
             slug='listing-categories',
             count=0, items_per_page=0, style='VerticalThumbnail',
         )
         listing_categories.categories = [cls.cat1, cls.cat2]
         listing_categories.sites = [1]
         listing_categories.save()
-        setattr(cls, listing_categories.slug, listing_categories)
+        setattr(cls, listing_categories.slug, listing_categories)\
+
+        # Listing with tags
+        listing_tags, dc = Listing.objects.get_or_create(
+            title='Listing tags',
+            slug='listing-tags',
+            count=0, items_per_page=0, style='VerticalThumbnail',
+        )
+        listing_tags.tags = [cls.tag1, cls.tag2]
+        listing_tags.sites = [1]
+        listing_tags.save()
+        setattr(cls, listing_tags.slug, listing_tags)
+
+        # Listing with content_type, categories and tags
+        content_type = ContentType.objects.get(app_label='post', model='post')
+        listing_all, dc = Listing.objects.get_or_create(
+            title='Listing all filters',
+            slug='listing-all-filters',
+            count=0, items_per_page=0, style='VerticalThumbnail',
+        )
+        listing_all.content_type = [content_type]
+        listing_all.categories = [cls.cat1, cls.cat2]
+        listing_all.tags = [cls.tag1, cls.tag2]
+        listing_all.sites = [1]
+        listing_all.save()
+        setattr(cls, listing_all.slug, listing_all)
+
+        # Listings for each style
+        content_type = ContentType.objects.get(app_label='post', model='post')
+        for style, dc in inspect.getmembers(listing_styles, inspect.isclass):
+            if style != 'AbstractBaseStyle':
+                listing, dc = Listing.objects.get_or_create(
+                    title='Listing %s' % style,
+                    slug='listing-%s' % style.lower(),
+                    count=0, items_per_page=0, style=style,
+                )
+                listing.pinned = [cls.post1]
+                listing.sites = [1]
+                listing.save()
+                setattr(cls, listing.slug, listing)
 
         # Page with row, column and tile
         page, dc = Page.objects.get_or_create(title='A page', slug='a-page')
@@ -197,6 +264,25 @@ class TestCase(BaseTestCase):
         self.failUnless(self.post1.modelbase_obj in listing.queryset().all())
         self.failUnless(self.post2.modelbase_obj in listing.queryset().all())
         self.failIf(self.post3.modelbase_obj in listing.queryset().all())
+
+    def test_listing_tags(self):
+        listing = getattr(self, 'listing-tags')
+        self.failUnless(self.post1.modelbase_obj in listing.queryset().all())
+        self.failIf(self.post2.modelbase_obj in listing.queryset().all())
+
+    def test_listing_all_filters(self):
+        listing = getattr(self, 'listing-all-filters')
+        self.failUnless(self.post1.modelbase_obj in listing.queryset().all())
+        self.failIf(self.post2.modelbase_obj in listing.queryset().all())
+        self.failIf(self.post3.modelbase_obj in listing.queryset().all())
+        self.failIf(self.gallery1.modelbase_obj in listing.queryset().all())
+
+    def test_listing_styles(self):
+        """Confirm the listings of each style render"""
+        for style, dc in inspect.getmembers(listing_styles, inspect.isclass):
+            if style != 'AbstractBaseStyle':
+                response = self.client.get('/listing/listing-%s/' % style.lower())
+                self.assertEqual(response.status_code, 200)
 
     def test_pages(self):
         # Login, password reset
@@ -275,7 +361,7 @@ class TestCase(BaseTestCase):
         gp2.save()
         settings.SITE_ID = 1
         django.contrib.sites.models.SITE_CACHE = {}
-       
+
         # Test that there is no cache key collision
         about1 = get_preference('GeneralPreferences', 'about_us')
         settings.SITE_ID = 2

@@ -6,17 +6,17 @@ class AbstractBaseStyle(object):
 
     def __init__(self, listing):
         self.listing = listing
-    
+
     def get_queryset(self, request=None):
         return self.listing.queryset(request)
 
     def get_pinned_queryset(self):
-        # Check for pinned_queryset. It can be missing since listings can be 
-        # called via the {% listing %} tag. The resulting proxy listing object 
+        # Check for pinned_queryset. It can be missing since listings can be
+        # called via the {% listing %} tag. The resulting proxy listing object
         # does not neccessarily have the property.
         from jmbo.models import ModelBase
         return getattr(self.listing, 'pinned_queryset', ModelBase.objects.none())
-       
+
     def get_context_data(self, context, as_tile=False):
         request = context['request']
 
@@ -35,8 +35,8 @@ class AbstractBaseStyle(object):
 
         context['display_title'] = True
         if as_tile and not self.listing.display_title_tiled:
-            context['display_title'] = False       
-        
+            context['display_title'] = False
+
         return context
 
     def render(self, context, as_tile=False):
@@ -76,3 +76,11 @@ class CustomTwo(AbstractBaseStyle):
 
 class CustomThree(AbstractBaseStyle):
     template_name = 'foundry/inclusion_tags/listing_custom_three.html'
+
+
+class CustomFour(AbstractBaseStyle):
+    template_name = 'foundry/inclusion_tags/listing_custom_four.html'
+
+
+class CustomFive(AbstractBaseStyle):
+    template_name = 'foundry/inclusion_tags/listing_custom_five.html'

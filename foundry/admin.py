@@ -122,7 +122,7 @@ class MenuAdmin(admin.ModelAdmin):
             }
         ),
     )
-  
+
 
 class NavbarLinkPositionInline(admin.StackedInline):
     model = NavbarLinkPosition
@@ -143,7 +143,7 @@ class NavbarAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('title', 'subtitle', 'slug', 'sites')}),
         (
-            'Caching', 
+            'Caching',
             {
                 'fields': ('enable_caching', 'cache_type', 'cache_timeout'),
                 'classes': ()
@@ -157,10 +157,11 @@ class ListingAdminForm(forms.ModelForm):
     class Meta:
         model = Listing
         fields = (
-            'title', 'slug', 'subtitle', 'content_type', 'categories', 'content',
-            'pinned', 'style', 'count', 'items_per_page', 'view_modifier', 
-            'display_title_tiled', 'enable_syndication', 'sites'
-        )       
+            'title', 'slug', 'subtitle', 'content_type', 'categories', 'tags',
+            'content', 'pinned', 'style', 'count', 'items_per_page',
+            'view_modifier', 'display_title_tiled', 'enable_syndication',
+            'sites'
+        )
         widgets = {
             'sites': SitesGroupsWidget,
             'view_modifier': forms.widgets.RadioSelect,
@@ -173,10 +174,10 @@ class ListingAdminForm(forms.ModelForm):
         ids = []
         for obj in ContentType.objects.all():
             if (obj.model_class() is not None) and issubclass(obj.model_class(), ModelBase):
-               ids.append(obj.id) 
+               ids.append(obj.id)
         self.fields['content_type']._set_queryset(ContentType.objects.filter(id__in=ids).order_by('name'))
 
-        # View modifiers. Inspect apps for modifiers. Iterate since there is 
+        # View modifiers. Inspect apps for modifiers. Iterate since there is
         # no registry.
         choices = [('', 'No ordering or filtering')]
         for app in settings.INSTALLED_APPS:
@@ -188,25 +189,13 @@ class ListingAdminForm(forms.ModelForm):
                         if klass.__doc__:
                             label = label + ' - ' + klass.__doc__
                         choices.append((
-                            klass.__module__ + '.' + klass.__name__, label                           
+                            klass.__module__ + '.' + klass.__name__, label
                         ))
         self.fields['view_modifier'].widget.choices = choices
 
         # Order
         field = self.fields['content']
         field._set_queryset(field._queryset.order_by('title'))
-
-    def clean(self):
-        cleaned_data = super(ListingAdminForm, self).clean()
-        n = 0
-        for fieldname in ('content_type', 'content', 'categories'):
-            if cleaned_data[fieldname]:
-                if n:
-                    raise forms.ValidationError(
-                        "You may set at most one of content type, content or categories."
-                    )
-                n += 1
-        return cleaned_data
 
 
 class ListingAdmin(admin.ModelAdmin):
@@ -248,7 +237,7 @@ class RegistrationPreferencesAdminForm(forms.ModelForm):
         # field before but it is now, then there may not be two members with
         # the same mobile number.
         unique_fields = [s for s in cleaned_data['raw_unique_fields'].split(',') if s]
-        for fieldname in unique_fields:            
+        for fieldname in unique_fields:
             values = Member.objects.exclude(**{fieldname: None}).exclude(**{fieldname: ''}).values_list(fieldname, flat=True)
             if values:
                 # set removes duplicates from a list
@@ -278,7 +267,7 @@ class NaughtyWordPreferencesAdmin(PreferencesAdmin):
 
 class MemberAdmin(admin.ModelAdmin):
     list_display = (
-        'username', 'email', 'mobile_number', 'first_name', 'last_name', 
+        'username', 'email', 'mobile_number', 'first_name', 'last_name',
         '_image'
     )
     search_fields = ['username', 'email']
@@ -310,7 +299,7 @@ class CountryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
 
 
-class PageViewForm(forms.ModelForm):       
+class PageViewForm(forms.ModelForm):
 
     class Meta:
         model = PageView
@@ -339,15 +328,15 @@ class PageAdmin(admin.ModelAdmin):
     list_display = ('title', 'subtitle', 'slug', 'is_homepage')
     prepopulated_fields = {'slug': ('title',)}
     inlines = (PageViewInline,)
-   
+
     def response_add(self, request, obj, post_url_continue='../%s/'):
         if '_addanother' not in request.POST and '_popup' not in request.POST:
-            request.POST['_continue'] = 1 
+            request.POST['_continue'] = 1
         return super(PageAdmin, self).response_add(request, obj, post_url_continue)
 
 
 class ChatRoomAdmin(ModelBaseAdmin):
-    
+
     def _actions(self, obj):
         result = super(ChatRoomAdmin, self)._actions(obj)
         return result + '<a href="/admin/foundry/foundrycomment/?object_pk=%s">View messages</a>' % obj.pk
@@ -396,7 +385,7 @@ class JmboContentTypeListFilter(SimpleListFilter):
             return queryset.filter(content_type__app_label=app_label, content_type__model=model)
         return queryset
 
-    
+
 class FoundryCommentAdmin(admin.ModelAdmin):
     list_display = ('id', 'content_object', 'user', 'comment')
     search_fields = ('user__username', 'comment',)

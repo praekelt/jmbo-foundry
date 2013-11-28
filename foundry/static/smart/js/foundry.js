@@ -1,10 +1,10 @@
 $(document).ready(function(){
 
     if (typeof FastClick !== 'undefined') {
-        // Let fastclick add a touchstart/end click event 
+        // Let fastclick add a touchstart/end click event
         // for more responsive touch interaction on smart devices
         FastClick.attach(document.body);
-        
+
         $("a").bind("touchstart", function(e){$(this).addClass("touch-active");});
         $("a").bind("touchend touchcancel", function(e){$(this).removeClass("touch-active");});
     }
@@ -20,7 +20,7 @@ $(document).ready(function(){
     });
 
     // Ajaxify paging for (1) standalone listing (2) listing in a tile.
-    $('div.foundry-listing div.pagination a').live('click', function(e){
+    $(document).on('click', 'div.foundry-listing div.pagination a', function(e){
         e.preventDefault();
         var target = $(this).parents('div.foundry-page-tile:first');
         var url = target.attr('original_url');
@@ -35,13 +35,13 @@ $(document).ready(function(){
         url = url.split('?')[0];
         url = url + $(this).attr('href');
         $.get(
-            url, 
-            {}, 
+            url,
+            {},
             function(data){
                 if (data.search('id="content"') != -1)
                 {
                     // Markup that contains fluff. We want only the content.
-                    var el = $('<div>' + data + '</div>');                   
+                    var el = $('<div>' + data + '</div>');
                     var content = $('div#content div.items:last div.item', el);
                     target_items.append(content);
                     var content = $('div#content div.pagination', el);
@@ -60,8 +60,32 @@ $(document).ready(function(){
         );
     });
 
+    // Ajaxify comment pagination.
+    $(document).on('click', 'div.foundry-comments-list div.pagination a', function(e){
+        e.preventDefault();
+        target = $(this).parents('div.foundry-comments-list:first');
+        var target_items = $('div.items:last', target);
+        var target_pagination = $('div.pagination', target);
+        url = $(location).attr('href');
+        // Strip params. Already present in href.
+        url = url.split('?')[0];
+        url = url + $(this).attr('href');
+        $.get(
+            url,
+            {},
+            function(data){
+                // Markup contains fluff. We want only the content.
+                var el = $('<div>' + data + '</div>');
+                var content = $('div#content div.foundry-comments-list div.items:last div.item', el);
+                target_items.append(content);
+                var content = $('div#content div.foundry-comments-list div.pagination', el);
+                target_pagination.replaceWith(content);
+            }
+        );
+    });
+
     // Ajaxify view modifier navigation for (1) standalone listing (2) listing in a tile.
-    $('div.foundry-listing div.jmbo-view-modifier div.item a').live('click', function(e){
+    $(document).on('click', 'div.foundry-listing div.jmbo-view-modifier div.item a', function(e){
         e.preventDefault();
         var target = $(this).parents('div.foundry-page-tile:first');
         var url = target.attr('original_url');
@@ -74,13 +98,13 @@ $(document).ready(function(){
         url = url.split('?')[0];
         url = url + $(this).attr('href');
         $.get(
-            url, 
-            {}, 
+            url,
+            {},
             function(data){
                 if (data.search('id="content"') != -1)
                 {
                     // Markup that contains fluff. We want only the content.
-                    var el = $('<div>' + data + '</div>');                   
+                    var el = $('<div>' + data + '</div>');
                     var content = $('div#content', el);
                     target.html(content.html());
                 }
@@ -103,7 +127,7 @@ $(document).ready(function(){
             data: data,
             async: false,
             type: 'POST',
-            cache: false,                    
+            cache: false,
             success: function(data){
                 if (data.indexOf('{') == 0)
                 {
@@ -115,7 +139,7 @@ $(document).ready(function(){
                     if (data.search('id="content"') != -1)
                     {
                         // Markup that contains fluff. We want only the content.
-                        var el = $('<div>' + data + '</div>');                   
+                        var el = $('<div>' + data + '</div>');
                         var content = $('div#content', el);
                         target.html(content.html());
                     }
@@ -127,21 +151,21 @@ $(document).ready(function(){
 
     // Intercept tile form submit for contained items (eg. a listing). The heading must be preserved.
     // An example is a tile containing a listing of polls.
-    $('div.foundry-enable-ajax .foundry-container form').live('submit', function(event){
+    $(document).on('submit', 'div.foundry-enable-ajax .foundry-container form', function(event){
         event.stopImmediatePropagation();
         var target = $(this).parents('div.item:first');
         _submit_intercept_common(this, event, target);
     });
 
-    // Intercept tile form submit for views with a form. 
+    // Intercept tile form submit for views with a form.
     // An example is a normal standalone form like site_contact.
-    $('div.foundry-enable-ajax form').live('submit', function(event){
+    $(document).on('submit', 'div.foundry-enable-ajax form', function(event){
         var target = $(this).parents('div.foundry-enable-ajax:first');
         _submit_intercept_common(this, event, target);
     });
 
     // Post a comment
-    $('form.comment-form').live('submit', function(event){
+    $(document).on('submit', 'form.comment-form', function(event){
         event.preventDefault();
         var form = $(this);
         var url = $(this).attr('action');
@@ -151,7 +175,7 @@ $(document).ready(function(){
             data: data,
             async: false,
             type: 'POST',
-            cache: false,                    
+            cache: false,
             success: function(data){
                 if (data.indexOf('{') == 0)
                 {
@@ -163,6 +187,10 @@ $(document).ready(function(){
                 }
                 else
                     form.replaceWith(data);
+            },
+            complete: function(){
+                // Clear in reply to in all cases
+                $('#id_in_reply_to').val('');
             }
         })
     });
@@ -174,8 +202,8 @@ $(document).ready(function(){
                 var el = $(this);
                 var url = '/fetch-new-comments-ajax/' + el.attr('content_type_id') + '/' + el.attr('oid') + '/' + el.attr('last_comment_id') + '/';
                 $.get(
-                    url, 
-                    {}, 
+                    url,
+                    {},
                     function(data){
                         if (data)
                             el.replaceWith(data);

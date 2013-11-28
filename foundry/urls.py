@@ -33,10 +33,10 @@ v1_api.register(PageResource())
 v1_api.register(BlogPostResource())
 
 
-urlpatterns = patterns('',        
+urlpatterns = patterns('',
     # Pre-empt url call for comment post
     url(
-        r'^comments/post/$',          
+        r'^comments/post/$',
         'foundry.views.post_comment',
         {},
         name='comments-post-comment'
@@ -44,19 +44,19 @@ urlpatterns = patterns('',
 
     (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/static/images/favicon.ico'}),
 
-    # Unidentified issue with Jmbo URLPatternItem class means 
+    # Unidentified issue with Jmbo URLPatternItem class means
     # (r'^', include('jmbo_sitemap.urls')) causes error. Use a workaround.
     url(
-        r'^sitemap\.xml$', 
-        'jmbo_sitemap.sitemap', 
-        {'sitemaps': sitemaps}, 
+        r'^sitemap\.xml$',
+        'jmbo_sitemap.sitemap',
+        {'sitemaps': sitemaps},
         name='sitemap'
-    ), 
+    ),
     url(
         r'^sitemap/$',
         'django.views.generic.simple.direct_to_template',
         {
-            'template': 'jmbo_sitemap/sitemap.html', 
+            'template': 'jmbo_sitemap/sitemap.html',
             'extra_context': {'content': lambda: preferences.HTMLSitemap.content}
         },
         name='html-sitemap'
@@ -93,7 +93,7 @@ urlpatterns = patterns('',
         r'^$',
         'django.views.generic.simple.direct_to_template',
         {
-            'template':'base.html', 
+            'template':'base.html',
         },
         name='home'
     ),
@@ -101,7 +101,7 @@ urlpatterns = patterns('',
         r'^logo/$',
         'django.views.generic.simple.direct_to_template',
         {
-            'template':'foundry/logo.html', 
+            'template':'foundry/logo.html',
         },
         name='logo'
     ),
@@ -109,7 +109,7 @@ urlpatterns = patterns('',
         r'^header/$',
         'django.views.generic.simple.direct_to_template',
         {
-            'template':'foundry/inclusion_tags/header.html', 
+            'template':'foundry/inclusion_tags/header.html',
         },
         name='header'
     ),
@@ -117,12 +117,12 @@ urlpatterns = patterns('',
         r'^footer/$',
         'django.views.generic.simple.direct_to_template',
         {
-            'template':'foundry/inclusion_tags/footer.html', 
+            'template':'foundry/inclusion_tags/footer.html',
         },
         name='footer'
     ),
 
-    # Join, login, password reset            
+    # Join, login, password reset
     url(
         r'^join/$',
         'foundry.views.join',
@@ -150,20 +150,20 @@ urlpatterns = patterns('',
     ),
     # Password reset with custom form
     url(
-        r'^password_reset/$', 
-        'django.contrib.auth.views.password_reset', 
+        r'^password_reset/$',
+        'django.contrib.auth.views.password_reset',
         {
             'password_reset_form': forms.PasswordResetForm,
         },
         name='password_reset',
     ),
-    
+
     # Pages defined in preferences
     url(
         r'^about-us/$',
         'django.views.generic.simple.direct_to_template',
         {
-            'template':'foundry/static_page.html', 
+            'template':'foundry/static_page.html',
             'extra_context':{'content':lambda:preferences.GeneralPreferences.about_us, 'title':_("About us")}
         },
         name='about-us'
@@ -172,7 +172,7 @@ urlpatterns = patterns('',
         r'^terms-and-conditions/$',
         'django.views.generic.simple.direct_to_template',
         {
-            'template':'foundry/static_page.html', 
+            'template':'foundry/static_page.html',
             'extra_context':{'content':lambda:preferences.GeneralPreferences.terms_and_conditions, 'title':_("Terms and conditions")}
         },
         name='terms-and-conditions'
@@ -181,7 +181,7 @@ urlpatterns = patterns('',
         r'^privacy-policy/$',
         'django.views.generic.simple.direct_to_template',
         {
-            'template':'foundry/static_page.html', 
+            'template':'foundry/static_page.html',
             'extra_context':{'content':lambda:preferences.GeneralPreferences.privacy_policy, 'title':_("Privacy policy")}
         },
         name='privacy-policy'
@@ -211,7 +211,7 @@ urlpatterns = patterns('',
         name='listing-feed'
     ),
 
-    # Edit profile    
+    # Edit profile
     url(r'^edit-profile/$',
         login_required(
             views.EditProfile.as_view(
@@ -222,7 +222,7 @@ urlpatterns = patterns('',
         name='edit-profile'
     ),
 
-    # Complete profile    
+    # Complete profile
     url(r'^complete-profile/$',
         login_required(
             views.EditProfile.as_view(
@@ -246,7 +246,7 @@ urlpatterns = patterns('',
         r'^lorem-ipsum/$',
         'django.views.generic.simple.direct_to_template',
         {
-            'template':'foundry/lorem_ipsum.html', 
+            'template':'foundry/lorem_ipsum.html',
         },
         name='lorem-ipsum'
     ),
@@ -301,32 +301,32 @@ urlpatterns = patterns('',
 
     # Blogpost list
     url(
-        r'^blogposts/$', 
-        'foundry.views.blogpost_object_list', 
+        r'^blogposts/$',
+        'foundry.views.blogpost_object_list',
         {'limit': 300},
         name='blogpost_object_list'
     ),
-    
+
     # Blogpost detail
     url(
-        r'^blogpost/(?P<slug>[\w-]+)/$', 
-        'foundry.views.blogpost_object_detail', 
+        r'^blogpost/(?P<slug>[\w-]+)/$',
+        'foundry.views.blogpost_object_detail',
         {},
         name='blogpost_object_detail'
     ),
 
     # Member notifications
     url(
-        r'^member-notifications/$', 
-        login_required(views.member_notifications), 
+        r'^member-notifications/$',
+        login_required(views.member_notifications),
         {},
         name='member-notifications'
     ),
 
     # User detail page
     url(
-        r'^users/(?P<username>[@\.\w-]+)/$', 
-        'foundry.views.user_detail', 
+        r'^users/(?P<username>[@\.\w-]+)/$',
+        'foundry.views.user_detail',
         {},
         name='user-detail'
     ),
@@ -338,13 +338,13 @@ urlpatterns = patterns('',
 #        {},
 #        name='member-detail'
 #    ),
-   
+
     # Coming soon
     url(
         r'^coming-soon/$',
         'django.views.generic.simple.direct_to_template',
         {
-            'template':'foundry/coming_soon.html', 
+            'template':'foundry/coming_soon.html',
         },
         name='coming-soon'
     ),
@@ -375,7 +375,7 @@ urlpatterns = patterns('',
         'django.views.generic.list_detail.object_list',
         {'queryset':Page.permitted.all().order_by('title')},
         'page-list'
-    ),    
+    ),
 
     # Admin
     url(
