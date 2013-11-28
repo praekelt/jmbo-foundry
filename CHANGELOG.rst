@@ -6,6 +6,7 @@ next
 #. Move to jQuery 1.10.2 as recommended version. If you have customized and static Javascript resources you will have to update them manually.
 #. Use a newer version of AnythingSlider.
 #. Allow form class to be passed to join view.
+#. Cache individual comments on comment list.
 
 1.1.23
 ------
@@ -25,6 +26,7 @@ next
 ------
 #. Provide two more custom listing styles.
 #. Listings can now be filtered by tag.
+>>>>>>> develop
 
 1.1.19.3
 --------

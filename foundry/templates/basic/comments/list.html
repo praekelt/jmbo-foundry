@@ -1,4 +1,4 @@
-{% load pagination_tags jmbo_template_tags foundry_tags i18n %}
+{% load cache pagination_tags jmbo_template_tags foundry_tags i18n %}
 
 <div class="comment-list">
 
@@ -26,6 +26,8 @@ $(document).ready(function(){
         {% autopaginate comment_list paginate_by -1 %}
         <div class="items">
             {% for comment in comment_list %}
+                {% get_can_report_comment comment as 'can_report_comment' %}
+                {% cache 3600 'comment-list-comment' comment.id can_report_comment request.user.id %}
                 <div id="c{{ comment.id }}" class="item {% if comment.in_reply_to %}child{% endif %}">
                     {% if comment.creator %}
                     <div class="image">
@@ -52,26 +54,21 @@ $(document).ready(function(){
                                 </a>
                             {% endwith %}
                         </div>
-                        {% if request.user.is_authenticated %}
-                            {% with comment.id|stringformat:"s" as comment_id %}
-                            {% with "comment_report_"|add:comment_id as key %}
-                            <div class="report">
-                                {% if not key in request.COOKIES %}
-                                    {% with request.POST.next|default:request.META.PATH_INFO as next %}
-                                        <a href="{% url report-comment comment.id %}?next={{ next|add:"?"|add:request.META.QUERY_STRING|urlencode }}" onclick="return window.confirm('{% trans "Are you sure you want to report this?" %}');">{% trans "Report" %}</a>
-                                    {% endwith %}
-                                {% else %}
-                                    {% trans "Reported" %}
-                                {% endif %}
-                            </div>
+                        {% if can_report_comment %}
+                            {% with request.POST.next|default:request.META.PATH_INFO as next %}
+                                <a href="{% url report-comment comment.id %}?next={{ next|add:"?"|add:request.META.QUERY_STRING|urlencode }}" onclick="return window.confirm('{% trans "Are you sure you want to report this?" %}');">{% trans "Report" %}</a>
                             {% endwith %}
-                            {% endwith %}
+                        {% else %}
+                            {% if request.user.is_authenticated %}
+                                {% trans "Reported" %}
+                            {% endif %}
                         {% endif %}
                     </div>
                     <div class="comment">
                         <span class="creator">{{ comment.user.username|default:comment.name }}:</span> {{ comment.comment|urlize }}
                     </div>
                 </div>
+                {% endcache %}
             {% endfor %}
             <div
                 class="comment-list-placeholder"

@@ -508,3 +508,37 @@ class FoundryCacheNode(template.Node):
             return value
 
         return self.nodelist.render(context)
+
+
+@register.tag
+def get_can_report_comment(parser, token):
+    """{% get_can_report_comment [comment] as [varname] %}"""
+    try:
+        tag_name, comment, dc, as_var = token.split_contents()
+    except ValueError:
+        raise template.TemplateSyntaxError(
+            "get_can_report_comment tag has syntax {% get_can_report_comment [comment] as [varname] %}"
+        )
+    return CanReportCommentNode(comment, as_var)
+
+
+class CanReportCommentNode(template.Node):
+
+    def __init__(self, comment, as_var):
+        self.comment = template.Variable(comment)
+        self.as_var = template.Variable(as_var)
+
+    def render(self, context):
+        comment = self.comment.resolve(context)
+        as_var = self.as_var.resolve(context)
+
+        request = context['request']
+        user = getattr(request, 'user', None)
+        result = False
+        if getattr(user, 'is_authenticated', lambda: False)():        
+            key = 'comment_report_%s' % comment.id
+            result = key not in request.COOKIES
+        context[as_var] = result
+
+        return ''
+
