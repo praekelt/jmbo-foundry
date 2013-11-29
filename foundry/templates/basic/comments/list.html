@@ -28,7 +28,7 @@ $(document).ready(function(){
             {% for comment in comment_list %}
                 {% get_can_report_comment comment as 'can_report_comment' %}
                 {% jmbocache 3600 'comment-list-comment' comment.id can_report_comment request.user.id %}
-                <div id="c{{ comment.id }}" class="item {% if comment.in_reply_to %}child{% endif %}">
+                <div id="c{{ comment.id }}" class="item {% if comment.in_reply_to_id %}child{% endif %}">
                     {% if comment.creator %}
                     <div class="image">
                         <a href="{% url user-detail comment.creator.username %}">
