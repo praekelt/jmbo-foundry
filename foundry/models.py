@@ -1,6 +1,8 @@
 import inspect
 import re
+import cPickle
 
+from django.core.cache import cache
 from django.core.urlresolvers import reverse, Resolver404
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -723,9 +725,17 @@ useful when using a page as a campaign."""
     @property
     def rows(self):
         """Fetch rows, columns and tiles in a single query"""
+
+        key = 'foundry-page-rows-%s' % self.id
+        cached = cache.get(key, None)
+        if cached:
+            tiles = cPickle.loads(cached)
+        else:
+            tiles = Tile.objects.select_related().filter(column__row__page=self).order_by('index')
+            cache.set(key, cPickle.dumps(tiles), 60)
+
         # Organize into a structure
         struct = {}
-        tiles = Tile.objects.select_related().filter(column__row__page=self).order_by('index')
         for tile in tiles:
             row = tile.column.row
             if row not in struct:
