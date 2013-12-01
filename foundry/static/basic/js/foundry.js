@@ -134,6 +134,7 @@ $(document).ready(function(){
                 var el = $('<div>' + data + '</div>');
                 var content = $('div#content div.foundry-comments-list:first', el);
                 target.html(content.html());
+                $(document).trigger("onCommentsPaginate", [target]);
             }
         );
     });
