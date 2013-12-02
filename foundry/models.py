@@ -528,12 +528,13 @@ class RegistrationPreferences(Preferences):
         # field before but it is now, then there may not be two members with
         # the same mobile number.
         for fieldname in self.unique_fields:
-            values = Member.objects.exclude(**{fieldname: None}).exclude(**{fieldname: ''}).values_list(fieldname, flat=True)
-            # set removes duplicates from a list
-            if len(values) != len(set(values)):
+            li = Member.objects.exclude(**{fieldname: None}).exclude(
+                **{fieldname: ''}).values(fieldname).annotate(
+                dcount=Count(fieldname)).order_by('-dcount')
+            if li and li[0]['dcount'] > 1:
                 raise RuntimeError(
                     "Cannot set %s to be unique since there is more than one \
-member with the same %s %s." % (fieldname, fieldname, values[0])
+member with the same %s %s." % (fieldname, fieldname, li[0][fieldname])
                 )
         super(RegistrationPreferences, self).save(*args, **kwargs)
 

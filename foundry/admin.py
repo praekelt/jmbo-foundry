@@ -1,6 +1,6 @@
 import inspect
 
-from django.db.models import CharField
+from django.db.models import CharField, Count
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.models import User
@@ -238,13 +238,13 @@ class RegistrationPreferencesAdminForm(forms.ModelForm):
         # the same mobile number.
         unique_fields = [s for s in cleaned_data['raw_unique_fields'].split(',') if s]
         for fieldname in unique_fields:
-            values = Member.objects.exclude(**{fieldname: None}).exclude(**{fieldname: ''}).values_list(fieldname, flat=True)
-            if values:
-                # set removes duplicates from a list
-                if len(values) != len(set(values)):
-                    raise forms.ValidationError(
-                        "Cannot set %s to be unique since there is more than one \
-    member with the same %s %s." % (fieldname, fieldname, values[0])
+            li = Member.objects.exclude(**{fieldname: None}).exclude(
+                **{fieldname: ''}).values(fieldname).annotate(
+                dcount=Count(fieldname)).order_by('-dcount')
+            if li and li[0]['dcount'] > 1:
+                raise forms.ValidationError(
+                    "Cannot set %s to be unique since there is more than one \
+member with the same %s %s." % (fieldname, fieldname, li[0][fieldname])
                     )
         return cleaned_data
 
