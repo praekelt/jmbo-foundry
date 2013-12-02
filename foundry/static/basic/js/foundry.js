@@ -219,6 +219,25 @@ $(document).ready(function(){
         })
     });
 
+    // Report a comment
+    $(document).on('click', 'div.foundry-comments-list a.report', function(){
+        if (!window.confirm('Are you sure you want to report this?'))
+            return false;
+
+        var el = $(this);
+        var url = el.attr('href');
+        $.ajax({
+            url: url,
+            async: true,
+            type: 'GET',
+            cache: false,
+            success: function(data){
+                el.replaceWith('Reported');
+            }
+        });
+        return false;
+    });
+
     }
 
 });

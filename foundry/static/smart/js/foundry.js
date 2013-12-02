@@ -80,6 +80,7 @@ $(document).ready(function(){
                 target_items.append(content);
                 var content = $('div#content div.foundry-comments-list div.pagination', el);
                 target_pagination.replaceWith(content);
+                $(document).trigger("onCommentsPaginate", [target]);
             }
         );
     });
@@ -193,6 +194,25 @@ $(document).ready(function(){
                 $('#id_in_reply_to').val('');
             }
         })
+    });
+
+    // Report a comment
+    $(document).on('click', 'div.foundry-comments-list a.report', function(){
+        if (!window.confirm('Are you sure you want to report this?'))
+            return false;
+
+        var el = $(this);
+        var url = el.attr('href');
+        $.ajax({
+            url: url,
+            async: true,
+            type: 'GET',
+            cache: false,
+            success: function(data){
+                el.replaceWith('Reported');
+            }
+        });
+        return false;
     });
 
     // Load new comments and chats
