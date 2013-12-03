@@ -59,6 +59,9 @@ class AttributeWrapper:
             return self._attributes[key]
         return getattr(self._obj, key)
 
+    def __setstate__(self, dict):
+        self.__dict__.update(dict)
+
     @property
     def klass(self):
         """Can't override __class__ and making it a property also does not
@@ -731,12 +734,10 @@ useful when using a page as a campaign."""
         key = 'foundry-page-rows-%s' % self.id
         cached = cache.get(key, None)
         if cached:
-            tiles = cPickle.loads(cached)
-        else:
-            tiles = Tile.objects.select_related().filter(column__row__page=self).order_by('index')
-            cache.set(key, cPickle.dumps(tiles), 60)
+            return cPickle.loads(cached)
 
         # Organize into a structure
+        tiles = Tile.objects.select_related().filter(column__row__page=self).order_by('index')
         struct = {}
         for tile in tiles:
             row = tile.column.row
@@ -758,6 +759,8 @@ useful when using a page as a campaign."""
             for column in keys_column:
                 column_objs.append(AttributeWrapper(column, tiles=struct[row][column]))
             result.append(AttributeWrapper(row, columns=column_objs))
+
+        cache.set(key, cPickle.dumps(result), settings.FOUNDRY.get('layout_cache_time', 60))
 
         return result
 

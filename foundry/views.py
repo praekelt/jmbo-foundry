@@ -29,6 +29,7 @@ from django.template.loader import get_template_from_string
 from django.core.mail import EmailMultiAlternatives
 from django.template import Context
 from django.utils.html import strip_tags
+from django.core.cache import cache
 
 # Comment post required imports
 from django.contrib.comments.views.comments import CommentPostBadRequest
@@ -141,10 +142,18 @@ def listing_detail(request, slug):
 
 def page_detail(request, slug):
     """Render a page by iterating over rows, columns and tiles."""
-    try:
-        page = Page.permitted.get(slug=slug)
-    except Page.DoesNotExist:
-        raise Http404('No page matches the given query.')
+
+    # Page detail gets called on nearly every request so cache the lookup
+    key = 'foundry-page-detail-%s' % slug
+    page = cache.get(key, None)
+    if not page:
+        try:
+            page = Page.permitted.get(slug=slug)
+        except Page.DoesNotExist:
+            raise Http404('No page matches the given query.')
+        else:
+            cache.set(key, page, settings.FOUNDRY.get('layout_cache_time', 60))
+
     extra = {}
     extra['object'] = page
     return render_to_response('foundry/page_detail.html', extra, context_instance=RequestContext(request))
