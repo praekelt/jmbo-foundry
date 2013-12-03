@@ -18,6 +18,7 @@ from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
 from django.utils.importlib import import_module
 from django.utils import simplejson as json
+from django.conf import settings
 
 from ckeditor.fields import RichTextField
 from preferences.models import Preferences
