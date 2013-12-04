@@ -7,7 +7,7 @@ next
 #. Use a newer version of AnythingSlider.
 #. Allow form class to be passed to join view.
 #. Cache individual comments on comment list.
-#. Minor performance improvements.
+#. Performance improvements.
 
 1.1.23
 ------

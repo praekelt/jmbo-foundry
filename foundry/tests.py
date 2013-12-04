@@ -58,7 +58,7 @@ class TestCase(BaseTestCase):
         site, dc = Site.objects.get_or_create(name='mobi', domain='mobi.com')
 
         # Categories
-        for i in range(1, 5):
+        for i in range(1, 6):
             cat, dc = Category.objects.get_or_create(
                 title='Category %s' % i, slug='cat%s' % i
             )
@@ -199,6 +199,17 @@ class TestCase(BaseTestCase):
         listing_all.save()
         setattr(cls, listing_all.slug, listing_all)
 
+        # Listing with no matches
+        listing_no_matches, dc = Listing.objects.get_or_create(
+            title='Listing no matches',
+            slug='listing-no-matches',
+            count=0, items_per_page=0, style='VerticalThumbnail',
+        )
+        listing_no_matches.categories = [cls.cat5]
+        listing_no_matches.sites = [1]
+        listing_no_matches.save()
+        setattr(cls, listing_no_matches.slug, listing_no_matches)
+
         # Listings for each style
         content_type = ContentType.objects.get(app_label='post', model='post')
         for style, dc in inspect.getmembers(listing_styles, inspect.isclass):
@@ -276,6 +287,12 @@ class TestCase(BaseTestCase):
         self.failIf(self.post2.modelbase_obj in listing.queryset().all())
         self.failIf(self.post3.modelbase_obj in listing.queryset().all())
         self.failIf(self.gallery1.modelbase_obj in listing.queryset().all())
+
+    def test_listing_no_matches(self):
+        listing = getattr(self, 'listing-no-matches')
+        self.failIf(listing.queryset().all().exists())
+        # Do it again to confirm cache is safe on empty queryset
+        self.failIf(listing.queryset().all().exists())
 
     def test_listing_styles(self):
         """Confirm the listings of each style render"""

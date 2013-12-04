@@ -310,6 +310,7 @@ complex page."""
         null=True,
         help_text='Sites that this listing will appear on.',
     )
+    modified = models.DateTimeField(editable=False, auto_now=True)
 
     objects = DefaultManager()
     permitted = PermittedManager()
@@ -327,24 +328,38 @@ complex page."""
         return reverse('listing-detail', args=[self.slug])
 
     def queryset(self, request=None):
-        q = ModelBase.permitted.filter(id__in=self.content.all())
-        if not q.exists():
-            q = ModelBase.permitted.all()
-            one_match = False
-            if self.content_type.exists():
-                q = q.filter(content_type__in=self.content_type.all())
-                one_match = True
-            if self.categories.exists():
-                q1 = Q(primary_category__in=self.categories.all())
-                q2 = Q(categories__in=self.categories.all())
-                q = q.filter(q1|q2)
-                one_match = True
-            if self.tags.exists():
-                q = q.filter(tags__in=self.tags.all())
-                one_match = True
-            if not one_match:
-                q = ModelBase.objects.none()
-        q = q.exclude(id__in=self.pinned.all())
+        key = 'foundry-listing-qs-%s-%s' % \
+            (self.id, self.modified.strftime('%s'))
+        cached = cache.get(key, None)
+        if cached:
+            q = ModelBase.objects.all()
+            q.query = cPickle.loads(cached)
+        else:
+            ids = self.content.all().values_list('id')
+            if ids:
+                q = ModelBase.permitted.filter(id__in=ids)
+            else:
+                q = ModelBase.permitted.all()
+                one_match = False
+                if self.content_type.exists():
+                    q = q.filter(content_type__in=self.content_type.all())
+                    one_match = True
+                if self.categories.exists():
+                    q1 = Q(primary_category__in=self.categories.all())
+                    q2 = Q(categories__in=self.categories.all())
+                    q = q.filter(q1|q2)
+                    one_match = True
+                if self.tags.exists():
+                    q = q.filter(tags__in=self.tags.all())
+                    one_match = True
+                if not one_match:
+                    q = ModelBase.objects.none()
+
+            ids = self.pinned.all().values_list('id')
+            if ids:
+                q = q.exclude(id__in=ids)
+
+            cache.set(key, cPickle.dumps(q.query), 3600)
 
         if request and self.view_modifier:
             mod, attr = self.view_modifier.rsplit('.', 1)
@@ -364,7 +379,17 @@ complex page."""
 
     @property
     def pinned_queryset(self):
-        return ModelBase.permitted.filter(id__in=self.pinned.all())
+        key = 'foundry-listing-qs-%s-%s' % \
+            (self.id, self.modified.strftime('%s'))
+        cached = cache.get(key, None)
+        if cached:
+             q = ModelBase.objects.all()
+             q.query = cPickle.loads(cached)
+        else:
+            ids = self.pinned.all().values_list('id')
+            q = ModelBase.permitted.filter(id__in=ids)
+            cache.set(key, cPickle.dumps(q.query), 3600)
+        return q
 
 
 class AbstractLinkPosition(models.Model):
