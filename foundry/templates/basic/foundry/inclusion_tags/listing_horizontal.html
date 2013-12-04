@@ -2,10 +2,10 @@
 
 {% if object_list.exists %}
     <div class="foundry-container foundry-listing foundry-listing-horizontal">
-        
+
         {% if display_title %}{% if listing.title %}<div class="title">{{ listing.title }}</div>{% endif %}{% endif %}
 
-        {% if pinned_list.exists %}
+        {% if pinned_list %}
         <div class="pinned-items">
         {% for object in pinned_list %}
             <div class="item {% if forloop.first %}first{% endif %} {% if forloop.last %}last{% endif %} item-{{ object.class_name|lower }}">
@@ -21,7 +21,9 @@
         {% endif %}
 
         <div class="items">
-        {% autopaginate object_list items_per_page %}
+        {% if items_per_page %}
+            {% autopaginate object_list items_per_page %}
+        {% endif %}
         {% for object in object_list %}
             <div class="item {% if forloop.first %}first{% endif %} {% if forloop.last %}last{% endif %} item-{{ object.class_name|lower }}">
                 {% render_object object.as_leaf_class "list_item_ipod" %}
@@ -29,8 +31,10 @@
             </div>
         {% endfor %}
         </div>
-        <div class="clear"></div>                
-        {% paginate %}
+        <div class="clear"></div>
+        {% if items_per_page %}
+            {% paginate %}
+        {% endif %}
 
     </div>
 {% endif %}

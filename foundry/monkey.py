@@ -250,3 +250,21 @@ def Site_title(self):
 
 Site.__unicode__ = Site__unicode__
 Site.title = Site_title
+
+
+"""Legacy templates do {% autopaginate object_list items_per_page %} because it
+was guaranteed to be non-zero. That led to an inefficiency which was removed.
+This patch ensures legacy templates do not break."""
+from pagination.templatetags import pagination_tags
+def AutoPaginateNode_decorator(func):
+    def new(self, context):
+        if isinstance(self.paginate_by, int):
+            paginate_by = self.paginate_by
+        else:
+            paginate_by = self.paginate_by.resolve(context)
+        if not paginate_by:
+            self.paginate_by = 100
+        return func(self, context)
+    return new
+
+pagination_tags.AutoPaginateNode.render = AutoPaginateNode_decorator(pagination_tags.AutoPaginateNode.render)
