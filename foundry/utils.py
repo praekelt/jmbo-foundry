@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.core.cache import cache
 from django.conf import settings
 
@@ -52,3 +54,21 @@ def get_preference(klass_name, attr):
         v = getattr(getattr(preferences, klass_name), attr)
         cache.set(key, v, 60)
     return v
+
+
+def get_age(dob):
+    """
+    Calculates age from date of birth. Adapted from:
+    http://stackoverflow.com/questions/2217488/age-from-birthdate-in-python
+    """
+    today = date.today()
+    try: 
+        birthday = dob.replace(year=today.year)
+    # raised when birth date is February 29 and
+    # the current year is not a leap year
+    except ValueError:
+        birthday = dob.replace(year=today.year, day=born.day - 1)
+    if birthday > today:
+        return today.year - dob.year - 1
+    else:
+        return today.year - dob.year

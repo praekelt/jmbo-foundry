@@ -1,12 +1,16 @@
 import re
+import jwt
+from datetime import datetime
+from calendar import timegm
+from urlparse import urlparse
 
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.utils import timezone
 
-from foundry.models import Member
-from foundry.utils import get_preference
+from foundry.models import Member, Country
+from foundry.utils import get_preference, get_age
 
 
 PROTECTED_URLS_PATTERN = r'|'.join((
@@ -20,6 +24,8 @@ PROTECTED_URLS_PATTERN = r'|'.join((
     '/static/', 
     '/admin/',
 ))
+AG_TOKEN_MAX_TIME_TO_EXPIRY = 60  # in seconds
+AG_TOKEN_PARAMETER_NAME = 't_ag'
 
 
 class VerboseRequestMeta:
@@ -101,9 +107,73 @@ class AgeGateway:
             if private_site:
                 return HttpResponseRedirect(reverse('login'))
             else:
+                # check if a partner site has supplied this
+                # site with the user's age
+                ag_values, expires = self.get_partner_age_gateway_values(request)
+                if ag_values and expires:
+                    # verify age and automatically pass age gateway
+                    dob = datetime.strptime(ag_values[3:], '%d-%m-%Y')
+                    if Country.objects.filter(country_code__iexact=ag_values[:2],
+                                              minimum_age__lte=get_age(dob)).exists():
+                        response.set_cookie('age_gateway_passed', value=1,
+                                            expires=expires)
+                        response.set_cookie('age_gateway_values', values=ag_values,
+                                            expires=expires)
+                        return response
                 return HttpResponseRedirect(reverse('age-gateway'))
 
-        return response            
+        return response
+
+
+    def get_partner_age_gateway_values(self, request):
+        """
+        Checks if age gateway values have been supplied by a partner site in a
+        JWT token. Returns (ag_values, expires) if valid, otherwise (None, None).
+        The token is only valid if
+        1. the payload expiry time is not yet past (field 'exp'),
+        2. the time to payload expiry is less than AG_TOKEN_MAX_TIME_TO_EXPIRY,
+        3. both the 'e' (cookie expiry) and 'v' (cookie value) fields are supplied,
+        4. HTTP_REFERER matches a partner site.
+        """
+        if AG_TOKEN_PARAMETER_NAME in request.GET:
+            ref_domain = urlparse(request.META.get('HTTP_REFERER', '')).netloc
+            partner_domains = get_preference('GeneralPreferences',
+                                             'partner_site_domains')
+            jwt_shared_secret = get_preference('GeneralPreferences',
+                                               'jwt_shared_secret')
+            token = request.GET[AG_TOKEN_PARAMETER_NAME]
+
+            # check that we have all the required variables and
+            # that referer is a partner domain/subdomain
+            if (token and jwt_shared_secret and partner_domains and ref_domain
+                and (
+                    re.match(
+                        r'.*(%s)' % r'|'.join(partner_domains.split()),
+                        ref_domain
+                    ) is not None
+                )):
+
+                try:
+                    payload = jwt.decode(token, jwt_shared_secret)
+                    from_expiry = (timegm(datetime.utcnow().utctimetuple())
+                                   - int(payload['exp']))
+
+                    # make sure a partner site cannot set a token
+                    # that expires too far in the future
+                    if from_expiry > AG_TOKEN_MAX_TIME_TO_EXPIRY:
+                        raise jwt.ExpiredSignature
+
+                    if len(payload['v']) != 13:
+                        raise ValueError
+
+                    return (payload['v'], datetime.strptime(payload['e'],
+                                                            '%Y-%m-%dT%H:%M:%S%z'))
+
+                except (jwt.DecodeError, jwt.ExpiredSignature,
+                        KeyError, ValueError):
+                    pass
+
+        return None, None
 
 
 def get_page(self):

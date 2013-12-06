@@ -54,6 +54,7 @@ setup(
         'jmbo_twitter',
         'django-social-auth==0.7.18',   # 0.7.19 introduces a migration scoping bug
         'jmbo_sitemap>=0.1',
+        'PyJWT==0.1.6',
     ],
     include_package_data=True,
     tests_require=[

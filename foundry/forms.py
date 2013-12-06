@@ -29,6 +29,7 @@ from jmbo.forms import as_div
 from foundry import models
 from foundry.widgets import OldSchoolDateWidget, PrettyFileInput
 from foundry.ambientmobile import AmbientSMS, AmbientSMSError
+from foundry.utils import get_age
 
 
 class TermsCheckboxInput(forms.widgets.CheckboxInput):
@@ -432,8 +433,7 @@ class AgeGatewayForm(forms.Form):
         country = cleaned_data.get('country')
         date_of_birth = cleaned_data.get('date_of_birth')
         if country and date_of_birth:
-            today = datetime.date.today()
-            if date_of_birth > today.replace(today.year - country.minimum_age):
+            if get_age(date_of_birth) < country.minimum_age:
                 msg = "You must be at least %s years of age to use this site." \
                     % country.minimum_age
                 raise forms.ValidationError(_(msg))
