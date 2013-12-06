@@ -170,7 +170,7 @@ $(document).ready(function(){
         event.preventDefault();
         var form = $(this);
         var url = $(this).attr('action');
-        var data = $(this).serialize();
+        var data = $(this).serialize() + '&paginate_offset=-1';
         $.ajax({
             url: url,
             data: data,
