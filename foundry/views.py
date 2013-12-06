@@ -301,7 +301,9 @@ def post_comment(request, next=None, using=None):
         # Return rendered comment list
         context = RequestContext(request)
         # Put paginate by as a GET variable so django-pagination works
-        context['request'].GET = QueryDict('paginate_by=%s' % request.POST['paginate_by'])
+        context['request'].GET = QueryDict(
+            'paginate_by=%s&paginate_offset=%s' % (request.POST['paginate_by'], request.POST.get('paginate_offset', -1))
+        )
         context['object'] = target
         t = Template("{% load comments %} {% render_comment_list for object %}")
         html = t.render(context)
