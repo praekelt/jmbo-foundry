@@ -1,6 +1,7 @@
 import types
 import hashlib
 from BeautifulSoup import BeautifulSoup
+import cPickle
 
 from django import template
 from django.core.cache import cache
@@ -50,7 +51,7 @@ class MenuNode(template.Node):
     def __init__(self, slug):
         self.slug = template.Variable(slug)
 
-    def render(self, context, as_tile=False):       
+    def render(self, context, as_tile=False):
         slug = self.slug.resolve(context)
         try:
             obj = Menu.permitted.get(slug=slug)
@@ -59,7 +60,7 @@ class MenuNode(template.Node):
 
         object_list = []
         for o in obj.menulinkposition_set.select_related().all().order_by('position'):
-            if o.condition_expression_result(context['request']):          
+            if o.condition_expression_result(context['request']):
                 # Glue name and class_name to o.link
                 o.link.name = o.name
                 o.link.class_name = o.class_name
@@ -84,7 +85,7 @@ def navbar(parser, token):
 class NavbarNode(template.Node):
 
     def __init__(self, slug):
-        self.slug = template.Variable(slug)        
+        self.slug = template.Variable(slug)
 
     def render(self, context, as_tile=False):
         slug = self.slug.resolve(context)
@@ -116,12 +117,12 @@ class NavbarNode(template.Node):
 def listing(parser, token):
     tokens = token.split_contents()
     length = len(tokens)
-    
+
     if length < 2:
         raise template.TemplateSyntaxError(
             'listing tag require at least argument slug or queryset'
         )
-   
+
     slug_or_queryset = tokens[1]
 
     kwargs = {}
@@ -140,7 +141,7 @@ class ListingNode(template.Node):
 
     def render(self, context, as_tile=False):
         slug_or_queryset = self.slug_or_queryset.resolve(context)
-        
+
         if isinstance(slug_or_queryset, types.UnicodeType):
             try:
                 obj = Listing.permitted.get(slug=slug_or_queryset)
@@ -152,7 +153,7 @@ class ListingNode(template.Node):
                 """Helper class emulating Listing API so AbstractBaseStyle
                 works. Essentially a record class."""
 
-                def __init__(self, queryset, **kwargs):                    
+                def __init__(self, queryset, **kwargs):
                     self.queryset = lambda x: queryset
                     self.items_per_page = 0
                     for k, v in kwargs.items():
@@ -190,18 +191,24 @@ class RowsNode(template.Node):
 
         block_name = self.block_name.resolve(context)
 
-        # Cache homepage rows_by_block_name on request. It can't change during
-        # a request.
+        # Cache homepage rows_by_block_name
         empty_marker = None
-        key = '_foundry_rowsnode_rows_by_block_name'
-        rows_by_block_name = getattr(request, key, empty_marker)
-        if rows_by_block_name is empty_marker:
+        key = 'foundry-rbbn-%s' % settings.SITE_ID
+        cached = cache.get(key, empty_marker)
+        if cached is None:
             pages = Page.permitted.filter(is_homepage=True)
-            if pages.exists():
+            # No exists check because result is small
+            if pages:
                 rows_by_block_name = pages[0].rows_by_block_name
             else:
                 rows_by_block_name = []
-            setattr(request, key, rows_by_block_name)
+            cache.set(
+                key,
+                cPickle.dumps(rows_by_block_name),
+                settings.FOUNDRY.get('layout_cache_time', 60)
+            )
+        else:
+            rows_by_block_name = cPickle.loads(cached)
 
         if rows_by_block_name:
             rows = rows_by_block_name.get(block_name, [])
@@ -242,18 +249,18 @@ class TileNode(template.Node):
 
         if tile.view_name:
             # Resolve view name to a function or object
-            # xxx: this is slow because there is no way to get the view 
-            # function / object directly from the view name - you have to pass 
-            # through the url. But since the result is consistent while the 
-            # Django process is running it is a good candidate for caching.     
+            # xxx: this is slow because there is no way to get the view
+            # function / object directly from the view name - you have to pass
+            # through the url. But since the result is consistent while the
+            # Django process is running it is a good candidate for caching.
             try:
-                url = reverse(tile.view_name)        
+                url = reverse(tile.view_name)
             except NoReverseMatch:
                 return "No reverse match for %s" % tile.view_name
             view, args, kwargs = resolve(url)
 
             # Set recursion guard flag and render only content block flag
-            setattr(request, '_foundry_suppress_rows_tag', 1)            
+            setattr(request, '_foundry_suppress_rows_tag', 1)
             setattr(request, 'render_only_content_block', True)
             html = ''
             # Call the view. Let any error propagate.
@@ -265,17 +272,17 @@ class TileNode(template.Node):
             elif isinstance(result, HttpResponse):
                 # Old-school view
                 html = result.content
-            # Clear flags  
-            # xxx: something may clear the flags. Need to investigate more 
+            # Clear flags
+            # xxx: something may clear the flags. Need to investigate more
             # incase of thread safety problem.
-            if hasattr(request, '_foundry_suppress_rows_tag'):           
+            if hasattr(request, '_foundry_suppress_rows_tag'):
                 delattr(request, '_foundry_suppress_rows_tag')
-            if hasattr(request, 'render_only_content_block'):           
+            if hasattr(request, 'render_only_content_block'):
                 delattr(request, 'render_only_content_block')
 
             # Extract content div if any
             soup = BeautifulSoup(html)
-            content = soup.find('div', id='content')        
+            content = soup.find('div', id='content')
             if content:
                 return content.renderContents()
 
@@ -295,7 +302,7 @@ class TileNode(template.Node):
 
 @register.tag
 def tile_url(parser, token):
-    """Return the Url for a given view. Very similar to the {% url %} template tag, 
+    """Return the Url for a given view. Very similar to the {% url %} template tag,
     but can accept a variable as first parameter."""
     try:
         tag_name, tile = token.split_contents()
@@ -314,12 +321,12 @@ class TileUrlNode(template.Node):
         tile = self.tile.resolve(context)
         if tile.view_name:
             try:
-                return reverse(tile.view_name)        
+                return reverse(tile.view_name)
             except NoReverseMatch:
                 return ''
 
         if tile.target:
-            # xxx: not strictly correct since target may be menu or navbar. 
+            # xxx: not strictly correct since target may be menu or navbar.
             # No harm done for now.
             url = reverse('listing-detail', args=[tile.target.slug])
             return url
@@ -356,9 +363,9 @@ class ListingQuerysetNode(template.Node):
 
 
 # autopaginate template tag based on django-pagination tag, but can take an
-# offset parameter. This allows you to show the last page by default. 
-# Docstrings omitted for brevity. May be worthwhile to contribute to 
-# django-pagination. Our API is slightly different though. This can be 
+# offset parameter. This allows you to show the last page by default.
+# Docstrings omitted for brevity. May be worthwhile to contribute to
+# django-pagination. Our API is slightly different though. This can be
 # overcome using assignment vars (eg. page_number=2).
 def do_autopaginate(parser, token):
     """
@@ -382,10 +389,10 @@ def do_autopaginate(parser, token):
     if len(split) == 2:
         return AutoPaginateNode(split[1])
     elif len(split) == 3:
-        return AutoPaginateNode(split[1], paginate_by=split[2], 
+        return AutoPaginateNode(split[1], paginate_by=split[2],
             context_var=context_var)
     elif len(split) == 4:
-        return AutoPaginateNode(split[1], paginate_by=split[2], 
+        return AutoPaginateNode(split[1], paginate_by=split[2],
             page_number=split[3], context_var=context_var)
     elif len(split) == 5:
         try:
@@ -393,7 +400,7 @@ def do_autopaginate(parser, token):
         except ValueError:
             raise template.TemplateSyntaxError(u'Got %s, but expected integer.'
                 % split[4])
-        return AutoPaginateNode(split[1], paginate_by=split[2], page_number=split[3], 
+        return AutoPaginateNode(split[1], paginate_by=split[2], page_number=split[3],
             orphans=orphans, context_var=context_var)
     else:
         raise template.TemplateSyntaxError('%r tag takes one required ' +
@@ -401,7 +408,7 @@ def do_autopaginate(parser, token):
 
 
 class AutoPaginateNode(template.Node):
-    def __init__(self, queryset_var, paginate_by=DEFAULT_PAGINATION, 
+    def __init__(self, queryset_var, paginate_by=DEFAULT_PAGINATION,
         page_number=0, orphans=DEFAULT_ORPHANS, context_var=None):
         self.queryset_var = template.Variable(queryset_var)
         if isinstance(paginate_by, int):
@@ -483,7 +490,7 @@ class FoundryCacheNode(template.Node):
             request = context['request']
             user = getattr(request, 'user', None)
 
-            # Compute a key from cache_type 
+            # Compute a key from cache_type
             k = ''
             if obj.cache_type == 'anonymous_only':
                 # If authenticated then bypass caching
@@ -508,3 +515,36 @@ class FoundryCacheNode(template.Node):
             return value
 
         return self.nodelist.render(context)
+
+
+@register.tag
+def get_can_report_comment(parser, token):
+    """{% get_can_report_comment [comment] as [varname] %}"""
+    try:
+        tag_name, comment, dc, as_var = token.split_contents()
+    except ValueError:
+        raise template.TemplateSyntaxError(
+            "get_can_report_comment tag has syntax {% get_can_report_comment [comment] as [varname] %}"
+        )
+    return CanReportCommentNode(comment, as_var)
+
+
+class CanReportCommentNode(template.Node):
+
+    def __init__(self, comment, as_var):
+        self.comment = template.Variable(comment)
+        self.as_var = template.Variable(as_var)
+
+    def render(self, context):
+        comment = self.comment.resolve(context)
+        as_var = self.as_var.resolve(context)
+
+        request = context['request']
+        user = getattr(request, 'user', None)
+        result = False
+        if getattr(user, 'is_authenticated', lambda: False)():
+            key = 'comment_report_%s' % comment.id
+            result = key not in request.COOKIES
+        context[as_var] = result
+
+        return ''

@@ -1,6 +1,14 @@
 Changelog
 =========
 
+1.2
+---
+#. Move to jQuery 1.10.2 as recommended version. If you have customized and static Javascript resources you will have to update them manually.
+#. Use a newer version of AnythingSlider.
+#. Allow form class to be passed to join view.
+#. Cache individual comments on comment list.
+#. Minor performance improvements.
+
 1.1.23
 ------
 #. Fix template error in `modelbase_list_item_ipod.html`.
@@ -19,6 +27,7 @@ Changelog
 ------
 #. Provide two more custom listing styles.
 #. Listings can now be filtered by tag.
+>>>>>>> develop
 
 1.1.19.3
 --------

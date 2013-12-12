@@ -123,13 +123,13 @@ ImageModel.add_accessor_methods = add_accessor_methods
 
 
 class LayerAwareSizes(dict):
-    
+
     def get(self, key):
         result = None
 
         # Handle legacy LAYER marker
         if key.endswith('_LAYER'):
-            key = key.replace('_LAYER', '') 
+            key = key.replace('_LAYER', '')
 
         # Iterate over layers
         for layer in settings.FOUNDRY['layers']:
@@ -211,7 +211,7 @@ def BlockNode_render(self, context):
 #BlockNode.render = BlockNode_render
 
 
-"""Django wraps the already hidden CSRF token input in an invisible container. This causes problems on low-end handsets. 
+"""Django wraps the already hidden CSRF token input in an invisible container. This causes problems on low-end handsets.
 https://code.djangoproject.com/ticket/18484"""
 from django.template.defaulttags import CsrfTokenNode
 from django.utils.safestring import mark_safe
@@ -248,5 +248,23 @@ def Site_title(self):
     # Strip away (smart), (web) etc
     return self.name.split('(')[0]
 
-Site.__unicode__ = Site__unicode__    
+Site.__unicode__ = Site__unicode__
 Site.title = Site_title
+
+
+"""Legacy templates do {% autopaginate object_list items_per_page %} because it
+was guaranteed to be non-zero. That led to an inefficiency which was removed.
+This patch ensures legacy templates do not break."""
+from pagination.templatetags import pagination_tags
+def AutoPaginateNode_decorator(func):
+    def new(self, context):
+        if isinstance(self.paginate_by, int):
+            paginate_by = self.paginate_by
+        else:
+            paginate_by = self.paginate_by.resolve(context)
+        if not paginate_by:
+            self.paginate_by = 100
+        return func(self, context)
+    return new
+
+pagination_tags.AutoPaginateNode.render = AutoPaginateNode_decorator(pagination_tags.AutoPaginateNode.render)

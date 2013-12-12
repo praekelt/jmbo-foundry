@@ -1,10 +1,13 @@
 import inspect
 import re
+import cPickle
 
+from django.core.cache import cache
 from django.core.urlresolvers import reverse, Resolver404
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
+from django.db.models import Count
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.contrib.auth.models import User, UserManager
 from django.contrib.contenttypes.models import ContentType
@@ -15,6 +18,7 @@ from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
 from django.utils.importlib import import_module
 from django.utils import simplejson as json
+from django.conf import settings
 
 from ckeditor.fields import RichTextField
 from preferences.models import Preferences
@@ -55,6 +59,9 @@ class AttributeWrapper:
         if key in self._attributes:
             return self._attributes[key]
         return getattr(self._obj, key)
+
+    def __setstate__(self, dict):
+        self.__dict__.update(dict)
 
     @property
     def klass(self):
@@ -526,12 +533,13 @@ class RegistrationPreferences(Preferences):
         # field before but it is now, then there may not be two members with
         # the same mobile number.
         for fieldname in self.unique_fields:
-            values = Member.objects.exclude(**{fieldname: None}).exclude(**{fieldname: ''}).values_list(fieldname, flat=True)
-            # set removes duplicates from a list
-            if len(values) != len(set(values)):
+            li = Member.objects.exclude(**{fieldname: None}).exclude(
+                **{fieldname: ''}).values(fieldname).annotate(
+                dcount=Count(fieldname)).order_by('-dcount')
+            if li and li[0]['dcount'] > 1:
                 raise RuntimeError(
                     "Cannot set %s to be unique since there is more than one \
-member with the same %s %s." % (fieldname, fieldname, values[0])
+member with the same %s %s." % (fieldname, fieldname, li[0][fieldname])
                 )
         super(RegistrationPreferences, self).save(*args, **kwargs)
 
@@ -723,9 +731,15 @@ useful when using a page as a campaign."""
     @property
     def rows(self):
         """Fetch rows, columns and tiles in a single query"""
+
+        key = 'foundry-page-rows-%s' % self.id
+        cached = cache.get(key, None)
+        if cached:
+            return cPickle.loads(cached)
+
         # Organize into a structure
-        struct = {}
         tiles = Tile.objects.select_related().filter(column__row__page=self).order_by('index')
+        struct = {}
         for tile in tiles:
             row = tile.column.row
             if row not in struct:
@@ -746,6 +760,8 @@ useful when using a page as a campaign."""
             for column in keys_column:
                 column_objs.append(AttributeWrapper(column, tiles=struct[row][column]))
             result.append(AttributeWrapper(row, columns=column_objs))
+
+        cache.set(key, cPickle.dumps(result), settings.FOUNDRY.get('layout_cache_time', 60))
 
         return result
 

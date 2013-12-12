@@ -20,7 +20,7 @@ $(document).ready(function(){
 </script>
 
 {% with request.REQUEST.paginate_by|default:20|add:0 as paginate_by %}
-{% with request.REQUEST.paginate_offset|default:-1|add:0 as paginate_offset %}
+{% with request.REQUEST.paginate_offset|default:0|add:0 as paginate_offset %}
 
     <div class="foundry-container foundry-comments-list">
 

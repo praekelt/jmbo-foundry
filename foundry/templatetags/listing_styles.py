@@ -23,7 +23,7 @@ class AbstractBaseStyle(object):
         context['object_list'] = self.get_queryset(request)
         context['pinned_list'] = self.get_pinned_queryset()
         context['listing'] = self.listing
-        context['items_per_page'] = self.listing.items_per_page or 100
+        context['items_per_page'] = self.listing.items_per_page
         context['identifier'] = getattr(self.listing, 'id', None) \
             or getattr(self.listing, 'identifier', '')
 
