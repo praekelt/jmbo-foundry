@@ -403,21 +403,23 @@ class AgeGatewayTestCase(BaseTestCase):
         gp.save()
         cache.clear()
 
-    def pass_age_gateway(self, dob=None, country_code='ZA'):
+    def pass_age_gateway(self, dob=None, country_code='ZA', extra={}):
         if dob is None:
             dob = date(day=1, month=7, year=1985)
-        self.client.post(reverse('age-gateway'), {
+        data = {
             'country': Country.objects.get(country_code=country_code).pk,
             'remember_me': True,
             'date_of_birth_0': dob.day,
             'date_of_birth_1': dob.month,
             'date_of_birth_2': dob.year
-        })
-        return dob
+        }
+        data.update(extra)
+        response = self.client.post(reverse('age-gateway'), data)
+        return response
 
     def test_age_gateway(self):
         self.assertRedirects(self.client.get(reverse('home')),
-                             reverse('age-gateway'))
+                             '%s?next=/' % reverse('age-gateway'))
         self.pass_age_gateway()
         self.assertEqual(self.client.get(reverse('home')).status_code,
                          200)
@@ -454,3 +456,15 @@ class AgeGatewayTestCase(BaseTestCase):
         self.assertEqual(self.client.cookies['age_gateway_values'].value,
                          'ZA-01-07-1985')
         self.assertEqual(response.status_code, 200)
+
+    def test_next_redirect(self):
+        redirect_to = reverse('about-us')
+        response = self.client.get(redirect_to)
+        self.assertRedirects(response,
+                             '%s?next=%s' % (reverse('age-gateway'),
+                                             redirect_to))
+        self.assertContains(self.client.get(response['Location']),
+                            'name="next" value="%s"' % redirect_to)
+        response = self.pass_age_gateway(extra={'next': redirect_to})
+        self.assertRedirects(response,
+                             reverse('about-us'))

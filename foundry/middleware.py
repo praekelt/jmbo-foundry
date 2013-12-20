@@ -2,6 +2,7 @@ import re
 import jwt
 from datetime import datetime
 from calendar import timegm
+from urlparse import urlparse
 
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
