@@ -1,4 +1,5 @@
 from datetime import date
+import random
 
 from django.core.cache import cache
 from django.conf import settings
@@ -58,7 +59,7 @@ def get_preference(klass_name, attr):
 
 def get_age(dob):
     """
-    Calculates age from date of birth. Adapted from:
+    Calculates age from date of birth (datetime.date object). Adapted from:
     http://stackoverflow.com/questions/2217488/age-from-birthdate-in-python
     """
     today = date.today()
@@ -72,3 +73,11 @@ def get_age(dob):
         return today.year - dob.year - 1
     else:
         return today.year - dob.year
+
+
+def generate_random_key(length,
+                        valid_characters='abcdefghijklmnopqrstuvwxyz0123456789'):
+    key = ''
+    for i in range(length):
+        key = '%s%s' % (key, random.choice(valid_characters))
+    return key

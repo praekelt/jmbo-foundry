@@ -461,6 +461,15 @@ my-user-agent will match my-user-agent-version-two.'''
         help_text="""May contain tags and javascript. Set this even if the
 preference is for a mobile site."""
     )
+    partner_site_configuration = models.TextField(
+        null=True,
+        blank=True,
+        help_text="A list of partner domains and JWT keys, one "
+                  "per line. A line has the format &lt;domain&gt; "
+                  "&lt;key&gt;, e.g. www.example.com this_is_a_key. "
+                  "Partner sites use the JWT key to encode age "
+                  "gateway values, etc."
+    )
 
     class Meta:
         verbose_name_plural = 'General Preferences'

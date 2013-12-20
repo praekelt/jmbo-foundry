@@ -112,12 +112,12 @@ class AgeGateway:
                 ag_values, expires = self.get_partner_age_gateway_values(request)
                 if ag_values and expires:
                     # verify age and automatically pass age gateway
-                    dob = datetime.strptime(ag_values[3:], '%d-%m-%Y')
+                    dob = datetime.strptime(ag_values[3:], '%d-%m-%Y').date()
                     if Country.objects.filter(country_code__iexact=ag_values[:2],
                                               minimum_age__lte=get_age(dob)).exists():
                         response.set_cookie('age_gateway_passed', value=1,
                                             expires=expires)
-                        response.set_cookie('age_gateway_values', values=ag_values,
+                        response.set_cookie('age_gateway_values', value=ag_values,
                                             expires=expires)
                         return response
                 return HttpResponseRedirect(reverse('age-gateway'))
@@ -136,42 +136,38 @@ class AgeGateway:
         4. HTTP_REFERER matches a partner site.
         """
         if AG_TOKEN_PARAMETER_NAME in request.GET:
-            ref_domain = urlparse(request.META.get('HTTP_REFERER', '')).netloc
-            partner_domains = get_preference('GeneralPreferences',
-                                             'partner_site_domains')
-            jwt_shared_secret = get_preference('GeneralPreferences',
-                                               'jwt_shared_secret')
             token = request.GET[AG_TOKEN_PARAMETER_NAME]
+            ref_domain = urlparse(request.META.get('HTTP_REFERER', '')).netloc
+            partner_config = get_preference('GeneralPreferences',
+                                            'partner_site_configuration')
 
-            # check that we have all the required variables and
-            # that referer is a partner domain/subdomain
-            if (token and jwt_shared_secret and partner_domains and ref_domain
-                and (
-                    re.match(
-                        r'.*(%s)' % r'|'.join(partner_domains.split()),
-                        ref_domain
-                    ) is not None
-                )):
+            try:
+                # get domains and JWT keys - will raise ValueError
+                # if the partner_site_configuration format is incorrect
+                domain_key_map = dict(line.split(' ', 1) for line in 
+                                      partner_config.strip('\n').split('\n'))
+                # raises KeyError if referer is not a partner domain
+                jwt_shared_secret = domain_key_map[ref_domain]
 
-                try:
-                    payload = jwt.decode(token, jwt_shared_secret)
-                    from_expiry = (timegm(datetime.utcnow().utctimetuple())
-                                   - int(payload['exp']))
+                payload = jwt.decode(token, jwt_shared_secret)
+                from_expiry = (timegm(datetime.utcnow().utctimetuple())
+                               - int(payload['exp']))
 
-                    # make sure a partner site cannot set a token
-                    # that expires too far in the future
-                    if from_expiry > AG_TOKEN_MAX_TIME_TO_EXPIRY:
-                        raise jwt.ExpiredSignature
+                # make sure a partner site cannot set a token
+                # that expires too far in the future
+                if from_expiry > AG_TOKEN_MAX_TIME_TO_EXPIRY:
+                    raise jwt.ExpiredSignature
 
-                    if len(payload['v']) != 13:
-                        raise ValueError
+                if len(payload['v']) != 13:
+                    raise ValueError
 
-                    return (payload['v'], datetime.strptime(payload['e'],
-                                                            '%Y-%m-%dT%H:%M:%S%z'))
+                # assume UTC timestamp
+                return (payload['v'], datetime.strptime(payload['e'],
+                                                        '%Y-%m-%dT%H:%M:%S'))
 
-                except (jwt.DecodeError, jwt.ExpiredSignature,
-                        KeyError, ValueError):
-                    pass
+            except (jwt.DecodeError, jwt.ExpiredSignature,
+                    KeyError, ValueError):
+                pass
 
         return None, None
 
