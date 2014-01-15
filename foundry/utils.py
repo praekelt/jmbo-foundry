@@ -3,6 +3,21 @@ import random
 
 from django.core.cache import cache
 from django.conf import settings
+try:
+    # Django >= 1.4.3
+    from django.utils.http import is_safe_url
+except ImportError:
+    import urlparse
+    def is_safe_url(url, host=None):
+        '''
+        Copied from Django 1.4.10:
+        https://github.com/django/django/blob/1.4.10/django/utils/http.py#L228
+        '''
+        if not url:
+            return False
+        url_info = urlparse.urlparse(url)
+        return (not url_info[1] or url_info[1] == host) and \
+            (not url_info[0] or url_info[0] in ['http', 'https'])
 
 from preferences import preferences
 

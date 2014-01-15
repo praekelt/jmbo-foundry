@@ -7,6 +7,7 @@ from urlparse import urlparse
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.contrib.auth.views import redirect_to_login
 from django.utils import timezone
 
 from foundry.models import Member, Country
@@ -96,7 +97,7 @@ class AgeGateway:
         if exempted_user_agents \
             and (
                 re.match(
-                    r'|'.join(exempted_user_agents.split()), 
+                    r'|'.join(exempted_user_agents.split()),
                     request.META.get('HTTP_USER_AGENT', '')
                ) is not None
             ):
@@ -105,7 +106,8 @@ class AgeGateway:
         user = getattr(request, 'user', None)
         if (user is not None) and user.is_anonymous():
             if private_site:
-                return HttpResponseRedirect(reverse('login'))
+                return redirect_to_login(request.path_info,
+                                         login_url=reverse('login'))
             else:
                 # check if a partner site has supplied this
                 # site with the user's age
@@ -120,10 +122,10 @@ class AgeGateway:
                         response.set_cookie('age_gateway_values', value=ag_values,
                                             expires=expires)
                         return response
-                return HttpResponseRedirect(reverse('age-gateway'))
+                return redirect_to_login(request.path_info,
+                                         login_url=reverse('age-gateway'))
 
         return response
-
 
     def get_partner_age_gateway_values(self, request):
         """
