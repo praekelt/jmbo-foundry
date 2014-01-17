@@ -8,6 +8,7 @@
             
         <form action="{% url age-gateway %}" method="POST" class="foundry-form">   
             {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.REQUEST.next }}" />
             {{ form.as_div }}
             <div class="buttons">
                 <input type="submit" value="{% trans "Confirm" %}" />
