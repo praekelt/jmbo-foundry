@@ -9,7 +9,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, \
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, REDIRECT_FIELD_NAME
 from django.contrib.sites.models import get_current_site
 from django.template import Context, loader
 from django.utils.http import int_to_base36
@@ -29,6 +29,7 @@ from jmbo.forms import as_div
 from foundry import models
 from foundry.widgets import OldSchoolDateWidget, PrettyFileInput
 from foundry.ambientmobile import AmbientSMS, AmbientSMSError
+from foundry.utils import get_age, is_safe_url
 
 
 class TermsCheckboxInput(forms.widgets.CheckboxInput):
@@ -432,8 +433,7 @@ class AgeGatewayForm(forms.Form):
         country = cleaned_data.get('country')
         date_of_birth = cleaned_data.get('date_of_birth')
         if country and date_of_birth:
-            today = datetime.date.today()
-            if date_of_birth > today.replace(today.year - country.minimum_age):
+            if get_age(date_of_birth) < country.minimum_age:
                 msg = "You must be at least %s years of age to use this site." \
                     % country.minimum_age
                 raise forms.ValidationError(_(msg))
@@ -446,12 +446,20 @@ class AgeGatewayForm(forms.Form):
         self.fields['country'].label = _("Where do you live?")
 
     def save(self, request):
-        """Set cookie"""
+        """
+        Sets age gateway cookies and returns redirect
+        to 'next' parameter if valid, otherwise home page.
+        """
+        # get redirect url
+        redirect_to = request.REQUEST.get(REDIRECT_FIELD_NAME, '/')
+        if not is_safe_url(url=redirect_to, host=request.get_host()):
+            redirect_to = '/'
+        response = HttpResponseRedirect(redirect_to)
+        # set cookie
         expires = None
         if self.cleaned_data['remember_me']:
             now = timezone.now()
             expires = now.replace(year=now.year+10)
-        response = HttpResponseRedirect('/')
         response.set_cookie('age_gateway_passed', value=1, expires=expires)
         response.set_cookie('age_gateway_values', value='%s-%s' % (self.cleaned_data['country'].country_code,
             self.cleaned_data['date_of_birth'].strftime('%d-%m-%Y')), expires=expires)

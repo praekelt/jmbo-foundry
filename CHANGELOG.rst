@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.2.1
+-----
+#. Use `next` parameter when redirecting to age gateway. On successfully passing the age gateway, the user is redirected to `next`.
+#. Allow a partner site to automatically pass the age gateway for a user by providing age gateway data in a JWT token.
+
 1.2
 ---
 #. Move to jQuery 1.10.2 as recommended version. If you have customized and static Javascript resources you will have to update them manually.

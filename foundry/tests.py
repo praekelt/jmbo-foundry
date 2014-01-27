@@ -1,8 +1,11 @@
-from datetime import datetime
+from calendar import timegm
+from datetime import datetime, date
 from time import sleep
 import inspect
+import jwt
 
 from django.core import management
+from django.core.cache import cache
 from django.test import TestCase as BaseTestCase
 from django.contrib.contenttypes.models import ContentType
 from django.test.client import Client as BaseClient, FakePayload, \
@@ -12,6 +15,7 @@ from django.contrib.auth.signals import user_logged_in
 import django.contrib.sites.models
 from django.contrib.sites.models import Site
 from django.conf import settings
+from django.utils import timezone
 
 from preferences import preferences
 from preferences.models import Preferences
@@ -19,9 +23,12 @@ from category.models import Category, Tag
 from post.models import Post
 from gallery.models import Gallery
 
-from foundry.models import Member, Listing, Page, Row, Column, Tile
+from foundry.models import Member, Listing, Page, Row, Column, Tile, \
+    Country
 from foundry import views
-from foundry.utils import get_preference
+from foundry.middleware import AG_TOKEN_PARAMETER_NAME, \
+    AG_TOKEN_MAX_TIME_TO_EXPIRY
+from foundry.utils import get_preference, generate_random_key
 from foundry.templatetags import listing_styles
 
 
@@ -370,3 +377,94 @@ class TestCase(BaseTestCase):
         settings.SITE_ID = 1
         django.contrib.sites.models.SITE_CACHE = {}
         self.assertNotEqual(about1, about2)
+
+
+class AgeGatewayTestCase(BaseTestCase):
+    
+    def setUp(self):
+        super(AgeGatewayTestCase, self).setUp()
+        cache.clear()
+
+    @classmethod
+    def setUpClass(cls):
+        super(AgeGatewayTestCase, cls).setUpClass()
+        Country.objects.create(title='South Africa',
+                               country_code='ZA',
+                               minimum_age=18)
+        gp = preferences.GeneralPreferences
+        gp.show_age_gateway = True
+        gp.save()
+
+    @classmethod
+    def tearDownClass(cls):
+        super(AgeGatewayTestCase, cls).tearDownClass()
+        gp = preferences.GeneralPreferences
+        gp.show_age_gateway = False
+        gp.save()
+        cache.clear()
+
+    def pass_age_gateway(self, dob=None, country_code='ZA', extra={}):
+        if dob is None:
+            dob = date(day=1, month=7, year=1985)
+        data = {
+            'country': Country.objects.get(country_code=country_code).pk,
+            'remember_me': True,
+            'date_of_birth_0': dob.day,
+            'date_of_birth_1': dob.month,
+            'date_of_birth_2': dob.year
+        }
+        data.update(extra)
+        response = self.client.post(reverse('age-gateway'), data)
+        return response
+
+    def test_age_gateway(self):
+        self.assertRedirects(self.client.get(reverse('home')),
+                             '%s?next=/' % reverse('age-gateway'))
+        self.pass_age_gateway()
+        self.assertEqual(self.client.get(reverse('home')).status_code,
+                         200)
+
+    def test_auto_pass_age_gateway(self):
+        partner_domain = 'www.test.com'
+        partner_key = generate_random_key(50)
+        gp = preferences.GeneralPreferences
+        gp.partner_site_configuration = '%s %s' % (partner_domain, partner_key)
+        gp.save()
+
+        # create token with over-18 value
+        now = timezone.now()
+        expiry = now.replace(year=now.year + 10)
+        payload = {
+            # value of age_gateway_values cookie
+            'v': 'ZA-01-07-1985',
+            # expiry for age gateway cookies
+            'e': expiry.strftime('%Y-%m-%dT%H:%M:%S'),
+            # expiry for this payload
+            'exp': (timegm(datetime.utcnow().utctimetuple())
+                    + int(AG_TOKEN_MAX_TIME_TO_EXPIRY * 0.5))
+        }
+        token = jwt.encode(payload, partner_key)
+        response = self.client.get('%s?%s=%s' % (reverse('home'),
+                                                 AG_TOKEN_PARAMETER_NAME,
+                                                 token),
+                                   HTTP_REFERER='http://%s' % partner_domain)
+        self.assertIn('age_gateway_passed', self.client.cookies)
+        self.assertEqual(self.client.cookies['age_gateway_passed'].value, '1')
+        self.assertEqual(self.client.cookies['age_gateway_passed']['expires'],
+                         expiry.strftime('%a, %d-%b-%Y %H:%M:%S GMT'))
+        self.assertIn('age_gateway_values', self.client.cookies)
+        self.assertEqual(self.client.cookies['age_gateway_values'].value,
+                         'ZA-01-07-1985')
+        self.assertEqual(response.status_code, 200)
+
+    def test_next_redirect(self):
+        redirect_to = reverse('about-us')
+        response = self.client.get(redirect_to)
+        self.assertRedirects(response,
+                             '%s?next=%s' % (reverse('age-gateway'),
+                                             redirect_to))
+        self.assertContains(self.client.get(response['Location']),
+                            'name="next" value="%s"' % redirect_to)
+        response = self.pass_age_gateway(extra={'next': redirect_to})
+        self.assertRedirects(response,
+                             reverse('about-us'))

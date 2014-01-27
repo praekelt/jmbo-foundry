@@ -1,5 +1,23 @@
+from datetime import date
+import random
+
 from django.core.cache import cache
 from django.conf import settings
+try:
+    # Django >= 1.4.3
+    from django.utils.http import is_safe_url
+except ImportError:
+    import urlparse
+    def is_safe_url(url, host=None):
+        '''
+        Copied from Django 1.4.10:
+        https://github.com/django/django/blob/1.4.10/django/utils/http.py#L228
+        '''
+        if not url:
+            return False
+        url_info = urlparse.urlparse(url)
+        return (not url_info[1] or url_info[1] == host) and \
+            (not url_info[0] or url_info[0] in ['http', 'https'])
 
 from preferences import preferences
 
@@ -52,3 +70,29 @@ def get_preference(klass_name, attr):
         v = getattr(getattr(preferences, klass_name), attr)
         cache.set(key, v, 60)
     return v
+
+
+def get_age(dob):
+    """
+    Calculates age from date of birth (datetime.date object). Adapted from:
+    http://stackoverflow.com/questions/2217488/age-from-birthdate-in-python
+    """
+    today = date.today()
+    try: 
+        birthday = dob.replace(year=today.year)
+    # raised when birth date is February 29 and
+    # the current year is not a leap year
+    except ValueError:
+        birthday = dob.replace(year=today.year, day=born.day - 1)
+    if birthday > today:
+        return today.year - dob.year - 1
+    else:
+        return today.year - dob.year
+
+
+def generate_random_key(length,
+                        valid_characters='abcdefghijklmnopqrstuvwxyz0123456789'):
+    key = ''
+    for i in range(length):
+        key = '%s%s' % (key, random.choice(valid_characters))
+    return key
