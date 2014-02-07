@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Fix forms.css rule for required fields.
+
 1.2.1
 -----
 #. Use `next` parameter when redirecting to age gateway. On successfully passing the age gateway, the user is redirected to `next`.
