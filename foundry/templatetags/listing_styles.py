@@ -1,3 +1,5 @@
+import inspect
+
 from django.template.loader import render_to_string
 from django.utils.importlib import import_module
 from django.conf import settings
@@ -92,13 +94,18 @@ LISTING_MAP = {}
 for klass in (Horizontal, Vertical, Promo, VerticalThumbnail, Widget):
     LISTING_CLASSES.append(klass)
     LISTING_MAP[klass.__name__] = klass
-for app in reversed(settings.INSTALLED_APPS):
-    mod = import_module(app)
-    ls = getattr(mod, 'listing_styles', None)
-    if ls:
-        for klass in inspect.getmembers(listing_styles, inspect.isclass):
-            LISTING_CLASSES.append(klass)
-            LISTING_MAP[klass.__name__] = klass
+for app in settings.INSTALLED_APPS:
+    if app == 'foundry':
+        continue
+    try:
+        mod = import_module(app + '.templatetags.listing_styles')
+    except ImportError:
+        pass
+    else:
+        for name, klass in inspect.getmembers(mod, inspect.isclass):
+            if name != 'AbstractBaseStyle':
+                LISTING_CLASSES.append(klass)
+                LISTING_MAP[klass.__name__] = klass
 for klass in (CustomOne, CustomTwo, CustomThree, CustomFour, CustomFive):
     LISTING_CLASSES.append(klass)
     LISTING_MAP[klass.__name__] = klass
