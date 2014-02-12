@@ -51,6 +51,7 @@ class AbstractBaseStyle(object):
 
 class Horizontal(AbstractBaseStyle):
     template_name = 'foundry/inclusion_tags/listing_horizontal.html'
+    image_path = 'admin/images/listing-horizontal.png'
 
 
 class Vertical(AbstractBaseStyle):
