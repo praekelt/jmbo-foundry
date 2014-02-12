@@ -12,7 +12,7 @@ from photologue.models import PhotoSize
 
 class Command(BaseCommand):
     help = "Scan apps for fixtures/photosizes.json and loads them."
-    
+
     @transaction.commit_on_success
     def handle(self, *args, **options):
 
@@ -28,7 +28,7 @@ class Command(BaseCommand):
                 fp = open(fixtures, 'r')
                 json = fp.read()
                 fp.close()
-                
+
                 # Create / update objects
                 for obj in serializers.deserialize('json', json):
                     # Blank pk
