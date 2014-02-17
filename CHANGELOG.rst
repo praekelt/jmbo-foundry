@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.2.2.2
+-------
+#. Hotfix - image layer fallback functionality restored.
+
 1.2.2.1
 -------
 #. Hotfix - added dependency link to photologue.
