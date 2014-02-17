@@ -85,7 +85,7 @@ from django.utils.functional import curry
 from django.conf import settings
 
 import photologue
-from photologue.models import PhotoSize, ImageModel
+from photologue.models import PhotoSize, ImageModel, size_method_map
 
 
 class LayerAwareSizes(dict):
