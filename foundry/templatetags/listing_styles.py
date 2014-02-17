@@ -1,5 +1,8 @@
+import inspect
+
 from django.template.loader import render_to_string
 from django.utils.importlib import import_module
+from django.conf import settings
 
 
 class AbstractBaseStyle(object):
@@ -48,6 +51,7 @@ class AbstractBaseStyle(object):
 
 class Horizontal(AbstractBaseStyle):
     template_name = 'foundry/inclusion_tags/listing_horizontal.html'
+    image_path = 'admin/images/listing-horizontal.png'
 
 
 class Vertical(AbstractBaseStyle):
@@ -84,3 +88,25 @@ class CustomFour(AbstractBaseStyle):
 
 class CustomFive(AbstractBaseStyle):
     template_name = 'foundry/inclusion_tags/listing_custom_five.html'
+
+
+LISTING_CLASSES = []
+LISTING_MAP = {}
+for klass in (Horizontal, Vertical, Promo, VerticalThumbnail, Widget):
+    LISTING_CLASSES.append(klass)
+    LISTING_MAP[klass.__name__] = klass
+for app in settings.INSTALLED_APPS:
+    if app == 'foundry':
+        continue
+    try:
+        mod = import_module(app + '.templatetags.listing_styles')
+    except ImportError:
+        pass
+    else:
+        for name, klass in inspect.getmembers(mod, inspect.isclass):
+            if name != 'AbstractBaseStyle':
+                LISTING_CLASSES.append(klass)
+                LISTING_MAP[klass.__name__] = klass
+for klass in (CustomOne, CustomTwo, CustomThree, CustomFour, CustomFive):
+    LISTING_CLASSES.append(klass)
+    LISTING_MAP[klass.__name__] = klass

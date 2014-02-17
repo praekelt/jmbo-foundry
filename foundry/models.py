@@ -35,7 +35,7 @@ from foundry.profile_models import AbstractAvatarProfile, \
     AbstractSocialProfile, AbstractPersonalProfile, \
     AbstractContactProfile, AbstractSubscriptionProfile, \
     AbstractLocationProfile
-from foundry.templatetags import listing_styles
+from foundry.templatetags.listing_styles import LISTING_CLASSES
 from foundry.managers import PermittedManager
 import foundry.eventhandlers
 from foundry.mixins import CachingMixin
@@ -280,7 +280,7 @@ items are visible across all pages when navigating the listing.""",
 Set to zero to display all items.""",
     )
     style = models.CharField(
-        choices=((style[0], style[0]) for style in inspect.getmembers(listing_styles, inspect.isclass) if style[0] != 'AbstractBaseStyle'),
+        choices=[(klass.__name__, klass.__name__) for klass in LISTING_CLASSES],
         max_length=64
     )
     items_per_page = models.PositiveIntegerField(

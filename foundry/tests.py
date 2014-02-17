@@ -29,7 +29,7 @@ from foundry import views
 from foundry.middleware import AG_TOKEN_PARAMETER_NAME, \
     AG_TOKEN_MAX_TIME_TO_EXPIRY
 from foundry.utils import get_preference, generate_random_key
-from foundry.templatetags import listing_styles
+from foundry.templatetags.listing_styles import LISTING_CLASSES
 
 
 class Client(BaseClient):
@@ -208,8 +208,8 @@ class TestCase(BaseTestCase):
 
         # Listings for each style
         content_type = ContentType.objects.get(app_label='post', model='post')
-        for style, dc in inspect.getmembers(listing_styles, inspect.isclass):
-            if style != 'AbstractBaseStyle':
+        for klass in LISTING_CLASSES:
+                style = klass.__name__
                 listing, dc = Listing.objects.get_or_create(
                     title='Listing %s' % style,
                     slug='listing-%s' % style.lower(),
@@ -286,9 +286,8 @@ class TestCase(BaseTestCase):
 
     def test_listing_styles(self):
         """Confirm the listings of each style render"""
-        for style, dc in inspect.getmembers(listing_styles, inspect.isclass):
-            if style != 'AbstractBaseStyle':
-                response = self.client.get('/listing/listing-%s/' % style.lower())
+        for klass in LISTING_CLASSES:
+                response = self.client.get('/listing/listing-%s/' % klass.__name__.lower())
                 self.assertEqual(response.status_code, 200)
 
     def test_pages(self):

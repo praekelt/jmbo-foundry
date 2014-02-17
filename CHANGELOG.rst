@@ -4,6 +4,8 @@ Changelog
 next
 ----
 #. Fix forms.css rule for required fields.
+#. Adapt monkey patch because of `django-photologue` version 2.8.praekelt.
+#. Make it possible to define custom listings.
 
 1.2.1
 -----
