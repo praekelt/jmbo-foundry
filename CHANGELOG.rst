@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.2.2.1
+-------
+#. Hotfix - added dependency link to photologue.
+
 1.2.2
 -----
 #. Fix forms.css rule for required fields.
