@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.2.2.3
+-------
+#. Hotfix - fix missing import.
+
 1.2.2.2
 -------
 #. Hotfix - image layer fallback functionality restored.
