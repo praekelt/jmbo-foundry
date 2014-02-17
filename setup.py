@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='1.2.2',
+    version='1.2.2.1',
     description='Jmbo Foundry ties together the various Jmbo products enabling you to rapidly build multilingual web and mobi sites with the minimum amount of code and customization.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -10,6 +10,9 @@ setup(
     license='BSD',
     url='http://github.com/praekelt/jmbo-foundry',
     packages = find_packages(),
+    dependency_links = [
+        'http://github.com/praekelt/django-photologue/tarball/2.8.praekelt#egg=django-photologue-2.8.praekelt',
+    ],
     install_requires = [
         # todo: eliminate dependencies handled by apps themselves
         'django-section',
