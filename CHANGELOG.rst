@@ -4,6 +4,7 @@ Changelog
 next
 ----
 #. Fix forms.css rule for required fields.
+#. Adapt monkey patch because of `django-photologue` version 2.8.praekelt.
 
 1.2.1
 -----
