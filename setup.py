@@ -10,6 +10,9 @@ setup(
     license='BSD',
     url='http://github.com/praekelt/jmbo-foundry',
     packages = find_packages(),
+    dependency_links = [
+        'http://github.com/praekelt/django-photologue/tarball/2.8.praekelt#egg=django-photologue-2.8.praekelt',
+    ],
     install_requires = [
         # todo: eliminate dependencies handled by apps themselves
         'django-section',
