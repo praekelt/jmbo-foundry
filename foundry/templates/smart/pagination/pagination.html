@@ -3,7 +3,7 @@
 
 {% if page_obj.has_next %}
 <div class="pagination"> 
-    <a href="?page={{ page_obj.next_page_number }}{{ getvars }}{{ hashtag }}" class="more">{% trans "More" %}</a>
+    <a href="?page={{ page_obj.next_page_number }}{{ getvars }}{{ hashtag }}" class="more" rel="nofollow">{% trans "More" %}</a>
 </div>
 <noscript>
     {% trans "Pagination requires javascript." %}

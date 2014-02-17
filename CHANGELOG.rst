@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.2.2
+-----
+#. Fix forms.css rule for required fields.
+#. Adapt monkey patch because of `django-photologue` version 2.8.praekelt.
+#. Make it possible to define custom listings.
+
 1.2.1
 -----
 #. Use `next` parameter when redirecting to age gateway. On successfully passing the age gateway, the user is redirected to `next`.

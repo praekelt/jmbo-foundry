@@ -17,7 +17,7 @@ from pagination.templatetags.pagination_tags import DEFAULT_PAGINATION, \
     DEFAULT_ORPHANS, INVALID_PAGE_RAISES_404
 
 from foundry.models import Menu, Navbar, Listing, Page, Member
-from foundry.templatetags import listing_styles
+from foundry.templatetags.listing_styles import LISTING_MAP
 
 register = template.Library()
 
@@ -164,7 +164,7 @@ class ListingNode(template.Node):
                 di[k] = template.Variable(v).resolve(context)
             obj = ListingProxy(slug_or_queryset, **di)
 
-        return getattr(listing_styles, obj.style)(obj).render(context, as_tile=as_tile)
+        return LISTING_MAP[obj.style](obj).render(context, as_tile=as_tile)
 
 
 @register.tag

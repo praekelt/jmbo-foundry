@@ -26,8 +26,10 @@ from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
     RegistrationPreferences, LoginPreferences, Member, DefaultAvatar, \
     PasswordResetPreferences, Country, Page, ChatRoom, BlogPost, Notification, \
     FoundryComment, CommentReport, PageView, NaughtyWordPreferences
-from foundry.widgets import SelectCommaWidget, DragDropOrderingWidget
+from foundry.widgets import SelectCommaWidget, DragDropOrderingWidget, RadioImageSelect
 from foundry.utils import get_view_choices
+from foundry.templatetags.listing_styles import LISTING_CLASSES
+
 
 BLOGPOST_PREVIEW_SIZE = 256
 
@@ -165,6 +167,7 @@ class ListingAdminForm(forms.ModelForm):
         widgets = {
             'sites': SitesGroupsWidget,
             'view_modifier': forms.widgets.RadioSelect,
+            'style': RadioImageSelect(choices=(('x','x'),('y','y'))),
         }
 
     def __init__(self, *args, **kwargs):
@@ -176,6 +179,10 @@ class ListingAdminForm(forms.ModelForm):
             if (obj.model_class() is not None) and issubclass(obj.model_class(), ModelBase):
                ids.append(obj.id)
         self.fields['content_type']._set_queryset(ContentType.objects.filter(id__in=ids).order_by('name'))
+
+        # Style
+        choices = LISTING_CLASSES
+        self.fields['style'].widget.choices = [(klass.__name__, klass.__name__, getattr(klass, 'image_path', None)) for klass in LISTING_CLASSES]
 
         # View modifiers. Inspect apps for modifiers. Iterate since there is
         # no registry.
@@ -201,7 +208,13 @@ class ListingAdminForm(forms.ModelForm):
 class ListingAdmin(admin.ModelAdmin):
     form = ListingAdminForm
     prepopulated_fields = {'slug': ('title',)}
-    list_display = ('title', 'subtitle')
+    list_display = ('title', 'subtitle', '_get_absolute_url')
+
+    def _get_absolute_url(self, obj):
+        url = obj.get_absolute_url()
+        return '<a href="%s" target="public">%s</a>' % (url, url)
+    _get_absolute_url.short_description = 'Permalink'
+    _get_absolute_url.allow_tags = True
 
 
 class GeneralPreferencesAdmin(PreferencesAdmin):

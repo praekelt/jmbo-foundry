@@ -3,14 +3,17 @@ import datetime
 import re
 
 from django.forms.widgets import CheckboxSelectMultiple, MultiWidget, Select, \
-    HiddenInput, FileInput
+    HiddenInput, FileInput, RadioInput, RadioFieldRenderer, RadioSelect
 from django.utils.datastructures import MultiValueDict
 from django.utils.translation import ugettext
 from django.utils import simplejson as json
+from django.utils.safestring import mark_safe
+from django.conf import settings
+
 
 class SelectCommaWidget(CheckboxSelectMultiple):
 
-    def render(self, name, value, attrs=None, choices=()):        
+    def render(self, name, value, attrs=None, choices=()):
         if not isinstance(value, types.ListType):
             value = value.split(',')
         return super(SelectCommaWidget, self).render(name, value, attrs=attrs, choices=choices)
@@ -87,14 +90,14 @@ class DragDropOrderingWidget(MultiWidget):
             return value
         self.key_order = json.loads(value)
         return [value]
-    
+
     def format_output(self, rendered_widgets):
         para = ""
         for f in sorted(self.key_order, key=lambda key: self.key_order[key]):
             para += '''<li name="%s"><span>%s</span></li>''' % (f, f)
         return u'''%s<ul class="dragdrop">%s</ul>%s''' % (rendered_widgets[0], para,
             DragDropOrderingWidget.script % (re.search(r'id="(?P<id>\w+)"', rendered_widgets[0]).group('id')))
-       
+
 
 class PrettyFileInput(FileInput):
 
@@ -109,3 +112,28 @@ class PrettyFileInput(FileInput):
         if self.current:
             preamble = ugettext("""<div class="pretty-file-input-current"><div class="title">Current:</div><div class="image"><img src="%s" /></div></div>""" % self.current)
         return preamble + super(PrettyFileInput, self).render(*args, **kwargs)
+
+
+class RadioImageInput(RadioInput):
+
+    def __init__(self, name, value, attrs, choice, index):
+        super(RadioImageInput, self).__init__(name, value, attrs, choice, index)
+        self.image_path = choice[2]
+
+    def tag(self):
+        result = super(RadioImageInput, self).tag()
+        if self.image_path:
+            return mark_safe(result + '<img src="' + settings.STATIC_URL + self.image_path + '"/>')
+        else:
+            return result
+
+
+class RadioImageFieldRenderer(RadioFieldRenderer):
+
+    def __iter__(self):
+        for i, choice in enumerate(self.choices):
+            yield RadioImageInput(self.name, self.value, self.attrs.copy(), choice, i)
+
+
+class RadioImageSelect(RadioSelect):
+    renderer = RadioImageFieldRenderer
