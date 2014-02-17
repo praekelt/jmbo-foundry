@@ -136,18 +136,18 @@ def init_size_method_map():
 
         layers = settings.FOUNDRY['layers']
         layer_size = re.sub(r'_(%s)$' % '|'.join(layers), '', size)
-        size_method_map['get_%s_size' % size] = {'base_name': '_get_SIZE_size', 'size': layer_size}
-        size_method_map['get_%s_photosize' % size] = {'base_name': '_get_SIZE_photosize', 'size': layer_size}
-        size_method_map['get_%s_url' % size] = {'base_name': '_get_SIZE_url', 'size': layer_size}
-        size_method_map['get_%s_filename' % size] = {'base_name': '_get_SIZE_filename', 'size': layer_size}
+        size_method_map['get_%s_size' % layer_size] = {'base_name': '_get_SIZE_size', 'size': layer_size}
+        size_method_map['get_%s_photosize' % layer_size] = {'base_name': '_get_SIZE_photosize', 'size': layer_size}
+        size_method_map['get_%s_url' % layer_size] = {'base_name': '_get_SIZE_url', 'size': layer_size}
+        size_method_map['get_%s_filename' % layer_size] = {'base_name': '_get_SIZE_filename', 'size': layer_size}
 
         # The _LAYER marker is legacy that needs to be maintained.
-        size_method_map['get_%s_LAYER_size' % size] = {'base_name': '_get_SIZE_size', 'size': layer_size}
-        size_method_map['get_%s_LAYER_photosize' % size] = {'base_name': '_get_SIZE_photosize', 'size': layer_size}
-        size_method_map['get_%s_LAYER_url' % size] = {'base_name': '_get_SIZE_url', 'size': layer_size}
-        size_method_map['get_%s_LAYER_filename' % size] = {'base_name': '_get_SIZE_filename', 'size': layer_size}
+        size_method_map['get_%s_LAYER_size' % layer_size] = {'base_name': '_get_SIZE_size', 'size': layer_size}
+        size_method_map['get_%s_LAYER_photosize' % layer_size] = {'base_name': '_get_SIZE_photosize', 'size': layer_size}
+        size_method_map['get_%s_LAYER_url' % layer_size] = {'base_name': '_get_SIZE_url', 'size': layer_size}
+        size_method_map['get_%s_LAYER_filename' % layer_size] = {'base_name': '_get_SIZE_filename', 'size': layer_size}
 
-ImageModel.init_size_method_map = init_size_method_map
+photologue.models.init_size_method_map = init_size_method_map
 
 
 """Patch {% block %} so we can inject side columns."""
