@@ -87,40 +87,6 @@ from django.conf import settings
 import photologue
 from photologue.models import PhotoSize, ImageModel
 
-def add_accessor_methods(self, *args, **kwargs):
-    for size in PhotoSizeCache().sizes.keys():
-        setattr(self, 'get_%s_size' % size,
-                curry(self._get_SIZE_size, size=size))
-        setattr(self, 'get_%s_photosize' % size,
-                curry(self._get_SIZE_photosize, size=size))
-        setattr(self, 'get_%s_url' % size,
-                curry(self._get_SIZE_url, size=size))
-        setattr(self, 'get_%s_filename' % size,
-                curry(self._get_SIZE_filename, size=size))
-
-        layers = settings.FOUNDRY['layers']
-        layer_size = re.sub(r'_(%s)$' % '|'.join(layers), '', size)
-        setattr(self, 'get_%s_size' % layer_size,
-                curry(self._get_SIZE_size, size=layer_size))
-        setattr(self, 'get_%s_photosize' % layer_size,
-                curry(self._get_SIZE_photosize, size=layer_size))
-        setattr(self, 'get_%s_url' % layer_size,
-                curry(self._get_SIZE_url, size=layer_size))
-        setattr(self, 'get_%s_filename' % layer_size,
-                curry(self._get_SIZE_filename, size=layer_size))
-
-        # The _LAYER marker is legacy that needs to be maintained.
-        setattr(self, 'get_%s_LAYER_size' % layer_size,
-                curry(self._get_SIZE_size, size=layer_size))
-        setattr(self, 'get_%s_LAYER_photosize' % layer_size,
-                curry(self._get_SIZE_photosize, size=layer_size))
-        setattr(self, 'get_%s_LAYER_url' % layer_size,
-                curry(self._get_SIZE_url, size=layer_size))
-        setattr(self, 'get_%s_LAYER_filename' % layer_size,
-                curry(self._get_SIZE_filename, size=layer_size))
-
-ImageModel.add_accessor_methods = add_accessor_methods
-
 
 class LayerAwareSizes(dict):
 
@@ -158,6 +124,30 @@ class PhotoSizeCache(object):
         self.sizes = LayerAwareSizes()
 
 photologue.models.PhotoSizeCache = PhotoSizeCache
+
+
+def init_size_method_map():
+    global size_method_map
+    for size in PhotoSizeCache().sizes.keys():
+        size_method_map['get_%s_size' % size] = {'base_name': '_get_SIZE_size', 'size': size}
+        size_method_map['get_%s_photosize' % size] = {'base_name': '_get_SIZE_photosize', 'size': size}
+        size_method_map['get_%s_url' % size] = {'base_name': '_get_SIZE_url', 'size': size}
+        size_method_map['get_%s_filename' % size] = {'base_name': '_get_SIZE_filename', 'size': size}
+
+        layers = settings.FOUNDRY['layers']
+        layer_size = re.sub(r'_(%s)$' % '|'.join(layers), '', size)
+        size_method_map['get_%s_size' % size] = {'base_name': '_get_SIZE_size', 'size': layer_size}
+        size_method_map['get_%s_photosize' % size] = {'base_name': '_get_SIZE_photosize', 'size': layer_size}
+        size_method_map['get_%s_url' % size] = {'base_name': '_get_SIZE_url', 'size': layer_size}
+        size_method_map['get_%s_filename' % size] = {'base_name': '_get_SIZE_filename', 'size': layer_size}
+
+        # The _LAYER marker is legacy that needs to be maintained.
+        size_method_map['get_%s_LAYER_size' % size] = {'base_name': '_get_SIZE_size', 'size': layer_size}
+        size_method_map['get_%s_LAYER_photosize' % size] = {'base_name': '_get_SIZE_photosize', 'size': layer_size}
+        size_method_map['get_%s_LAYER_url' % size] = {'base_name': '_get_SIZE_url', 'size': layer_size}
+        size_method_map['get_%s_LAYER_filename' % size] = {'base_name': '_get_SIZE_filename', 'size': layer_size}
+
+ImageModel.init_size_method_map = init_size_method_map
 
 
 """Patch {% block %} so we can inject side columns."""
