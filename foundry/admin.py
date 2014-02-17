@@ -208,7 +208,13 @@ class ListingAdminForm(forms.ModelForm):
 class ListingAdmin(admin.ModelAdmin):
     form = ListingAdminForm
     prepopulated_fields = {'slug': ('title',)}
-    list_display = ('title', 'subtitle')
+    list_display = ('title', 'subtitle', '_get_absolute_url')
+
+    def _get_absolute_url(self, obj):
+        url = obj.get_absolute_url()
+        return '<a href="%s" target="public">%s</a>' % (url, url)
+    _get_absolute_url.short_description = 'Permalink'
+    _get_absolute_url.allow_tags = True
 
 
 class GeneralPreferencesAdmin(PreferencesAdmin):
