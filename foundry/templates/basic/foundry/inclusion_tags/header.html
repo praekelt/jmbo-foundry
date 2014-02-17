@@ -8,8 +8,8 @@
         <span><a href="{% url logout %}">{% trans "Sign out" %}</a></span>
       {% endif %}
       {% if request.user.is_anonymous %}
-          <span><a href="{% url login %}?next={{ request.META.PATH_INFO }}">{% trans "Sign in" %}</a></span>
-          <span><a href="{% url join %}">{% trans "Join" %}</a></span>
+          <span><a href="{% url login %}?next={{ request.META.PATH_INFO }}" rel="nofollow">{% trans "Sign in" %}</a></span>
+          <span><a href="{% url join %}" rel="nofollow">{% trans "Join" %}</a></span>
       {% endif %}
 	</div>
 </div>
