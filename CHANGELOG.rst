@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Use new version of `django-ckeditor` with prettier toolbars.
+
 1.2.2.3
 -------
 #. Hotfix - fix missing import.
