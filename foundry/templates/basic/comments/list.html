@@ -30,17 +30,21 @@ $(document).ready(function(){
                 {% get_can_report_comment comment as 'can_report_comment' %}
                 {% jmbocache 3600 'comment-list-comment' comment.id can_report_comment request.user.id %}
                 <div id="c{{ comment.id }}" class="item {% if comment.in_reply_to_id %}child{% endif %}">
-                    {% if comment.creator %}
                     <div class="image">
-                        <a href="{% url user-detail comment.creator.username %}">
-                        {% if comment.creator.image %}
-                            <img src="{{ comment.creator.get_thumbnail_LAYER_url }}" />
+                        {% with creator=comment.creator %}
+                        {% if creator %}
+                            {% if creator.image %}
+                                <a href="{% url user-detail creator.username %}">
+                                    <img src="{{ creator.get_thumbnail_LAYER_url }}" />
+                                </a>
+                            {% else %}
+                                <img src="{{ STATIC_URL }}/images/anonymous.png" />
+                            {% endif %}
                         {% else %}
                             <img src="{{ STATIC_URL }}/images/anonymous.png" />
                         {% endif %}
-                        </a>
+                        {% endwith %}
                     </div>
-                    {% endif %}
                     <div class="meta">
                         <div class="byline">{% humanize_time_diff comment.submit_date '' %}</div>
                     </div>
@@ -51,7 +55,7 @@ $(document).ready(function(){
                                 <a href="{% url comment-reply-form %}?content_type_id={{ comment.content_type_id }}&oid={{ comment.object_pk }}&next={{ next }}&paginate_by={{ paginate_by }}"
                                    class="comment-reply"
                                    comment_id="{{ comment.id }}"
-                                   creator="{{ comment.creator.username }}"
+                                   creator="{{ comment.user.username|default:comment.name }}"
                                    rel="nofollow">{% trans "Reply" %}
                                 </a>
                             {% endwith %}
