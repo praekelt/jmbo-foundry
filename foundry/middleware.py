@@ -15,14 +15,14 @@ from foundry.utils import get_preference, get_age
 
 
 PROTECTED_URLS_PATTERN = r'|'.join((
-    reverse('age-gateway'), 
-    reverse('join'), 
+    reverse('age-gateway'),
+    reverse('join'),
     reverse('login'),
     reverse('logout'),
     reverse('password_reset'),
-    reverse('terms-and-conditions'), 
-    '/auth/password_reset/', 
-    '/static/', 
+    reverse('terms-and-conditions'),
+    '/auth/password_reset/',
+    '/static/',
     '/admin/',
 ))
 AG_TOKEN_MAX_TIME_TO_EXPIRY = 60  # in seconds
@@ -44,11 +44,11 @@ class AgeGateway:
     Must run after AuthenticationMiddleware."""
 
     def process_response(self, request, response):
-        
+
         # Ignore ajax
         if request.is_ajax():
             return response
-        
+
         # Protected URLs
         if re.match(PROTECTED_URLS_PATTERN, request.META['PATH_INFO']) is not None:
             return response
@@ -75,7 +75,7 @@ class AgeGateway:
         if exempted_urls \
             and (
                 re.match(
-                    r'|'.join(exempted_urls.split()), 
+                    r'|'.join(exempted_urls.split()),
                     request.META['PATH_INFO']
                ) is not None
             ):
@@ -86,7 +86,7 @@ class AgeGateway:
         if exempted_ips \
             and (
                 re.match(
-                    r'|'.join(exempted_ips.split()), 
+                    r'|'.join(exempted_ips.split()),
                     request.META['REMOTE_ADDR']
                ) is not None
             ):
@@ -146,7 +146,7 @@ class AgeGateway:
             try:
                 # get domains and JWT keys - will raise ValueError
                 # if the partner_site_configuration format is incorrect
-                domain_key_map = dict(line.split(' ', 1) for line in 
+                domain_key_map = dict(line.split(' ', 1) for line in
                                       partner_config.strip('\n').split('\n'))
                 # raises KeyError if referer is not a partner domain
                 jwt_shared_secret = domain_key_map[ref_domain]
@@ -186,7 +186,7 @@ def get_page(self):
 
 
 class PaginationMiddleware(object):
-    """Legacy middleware. It is now exactly the same as django-paginations's 
+    """Legacy middleware. It is now exactly the same as django-paginations's
     middleware. Will be marked for deprecation soon along with get_page."""
 
     def process_request(self, request):
@@ -213,7 +213,7 @@ class CheckProfileCompleteness:
         user = getattr(request, 'user', None)
         if isinstance(user, Member) and not user.is_profile_complete:
             return HttpResponseRedirect(reverse('complete-profile'))
-                
+
         return response
 
 
@@ -221,12 +221,12 @@ class LastSeen:
     """Update a user's last seen field at most every 5 minutes."""
 
     def process_response(self, request, response):
-        
+
         # Update last_seen if the cookie has expired and this is an authenticated member
         user = getattr(request, 'user', None)
         if isinstance(user, Member) and not request.COOKIES.get('last_seen', None):
             user.last_seen = timezone.now()
             user.save()
             response.set_cookie('last_seen', '1', max_age=300)
-        
+
         return response
