@@ -4,6 +4,7 @@ Changelog
 next
 ----
 #. Use new version of `django-ckeditor` with prettier toolbars.
+#. Make ajax pagination more robust. It now always targets the correct listing.
 
 1.2.2.3
 -------

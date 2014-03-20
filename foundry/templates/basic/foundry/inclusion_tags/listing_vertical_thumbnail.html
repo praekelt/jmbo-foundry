@@ -1,7 +1,7 @@
 {% load jmbo_template_tags jmbo_inclusion_tags foundry_tags pagination_tags %}
 
 {% if object_list.exists %}
-    <div class="foundry-container foundry-listing foundry-listing-vertical-thumbnail" id="foundry-listing-{{ identifier }}">
+    <div class="foundry-container foundry-listing foundry-listing-vertical-thumbnail" id="foundry-listing-{{ identifier|default:listing.id }}">
 
         {% if display_title %}{% if listing.title %}<div class="title">{{ listing.title }}</div>{% endif %}{% endif %}
 

@@ -82,7 +82,6 @@ $(document).ready(function(){
     // Ajaxify paging and view modifier navigation for (1) standalone listing (2) listing in a tile.
     $(document).on('click', 'div.foundry-listing div.pagination a, div.foundry-listing div.jmbo-view-modifier div.item a', function(e){
         e.preventDefault();
-        // todo: need a better way to identify target. Ad-hoc listing may need a name.
         var url_provider = $(this).parents('div.foundry-page-tile:first');
         if (url_provider.length)
         {
