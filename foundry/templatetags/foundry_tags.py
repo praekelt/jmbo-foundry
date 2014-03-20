@@ -158,6 +158,8 @@ class ListingNode(template.Node):
                     self.items_per_page = 0
                     for k, v in kwargs.items():
                         setattr(self, k, v)
+                    if not hasattr(self, 'id'):
+                        setattr(self, 'id', None)
 
             di = {}
             for k, v in self.kwargs.items():
