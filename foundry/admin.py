@@ -13,6 +13,8 @@ from django.contrib.flatpages.admin import FlatPageAdmin as FlatPageAdminOld
 from django.contrib.flatpages.admin import FlatpageForm as FlatpageFormOld
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import strip_tags
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 from ckeditor.widgets import CKEditorWidget
 from preferences.admin import PreferencesAdmin
@@ -278,12 +280,26 @@ class NaughtyWordPreferencesAdmin(PreferencesAdmin):
     pass
 
 
-class MemberAdmin(admin.ModelAdmin):
+class MemberChangeForm(UserChangeForm):
+    class Meta:
+        model = Member
+
+
+class MemberCreationForm(UserCreationForm):
+    class Meta:
+        model = Member
+        fields = ('username',)
+
+
+class MemberAdmin(UserAdmin):
     list_display = (
         'username', 'email', 'mobile_number', 'first_name', 'last_name',
         '_image'
     )
     search_fields = ['username', 'email']
+    form = MemberChangeForm
+    add_form = MemberCreationForm
+    fieldsets = None
 
     def _image(self, obj):
         # todo: use correct photologue scale
