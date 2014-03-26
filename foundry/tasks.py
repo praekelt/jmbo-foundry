@@ -75,9 +75,7 @@ def report_naughty_words():
     flagged = []
     comments = FoundryComment.objects.filter(moderated=False).order_by('id')
     for comment in comments:
-        # Do permitted check since we report per site. No way to do it
-        # as part of the query.
-        if comment.content_object and comment.content_object.is_permitted:
+        if comment.content_object:
             if flag(comment.comment, threshold, words):
                 flagged.append(comment)
             else:
