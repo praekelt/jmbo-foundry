@@ -92,8 +92,8 @@ MIDDLEWARE_CLASSES = (
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
-# A tuple of callables that are used to populate the context in RequestContext. 
-# These callables take a request object as their argument and return a 
+# A tuple of callables that are used to populate the context in RequestContext.
+# These callables take a request object as their argument and return a
 # dictionary of items to be merged into the context.
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
@@ -174,7 +174,8 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     'django.contrib.sitemaps',
     'django.contrib.admin',
-    'debug_toolbar',
+    'djcelery',
+#    'debug_toolbar',
 )
 
 # Your ReCaptcha provided public key.
@@ -223,7 +224,7 @@ SIMPLE_AUTOCOMPLETE = {
     'auth.user': {'threshold': 20},
     'category.category': {'threshold':20},
     'jmbo.modelbase': {
-        'threshold': 50, 
+        'threshold': 50,
         'duplicate_format_function': lambda item, model, content_type: item.as_leaf_class().content_type.name
     }
 }
@@ -236,7 +237,7 @@ STATICFILES_FINDERS = (
 )
 
 JMBO_ANALYTICS = {
-    'google_analytics_id': '', 
+    'google_analytics_id': '',
 }
 
 PHOTOLOGUE_MAXBLOCK = 2 ** 20
@@ -265,3 +266,6 @@ SOCIAL_AUTH_USER_MODEL = 'foundry.Member'
 #GOOGLE_OAUTH2_CLIENT_SECRET = ''
 
 INTERNAL_IPS = ('127.0.0.1',)
+
+import djcelery
+djcelery.setup_loader()

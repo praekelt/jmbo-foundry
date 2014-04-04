@@ -11,3 +11,9 @@ DATABASES = {
         'PORT': '',
     }
 }
+
+# Disable celery
+CELERY_ALWAYS_EAGER = True
+BROKER_BACKEND = 'memory'
+
+# Need this last line until django-setuptest is improved.

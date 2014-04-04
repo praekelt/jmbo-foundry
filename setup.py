@@ -59,6 +59,7 @@ setup(
         'jmbo_sitemap>=0.1',
         'PyJWT==0.1.6',
         'django-photologue>=2.8.praekelt',
+        'django-celery',                # can remove when newer jmbo is released
     ],
     include_package_data=True,
     tests_require=[
