@@ -53,7 +53,7 @@ def _build_view_names_recurse(url_patterns=None):
 
 
 def get_view_choices():
-    # Implement a simple module level cache. The result never changes 
+    # Implement a simple module level cache. The result never changes
     # for the duration of the Django process life.
     if not _foundry_utils_cache.has_key('get_view_choices'):
         result = _build_view_names_recurse()
@@ -62,13 +62,24 @@ def get_view_choices():
     return _foundry_utils_cache['get_view_choices']
 
 
-def get_preference(klass_name, attr):    
+def get_preference(klass_name, attr):
     key = 'jmbo_foundry' + str(settings.SITE_ID) + klass_name + attr
+
+    # Use an empty marker because None is a valid value to cache
     empty_marker = '__empty__'
+    none_marker = '__none__'
     v = cache.get(key, empty_marker)
-    if v == empty_marker:
-        v = getattr(getattr(preferences, klass_name), attr)
-        cache.set(key, v, 60)
+    if v != empty_marker:
+        if v == none_marker:
+            return None
+        else:
+            return v
+
+    v = getattr(getattr(preferences, klass_name), attr)
+    if v is None:
+        v = none_marker
+    cache.set(key, v, 60)
+
     return v
 
 
@@ -78,7 +89,7 @@ def get_age(dob):
     http://stackoverflow.com/questions/2217488/age-from-birthdate-in-python
     """
     today = date.today()
-    try: 
+    try:
         birthday = dob.replace(year=today.year)
     # raised when birth date is February 29 and
     # the current year is not a leap year
