@@ -76,9 +76,11 @@ def get_preference(klass_name, attr):
             return v
 
     v = getattr(getattr(preferences, klass_name), attr)
+
     if v is None:
-        v = none_marker
-    cache.set(key, v, 60)
+        cache.set(key, none_marker, 60)
+    else:
+        cache.set(key, v, 60)
 
     return v
 
