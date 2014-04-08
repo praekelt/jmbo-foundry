@@ -181,7 +181,7 @@ A navigation bar typically contains a small amount of items since horizontal
 space is limited.  Each item in the navigation bar is represented as a `Link`.
 A navbar can be published to certain sites.
 
-A navbar with slug `main` is considered special. It is assumed to be the site 
+A navbar with slug `main` is considered special. It is assumed to be the site
 navbar by default.
 
 Menus
@@ -218,7 +218,7 @@ basic, smart and web. Templates, styling, javascript, images and even code
 can all be different per payer. This enables optimal support for different
 devices from the same codebase.
 
-Layers are arranged in this hierarchy. 
+Layers are arranged in this hierarchy.
 
   basic - smart
   basic - web
