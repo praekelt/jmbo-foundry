@@ -252,6 +252,7 @@ class Listing(models.Model):
 any setting for <i>Content Type</i>, <i>Categories</i> and <i>Tags</i>.""",
         blank=True,
         null=True,
+        related_name='listing_content',
     )
     categories = models.ManyToManyField(
         'category.Category',
@@ -364,7 +365,9 @@ complex page."""
 
     @property
     def pinned_queryset(self):
-        return ModelBase.permitted.filter(id__in=self.pinned.all())
+        return ModelBase.permitted.filter(listing_pinned__id=self.id).order_by(
+            'listing_pinned__id'
+        )
 
 
 class AbstractLinkPosition(models.Model):

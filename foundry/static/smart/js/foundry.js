@@ -22,13 +22,20 @@ $(document).ready(function(){
     // Ajaxify paging for (1) standalone listing (2) listing in a tile.
     $(document).on('click', 'div.foundry-listing div.pagination a', function(e){
         e.preventDefault();
-        var target = $(this).parents('div.foundry-page-tile:first');
-        var url = target.attr('original_url');
-        if (!target.length)
+        var url_provider = $(this).parents('div.foundry-page-tile:first');
+        if (url_provider.length)
+        {
+            var url = url_provider.attr('original_url');
+            var target = $('div.foundry-listing:first', url_provider);
+        }
+        else
         {
             target = $(this).parents('div.foundry-listing:first');
             url = $(location).attr('href');
         }
+        var listing_dom_id = target.attr('id');
+        if (listing_dom_id == "foundry-listing-")
+            listing_dom_id = null;
         var target_items = $('div.items:last', target);
         var target_pagination = $('div.pagination', target);
         // Strip params. Already present in href.
@@ -38,23 +45,23 @@ $(document).ready(function(){
             url,
             {},
             function(data){
-                if (data.search('id="content"') != -1)
+                // Markup that contains fluff. We want only the content.
+                var el = $('<div>' + data + '</div>');
+
+                // If the listing can be identified then use that, else use
+                // first available one.
+                if (listing_dom_id)
                 {
-                    // Markup that contains fluff. We want only the content.
-                    var el = $('<div>' + data + '</div>');
-                    var content = $('div#content div.items:last div.item', el);
-                    target_items.append(content);
-                    var content = $('div#content div.pagination', el);
-                    target_pagination.replaceWith(content);
+                    var content = $('#' + listing_dom_id + ' div.items:last div.item', el);
+                    var content_pagination = $('#' + listing_dom_id + ' div.pagination', el);
                 }
                 else
                 {
-                    var el = $(data);
-                    var content = $('div.items:last div.item', el);
-                    target_items.append(content);
-                    var content = $('div.pagination', el);
-                    target_pagination.replaceWith(content);
+                    var content = $('div#content div.items:last div.item', el);
+                    var content_pagination = $('div#content div.pagination', el);
                 }
+                target_items.append(content);
+                target_pagination.replaceWith(content_pagination);
                 $(document).trigger("onListingRefresh", [target]);
             }
         );
