@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.2.3
+-----
 #. Use new version of `django-ckeditor` with prettier toolbars.
 #. Make ajax pagination more robust. It now always targets the correct listing.
 #. Fix password setting on member change form.
