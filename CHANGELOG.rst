@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Validate member profile image strictly.
+
 1.2.3.1
 -------
 #. Use new version of `django-ckeditor` with prettier toolbars.
