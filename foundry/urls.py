@@ -325,7 +325,7 @@ urlpatterns = patterns('',
 
     # User detail page
     url(
-        r'^users/(?P<username>[@\.\w-]+)/$',
+        r'^users/(?P<username>[=@\.\w-]+)/$',
         'foundry.views.user_detail',
         {},
         name='user-detail'

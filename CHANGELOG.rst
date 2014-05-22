@@ -4,6 +4,7 @@ Changelog
 next
 ----
 #. Validate member profile image strictly.
+#. Allow = in username.
 
 1.2.3.1
 -------
