@@ -11,10 +11,10 @@
         <input type="hidden" name="next" value="{{ request.REQUEST.next }}" />
         {{ form.as_div }}
         <div class="buttons">
-        	<input type="submit" value="{% trans "Sign in" %}" />
+            <input type="submit" value="{% trans "Sign in" %}" />
         </div>
-        <span><a href="{% url password_reset %}">{% blocktrans %}Forgot your password?{% endblocktrans %}</a></span>
-        <span>{% trans "Not registered?" %} <a href="{% url join %}">{% trans "Sign up here" %}</a></span>
+        <span><a href="{% url password_reset %}" rel="nofollow">{% blocktrans %}Forgot your password?{% endblocktrans %}</a></span>
+        <span>{% trans "Not registered?" %} <a href="{% url join %}" rel="nofollow">{% trans "Sign up here" %}</a></span>
     </form>
 
     <div class="social-buttons">
