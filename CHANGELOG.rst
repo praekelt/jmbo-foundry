@@ -5,6 +5,7 @@ next
 ----
 #. Validate member profile image strictly.
 #. Allow = in username.
+#. Friendly error message when attempting to use the same slug for overlapping sites.
 
 1.2.3.1
 -------

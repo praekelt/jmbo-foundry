@@ -110,6 +110,18 @@ class MenuAdminForm(forms.ModelForm):
         model = Menu
         widgets = {'sites': SitesGroupsWidget}
 
+    def clean(self):
+        for site in self.cleaned_data['sites']:
+            q = Menu.objects.filter(slug=self.cleaned_data['slug'], sites=site)
+            if self.instance.id:
+                q = q.exclude(id=self.instance.id)
+            if q.exists():
+                raise forms.ValidationError(_(
+                    "The slug is already in use by menu %s. To use the same \
+                    slug the pages menu not have overlapping sites." % q[0]
+                ))
+        return self.cleaned_data
+
 
 class MenuAdmin(admin.ModelAdmin):
     form = MenuAdminForm
@@ -137,6 +149,18 @@ class NavbarAdminForm(forms.ModelForm):
     class Meta:
         model = Navbar
         widgets = {'sites': SitesGroupsWidget}
+
+    def clean(self):
+        for site in self.cleaned_data['sites']:
+            q = Navbar.objects.filter(slug=self.cleaned_data['slug'], sites=site)
+            if self.instance.id:
+                q = q.exclude(id=self.instance.id)
+            if q.exists():
+                raise forms.ValidationError(_(
+                    "The slug is already in use by navbar %s. To use the same \
+                    slug the navbars may not have overlapping sites." % q[0]
+                ))
+        return self.cleaned_data
 
 
 class NavbarAdmin(admin.ModelAdmin):
@@ -205,6 +229,18 @@ class ListingAdminForm(forms.ModelForm):
         # Order
         field = self.fields['content']
         field._set_queryset(field._queryset.order_by('title'))
+
+    def clean(self):
+        for site in self.cleaned_data['sites']:
+            q = Listing.objects.filter(slug=self.cleaned_data['slug'], sites=site)
+            if self.instance.id:
+                q = q.exclude(id=self.instance.id)
+            if q.exists():
+                raise forms.ValidationError(_(
+                    "The slug is already in use by listing %s. To use the same \
+                    slug the listings may not have overlapping sites." % q[0]
+                ))
+        return self.cleaned_data
 
 
 class ListingAdmin(admin.ModelAdmin):
@@ -350,6 +386,18 @@ class PageAdminForm(forms.ModelForm):
     class Meta:
         model = Page
         widgets = {'sites': SitesGroupsWidget}
+
+    def clean(self):
+        for site in self.cleaned_data['sites']:
+            q = Page.objects.filter(slug=self.cleaned_data['slug'], sites=site)
+            if self.instance.id:
+                q = q.exclude(id=self.instance.id)
+            if q.exists():
+                raise forms.ValidationError(_(
+                    "The slug is already in use by page %s. To use the same \
+                    slug the pages may not have overlapping sites." % q[0]
+                ))
+        return self.cleaned_data
 
 
 class PageAdmin(admin.ModelAdmin):
