@@ -1,6 +1,7 @@
 import datetime
 import re
 from operator import itemgetter
+from PIL import Image
 
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django import forms
@@ -327,6 +328,18 @@ class EditProfileForm(forms.ModelForm):
             field = self.fields.get(name, None)
             if field and not field.required:
                 field.required = True
+
+    def clean_image(self):
+        image = self.cleaned_data['image']
+        if image:
+            im = Image.open(image)
+            try:
+                im.load()
+            except IOError:
+                raise forms.ValidationError(
+                    _("The image is either invalid or unsupported.")
+                )
+        return image
 
     def clean(self):
         cleaned_data = super(EditProfileForm, self).clean()
