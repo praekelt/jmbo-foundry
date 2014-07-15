@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. RSS2 feed now includes canonical image.
+
 1.2.4
 -----
 #. Validate member profile image strictly.
