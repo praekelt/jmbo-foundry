@@ -43,7 +43,7 @@ class ListingFeed(Feed):
             return cached
         info = namedtuple('Info', ['url', 'length', 'mime_type'])('', 0, '')
         if item.image:
-            image = None
+            blob = None
             try:
                 blob = Image.open(item.image.path)
             except IOError:
