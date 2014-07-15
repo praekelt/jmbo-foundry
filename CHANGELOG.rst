@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.2.5
+-----
 #. RSS2 feed now includes canonical image.
 
 1.2.4
