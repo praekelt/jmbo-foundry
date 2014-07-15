@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.2.5.1
+-------
+#. Fix typo leading to unassigned variable.
+
 1.2.5
 -----
 #. RSS2 feed now includes canonical image.
