@@ -61,6 +61,7 @@ setup(
         'PyJWT==0.1.6',
         'django-photologue>=2.9.praekelt',
         'django-celery',                # can remove when newer jmbo is released
+        'requests',
     ],
     include_package_data=True,
     tests_require=[
