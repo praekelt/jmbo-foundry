@@ -1,16 +1,20 @@
+from os.path import expanduser
+
 from foundry.settings import *
 
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'foundry',
-        'USER': 'test',
+        'NAME': 'jmbo_foundry',
+        'USER': 'postgres',
         'PASSWORD': '',
         'HOST': '',
         'PORT': '',
     }
 }
+
+CKEDITOR_UPLOAD_PATH = expanduser('~')
 
 # Disable celery
 CELERY_ALWAYS_EAGER = True
