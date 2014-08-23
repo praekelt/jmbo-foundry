@@ -20,4 +20,5 @@ CKEDITOR_UPLOAD_PATH = expanduser('~')
 CELERY_ALWAYS_EAGER = True
 BROKER_BACKEND = 'memory'
 
-# Need this last line until django-setuptest is improved.
+# xxx: get tests to pass with migrations
+SOUTH_TESTS_MIGRATE = False
