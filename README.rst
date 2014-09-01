@@ -2,13 +2,17 @@ Jmbo Foundry
 ============
 **Jmbo Foundry ties together the various Jmbo products enabling you to rapidly build multilingual web and mobi sites with the minimum amount of code and customization.**
 
+.. figure:: https://travis-ci.org/praekelt/jmbo-foundry.svg?branch=develop
+   :align: center
+   :alt: Travis
+
 .. contents:: Contents
     :depth: 5
 
 Overview
 --------
 
-`jmbo-foundry` ties together the various Jmbo products enabling you to rapidly build 
+`jmbo-foundry` ties together the various Jmbo products enabling you to rapidly build
 multilingual web and mobi sites with the minimum amount of code and customization.
 
 `jmbo-foundry` strives for a high level of through the web configuration. Much
@@ -57,7 +61,7 @@ site and set the values to `m.mysite.com`.
 
 If you have only one site then you may blindly publish everything that is
 publishable to this site.  However, if you have more than one site and in
-different languages then understanding sites become significant. 
+different languages then understanding sites become significant.
 
 At its most basic level publishing to a site means making content appear on a
 site. This is easy to understand when the content is eg. an article, but
@@ -72,7 +76,7 @@ Preferences can be published to certain sites.
 General preferences
 *******************
 
-Check `Private site` to make the site accessible only to visitors who are 
+Check `Private site` to make the site accessible only to visitors who are
 logged in.
 
 Check `Show age gateway` to enable the age gateway for the site. Visitors must
