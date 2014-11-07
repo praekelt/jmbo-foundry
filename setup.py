@@ -12,7 +12,6 @@ setup(
     url='http://github.com/praekelt/jmbo-foundry',
     packages = find_packages(),
     dependency_links = [
-        'http://github.com/praekelt/django-photologue/tarball/2.10.praekelt#egg=django-photologue-2.10.praekelt',
     ],
     install_requires = [
         # todo: eliminate dependencies handled by apps themselves
@@ -24,7 +23,7 @@ setup(
         'django-snippetscream',
         'django-generate',
         'jmbo-calendar',
-        'jmbo>=1.0.11',
+        'jmbo>=1.1',
         'jmbo-chart',
         'django-recaptcha',
         'django-secretballot',
@@ -59,7 +58,6 @@ setup(
         'django-social-auth==0.7.18',   # 0.7.19 introduces a migration scoping bug
         'jmbo_sitemap>=0.1',
         'PyJWT==0.1.6',
-        'django-photologue>=2.10.praekelt',
         'django-celery',                # can remove when newer jmbo is released
         'requests',
     ],
