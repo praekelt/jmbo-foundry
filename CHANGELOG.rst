@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.2.6
+-----
 #. Fix naughty word task emoji handling.
 
 1.2.5.1
