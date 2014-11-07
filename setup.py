@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='1.2.5.1',
+    version='1.2.6',
     description='Jmbo Foundry ties together the various Jmbo products enabling you to rapidly build multilingual web and mobi sites with the minimum amount of code and customization.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -61,6 +61,7 @@ setup(
         'PyJWT==0.1.6',
         'django-photologue>=2.9.praekelt',
         'django-celery',                # can remove when newer jmbo is released
+        'requests',
     ],
     include_package_data=True,
     tests_require=[
