@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.2.6.1
+-------
+#. Delegate photologue dependency to Jmbo.
+
 1.2.6
 -----
 #. Fix naughty word task emoji handling.
