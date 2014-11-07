@@ -8,6 +8,7 @@ from django.template.loader import get_template_from_string
 from django.template import Context
 from django.contrib.sites.models import Site
 from django.utils.html import strip_tags
+from django.utils.encoding import force_unicode
 from django.conf import settings
 
 from celery import task
@@ -47,7 +48,7 @@ def report_naughty_words():
         """Very simple check for naughty words"""
         # Normalize diacritic characters into ASCII since current version of
         # jaro_distance cannot handle them.
-        normalized_text = ''.join((c for c in unicodedata.normalize('NFD', text) if unicodedata.category(c) != 'Mn'))
+        normalized_text = unicodedata.normalize('NFKD', force_unicode(text)).encode('ascii', 'ignore')
         total_weight = 0
         lwords = normalized_text.lower().split()
         for naughty in words:

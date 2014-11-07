@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Fix naughty word task emoji handling.
+
 1.2.5.1
 -------
 #. Fix typo leading to unassigned variable.
