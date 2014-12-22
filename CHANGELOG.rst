@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Deprecate `compute_settings` function.
+
 1.2.6.1
 -------
 #. Delegate photologue dependency to Jmbo.

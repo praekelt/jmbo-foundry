@@ -149,14 +149,13 @@ INSTALLED_APPS = (
     'competition',
     'ckeditor',
     'contact',
-    'poll', # add to paster
+    'poll',
     'jmbo_sitemap',
-    'simple_autocomplete', # custom
-    'pagination', # custom
-    'south', # custom - add to paster
-    'compressor', # custom - add to paster
-    'jmbo_analytics', # add to paster
-    'analytics', # add to paster
+    'simple_autocomplete',
+    'pagination',
+    'south',
+    'compressor',
+    'jmbo_analytics',
     'gunicorn',
     'sites_groups',
     'atlas',
@@ -247,15 +246,6 @@ DJANGO_ATLAS = {
 }
 
 
-def compute_settings(sender):
-    """Function not required anymore since our template loader and static file
-    finder have become smarter."""
-    warnings.warn("""compute_settings is redundant. If \
-foundry.finders.FileSystemLayerAwareFinder is listed under \
-STATICFILES_FINDERS then you may safely remove the call to compute_settings \
-from your settings file.""", RuntimeWarning)
-
-
 # See django-socialauth project for all settings
 SOCIAL_AUTH_USER_MODEL = 'foundry.Member'
 #FACEBOOK_APP_ID = ''
@@ -266,6 +256,9 @@ SOCIAL_AUTH_USER_MODEL = 'foundry.Member'
 #GOOGLE_OAUTH2_CLIENT_SECRET = ''
 
 INTERNAL_IPS = ('127.0.0.1',)
+
+BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
 import djcelery
 djcelery.setup_loader()

@@ -28,6 +28,7 @@ setup(
         'django-object-tools>=0.0.5',
         'django-debug-toolbar',
         'django_compressor',
+        'django-social-auth==0.7.18',   # 0.7.19 introduces a migration scoping bug
 
         'jmbo>=1.1',
         'jmbo-gallery>=0.2.1',
