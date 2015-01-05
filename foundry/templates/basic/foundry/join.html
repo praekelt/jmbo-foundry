@@ -2,11 +2,11 @@
 {% load i18n %}
 
 {% block content %}
-<div class="join"> 
+<div class="join">
 
     <div class="title">{% trans "Sign up" %}</div>
 
-    <form action="{% url join %}" method="POST" enctype="multipart/form-data" class="foundry-form">   
+    <form action="{% url "join" %}" method="POST" enctype="multipart/form-data" class="foundry-form">
         {% csrf_token %}
         {{ form.as_div }}
         <div class="buttons">
@@ -17,17 +17,17 @@
     <div class="social-buttons">
         {% if FOUNDRY_HAS_FACEBOOK_CONNECT %}
         <div>
-            <a href="{% url socialauth_begin 'facebook' %}" class="facebook"><span></span>{% trans "Sign in with Facebook" %}</a>
+            <a href="{% url "socialauth_begin" 'facebook' %}" class="facebook"><span></span>{% trans "Sign in with Facebook" %}</a>
         </div>
         {% endif %}
         {% if FOUNDRY_HAS_TWITTER_OAUTH %}
         <div>
-            <a href="{% url socialauth_begin 'twitter' %}" class="twitter"><span></span>{% trans "Sign in with Twitter" %}</a>
+            <a href="{% url "socialauth_begin" 'twitter' %}" class="twitter"><span></span>{% trans "Sign in with Twitter" %}</a>
         </div>
         {% endif %}
         {% if FOUNDRY_HAS_GOOGLE_OAUTH2 %}
         <div>
-            <a href="{% url socialauth_begin 'google-oauth2' %}" class="google"><span></span>{% trans "Sign in with Google" %}</a>
+            <a href="{% url "socialauth_begin" 'google-oauth2' %}" class="google"><span></span>{% trans "Sign in with Google" %}</a>
         </div>
         {% endif %}
     </div>

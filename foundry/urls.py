@@ -1,9 +1,12 @@
-from django.conf.urls.defaults import patterns, url, include
+from django.conf.urls import patterns, include, url
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.views.generic.base import TemplateView
+from django.views.generic.detail import DetailView
+from django.views.generic.base import RedirectView
 
 from preferences import preferences
 from jmbo_sitemap import sitemaps
@@ -42,7 +45,7 @@ urlpatterns = patterns('',
         name='comments-post-comment'
     ),
 
-    (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/static/images/favicon.ico'}),
+    (r'^favicon\.ico$', RedirectView.as_view(url='/static/images/favicon.ico', permanent=False)),
 
     # Unidentified issue with Jmbo URLPatternItem class means
     # (r'^', include('jmbo_sitemap.urls')) causes error. Use a workaround.
@@ -54,9 +57,8 @@ urlpatterns = patterns('',
     ),
     url(
         r'^sitemap/$',
-        'django.views.generic.simple.direct_to_template',
+        TemplateView.as_view(template_name='jmbo_sitemap/sitemap.html'),
         {
-            'template': 'jmbo_sitemap/sitemap.html',
             'extra_context': {'content': lambda: preferences.HTMLSitemap.content}
         },
         name='html-sitemap'
@@ -91,34 +93,22 @@ urlpatterns = patterns('',
 
     url(
         r'^$',
-        'django.views.generic.simple.direct_to_template',
-        {
-            'template':'base.html',
-        },
+        TemplateView.as_view(template_name='base.html'),
         name='home'
     ),
     url(
         r'^logo/$',
-        'django.views.generic.simple.direct_to_template',
-        {
-            'template':'foundry/logo.html',
-        },
+        TemplateView.as_view(template_name='foundry/logo.html'),
         name='logo'
     ),
     url(
         r'^header/$',
-        'django.views.generic.simple.direct_to_template',
-        {
-            'template':'foundry/inclusion_tags/header.html',
-        },
+        TemplateView.as_view(template_name='foundry/inclusion_tags/header.html'),
         name='header'
     ),
     url(
         r'^footer/$',
-        'django.views.generic.simple.direct_to_template',
-        {
-            'template':'foundry/inclusion_tags/footer.html',
-        },
+        TemplateView.as_view(template_name='foundry/inclusion_tags/footer.html'),
         name='footer'
     ),
 
@@ -161,27 +151,24 @@ urlpatterns = patterns('',
     # Pages defined in preferences
     url(
         r'^about-us/$',
-        'django.views.generic.simple.direct_to_template',
+        TemplateView.as_view(template_name='foundry/static_page.html'),
         {
-            'template':'foundry/static_page.html',
             'extra_context':{'content':lambda:preferences.GeneralPreferences.about_us, 'title':_("About us")}
         },
         name='about-us'
     ),
     url(
         r'^terms-and-conditions/$',
-        'django.views.generic.simple.direct_to_template',
+        TemplateView.as_view(template_name='foundry/static_page.html'),
         {
-            'template':'foundry/static_page.html',
             'extra_context':{'content':lambda:preferences.GeneralPreferences.terms_and_conditions, 'title':_("Terms and conditions")}
         },
         name='terms-and-conditions'
     ),
     url(
         r'^privacy-policy/$',
-        'django.views.generic.simple.direct_to_template',
+        TemplateView.as_view(template_name='foundry/static_page.html'),
         {
-            'template':'foundry/static_page.html',
             'extra_context':{'content':lambda:preferences.GeneralPreferences.privacy_policy, 'title':_("Privacy policy")}
         },
         name='privacy-policy'
@@ -244,10 +231,7 @@ urlpatterns = patterns('',
     # Lorem ipsum
     url(
         r'^lorem-ipsum/$',
-        'django.views.generic.simple.direct_to_template',
-        {
-            'template':'foundry/lorem_ipsum.html',
-        },
+        TemplateView.as_view(template_name='foundry/lorem_ipsum.html'),
         name='lorem-ipsum'
     ),
 
@@ -342,10 +326,7 @@ urlpatterns = patterns('',
     # Coming soon
     url(
         r'^coming-soon/$',
-        'django.views.generic.simple.direct_to_template',
-        {
-            'template':'foundry/coming_soon.html',
-        },
+        TemplateView.as_view(template_name='foundry/coming_soon.html'),
         name='coming-soon'
     ),
 
@@ -372,7 +353,7 @@ urlpatterns = patterns('',
     ),
     url(
         r'^pages/$',
-        'django.views.generic.list_detail.object_list',
+        DetailView.as_view(),
         {'queryset':Page.permitted.all().order_by('title')},
         'page-list'
     ),

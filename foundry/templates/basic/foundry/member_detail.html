@@ -10,18 +10,18 @@
     <div class="meta">
         {% if notifications %}
             <div class="notifications">
-                <a href="{% url member-notifications %}">{% trans "Notifications" %} ({{ notifications }})</a>
+                <a href="{% url "member-notifications" %}">{% trans "Notifications" %} ({{ notifications }})</a>
             </div>
         {% endif %}
     </div>
 
     <table>
         <tr class="total-comments">
-            <th>{% trans "Total comments" %}</th>            
+            <th>{% trans "Total comments" %}</th>
             <td>{{ object.number_of_comments }}</td>
         </tr>
         <tr class="recent-comments">
-            <th>{% trans "Recent comments" %}</th>            
+            <th>{% trans "Recent comments" %}</th>
             <td>
                 {% for comment in object.last_5_comments %}
                     <div>
@@ -32,6 +32,6 @@
         </tr>
 
     </table>
-    
+
 </div>
 {% endblock content %}

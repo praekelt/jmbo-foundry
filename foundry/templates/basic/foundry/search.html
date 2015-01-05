@@ -4,7 +4,7 @@
 {% block content %}
 
 <div class="search">
-<form method="POST" action="{% url search %}" class="foundry-form">
+<form method="POST" action="{% url "search" %}" class="foundry-form">
     {% csrf_token %}
     {{ form.as_div }}
     <div class="buttons">

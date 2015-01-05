@@ -13,14 +13,14 @@ Based on jmbo/templates/inclusion_tags/object_comments.html.
             {% plural %}
                 {{ counter }} messages
             {% endblocktrans %}
-            <a href="#comment">{% trans "Add yours" %}</a>            
+            <a href="#comment">{% trans "Add yours" %}</a>
         </div>
         {% render_comment_list for object %}
         {% if can_render_comment_form %}
             {% render_comment_form for object %}
         {% else %}
             {% if can_comment_code == 'auth_required' %}
-                <a href="{% url login %}?next={{ request.META.PATH_INFO }}">{% trans "Sign in to chat" %}</a>
+                <a href="{% url "login" %}?next={{ request.META.PATH_INFO }}">{% trans "Sign in to chat" %}</a>
             {% endif %}
         {% endif %}
     </div>

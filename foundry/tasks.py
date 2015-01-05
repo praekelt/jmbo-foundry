@@ -28,9 +28,9 @@ TEMPLATE = '''
     <div>
         {{ comment.comment }}
         <br />
-        <a href="http://{{ site_domain}}{% url admin-remove-comment comment.id %}" target="_">Remove this comment</a>
+        <a href="http://{{ site_domain}}{% url "admin-remove-comment" comment.id %}" target="_">Remove this comment</a>
         |
-        <a href="http://{{ site_domain}}{% url admin-allow-comment comment.id %}" target="_">Allow this comment</a>
+        <a href="http://{{ site_domain}}{% url "admin-allow-comment" comment.id %}" target="_">Allow this comment</a>
     </div>
     <br />
 {% endfor %}

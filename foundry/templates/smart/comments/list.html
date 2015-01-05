@@ -32,7 +32,7 @@ $(document).ready(function(){
                 <div id="c{{ comment.id }}" class="item {% if comment.in_reply_to_id %}child{% endif %}">
                     {% if comment.creator %}
                     <div class="image">
-                        <a href="{% url user-detail comment.creator.username %}">
+                        <a href="{% url "user-detail" comment.creator.username %}">
                         {% if comment.creator.image %}
                             <img src="{{ comment.creator.get_thumbnail_LAYER_url }}" />
                         {% else %}
@@ -48,7 +48,7 @@ $(document).ready(function(){
                         <!-- todo: Need can comment test -->
                         <div class="reply">
                             {% with request.POST.next|default:request.META.PATH_INFO as next %}
-                                <a href="{% url comment-reply-form %}?content_type_id={{ comment.content_type_id }}&oid={{ comment.object_pk }}&next={{ next }}&paginate_by={{ paginate_by }}"
+                                <a href="{% url "comment-reply-form" %}?content_type_id={{ comment.content_type_id }}&oid={{ comment.object_pk }}&next={{ next }}&paginate_by={{ paginate_by }}"
                                    class="comment-reply"
                                    comment_id="{{ comment.id }}"
                                    creator="{{ comment.creator.username }}"
@@ -58,7 +58,7 @@ $(document).ready(function(){
                         </div>
                         {% if can_report_comment %}
                             {% with request.POST.next|default:request.META.PATH_INFO as next %}
-                                <a href="{% url report-comment comment.id %}?next={{ next|add:"?"|add:request.META.QUERY_STRING|urlencode }}" class="report" rel="nofollow">{% trans "Report" %}</a>
+                                <a href="{% url "report-comment" comment.id %}?next={{ next|add:"?"|add:request.META.QUERY_STRING|urlencode }}" class="report" rel="nofollow">{% trans "Report" %}</a>
                             {% endwith %}
                         {% else %}
                             {% if request.user.is_authenticated %}
