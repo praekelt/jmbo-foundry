@@ -40,7 +40,7 @@ TEMPLATE = '''
 '''
 
 
-@periodic_task(run_every=crontab(hour='*', minute='*/10', day_of_week='*'))
+@periodic_task(run_every=crontab(hour='*', minute='*/10', day_of_week='*'), ignore_result=True)
 def report_naughty_words():
     # As long as reporting is done often this won't turn into a memory hog.
 

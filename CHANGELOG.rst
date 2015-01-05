@@ -1,6 +1,11 @@
 Changelog
 =========
 
+next
+----
+#. Deprecate `compute_settings` function.
+#. Ignore result of celery tasks as appropriate.
+
 1.2.6.1
 -------
 #. Delegate photologue dependency to Jmbo.
