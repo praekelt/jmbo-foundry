@@ -89,7 +89,7 @@ MIDDLEWARE_CLASSES = (
     'foundry.middleware.LastSeen',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+#    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 # A tuple of callables that are used to populate the context in RequestContext.
@@ -119,49 +119,56 @@ ROOT_URLCONF = 'foundry.urls'
 INSTALLED_APPS = (
     # The order is important else template resolution may not work
     'foundry',
-    'downloads',
-    'friends',
-    'section',
-    'gallery',
-    'googlesearch',
-    'music',
-    'export',
-    'foundry',
-    'snippetscream',
-    'generate',
-    #'jmbo_calendar', optional
-    'jmbo_twitter',
+
+    # Optional praekelt-maintained apps. Uncomment for development and
+    # install with buildout or pip.
+    #'atlas',
+    #'banner',          # requires dfp
+    #'jmbo_calendar',   # requires atlas
+    #'chart',
+    #'competition',
+    #'downloads',
+    #'friends',
+    #'gallery',
+    #'music',
+    #'poll',
+    #'show',            # requires jmbo_calendar
+    #'jmbo_twitter',
+
+    'contact',
+    'post',
+    'jmbo_analytics',
+    'jmbo_sitemap',
     'jmbo',
     'photologue',
-    'chart',
-    'captcha',
     'secretballot',
-    'publisher',
     'category',
-    'post',
     'likes',
+
+    # todo: attempt to get rid of these five
+    'section',
     'gizmo',
-    'object_tools',
+    'generate',
     'registration',
-    #'show', optional
-    'preferences',
-    'banner',
-    'competition',
+    'snippetscream',
+
+    'captcha',
     'ckeditor',
-    'contact',
-    'poll',
-    'jmbo_sitemap',
-    'simple_autocomplete',
-    'pagination',
-    'south',
     'compressor',
-    'jmbo_analytics',
-    'gunicorn',
-    'sites_groups',
-    'atlas',
-    'tastypie',
-    'social_auth',
     'dfp',
+    'export',
+    'googlesearch',
+    'gunicorn',
+    'object_tools',
+    'pagination',
+    'publisher',
+    'preferences',
+    'simple_autocomplete',
+    'sites_groups',
+    'social_auth',
+    'south',
+    'tastypie',
+
     'django.contrib.auth',
     'django.contrib.comments',
     'django.contrib.contenttypes',
@@ -173,6 +180,7 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     'django.contrib.sitemaps',
     'django.contrib.admin',
+
     'djcelery',
 #    'debug_toolbar',
 )

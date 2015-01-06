@@ -48,7 +48,11 @@ from category.models import Category
 from jmbo.models import ModelBase
 from jmbo.view_modifiers import DefaultViewModifier
 from preferences import preferences
-from gallery.models import GalleryImage
+try:
+    from gallery.models import GalleryImage
+    HAS_GALLERY = True
+except:
+    HAS_GALLERY = False
 
 from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification, \
     Member, FoundryComment, CommentReport, Country
@@ -179,8 +183,11 @@ def search_results(request):
     if search_term:
         q1 = Q(title__icontains=search_term)
         q2 = Q(description__icontains=search_term)
-        ct = ContentType.objects.get_for_model(GalleryImage)
-        queryset = ModelBase.permitted.filter(q1|q2).exclude(content_type=ct)
+        queryset = ModelBase.permitted.filter(q1|q2)
+        if "gallery" in settings.INSTALLED_APPS:
+            from gallery.models import GalleryImage
+            ct = ContentType.objects.get_for_model(GalleryImage)
+            queryset = queryset.exclude(content_type=ct)
     else:
         queryset = ModelBase.objects.none()
     extra = dict(

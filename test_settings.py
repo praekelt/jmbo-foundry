@@ -3,10 +3,21 @@ from os.path import expanduser
 from foundry.settings import *
 
 
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+#        'NAME': 'jmbo_spatial',
+#        'USER': 'postgres',
+#        'PASSWORD': '',
+#        'HOST': '',
+#        'PORT': '',
+#    }
+#}
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'jmbo_spatial',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'jmbo',
         'USER': 'postgres',
         'PASSWORD': '',
         'HOST': '',

@@ -3,13 +3,14 @@ import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
-
+from django.conf import settings
 
 class Migration(SchemaMigration):
 
-    depends_on = (
-        ("banner", "0001_initial"),
-    )
+    if "banner" in settings.INSTALLED_APPS:
+        depends_on = (
+            ("banner", "0001_initial"),
+        )
 
     def forwards(self, orm):
         pass

@@ -64,29 +64,19 @@ urlpatterns = patterns('',
         name='html-sitemap'
     ),
 
-    (r'^downloads/', include('downloads.urls')),
-    (r'^friends/', include('friends.urls')),
-    (r'^gallery/', include('gallery.urls')),
     (r'^googlesearch/', include('googlesearch.urls')),
     (r'^jmbo/', include('jmbo.urls')),
-    (r'^chart/', include('chart.urls')),
     (r'^comments/', include('django.contrib.comments.urls')),
     (r'^likes/', include('likes.urls')),
     (r'^object-tools/', include(object_tools.tools.urls)),
-    (r'^show/', include('show.urls')),
-    (r'^competition/', include('competition.urls')),
     (r'^ckeditor/', include('ckeditor.urls')),
     (r'^contact/', include('contact.urls')),
     (r'^post/', include('post.urls')),
-    (r'^poll/', include('poll.urls')),
     (r'^simple-autocomplete/', include('simple_autocomplete.urls')),
     (r'^jmbo-analytics/', include('jmbo_analytics.urls')),
     (r'^api/', include(v1_api.urls)),
-    (r'^banner/', include('banner.urls')),
     url(r'social-auth', include('social_auth.urls')),
 
-    (r'^admin/', include('gallery.admin_urls')),
-    (r'^admin/', include('jmbo_twitter.admin_urls')),
     (r'^admin/', include(admin.site.urls)),
 
     url(
@@ -313,14 +303,6 @@ urlpatterns = patterns('',
         name='user-detail'
     ),
 
-    # Member detail page. Legacy page. jmbo-friends member-detail will resolve first.
-#    url(
-#        r'^members/(?P<username>[\w-]+)/$',
-#        'foundry.views.member_detail',
-#        {},
-#        name='member-detail'
-#    ),
-
     # Coming soon
     url(
         r'^coming-soon/$',
@@ -354,6 +336,14 @@ urlpatterns = patterns('',
         DetailView.as_view(),
         {'queryset':Page.permitted.all().order_by('title')},
         'page-list'
+    ),
+
+    # Member detail page
+    url(
+        r'^members/(?P<username>[\w-]+)/$',
+        'foundry.views.member_detail',
+        {},
+        name='member-detail'
     ),
 
     # Admin
@@ -433,16 +423,35 @@ urlpatterns = patterns('',
 )
 
 # Praekelt maintained Jmbo packages which are optional
-try:
-    import jmbo_calendar
+if "banner" in settings.INSTALLED_APPS:
+    urlpatterns += patterns('', (r'^banner/', include('banner.urls')))
+if "chart" in settings.INSTALLED_APPS:
+    urlpatterns += patterns('', (r'^chart/', include('chart.urls')))
+if "competition" in settings.INSTALLED_APPS:
+    urlpatterns += patterns('', (r'^competition/', include('competition.urls')))
+if "downloads" in settings.INSTALLED_APPS:
+    urlpatterns += patterns('', (r'^downloads/', include('downloads.urls')))
+if "friends" in settings.INSTALLED_APPS:
+    # Friends has a fancy member detail page and needs to resolve first
+    urlpatterns.insert(1, (r'^friends/', include('friends.urls')))
+if "gallery" in settings.INSTALLED_APPS:
+    urlpatterns += patterns('',
+        (r'^gallery/', include('gallery.urls')),
+        (r'^admin/', include('gallery.admin_urls')),
+    )
+if "jmbo_calendar" in settings.INSTALLED_APPS:
     urlpatterns += patterns('', (r'^calendar/', include('jmbo_calendar.urls')))
-except ImportError:
-    pass
-try:
-    import music
+if "jmbo_twitter" in settings.INSTALLED_APPS:
+    urlpatterns += patterns('',
+        (r'^jmbo_twitter', include('jmbo_twitter.urls')),
+        (r'^admin/', include('jmbo_twitter.admin_urls')),
+)
+if "music" in settings.INSTALLED_APPS:
     urlpatterns += patterns('', (r'^music/', include('music.urls')))
-except ImportError:
-    pass
+if "poll" in settings.INSTALLED_APPS:
+    urlpatterns += patterns('', (r'^poll/', include('poll.urls')))
+if "show" in settings.INSTALLED_APPS:
+    urlpatterns += patterns('', (r'^show/', include('show.urls')))
 
 urlpatterns += staticfiles_urlpatterns()
 

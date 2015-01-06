@@ -15,4 +15,7 @@ def foundry(request):
         'FOUNDRY_HAS_FACEBOOK_CONNECT': getattr(settings, 'FACEBOOK_APP_ID', '') != '',
         'FOUNDRY_HAS_TWITTER_OAUTH': getattr(settings, 'TWITTER_CONSUMER_KEY', '') != '',
         'FOUNDRY_HAS_GOOGLE_OAUTH2': getattr(settings, 'GOOGLE_OAUTH2_CLIENT_ID', '') != '',
+        'FOUNDRY_HAS_GALLERY': 'gallery' in settings.INSTALLED_APPS,
+        'FOUNDRY_HAS_BANNER': 'banner' in settings.INSTALLED_APPS,
+
     }

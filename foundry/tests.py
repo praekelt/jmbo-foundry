@@ -21,7 +21,10 @@ from preferences import preferences
 from preferences.models import Preferences
 from category.models import Category, Tag
 from post.models import Post
-from gallery.models import Gallery
+try:
+    from gallery.models import Gallery
+except ImportError:
+    pass
 
 from foundry.models import Member, Listing, Page, Row, Column, Tile, \
     Country
@@ -109,19 +112,20 @@ class TestCase(BaseTestCase):
             setattr(cls, 'post%s' % i, post)
 
         # Published galleries
-        for i in range(1, 5):
-            gallery, dc = Gallery.objects.get_or_create(
-                title='Gallery %s' % i, owner=cls.editor, state='published',
-            )
-            # Toggle between categories and primary category
-            if i % 2 == 1:
-                gallery.categories = [getattr(cls, 'cat%s' % i)]
-                gallery.tags = [getattr(cls, 'tag%s' % i)]
-            else:
-                gallery.primary_category = getattr(cls, 'cat%s' % i)
-            gallery.sites = [1]
-            gallery.save()
-            setattr(cls, 'gallery%s' % i, Gallery)
+        if "gallery" in settings.INSTALLED_APPS:
+            for i in range(1, 5):
+                gallery, dc = Gallery.objects.get_or_create(
+                    title='Gallery %s' % i, owner=cls.editor, state='published',
+                )
+                # Toggle between categories and primary category
+                if i % 2 == 1:
+                    gallery.categories = [getattr(cls, 'cat%s' % i)]
+                    gallery.tags = [getattr(cls, 'tag%s' % i)]
+                else:
+                    gallery.primary_category = getattr(cls, 'cat%s' % i)
+                gallery.sites = [1]
+                gallery.save()
+                setattr(cls, 'gallery%s' % i, Gallery)
 
         # Listings
 
@@ -282,7 +286,8 @@ class TestCase(BaseTestCase):
         self.failUnless(self.post1.modelbase_obj in listing.queryset().all())
         self.failIf(self.post2.modelbase_obj in listing.queryset().all())
         self.failIf(self.post3.modelbase_obj in listing.queryset().all())
-        self.failIf(self.gallery1.modelbase_obj in listing.queryset().all())
+        if "gallery" in settings.INSTALLED_APPS:
+            self.failIf(self.gallery1.modelbase_obj in listing.queryset().all())
 
     def test_listing_styles(self):
         """Confirm the listings of each style render"""

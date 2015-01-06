@@ -21,6 +21,7 @@ setup(
         'django-registration',
         'django-snippetscream',
 
+        # Django apps
         'django-googlesearch',
         'django-export',
         'django-simple-autocomplete',
@@ -29,24 +30,30 @@ setup(
         'django-debug-toolbar',
         'django_compressor',
         'django-social-auth==0.7.18',   # 0.7.19 introduces a migration scoping bug
+        'django-dfp>=0.3.3',            # required because of import in base_inner.html
 
+        # Jmbo apps
         'jmbo>=1.1',
-        'jmbo-gallery>=0.2.1',
-        'jmbo-music',
-        'jmbo-calendar',
-        'jmbo-chart',
         'jmbo-post>=0.1.2',
-        'jmbo-show>=0.2',
-        'jmbo-banner>=0.2.2',
-        'jmbo-competition',
         'jmbo-contact>=0.1.2',
-        'jmbo-poll',
         'jmbo_analytics',
-        'jmbo-friends',
-	    'jmbo-downloads',
-        'jmbo_twitter',
         'jmbo_sitemap>=0.1',
 
+        # Optional praekelt-maintained Jmbo apps. Uncomment for development or
+        # install with buildout or pip.
+        #'jmbo-banner>=0.2.2',
+        #'jmbo-calendar',
+        #'jmbo-chart',
+        #'jmbo-competition',
+	    #'jmbo-downloads',
+        #'jmbo-friends',
+        #'jmbo-gallery>=0.2.1',
+        #'jmbo-music',
+        #'jmbo-poll',
+        #'jmbo-show>=0.2',
+        #'jmbo_twitter',
+
+        # Python libraries
         'jellyfish',
         'BeautifulSoup',
         'PyJWT==0.1.6',
