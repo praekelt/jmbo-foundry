@@ -25,13 +25,10 @@ PROJECT_MODULE = 'foundry'
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-# For PostgreSQL first do from the command line
-# echo "CREATE USER foundry WITH PASSWORD 'foundry'" | sudo -u postgres psql
-# echo "CREATE DATABASE foundry WITH OWNER foundry ENCODING 'UTF8'" | sudo -u postgres psql
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        #'ENGINE': 'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'foundry', # Or path to database file if using sqlite3.
         'USER': 'foundry', # Not used with sqlite3.
         'PASSWORD': 'foundry', # Not used with sqlite3.
