@@ -68,7 +68,6 @@ urlpatterns = patterns('',
     (r'^friends/', include('friends.urls')),
     (r'^gallery/', include('gallery.urls')),
     (r'^googlesearch/', include('googlesearch.urls')),
-    (r'^music/', include('music.urls')),
     (r'^jmbo/', include('jmbo.urls')),
     (r'^chart/', include('chart.urls')),
     (r'^comments/', include('django.contrib.comments.urls')),
@@ -84,7 +83,6 @@ urlpatterns = patterns('',
     (r'^jmbo-analytics/', include('jmbo_analytics.urls')),
     (r'^api/', include(v1_api.urls)),
     (r'^banner/', include('banner.urls')),
-    (r'^calendar/', include('jmbo_calendar.urls')),
     url(r'social-auth', include('social_auth.urls')),
 
     (r'^admin/', include('gallery.admin_urls')),
@@ -286,7 +284,7 @@ urlpatterns = patterns('',
     # Blogpost list
     url(
         r'^blogposts/$',
-        'foundry.views.blogpost_object_list',
+        views.BlogPostObjectList.as_view(),
         {'limit': 300},
         name='blogpost_object_list'
     ),
@@ -294,7 +292,7 @@ urlpatterns = patterns('',
     # Blogpost detail
     url(
         r'^blogpost/(?P<slug>[\w-]+)/$',
-        'foundry.views.blogpost_object_detail',
+        views.BlogPostObjectDetail.as_view(),
         {},
         name='blogpost_object_detail'
     ),
@@ -433,6 +431,18 @@ urlpatterns = patterns('',
     ),
 
 )
+
+# Praekelt maintained Jmbo packages which are optional
+try:
+    import jmbo_calendar
+    urlpatterns += patterns('', (r'^calendar/', include('jmbo_calendar.urls')))
+except ImportError:
+    pass
+try:
+    import music
+    urlpatterns += patterns('', (r'^music/', include('music.urls')))
+except ImportError:
+    pass
 
 urlpatterns += staticfiles_urlpatterns()
 

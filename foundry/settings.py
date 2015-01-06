@@ -129,7 +129,7 @@ INSTALLED_APPS = (
     'foundry',
     'snippetscream',
     'generate',
-    'jmbo_calendar',
+    #'jmbo_calendar', optional
     'jmbo_twitter',
     'jmbo',
     'photologue',
@@ -143,7 +143,7 @@ INSTALLED_APPS = (
     'gizmo',
     'object_tools',
     'registration',
-    'show',
+    #'show', optional
     'preferences',
     'banner',
     'competition',
