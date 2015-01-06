@@ -10,6 +10,7 @@ from django.views.generic.base import RedirectView
 
 from preferences import preferences
 from jmbo_sitemap import sitemaps
+from jmbo_sitemap.views import SitemapHTMLView
 from jmbo.urls import v1_api
 # Trivial imports so resource registration works
 import post.urls
@@ -57,10 +58,7 @@ urlpatterns = patterns('',
     ),
     url(
         r'^sitemap/$',
-        TemplateView.as_view(template_name='jmbo_sitemap/sitemap.html'),
-        {
-            'extra_context': {'content': lambda: preferences.HTMLSitemap.content}
-        },
+        SitemapHTMLView.as_view(),
         name='html-sitemap'
     ),
 
