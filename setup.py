@@ -51,7 +51,7 @@ setup(
         #'jmbo-music',
         #'jmbo-poll',
         #'jmbo-show>=0.2',
-        #'jmbo_twitter',
+        #'jmbo-twitter',
 
         # Python libraries
         'jellyfish',
@@ -64,6 +64,20 @@ setup(
     include_package_data=True,
     tests_require=[
         'django-setuptest>=0.1.4',
+        # Below does not work for buildout so automated testing is currently a
+        # problem. You have to manually uncomment apps in the section above to
+        # test them. When buuildout support is deprecated this will be fixed.
+        #'jmbo-banner>=0.2.2',
+        ##'jmbo-calendar',
+        #'jmbo-chart',
+        ##'jmbo-competition',
+	    #'jmbo-downloads',
+        #'jmbo-friends',
+        #'jmbo-gallery>=0.2.1',
+        #'jmbo-music',
+        #'jmbo-poll',
+        ##'jmbo-show>=0.2',
+        #'jmbo-twitter',
     ],
     test_suite="setuptest.setuptest.SetupTestSuite",
     classifiers=[

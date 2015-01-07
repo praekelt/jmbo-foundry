@@ -431,7 +431,7 @@ if "downloads" in settings.INSTALLED_APPS:
     urlpatterns += patterns('', (r'^downloads/', include('downloads.urls')))
 if "friends" in settings.INSTALLED_APPS:
     # Friends has a fancy member detail page and needs to resolve first
-    urlpatterns.insert(1, (r'^friends/', include('friends.urls')))
+    urlpatterns.insert(1, url(r'^friends/', include('friends.urls')))
 if "gallery" in settings.INSTALLED_APPS:
     urlpatterns += patterns('',
         (r'^gallery/', include('gallery.urls')),
