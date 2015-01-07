@@ -15,6 +15,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.html import strip_tags
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.admin.options import IS_POPUP_VAR
 
 from ckeditor.widgets import CKEditorWidget
 from preferences.admin import PreferencesAdmin
@@ -406,8 +407,8 @@ class PageAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     inlines = (PageViewInline,)
 
-    def response_add(self, request, obj, post_url_continue='../%s/'):
-        if '_addanother' not in request.POST and '_popup' not in request.POST:
+    def response_add(self, request, obj, post_url_continue=None):
+        if '_addanother' not in request.POST and IS_POPUP_VAR not in request.POST:
             request.POST['_continue'] = 1
         return super(PageAdmin, self).response_add(request, obj, post_url_continue)
 
