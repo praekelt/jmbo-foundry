@@ -11,7 +11,7 @@ class RowEditAjaxForm(forms.ModelForm):
     class Meta:
         model = Row
         fields = (
-            'block_name', 'class_name', 'enable_caching', 'cache_type', 
+            'block_name', 'class_name', 'enable_caching', 'cache_type',
             'cache_timeout'
         )
 
@@ -21,23 +21,23 @@ class ColumnCreateAjaxForm(forms.ModelForm):
     class Meta:
         model = Column
         fields = (
-            'row', 'width', 'title', 'designation', 'class_name', 
+            'row', 'width', 'title', 'designation', 'class_name',
             'enable_caching', 'cache_type', 'cache_timeout'
         )
         widgets = {
-            'row':forms.widgets.HiddenInput, 
+            'row':forms.widgets.HiddenInput,
         }
 
     def clean_width(self):
-        """Check that width does not exceed maximum for the row"""        
+        """Check that width does not exceed maximum for the row"""
         value = self.cleaned_data['width']
         row = self.cleaned_data['row']
         total_width = row.column_set.all().aggregate(Sum('width'))['width__sum'] or 0
-        max_width = 16 - total_width       
+        max_width = 16 - total_width
         min_width = min(max_width, 1)
         if (value < min_width) or (value > max_width):
             raise forms.ValidationError('Width must be a value from %s to %s.' % (min_width, max_width))
-        return value   
+        return value
 
 
 class ColumnEditAjaxForm(forms.ModelForm):
@@ -45,24 +45,24 @@ class ColumnEditAjaxForm(forms.ModelForm):
     class Meta:
         model = Column
         fields = (
-            'row', 'width', 'title', 'designation', 'class_name', 
+            'row', 'width', 'title', 'designation', 'class_name',
             'enable_caching', 'cache_type', 'cache_timeout'
         )
         widgets = {
-            'row':forms.widgets.HiddenInput, 
+            'row':forms.widgets.HiddenInput,
         }
 
     def clean_width(self):
         value = self.cleaned_data['width']
         if (value < 1) or (value > 16):
             raise forms.ValidationError('Width must be a value from 1 to 16.')
-        return value   
+        return value
 
 
 class TileEditAjaxForm(forms.ModelForm):
     target = forms.ChoiceField(
-        choices=[], 
-        required=False, 
+        choices=[],
+        required=False,
         help_text="A navbar, menu or listing."
     )
 
@@ -70,18 +70,18 @@ class TileEditAjaxForm(forms.ModelForm):
         model = Tile
         fields = (
             'column', 'target', 'view_name', 'class_name', 'enable_ajax',
-            'condition_expression', 'enable_caching', 'cache_type', 
+            'condition_expression', 'enable_caching', 'cache_type',
             'cache_timeout'
         )
         widgets = {
-            'column':forms.widgets.HiddenInput, 
+            'column':forms.widgets.HiddenInput,
             'target':forms.widgets.Select,
             'view_name':forms.widgets.Select
         }
 
     def __init__(self, *args, **kwargs):
         super(TileEditAjaxForm, self).__init__(*args, **kwargs)
-        
+
         # Target choices
         choices = []
         for klass in (Menu, Navbar, Listing):
@@ -95,7 +95,7 @@ class TileEditAjaxForm(forms.ModelForm):
         self.fields['target'].choices = [('', '-- Select --')] + choices
 
         # Initial target
-        if self.instance and self.instance.target:            
+        if self.instance and self.instance.target:
             self.fields['target'].initial = '%s_%s' % \
                 (self.instance.target_content_type.id, self.instance.target_object_id)
 
@@ -114,7 +114,7 @@ class TileEditAjaxForm(forms.ModelForm):
         return cleaned_data
 
 
-    def save(self, commit=True):        
+    def save(self, commit=True):
         instance = super(TileEditAjaxForm, self).save(commit)
 
         # Set target
