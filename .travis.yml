@@ -8,6 +8,7 @@ python:
 
 env:
   - DJANGO=Django==1.4.10
+  - DJANGO=Django==1.6.9
 
 install:
   - pip install -q $DJANGO --use-mirrors
@@ -23,6 +24,6 @@ before_script:
     - psql -U postgres -d template_postgis -c "GRANT ALL ON geometry_columns TO PUBLIC;"
     - psql -U postgres -d template_postgis -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;"
     - psql -U postgres -d template_postgis -c "GRANT ALL ON geography_columns TO PUBLIC;"
-    - psql -U postgres -c "create database jmbo_foundry encoding 'UTF8' template template_postgis"
+    - psql -U postgres -c "create database jmbo encoding 'UTF8' template template_postgis"
 
 script: python setup.py test
