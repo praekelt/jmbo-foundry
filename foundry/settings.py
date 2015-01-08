@@ -85,7 +85,6 @@ MIDDLEWARE_CLASSES = (
     'foundry.middleware.VerboseRequestMeta',
     'foundry.middleware.LastSeen',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
-    'django.middleware.transaction.TransactionMiddleware',
 #    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
