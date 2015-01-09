@@ -36,7 +36,7 @@ from foundry.templatetags.listing_styles import LISTING_CLASSES
 from foundry.managers import PermittedManager
 from foundry.interfaces import ITileProvider
 from foundry.mixins import CachingMixin
-
+import foundry.monkey
 
 # regex that identifies scripts in text
 SCRIPT_REGEX = re.compile(r"""(<script[^>]*>)|(<[^>]* on[a-z]+=['"].*?['"][^>]*)""", flags=re.DOTALL)
