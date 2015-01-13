@@ -1,7 +1,11 @@
 from django import forms
+from django.db import models
 from django.db.models.aggregates import Sum
 from django.contrib.contenttypes.models import ContentType
 
+from zope.interface import classImplements
+
+from foundry.interfaces import ITileProvider
 from foundry.models import Menu, Navbar, Listing, Row, Column, Tile
 from foundry.utils import get_view_choices
 
@@ -25,7 +29,7 @@ class ColumnCreateAjaxForm(forms.ModelForm):
             'enable_caching', 'cache_type', 'cache_timeout'
         )
         widgets = {
-            'row':forms.widgets.HiddenInput,
+            'row': forms.widgets.HiddenInput,
         }
 
     def clean_width(self):
@@ -49,7 +53,7 @@ class ColumnEditAjaxForm(forms.ModelForm):
             'enable_caching', 'cache_type', 'cache_timeout'
         )
         widgets = {
-            'row':forms.widgets.HiddenInput,
+            'row': forms.widgets.HiddenInput,
         }
 
     def clean_width(self):
@@ -74,9 +78,9 @@ class TileEditAjaxForm(forms.ModelForm):
             'cache_timeout'
         )
         widgets = {
-            'column':forms.widgets.HiddenInput,
-            'target':forms.widgets.Select,
-            'view_name':forms.widgets.Select
+            'column': forms.widgets.HiddenInput,
+            'target': forms.widgets.Select,
+            'view_name': forms.widgets.Select
         }
 
     def __init__(self, *args, **kwargs):
@@ -84,20 +88,29 @@ class TileEditAjaxForm(forms.ModelForm):
 
         # Target choices
         choices = []
-        for klass in (Menu, Navbar, Listing):
-            ctid = ContentType.objects.get(app_label='foundry', model=klass.__name__.lower()).id
+        tileproviders = [
+            m for m in models.get_models() if classImplements(m, ITileProvider)
+        ]
+        for klass in tileproviders:
+            ctid = ContentType.objects.get(
+                app_label='foundry', model=klass.__name__.lower()
+            ).id
             for o in klass.objects.filter(sites__in=kwargs['instance'].column.row.page.sites.all()).distinct():
                 title = o.title
                 subtitle = getattr(o, 'subtitle', None)
                 if subtitle:
                     title = '%s (%s)' % (title, subtitle)
-                choices.append( ('%s_%s' % (ctid, o.id), '%s: %s' % (klass.__name__, title)) )
+                choices.append(
+                    ('%s_%s' % (ctid, o.id), '%s: %s' % (klass.__name__, title))
+                )
         self.fields['target'].choices = [('', '-- Select --')] + choices
 
         # Initial target
         if self.instance and self.instance.target:
-            self.fields['target'].initial = '%s_%s' % \
-                (self.instance.target_content_type.id, self.instance.target_object_id)
+            self.fields['target'].initial = '%s_%s' % (
+                self.instance.target_content_type.id,
+                self.instance.target_object_id
+            )
 
         self.fields['view_name'].widget.choices = [('', '-- Select --')] + get_view_choices()
 
@@ -113,7 +126,6 @@ class TileEditAjaxForm(forms.ModelForm):
             raise forms.ValidationError("Select either Target or View Name, not both.")
         return cleaned_data
 
-
     def save(self, commit=True):
         instance = super(TileEditAjaxForm, self).save(commit)
 
@@ -121,7 +133,9 @@ class TileEditAjaxForm(forms.ModelForm):
         target = self.cleaned_data['target']
         if target:
             ctid, oid = target.split('_')
-            instance.target = ContentType.objects.get(id=ctid).get_object_for_this_type(id=oid)
+            instance.target = ContentType.objects.get(
+                id=ctid
+            ).get_object_for_this_type(id=oid)
         else:
             instance.target = None
 

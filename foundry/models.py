@@ -4,17 +4,15 @@ import cPickle
 
 from django.core.cache import cache
 from django.core.urlresolvers import reverse, Resolver404
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.db.models import Count
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User, UserManager
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.contrib.comments.models import Comment as BaseComment
-from django.contrib.sites.models import Site
-from django.db.models.signals import m2m_changed, post_save
+from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 from django.utils.importlib import import_module
 from django.utils import simplejson as json
@@ -26,21 +24,19 @@ from preferences import preferences
 from snippetscream import resolve_to_name
 from photologue.models import ImageModel
 from south.modelsinspector import add_introspection_rules
+from zope.interface import implements
 
-from jmbo.utils import generate_slug
 from jmbo.models import ModelBase
 from jmbo.managers import DefaultManager
-
 from foundry.profile_models import AbstractAvatarProfile, \
     AbstractSocialProfile, AbstractPersonalProfile, \
     AbstractContactProfile, AbstractSubscriptionProfile, \
     AbstractLocationProfile
 from foundry.templatetags.listing_styles import LISTING_CLASSES
 from foundry.managers import PermittedManager
-import foundry.eventhandlers
+from foundry.interfaces import ITileProvider
 from foundry.mixins import CachingMixin
 import foundry.monkey
-
 
 # regex that identifies scripts in text
 SCRIPT_REGEX = re.compile(r"""(<script[^>]*>)|(<[^>]* on[a-z]+=['"].*?['"][^>]*)""", flags=re.DOTALL)
@@ -68,6 +64,7 @@ class AttributeWrapper:
         """Can't override __class__ and making it a property also does not
         work. Could be because of Django metaclasses."""
         return self._obj.__class__
+
 
 class Link(models.Model):
     title = models.CharField(
@@ -177,6 +174,7 @@ class Menu(CachingMixin):
 
     objects = DefaultManager()
     permitted = PermittedManager()
+    implements(ITileProvider)
 
     class Meta:
         ordering = ('title', 'subtitle')
@@ -212,6 +210,7 @@ class Navbar(CachingMixin):
 
     objects = DefaultManager()
     permitted = PermittedManager()
+    implements(ITileProvider)
 
     class Meta:
         ordering = ('title', 'subtitle')
@@ -314,6 +313,7 @@ complex page."""
 
     objects = DefaultManager()
     permitted = PermittedManager()
+    implements(ITileProvider)
 
     class Meta:
         ordering = ('title', 'subtitle')
