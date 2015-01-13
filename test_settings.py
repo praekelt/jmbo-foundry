@@ -17,7 +17,7 @@ DATABASES = {
 # See setup.py for an explanation as to why these aren't enabled by default
 '''
 INSTALLED_APPS += (
-    'banner',          # requires dfp
+    'banner',
     #'jmbo_calendar',   # requires atlas
     'chart',
     #'competition',

@@ -14,7 +14,7 @@ install:
   - pip install -r requirements.txt --use-mirrors
 
 before_script:
-    - psql -U postgres -c "create database jmbo encoding 'UTF8'"
+    - psql -U postgres -c "create database jmbo_spatial encoding 'UTF8'"
     - psql -U postgres jmbo -c "CREATE EXTENSION postgis;"
     - psql -U postgres jmbo -c "CREATE EXTENSION postgis_topology;"
 

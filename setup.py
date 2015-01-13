@@ -28,27 +28,28 @@ setup(
         'django-debug-toolbar',
         'django_compressor',
         'django-social-auth==0.7.18',   # 0.7.19 introduces a migration scoping bug
+        'django-dfp>=0.3.3',
 
         # These Jmbo apps are always part of Foundry
         'jmbo>=1.1',
-        'jmbo-post>=0.1.2',
         'jmbo_analytics',
-        'jmbo-friends',
-
-        # Optional. Enabled until I figure out how to get buildout to recognize
-        # tests_require.
-        'jmbo-gallery>=0.2.1',
-        'jmbo-music',
-        'jmbo-calendar',
-        'jmbo-chart',
-        'jmbo-show>=0.2',
-        'jmbo-banner>=0.2.2',
-        'jmbo-competition',
         'jmbo-contact>=0.1.2',
-        'jmbo-poll',
-        'jmbo-downloads',
-        'jmbo_twitter',
+        'jmbo-post>=0.1.2',
         'jmbo_sitemap>=0.1',
+
+        # In this section until I figure out how to get buildout to recognize
+        # tests_require.
+        #'jmbo-banner>=0.2.2',
+        #'jmbo-calendar',
+        #'jmbo-chart',
+        #'jmbo-competition',
+        #'jmbo-download',
+        #'jmbo-friends',
+        #'jmbo-gallery>=0.2.1',
+        #'jmbo-music',
+        #'jmbo-poll',
+        #'jmbo_twitter',
+        #'jmbo-show>=0.2',
 
         'jellyfish',
         'BeautifulSoup',
@@ -56,6 +57,7 @@ setup(
         'requests',
         'gunicorn',
         'python-memcached',
+        'zope.interface'
     ],
     include_package_data=True,
     tests_require=[
