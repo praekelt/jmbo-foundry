@@ -2,23 +2,11 @@ from os.path import expanduser
 
 from foundry.settings import *
 
-
-# When jmbo-calendar is fixed we can move back to postgis
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-#        'NAME': 'jmbo_spatial',
-#        'USER': 'postgres',
-#        'PASSWORD': '',
-#        'HOST': '',
-#        'PORT': '',
-#    }
-#}
-
+# Postgis because we want to test full functionality
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'jmbo',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'jmbo_spatial',
         'USER': 'postgres',
         'PASSWORD': '',
         'HOST': '',
@@ -29,7 +17,6 @@ DATABASES = {
 # See setup.py for an explanation as to why these aren't enabled by default
 '''
 INSTALLED_APPS += (
-    #'atlas',
     'banner',          # requires dfp
     #'jmbo_calendar',   # requires atlas
     'chart',

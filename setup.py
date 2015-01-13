@@ -17,7 +17,6 @@ setup(
         # todo: attempt to get rid of these five
         'django-section',
         'django-gizmo',
-        'django-generate',
         'django-registration',
         'django-snippetscream',
 

@@ -27,8 +27,9 @@ TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
     'default': {
-        #'ENGINE': 'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # Must use postgis when developing foundry and Jmbo core itself else migrations are wrong
+        'ENGINE': 'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        #'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'foundry', # Or path to database file if using sqlite3.
         'USER': 'foundry', # Not used with sqlite3.
         'PASSWORD': 'foundry', # Not used with sqlite3.
@@ -118,9 +119,8 @@ INSTALLED_APPS = (
 
     # Optional praekelt-maintained apps. Uncomment for development and
     # install with buildout or pip.
-    #'atlas',
     #'banner',          # requires dfp
-    #'jmbo_calendar',   # requires atlas
+    #'jmbo_calendar'
     #'chart',
     #'competition',
     #'downloads',
@@ -148,6 +148,7 @@ INSTALLED_APPS = (
     'registration',
     'snippetscream',
 
+    'atlas',
     'captcha',
     'ckeditor',
     'compressor',
