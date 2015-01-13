@@ -14,11 +14,12 @@ setup(
     dependency_links=[
     ],
     install_requires=[
-        # todo: attempt to get rid of these five
+        # todo: attempt to get rid of these four
         'django-section',
         'django-gizmo',
         'django-registration',
         'django-snippetscream',
+
         'django-googlesearch',
         'django-export',
         'django-simple-autocomplete',
@@ -28,19 +29,23 @@ setup(
         'django_compressor',
         'django-social-auth==0.7.18',   # 0.7.19 introduces a migration scoping bug
 
+        # These Jmbo apps are always part of Foundry
         'jmbo>=1.1',
+        'jmbo-post>=0.1.2',
+        'jmbo_analytics',
+        'jmbo-friends',
+
+        # Optional. Enabled until I figure out how to get buildout to recognize
+        # tests_require.
         'jmbo-gallery>=0.2.1',
         'jmbo-music',
         'jmbo-calendar',
         'jmbo-chart',
-        'jmbo-post>=0.1.2',
         'jmbo-show>=0.2',
         'jmbo-banner>=0.2.2',
         'jmbo-competition',
         'jmbo-contact>=0.1.2',
         'jmbo-poll',
-        'jmbo_analytics',
-        'jmbo-friends',
         'jmbo-downloads',
         'jmbo_twitter',
         'jmbo_sitemap>=0.1',

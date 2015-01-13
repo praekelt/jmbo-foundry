@@ -141,10 +141,9 @@ INSTALLED_APPS = (
     'category',
     'likes',
 
-    # todo: attempt to get rid of these five
+    # todo: attempt to get rid of these four
     'section',
     'gizmo',
-    'generate',
     'registration',
     'snippetscream',
 
@@ -165,6 +164,7 @@ INSTALLED_APPS = (
     'social_auth',
     'south',
     'tastypie',
+    'generate',
 
     'django.contrib.auth',
     'django.contrib.comments',
