@@ -15,7 +15,7 @@ install:
 
 before_script:
     - psql -U postgres -c "create database jmbo_spatial encoding 'UTF8'"
-    - psql -U postgres jmbo -c "CREATE EXTENSION postgis;"
-    - psql -U postgres jmbo -c "CREATE EXTENSION postgis_topology;"
+    - psql -U postgres jmbo_spatial -c "CREATE EXTENSION postgis;"
+    - psql -U postgres jmbo_spatial -c "CREATE EXTENSION postgis_topology;"
 
 script: python setup.py test
