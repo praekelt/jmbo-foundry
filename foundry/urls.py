@@ -137,26 +137,26 @@ urlpatterns = patterns('',
     # Pages defined in preferences
     url(
         r'^about-us/$',
-        TemplateView.as_view(template_name='foundry/static_page.html'),
-        {
-            'extra_context':{'content':lambda:preferences.GeneralPreferences.about_us, 'title':_("About us")}
-        },
+        views.StaticView.as_view(
+            content=lambda:preferences.GeneralPreferences.about_us,
+            title=_("About us")
+        ),
         name='about-us'
     ),
     url(
         r'^terms-and-conditions/$',
-        TemplateView.as_view(template_name='foundry/static_page.html'),
-        {
-            'extra_context':{'content':lambda:preferences.GeneralPreferences.terms_and_conditions, 'title':_("Terms and conditions")}
-        },
+        views.StaticView.as_view(
+            content=lambda:preferences.GeneralPreferences.terms_and_conditions,
+            title=_("Terms and conditions")
+        ),
         name='terms-and-conditions'
     ),
     url(
         r'^privacy-policy/$',
-        TemplateView.as_view(template_name='foundry/static_page.html'),
-        {
-            'extra_context':{'content':lambda:preferences.GeneralPreferences.privacy_policy, 'title':_("Privacy policy")}
-        },
+        views.StaticView.as_view(
+            content=lambda:preferences.GeneralPreferences.privacy_policy,
+            title=_("Privacy policy")
+        ),
         name='privacy-policy'
     ),
 

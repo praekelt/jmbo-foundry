@@ -473,6 +473,17 @@ class TestCase(BaseTestCase):
                 response = self.client.get(obj.get_absolute_url())
                 self.assertEqual(response.status_code, 200)
 
+    def test_static_view(self):
+        """High-level test to confirm static views render"""
+        urls = (
+            (reverse("about-us"), "About us"),
+            (reverse("terms-and-conditions"), "Terms and conditions"),
+            (reverse("privacy-policy"), "Privacy policy"),
+        )
+        for url, title in urls:
+            response = self.client.get(url)
+            self.failUnless(title in response.content)
+
 
 class AgeGatewayTestCase(BaseTestCase):
 

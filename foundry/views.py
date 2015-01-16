@@ -30,6 +30,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template import Context
 from django.utils.html import strip_tags
 from django.core.cache import cache
+from django.views.generic.base import TemplateView
 
 # Comment post required imports
 from django.contrib.comments.views.comments import CommentPostBadRequest
@@ -483,6 +484,20 @@ def fetch_new_comments_ajax(request, content_type_id, oid, last_comment_id):
 def server_error(request, template_name='500.html'):
     t = loader.get_template(template_name)
     return HttpResponseServerError(t.render(RequestContext(request)))
+
+
+class StaticView(TemplateView):
+    """Used by pages driven by preferences, eg. abous-us"""
+
+    template_name = "foundry/static_page.html"
+    title = None
+    content = None
+
+    def get_context_data(self, **kwargs):
+        context = super(StaticView, self).get_context_data(**kwargs)
+        context["title"] = self.title
+        context["content"] = self.content
+        return context
 
 
 # Views for testing
