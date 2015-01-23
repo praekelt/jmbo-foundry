@@ -51,43 +51,52 @@ class AbstractBaseStyle(object):
 
 class Horizontal(AbstractBaseStyle):
     template_name = 'foundry/inclusion_tags/listing_horizontal.html'
-    image_path = 'admin/images/listing-horizontal.png'
+    image_path = "/admin/images/listing-horizontal.png"
 
 
 class Vertical(AbstractBaseStyle):
     template_name = 'foundry/inclusion_tags/listing_vertical.html'
+    image_path = "/admin/images/listing-vertical.png"
 
 
 class Promo(AbstractBaseStyle):
     template_name = 'foundry/inclusion_tags/listing_promo.html'
+    image_path = "/admin/images/listing-promo.png"
 
 
 class VerticalThumbnail(AbstractBaseStyle):
     template_name = 'foundry/inclusion_tags/listing_vertical_thumbnail.html'
+    image_path = "/admin/images/listing-vertical-thumbnail.png"
 
 
 class Widget(AbstractBaseStyle):
     template_name = 'foundry/inclusion_tags/listing_widget.html'
+    image_path = "/admin/images/listing-widget.png"
 
 
 class CustomOne(AbstractBaseStyle):
     template_name = 'foundry/inclusion_tags/listing_custom_one.html'
+    image_path = "/admin/images/listing-custom-one.png"
 
 
 class CustomTwo(AbstractBaseStyle):
     template_name = 'foundry/inclusion_tags/listing_custom_two.html'
+    image_path = "/admin/images/listing-custom-two.png"
 
 
 class CustomThree(AbstractBaseStyle):
     template_name = 'foundry/inclusion_tags/listing_custom_three.html'
+    image_path = "/admin/images/listing-custom-three.png"
 
 
 class CustomFour(AbstractBaseStyle):
     template_name = 'foundry/inclusion_tags/listing_custom_four.html'
+    image_path = "/admin/images/listing-custom-four.png"
 
 
 class CustomFive(AbstractBaseStyle):
     template_name = 'foundry/inclusion_tags/listing_custom_five.html'
+    image_path = "/admin/images/listing-custom-five.png"
 
 
 LISTING_CLASSES = []

@@ -120,7 +120,7 @@ INSTALLED_APPS = (
     # Optional praekelt-maintained apps. Uncomment for development and
     # install with buildout or pip.
     #'banner',          # requires dfp
-    #'jmbo_calendar'
+    #'jmbo_calendar',
     #'chart',
     #'competition',
     #'downloads',
@@ -136,10 +136,10 @@ INSTALLED_APPS = (
     'jmbo_analytics',
     'jmbo_sitemap',
     'jmbo',
-    'photologue',
-    'secretballot',
     'category',
     'likes',
+    'photologue',
+    'secretballot',
 
     # todo: attempt to get rid of these four
     'section',
@@ -164,7 +164,7 @@ INSTALLED_APPS = (
     'social_auth',
     'south',
     'tastypie',
-    'generate',
+    'generate',     # try to remove
 
     'django.contrib.auth',
     'django.contrib.comments',
