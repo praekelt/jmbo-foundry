@@ -405,7 +405,7 @@ class PageAdmin(admin.ModelAdmin):
     form = PageAdminForm
     list_display = ('title', 'subtitle', 'slug', 'is_homepage')
     prepopulated_fields = {'slug': ('title',)}
-    inlines = (PageViewInline,)
+    #inlines = (PageViewInline,)
 
     def response_add(self, request, obj, post_url_continue=None):
         if '_addanother' not in request.POST and IS_POPUP_VAR not in request.POST:
