@@ -164,7 +164,7 @@ INSTALLED_APPS = (
     'social_auth',
     'south',
     'tastypie',
-    'generate',     # try to remove
+    'generate',
 
     'django.contrib.auth',
     'django.contrib.comments',
