@@ -64,7 +64,6 @@ kombu==3.0.24
 lxml==3.4.1
 oauth2==1.5.211
 oauthlib==0.7.2
-psycopg2==2.5.4
 pylast==1.1.0
 python-dateutil==2.4.0
 python-memcached==1.53
