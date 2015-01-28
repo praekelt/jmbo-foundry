@@ -14,22 +14,20 @@ DATABASES = {
     }
 }
 
-# See setup.py for an explanation as to why these aren't enabled by default
-'''
+# Foundry provides high-level testing tools for other content types
 INSTALLED_APPS += (
     'banner',
-    #'jmbo_calendar',   # requires atlas
+    'jmbo_calendar',
     'chart',
-    #'competition',
+    'competition',
     'downloads',
     'friends',
     'gallery',
     'music',
     'poll',
-    #'show',            # requires jmbo_calendar
-    #'jmbo_twitter',
+    'show',
+    'jmbo_twitter',
 )
-'''
 
 CKEDITOR_UPLOAD_PATH = expanduser('~')
 
