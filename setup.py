@@ -37,20 +37,6 @@ setup(
         'jmbo-post>=0.1.2',
         'jmbo_sitemap>=0.1',
 
-        # In this section until I figure out how to get buildout to recognize
-        # tests_require.
-        #'jmbo-banner>=0.2.2',
-        #'jmbo-calendar',
-        #'jmbo-chart',
-        #'jmbo-competition',
-        #'jmbo-downloads',
-        #'jmbo-friends',
-        #'jmbo-gallery>=0.2.1',
-        #'jmbo-music',
-        #'jmbo-poll',
-        #'jmbo-twitter',
-        #'jmbo-show>=0.2',
-
         'jellyfish',
         'BeautifulSoup',
         'PyJWT==0.1.6',
@@ -61,6 +47,18 @@ setup(
     ],
     include_package_data=True,
     tests_require=[
+        # Foundry provides high-level testing tools for other content types
+        'jmbo-banner>=0.2.2',
+        'jmbo-calendar',
+        'jmbo-chart',
+        'jmbo-competition',
+        'jmbo-downloads',
+        'jmbo-friends',
+        'jmbo-gallery>=0.2.1',
+        'jmbo-music',
+        'jmbo-poll',
+        'jmbo-twitter',
+        'jmbo-show>=0.2',
         'django-setuptest>=0.1.4',
     ],
     test_suite="setuptest.setuptest.SetupTestSuite",
