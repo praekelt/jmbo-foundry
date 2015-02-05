@@ -29,6 +29,7 @@ setup(
         'django_compressor',
         'django-social-auth==0.7.18',   # 0.7.19 introduces a migration scoping bug
         'django-dfp>=0.3.3',
+        'django-layers-hr',
 
         # These Jmbo apps are always part of Foundry
         'jmbo>=1.1',

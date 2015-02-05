@@ -5,6 +5,8 @@ next
 ----
 #. Deprecate `compute_settings` function.
 #. Ignore result of celery tasks as appropriate.
+#. Move to Django 1.6 support. Backwards incompatible.
+#. Use `django-layers-hr` to handle layering. The FOUNDRY['layers'] setting is now deprecated.
 
 1.2.6.1
 -------

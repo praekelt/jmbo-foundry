@@ -31,6 +31,7 @@
 -e git+git@github.com:praekelt/jmbo-show.git@feature/django-1.6#egg=jmbo-show
 -e git+git@github.com:praekelt/jmbo-sitemap.git@feature/django-1.6#egg=jmbo-sitemap
 -e git+git@github.com:praekelt/jmbo-twitter.git@feature/django-1.6#egg=jmbo-twitter
+-e git+git@github.com:hedleyroos/django-layers.git@develop#egg=django-layers
 
 psycopg2==2.5.4
 BeautifulSoup==3.2.1

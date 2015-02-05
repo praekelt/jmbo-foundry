@@ -13,7 +13,10 @@ import warnings
 FOUNDRY = {
     'sms_gateway_api_key': '',
     'sms_gateway_password': '',
-    'layers': ('basic',)
+}
+
+LAYERS = {
+    'layers': ('basic',),
 }
 
 # Paths
@@ -104,10 +107,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'foundry.context_processors.foundry',
 )
 
-# AppDirectoriesTypeLoader must be after filesystem loader
 TEMPLATE_LOADERS = (
+    'layers.loaders.filesystem.Loader',
     'django.template.loaders.filesystem.Loader',
-    'foundry.loaders.AppDirectoriesTypeLoader',
+    'layers.loaders.app_directories.Loader',
     'django.template.loaders.app_directories.Loader',
 )
 
@@ -155,6 +158,7 @@ INSTALLED_APPS = (
     'export',
     'googlesearch',
     'gunicorn',
+    #'layers',
     'object_tools',
     'pagination',
     'publisher',
@@ -179,6 +183,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
 
     'djcelery',
+    'layers',
 #    'debug_toolbar',
 )
 
@@ -234,8 +239,9 @@ SIMPLE_AUTOCOMPLETE = {
 }
 
 STATICFILES_FINDERS = (
-    'foundry.finders.FileSystemLayerAwareFinder',
+    'layers.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
+    'layers.finders.AppDirectoriesFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 )

@@ -8,7 +8,7 @@ def foundry(request):
     # get_preference, get_current_site do caching
     return {
         'FOUNDRY': settings.FOUNDRY,
-        'LAYER_PATH': settings.FOUNDRY['layers'][0] + '/',
+        'LAYER_PATH': settings.LAYERS['layers'][-1] + '/',
         'CURRENT_SITE': get_current_site(request),
         'ANALYTICS_TAGS': get_preference('GeneralPreferences', 'analytics_tags'),
         'SITE_DESCRIPTION': get_preference('GeneralPreferences', 'site_description'),

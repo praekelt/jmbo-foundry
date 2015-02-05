@@ -98,7 +98,9 @@ class LayerAwareSizes(dict):
             key = key.replace('_LAYER', '')
 
         # Iterate over layers
-        for layer in settings.FOUNDRY['layers']:
+        layers = list(settings.LAYERS['layers'])
+        layers.reverse()
+        for layer in layers:
             result = super(LayerAwareSizes, self).get(key + '_' + layer)
             if result is not None:
                 break
