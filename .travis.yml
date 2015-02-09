@@ -11,7 +11,7 @@ env:
 
 install:
   - pip install -q $DJANGO --use-mirrors
-  - pip install -r requirements.txt --use-mirrors
+  - pip install -r requirements.pip --use-mirrors
 
 before_script:
     - psql -U postgres -c "create database jmbo_spatial encoding 'UTF8'"

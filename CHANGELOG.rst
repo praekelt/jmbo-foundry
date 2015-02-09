@@ -7,6 +7,7 @@ next
 #. Ignore result of celery tasks as appropriate.
 #. Move to Django 1.6 support. Backwards incompatible.
 #. Use `django-layers-hr` to handle layering. The FOUNDRY['layers'] setting is now deprecated.
+#. Deprecate legacy handling for substring `_LAYER_` in photosize name.
 
 1.2.6.1
 -------
