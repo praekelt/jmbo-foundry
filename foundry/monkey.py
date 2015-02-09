@@ -93,13 +93,8 @@ class LayerAwareSizes(dict):
     def get(self, key):
         result = None
 
-        # Handle legacy LAYER marker
-        if key.endswith('_LAYER'):
-            key = key.replace('_LAYER', '')
-
         # Iterate over layers
-        layers = list(settings.LAYERS['layers'])
-        layers.reverse()
+        layers = reversed(list(settings.LAYERS['layers']))
         for layer in layers:
             result = super(LayerAwareSizes, self).get(key + '_' + layer)
             if result is not None:

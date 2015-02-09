@@ -35,7 +35,7 @@ $(document).ready(function(){
                         {% if creator %}
                             {% if creator.image %}
                                 <a href="{% url "user-detail" creator.username %}">
-                                    <img src="{{ creator.get_thumbnail_LAYER_url }}" />
+                                    <img src="{{ creator.get_thumbnail_url }}" />
                                 </a>
                             {% else %}
                                 <img src="{{ STATIC_URL }}/images/anonymous.png" />
