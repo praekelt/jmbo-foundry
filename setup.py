@@ -37,6 +37,7 @@ setup(
         'BeautifulSoup',
         'jellyfish',
         'python-memcached',
+        'PyJWT',
         'requests',
         'zope.interface'
     ],
