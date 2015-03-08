@@ -14,22 +14,17 @@ setup(
     dependency_links=[
     ],
     install_requires=[
-        # todo: attempt to get rid of these four
-        'django-section',
-        'django-gizmo',
-        'django-registration',
-        'django-snippetscream',
-
-        'django-googlesearch',
-        'django-export',
-        'django-simple-autocomplete',
-        'django-pagination',
-        'django-object-tools>=0.0.5',
-        'django-debug-toolbar',
         'django_compressor',
-        'django-social-auth==0.7.18',   # 0.7.19 introduces a migration scoping bug
         'django-dfp>=0.3.3',
+        'django-export',
+        'django-googlesearch',
         'django-layers-hr>=0.3',
+        'django-object-tools>=0.0.5',
+        'django-pagination',
+        'django-publisher',             # legacy, required by migrations
+        'django-simple-autocomplete',
+        'django-social-auth==0.7.18',   # 0.7.19 introduces a migration scoping bug
+        'django-snippetscream',
 
         # These Jmbo apps are always part of Foundry
         'jmbo>=1.1',
@@ -38,12 +33,11 @@ setup(
         'jmbo-post>=0.1.2',
         'jmbo_sitemap>=0.1',
 
-        'jellyfish',
+        # Python libraries
         'BeautifulSoup',
-        'PyJWT==0.1.6',
-        'requests',
-        'gunicorn',
+        'jellyfish',
         'python-memcached',
+        'requests',
         'zope.interface'
     ],
     include_package_data=True,

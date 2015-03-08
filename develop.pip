@@ -37,7 +37,6 @@ psycopg2==2.5.4
 BeautifulSoup==3.2.1
 Django==1.6.8
 Pillow==2.7.0
-PyJWT==0.1.6
 PyYAML==3.11
 South==1.0.2
 amqp==1.4.6
@@ -50,15 +49,10 @@ django-appconf==0.6
 django-celery==3.1.16
 django-ckeditor==4.4.7
 django-compressor==1.4
-django-debug-toolbar==1.2.2
-django-gizmo==0.0.4
 django-pagination==1.0.7
-django-registration==1.0
 django-secretballot==0.2.3
-django-section==0.0.3
 django-social-auth==0.7.18
 django-tastypie==0.11.1
-gunicorn==19.1.1
 httplib2==0.9
 jellyfish==0.3.3
 kombu==3.0.24

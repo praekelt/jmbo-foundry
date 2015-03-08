@@ -89,7 +89,6 @@ MIDDLEWARE_CLASSES = (
     'foundry.middleware.VerboseRequestMeta',
     'foundry.middleware.LastSeen',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
-#    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 # A tuple of callables that are used to populate the context in RequestContext.
@@ -144,31 +143,24 @@ INSTALLED_APPS = (
     'photologue',
     'secretballot',
 
-    # todo: attempt to get rid of these four
-    'section',
-    'gizmo',
-    'registration',
-    'snippetscream',
-
     'atlas',
     'captcha',
     'ckeditor',
     'compressor',
     'dfp',
     'export',
+    'generate',
     'googlesearch',
-    'gunicorn',
-    #'layers',
     'object_tools',
     'pagination',
     'publisher',
     'preferences',
     'simple_autocomplete',
     'sites_groups',
+    'snippetscream',
     'social_auth',
     'south',
     'tastypie',
-    'generate',
 
     'django.contrib.auth',
     'django.contrib.comments',
@@ -184,7 +176,6 @@ INSTALLED_APPS = (
 
     'djcelery',
     'layers',
-#    'debug_toolbar',
 )
 
 # Your ReCaptcha provided public key.
@@ -192,9 +183,6 @@ RECAPTCHA_PUBLIC_KEY = '6LccPr4SAAAAAJRDO8gKDYw2QodyRiRLdqBhrs0n'
 
 # Your ReCaptcha provided private key.
 RECAPTCHA_PRIVATE_KEY = '6LccPr4SAAAAAH5q006QCoql-RRrRs1TFCpoaOcw'
-
-# Module containing gizmo configuration
-ROOT_GIZMOCONF = '%s.gizmos' % PROJECT_MODULE
 
 # URL prefix for ckeditor JS and CSS media (not uploaded media). Make sure to use a trailing slash.
 CKEDITOR_MEDIA_PREFIX = '/media/ckeditor/'
@@ -243,7 +231,6 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'layers.finders.AppDirectoriesFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'compressor.finders.CompressorFinder',
 )
 
 JMBO_ANALYTICS = {
