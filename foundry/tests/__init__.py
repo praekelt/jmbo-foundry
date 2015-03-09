@@ -7,6 +7,7 @@ import os
 
 from django.core import management
 from django.core.cache import cache
+from django.db import models
 from django.test import TestCase as BaseTestCase
 from django.contrib.contenttypes.models import ContentType
 from django.test.client import Client, RequestFactory
@@ -26,13 +27,13 @@ from django.core.files.base import ContentFile
 from django.conf import settings
 
 from preferences import preferences
-from preferences.models import Preferences
 from category.models import Category, Tag
 from jmbo.models import ModelBase
 from post.models import Post
+from zope.interface import implementedBy
 
 from foundry.models import Member, Listing, Page, Row, Column, Tile, \
-    Country
+    Country, Menu, Navbar
 from foundry import views
 from foundry.middleware import AG_TOKEN_PARAMETER_NAME, \
     AG_TOKEN_MAX_TIME_TO_EXPIRY
@@ -259,6 +260,16 @@ class TestCase(BaseTestCase):
         member.email = ''
         member.save()
         setattr(cls, 'klaas', member)
+
+    def test_tileproviders(self):
+        tileproviders = [
+            m for m in models.get_models()
+            if "ITileProvider" in [
+                interface.getName() for interface in implementedBy(m)
+            ]
+        ]
+        for tileprovider in [Menu, Listing, Navbar]:
+            self.assertIn(tileprovider, tileproviders)
 
     def test_listing_pvt(self):
         listing = getattr(self, 'posts-vertical-thumbnail')

@@ -3,10 +3,9 @@ from django.db import models
 from django.db.models.aggregates import Sum
 from django.contrib.contenttypes.models import ContentType
 
-from zope.interface import classImplements
+from zope.interface import implementedBy
 
-from foundry.interfaces import ITileProvider
-from foundry.models import Menu, Navbar, Listing, Row, Column, Tile
+from foundry.models import Row, Column, Tile
 from foundry.utils import get_view_choices
 
 
@@ -92,7 +91,12 @@ class TileEditAjaxForm(forms.ModelForm):
         #tileproviders = [
         #    m for m in models.get_models() if classImplements(m, ITileProvider)
         #]
-        tileproviders = [Menu, Navbar, Listing]
+        tileproviders = [
+            m for m in models.get_models()
+            if "ITileProvider" in [
+                interface.getName() for interface in implementedBy(m)
+            ]
+        ]
         for klass in tileproviders:
             ctid = ContentType.objects.get(
                 app_label='foundry', model=klass.__name__.lower()
