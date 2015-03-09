@@ -88,9 +88,11 @@ class TileEditAjaxForm(forms.ModelForm):
 
         # Target choices
         choices = []
-        tileproviders = [
-            m for m in models.get_models() if classImplements(m, ITileProvider)
-        ]
+        # xxx: revert until lookups work correctly
+        #tileproviders = [
+        #    m for m in models.get_models() if classImplements(m, ITileProvider)
+        #]
+        tileproviders = [Menu, Navbar, Listing]
         for klass in tileproviders:
             ctid = ContentType.objects.get(
                 app_label='foundry', model=klass.__name__.lower()
