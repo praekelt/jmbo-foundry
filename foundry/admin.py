@@ -16,6 +16,7 @@ from django.utils.html import strip_tags
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.admin.options import IS_POPUP_VAR
+from django.forms.widgets import Select
 
 from ckeditor.widgets import CKEditorWidget
 from preferences.admin import PreferencesAdmin
@@ -28,7 +29,7 @@ from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
     NavbarLinkPosition, Navbar, GeneralPreferences, GeneralPreferences, \
     RegistrationPreferences, LoginPreferences, Member, DefaultAvatar, \
     PasswordResetPreferences, Country, Page, ChatRoom, BlogPost, Notification, \
-    FoundryComment, CommentReport, PageView, NaughtyWordPreferences
+    FoundryComment, CommentReport, PageView, NaughtyWordPreferences, ViewProxy
 from foundry.widgets import SelectCommaWidget, DragDropOrderingWidget, RadioImageSelect
 from foundry.utils import get_view_choices
 from foundry.templatetags.listing_styles import LISTING_CLASSES
@@ -486,6 +487,23 @@ class FlatPageAdmin(FlatPageAdminOld):
     form = FlatpageForm
 
 
+class ViewProxyAdminForm(forms.ModelForm):
+    """A form is required because of issues when specifying the choices in the
+    model."""
+
+    class Meta:
+        model = ViewProxy
+        widgets = {"view_name": Select}
+
+    def __init__(self, *args, **kwargs):
+        super(ViewProxyAdminForm, self).__init__(*args, **kwargs)
+        self.fields["view_name"].widget.choices = get_view_choices()
+
+
+class ViewProxyAdmin(ModelBaseAdmin):
+    form = ViewProxyAdminForm
+
+
 admin.site.register(Link, LinkAdmin)
 admin.site.register(Menu, MenuAdmin)
 admin.site.register(Navbar, NavbarAdmin)
@@ -504,6 +522,7 @@ admin.site.register(BlogPost, BlogPostAdmin)
 admin.site.register(Notification, NotificationAdmin)
 admin.site.register(FoundryComment, FoundryCommentAdmin)
 admin.site.register(CommentReport, CommentReportAdmin)
+admin.site.register(ViewProxy, ViewProxyAdmin)
 # We have to unregister the normal admin, and then reregister ours
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)

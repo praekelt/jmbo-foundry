@@ -36,6 +36,7 @@ from foundry.templatetags.listing_styles import LISTING_CLASSES
 from foundry.managers import PermittedManager
 from foundry.interfaces import ITileProvider
 from foundry.mixins import CachingMixin
+from foundry.utils import get_view_choices
 import foundry.monkey
 
 # regex that identifies scripts in text
@@ -1022,6 +1023,22 @@ class Notification(models.Model):
 
     def __unicode__(self):
         return str(self.id)
+
+
+class ViewProxy(ModelBase):
+    """Content type that allows a view to be used in a listing"""
+
+    view_name = models.CharField(
+        max_length=256,
+        help_text=_("View name to which this link will redirect."),
+    )
+
+    class Meta:
+        verbose_name = _("View Proxy")
+        verbose_name_plural = _("View Proxies")
+
+    def get_absolute_url(self):
+        return None
 
 
 # todo: move to eventhandlers.py

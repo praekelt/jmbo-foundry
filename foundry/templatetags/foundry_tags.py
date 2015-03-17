@@ -310,7 +310,7 @@ def tile_url(parser, token):
         tag_name, tile = token.split_contents()
     except ValueError:
         raise template.TemplateSyntaxError(
-            'render_view tag requires argument tile'
+            'tile_url tag requires argument tile'
         )
     return TileUrlNode(tile)
 
@@ -550,3 +550,39 @@ class CanReportCommentNode(template.Node):
         context[as_var] = result
 
         return ''
+
+
+@register.tag
+def render_view(parser, token):
+    """{% render_view view_name %}"""
+    tokens = token.split_contents()
+    if len(tokens) != 2:
+        raise template.TemplateSyntaxError(
+            "render_view view_name %}"
+        )
+    return RenderViewNode(tokens[1])
+
+
+class RenderViewNode(template.Node):
+
+    def __init__(self, view_name):
+        self.view_name = template.Variable(view_name)
+
+    def render(self, context):
+        view_name = self.view_name.resolve(context)
+        url = reverse(view_name)
+        view, args, kwargs = resolve(url)
+        # Call the view. Let any error propagate.
+        request = context['request']
+        old = getattr(request, 'render_only_content_block', False)
+        setattr(request, 'render_only_content_block', True)
+        result = view(request, *args, **kwargs)
+        setattr(request, 'render_only_content_block', old)
+        if isinstance(result, TemplateResponse):
+            # The result of a generic view
+            result.render()
+            html = result.rendered_content
+        elif isinstance(result, HttpResponse):
+            # Old-school view
+            html = result.content
+        return html
