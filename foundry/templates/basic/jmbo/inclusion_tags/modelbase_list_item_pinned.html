@@ -3,7 +3,7 @@
 {% jmbocache 3600 'modelbase-list-item-pinned-inclusion' object.id object.modified %}
     <div class="title">
         {% if object.categories.all.exists %}<span class="category">{{ object.categories.all|join_titles }}:</span>{% endif %}
-        <a href="{{ object.get_absolute_url }}">{{ object.title }}</a>
+        <a href="{{ object.get_absolute_url }}" title="{{ object.title|escape }}">{{ object.title }}</a>
     </div>
 {% endjmbocache %}
 
