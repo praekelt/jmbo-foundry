@@ -301,6 +301,7 @@ class TestCase(BaseTestCase):
         response = self.client.get('/listing/posts-vertical-thumbnail/')
         self.assertEqual(response.status_code, 200)
         self.failIf(response.content.find('foundry-listing-vertical-thumbnail') == -1)
+        print response.content
         self.failIf(response.content.find('/post/cat1/post-1') == -1)
 
     def test_last_seen(self):
