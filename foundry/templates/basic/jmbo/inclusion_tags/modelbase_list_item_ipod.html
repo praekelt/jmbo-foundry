@@ -6,14 +6,14 @@ Layout similar to a classic iPod.
 
 {% jmbocache 3600 'modelbase-list-item-ipod-inclusion' object.id object.modified %}
     <div class="image">
-        <a href="{{ object.get_absolute_url_categorized }}">
+        <a href="{{ object.get_absolute_url_categorized }}" title="{{ object.title|escape }}">
             <img src="{{ object.get_modelbase_list_item_ipod_url }}" alt="{{ object.title }}" />
         </a>
     </div>
 
     <div class="title">
         {% if object.categories.all.exists %}<span class="category">{{ object.categories.all|join_titles }}:</span>{% endif %}
-        <a href="{{ object.get_absolute_url_categorized }}">{{ object.title }}</a>
+        <a href="{{ object.get_absolute_url_categorized }}" title="{{ object.title|escape }}">{{ object.title }}</a>
     </div>
 {% endjmbocache %}
 
