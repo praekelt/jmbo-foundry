@@ -10,7 +10,7 @@
                 <img src="{{ object.get_modelbase_list_item_promo_url }}" alt="{{ object.title }}" alt="{{ object.title }}" />
                 <div class="info">
                     {% if object.categories.all.exists %}<div class="subtitle">{{ object.categories.all|join_titles }}:</div>{% endif %}
-                    <div class="title"><a href="{{ object.get_absolute_url }}" title="{{ object.title|escape }}">{{ object.title }}</a></div>
+                    <div class="title"><a href="{{ object.get_absolute_url_categorized }}" title="{{ object.title|escape }}">{{ object.title }}</a></div>
                     <div class="description">{{ object.description }}</div>
                 </div>
             </li>
@@ -21,7 +21,7 @@
                 <img src="{{ object.get_modelbase_list_item_promo_url }}" alt="{{ object.title }}" alt="{{ object.title }}" />
                 <div class="info">
                     {% if object.categories.all.exists %}<div class="subtitle">{{ object.categories.all|join_titles }}:</div>{% endif %}
-                    <div class="title"><a href="{{ object.get_absolute_url }}" title="{{ object.title|escape }}">{{ object.title }}</a></div>
+                    <div class="title"><a href="{{ object.get_absolute_url_categorized }}" title="{{ object.title|escape }}">{{ object.title }}</a></div>
                     <div class="description">{{ object.description }}</div>
                 </div>
             </li>
