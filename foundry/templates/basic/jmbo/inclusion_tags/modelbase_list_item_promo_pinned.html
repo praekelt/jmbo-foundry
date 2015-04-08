@@ -1,5 +1,5 @@
 {% load jmbo_template_tags foundry_tags %}
 
 {% jmbocache 3600 'modelbase-list-item-promo-pinned-inclusion' object.id object.modified %}
-    <a href="{{ object.get_absolute_url }}"><img src="{{ object.get_modelbase_list_item_promo_pinned_url }}" alt="{{ object.title }}" alt="{{ object.title }}" /></a>
+    <a href="{{ object.get_absolute_url_categorized }}"><img src="{{ object.get_modelbase_list_item_promo_pinned_url }}" alt="{{ object.title }}" alt="{{ object.title }}" /></a>
 {% endjmbocache %}
