@@ -33,7 +33,7 @@ from post.models import Post
 from zope.interface import implementedBy
 
 from foundry.models import Member, Listing, Page, Row, Column, Tile, \
-    Country, Menu, Navbar
+    Country, Menu, Navbar, ViewProxy
 from foundry import views
 from foundry.middleware import AG_TOKEN_PARAMETER_NAME, \
     AG_TOKEN_MAX_TIME_TO_EXPIRY
@@ -442,6 +442,10 @@ class TestCase(BaseTestCase):
             else:
                 if issubclass(model_class, Download):
                     continue
+
+            # Skip over ViewProxy since it has no detail view
+            if issubclass(model_class, ViewProxy):
+                continue
 
             if (model_class is not None) \
                 and issubclass(model_class, ModelBase):
