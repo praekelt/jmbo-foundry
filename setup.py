@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='1.2.6.1',
+    version='1.3.0',
     description='Jmbo Foundry ties together the various Jmbo products enabling you to rapidly build multilingual web and mobi sites with the minimum amount of code and customization.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -30,12 +30,12 @@ setup(
         'django_compressor',
         'django-social-auth==0.7.18',   # 0.7.19 introduces a migration scoping bug
 
-        'jmbo>=1.1',
+        'jmbo>=1.2.0',
         'jmbo-gallery>=0.2.1',
         'jmbo-music',
         'jmbo-calendar',
         'jmbo-chart',
-        'jmbo-post>=0.1.2',
+        'jmbo-post>=0.4',
         'jmbo-show>=0.2',
         'jmbo-banner>=0.2.2',
         'jmbo-competition',

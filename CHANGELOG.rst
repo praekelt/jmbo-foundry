@@ -1,10 +1,13 @@
 Changelog
 =========
 
-next
-----
+1.3.0
+-----
 #. Deprecate `compute_settings` function.
 #. Ignore result of celery tasks as appropriate.
+#. Up `jmbo` requirement to 1.2.0.
+#. Up `jmbo-post` requirement to 0.4.
+#. SEO improvements in templates.
 
 1.2.6.1
 -------
