@@ -22,42 +22,6 @@ class Migration(SchemaMigration):
 
 
     models = {
-        u'atlas.city': {
-            'Meta': {'ordering': "('name',)", 'object_name': 'City'},
-            'coordinates': ('atlas.fields.CoordinateField', [], {'blank': 'True', 'null': 'True', 'geography': 'True'}),
-            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['atlas.Country']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'db_index': 'True'}),
-            'region': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['atlas.Region']", 'null': 'True', 'blank': 'True'})
-        },
-        u'atlas.country': {
-            'Meta': {'ordering': "('name',)", 'object_name': 'Country'},
-            'border': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {'blank': 'True', 'null': 'True', 'geography': 'True'}),
-            'coordinates': ('atlas.fields.CoordinateField', [], {'blank': 'True', 'null': 'True', 'geography': 'True'}),
-            'country_code': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '2', 'db_index': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
-        },
-        u'atlas.location': {
-            'Meta': {'object_name': 'Location'},
-            'address': ('django.db.models.fields.TextField', [], {'max_length': '512', 'null': 'True', 'blank': 'True'}),
-            'city': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['atlas.City']"}),
-            'coordinates': ('atlas.fields.CoordinateField', [], {'blank': 'True', 'null': 'True', 'geography': 'True'}),
-            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['atlas.Country']"}),
-            'description': ('django.db.models.fields.TextField', [], {'max_length': '1024', 'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'db_index': 'True'}),
-            'photo': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['photologue.Photo']", 'null': 'True', 'blank': 'True'})
-        },
-        u'atlas.region': {
-            'Meta': {'ordering': "('name',)", 'unique_together': "(('country', 'code'),)", 'object_name': 'Region'},
-            'border': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {'blank': 'True', 'null': 'True', 'geography': 'True'}),
-            'code': ('django.db.models.fields.CharField', [], {'max_length': '2', 'db_index': 'True'}),
-            'coordinates': ('atlas.fields.CoordinateField', [], {'blank': 'True', 'null': 'True', 'geography': 'True'}),
-            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['atlas.Country']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '128'})
-        },
         u'auth.group': {
             'Meta': {'object_name': 'Group'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -349,7 +313,6 @@ class Migration(SchemaMigration):
             'image_attribution': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'likes_closed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'likes_enabled': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'location': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['atlas.Location']", 'null': 'True', 'blank': 'True'}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'db_index': 'True'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'}),
             'owner_override': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
