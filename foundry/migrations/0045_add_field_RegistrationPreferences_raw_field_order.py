@@ -11,7 +11,7 @@ class Migration(SchemaMigration):
         connection = db._get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('select raw_field_order from preferences_registrationpreferences')
+            cursor.execute('select raw_field_order from %s' % db.quote_name('preferences_registrationpreferences'))
             connection.close()
         except:
             connection.close()
