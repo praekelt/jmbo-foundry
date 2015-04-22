@@ -28,6 +28,16 @@ PROJECT_MODULE = 'foundry'
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+# For older Postgres (location aware) do from command line
+# echo "CREATE USER foundry WITH PASSWORD 'foundry'" | sudo -u postgres psql
+# echo "CREATE DATABASE foundry WITH OWNER foundry ENCODING 'UTF8' TEMPLATE template_postgis" | sudo -u postgres psql
+
+# For modern Postgres (location aware) do from command line
+# echo "CREATE USER foundry WITH PASSWORD 'foundry'" | sudo -u postgres psql
+# echo "CREATE DATABASE foundry WITH OWNER foundry ENCODING 'UTF8'" | sudo -u postgres psql
+# echo "CREATE EXTENSION postgis" | sudo -u postgres psql foundry
+# echo "CREATE EXTENSION postgis_topology" | sudo -u postgres psql foundry
+
 DATABASES = {
     'default': {
         # Must use postgis when developing foundry and Jmbo core itself else migrations are wrong

@@ -7,7 +7,6 @@
 -e git+git@github.com:praekelt/django-googlesearch.git@feature/django-1.6#egg=django-googlesearch
 -e git+git@github.com:praekelt/django-likes.git@feature/django-1.6#egg=django-likes
 -e git+git@github.com:praekelt/django-object-tools.git@develop#egg=django-object-tools
--e git+git@github.com:praekelt/django-photologue.git@develop#egg=django-photologue
 -e git+git@github.com:praekelt/django-preferences.git@develop#egg=django-preferences
 -e git+git@github.com:praekelt/django-publisher.git@develop#egg=django-publisher
 -e git+git@github.com:praekelt/django-recaptcha.git@develop#egg=django-recaptcha
@@ -73,3 +72,4 @@ six==1.9.0
 sqlparse==0.1.14
 wsgiref==0.1.2
 zope.interface==4.1.2
+django-photologue==3.1.1
