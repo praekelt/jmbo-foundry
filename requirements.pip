@@ -13,7 +13,7 @@
 -e git+https://github.com/praekelt/django-simple-autocomplete.git@develop#egg=django-simple-autocomplete
 -e git+https://github.com/praekelt/django-sites-groups.git@develop#egg=django-sites-groups
 -e git+https://github.com/shaunsephton/django-snippetscream.git#egg=django-snippetscream
--e git+https://github.com/praekelt/jmbo.git@feature/django-1.6-mainline-photologue#egg=jmbo
+-e git+https://github.com/praekelt/jmbo.git@feature/django-1.6#egg=jmbo
 -e git+https://github.com/praekelt/jmbo-analytics.git@develop#egg=jmbo-analytics
 -e git+https://github.com/praekelt/jmbo-banner.git@feature/django-1.6#egg=jmbo-banner
 -e git+https://github.com/praekelt/jmbo-calendar.git@feature/django-1.6#egg=jmbo-calendar
