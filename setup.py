@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='1.2.6.1',
+    version='1.3.0',
     description='Jmbo Foundry ties together the various Jmbo products enabling you to rapidly build multilingual web and mobi sites with the minimum amount of code and customization.',
     long_description=open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -18,7 +18,7 @@ setup(
         'django-dfp>=0.3.3',
         'django-export',
         'django-googlesearch',
-        'django-layers-hr>=0.3',
+        'django-layers-hr>=0.4',
         'django-object-tools>=0.0.5',
         'django-pagination',
         'django-publisher',             # legacy, required by migrations
