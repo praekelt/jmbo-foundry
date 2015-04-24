@@ -731,6 +731,12 @@ class Page(models.Model):
         null=True,
         help_text='Some titles may be the same. A subtitle makes a distinction. It is not displayed on the site.',
     )
+    description = models.TextField(
+        help_text=_('A short description. More verbose than the title but \
+limited to one or two sentences.'),
+        blank=True,
+        null=True,
+    )
     slug = models.SlugField(
         editable=True,
         max_length=32,
