@@ -27,10 +27,10 @@ setup(
         'django-snippetscream',
 
         # These Jmbo apps are always part of Foundry
-        'jmbo>=1.1',
+        'jmbo==2.0.0a1',
         'jmbo_analytics',
         'jmbo-contact>=0.1.2',
-        'jmbo-post>=0.1.2',
+        'jmbo-post==2.0.0a1',
         'jmbo_sitemap>=0.1',
 
         # Python libraries
