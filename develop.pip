@@ -26,7 +26,7 @@
 -e git+git@github.com:praekelt/jmbo-friends.git@feature/django-1.6#egg=jmbo-friends
 -e git+git@github.com:praekelt/jmbo-music.git@feature/django-1.6#egg=jmbo-music
 -e git+git@github.com:praekelt/jmbo-poll.git@feature/django-1.6#egg=jmbo-poll
--e git+git@github.com:praekelt/jmbo-post.git@feature/django-1.6#egg=jmbo-post
+-e git+git@github.com:praekelt/jmbo-post.git@develop#egg=jmbo-post
 -e git+git@github.com:praekelt/jmbo-show.git@feature/django-1.6#egg=jmbo-show
 -e git+git@github.com:praekelt/jmbo-sitemap.git@feature/django-1.6#egg=jmbo-sitemap
 -e git+git@github.com:praekelt/jmbo-twitter.git@feature/django-1.6#egg=jmbo-twitter
