@@ -28,10 +28,10 @@ setup(
 
         # These Jmbo apps are always part of Foundry
         'jmbo==2.0.0a1',
-        'jmbo_analytics',
-        'jmbo-contact>=0.1.2',
+        'jmbo-analytics',
+        'jmbo-contact==2.0.0a1',
         'jmbo-post==2.0.0a1',
-        'jmbo_sitemap>=0.1',
+        'jmbo-sitemap>=0.1',
 
         # Python libraries
         'BeautifulSoup',
