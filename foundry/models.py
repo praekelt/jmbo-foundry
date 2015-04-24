@@ -3,7 +3,7 @@ import re
 import cPickle
 
 from django.core.cache import cache
-from django.core.urlresolvers import reverse, Resolver404
+from django.core.urlresolvers import reverse, Resolver404, NoReverseMatch
 from django.db import models
 from django.db.models import Q
 from django.db.models import Count
@@ -123,6 +123,24 @@ class Link(models.Model):
         elif self.target:
             return self.target.get_absolute_url()
         else:
+            # Django can be served in a subdirectory. Transparently fix urls.
+            if '://' in self.url:
+                return self.url
+
+            # Urls not starting with a slash proably do so with reason. Skip.
+            if not self.url.startswith('/'):
+                return self.url
+
+            # Request is not available here so use reverse to determine root
+            try:
+                root = reverse('home')
+            except NoReverseMatch:
+                return self.url
+
+            # /abc and /today/abc must be transformed into /today/abc
+            if not self.url.startswith(root):
+                return root.rstrip('/') + '/' + self.url.lstrip('/')
+
             return self.url
 
     def is_active(self, request):
