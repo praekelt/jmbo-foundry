@@ -17,17 +17,17 @@ DATABASES = {
 # Foundry provides high-level testing tools for other content types
 INSTALLED_APPS += (
     'banner',
-    'jmbo_calendar',
     'chart',
     #'competition',
     'downloads',
     'friends',
     'gallery',
+    'jmbo_calendar',
+    #'jmbo_sitemap',
+    #'jmbo_twitter',
     'music',
     'poll',
     #'show',
-    #'jmbo_twitter',
-    #'jmbo_sitemap',
 )
 
 CKEDITOR_UPLOAD_PATH = expanduser('~')

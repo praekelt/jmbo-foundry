@@ -48,6 +48,7 @@ setup(
         'jmbo-chart==2.0.0a1',
         #'jmbo-competition',
         'jmbo-downloads==2.0.0a1',
+        'jmbo-friends==2.0.0a1',
         'jmbo-gallery==2.0.0a1',
         'jmbo-music==2.0.0a1',
         'jmbo-poll==2.0.0a1',
