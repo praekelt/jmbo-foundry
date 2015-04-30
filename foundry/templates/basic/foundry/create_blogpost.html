@@ -4,7 +4,7 @@
 {% block content %}
     <div class="create-blogpost">
 	    <div class="title">{% blocktrans %}Create a blog post{% endblocktrans %}</div>
-	    <form action="{% url create-blogpost %}" method="POST" class="foundry-form">   
+	    <form action="{% url "create-blogpost" %}" method="POST" class="foundry-form">
 	        {% csrf_token %}
 	        {{ form.as_div }}
 	        <div class="buttons">

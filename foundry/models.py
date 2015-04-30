@@ -3,18 +3,16 @@ import re
 import cPickle
 
 from django.core.cache import cache
-from django.core.urlresolvers import reverse, Resolver404
-from django.core.exceptions import ValidationError
+from django.core.urlresolvers import reverse, Resolver404, NoReverseMatch
 from django.db import models
 from django.db.models import Q
 from django.db.models import Count
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User, UserManager
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.contrib.comments.models import Comment as BaseComment
-from django.contrib.sites.models import Site
-from django.db.models.signals import m2m_changed, post_save
+from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 from django.utils.importlib import import_module
 from django.utils import simplejson as json
@@ -26,21 +24,20 @@ from preferences import preferences
 from snippetscream import resolve_to_name
 from photologue.models import ImageModel
 from south.modelsinspector import add_introspection_rules
+from zope.interface import implements
 
-from jmbo.utils import generate_slug
 from jmbo.models import ModelBase
 from jmbo.managers import DefaultManager
-
 from foundry.profile_models import AbstractAvatarProfile, \
     AbstractSocialProfile, AbstractPersonalProfile, \
     AbstractContactProfile, AbstractSubscriptionProfile, \
     AbstractLocationProfile
 from foundry.templatetags.listing_styles import LISTING_CLASSES
 from foundry.managers import PermittedManager
-import foundry.eventhandlers
+from foundry.interfaces import ITileProvider
 from foundry.mixins import CachingMixin
+from foundry.utils import get_view_choices
 import foundry.monkey
-
 
 # regex that identifies scripts in text
 SCRIPT_REGEX = re.compile(r"""(<script[^>]*>)|(<[^>]* on[a-z]+=['"].*?['"][^>]*)""", flags=re.DOTALL)
@@ -68,6 +65,7 @@ class AttributeWrapper:
         """Can't override __class__ and making it a property also does not
         work. Could be because of Django metaclasses."""
         return self._obj.__class__
+
 
 class Link(models.Model):
     title = models.CharField(
@@ -125,6 +123,24 @@ class Link(models.Model):
         elif self.target:
             return self.target.get_absolute_url()
         else:
+            # Django can be served in a subdirectory. Transparently fix urls.
+            if '://' in self.url:
+                return self.url
+
+            # Urls not starting with a slash proably do so with reason. Skip.
+            if not self.url.startswith('/'):
+                return self.url
+
+            # Request is not available here so use reverse to determine root
+            try:
+                root = reverse('home')
+            except NoReverseMatch:
+                return self.url
+
+            # /abc and /today/abc must be transformed into /today/abc
+            if not self.url.startswith(root):
+                return root.rstrip('/') + '/' + self.url.lstrip('/')
+
             return self.url
 
     def is_active(self, request):
@@ -177,6 +193,7 @@ class Menu(CachingMixin):
 
     objects = DefaultManager()
     permitted = PermittedManager()
+    implements(ITileProvider)
 
     class Meta:
         ordering = ('title', 'subtitle')
@@ -212,6 +229,7 @@ class Navbar(CachingMixin):
 
     objects = DefaultManager()
     permitted = PermittedManager()
+    implements(ITileProvider)
 
     class Meta:
         ordering = ('title', 'subtitle')
@@ -314,6 +332,7 @@ complex page."""
 
     objects = DefaultManager()
     permitted = PermittedManager()
+    implements(ITileProvider)
 
     class Meta:
         ordering = ('title', 'subtitle')
@@ -1028,6 +1047,22 @@ class Notification(models.Model):
 
     def __unicode__(self):
         return str(self.id)
+
+
+class ViewProxy(ModelBase):
+    """Content type that allows a view to be used in a listing"""
+
+    view_name = models.CharField(
+        max_length=256,
+        help_text=_("View name to which this link will redirect."),
+    )
+
+    class Meta:
+        verbose_name = _("View Proxy")
+        verbose_name_plural = _("View Proxies")
+
+    def get_absolute_url(self):
+        return None
 
 
 # todo: move to eventhandlers.py

@@ -307,7 +307,7 @@ class EditProfileForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        self.base_fields['image'].widget = PrettyFileInput(current=kwargs['instance'].get_thumbnail_LAYER_url())
+        self.base_fields['image'].widget = PrettyFileInput(current=kwargs['instance'].get_thumbnail_url())
         super(EditProfileForm, self).__init__(*args, **kwargs)
 
         # todo: need a preference member_edit_fields

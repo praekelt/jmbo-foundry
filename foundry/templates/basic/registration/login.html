@@ -6,31 +6,31 @@
 
     <div class="title">{% trans "Sign in" %}</div>
 
-    <form action="{% url login %}" method="POST" class="foundry-form">
+    <form action="{% url "login" %}" method="POST" class="foundry-form">
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ request.REQUEST.next }}" />
         {{ form.as_div }}
         <div class="buttons">
             <input type="submit" value="{% trans "Sign in" %}" />
         </div>
-        <span><a href="{% url password_reset %}" rel="nofollow">{% blocktrans %}Forgot your password?{% endblocktrans %}</a></span>
-        <span>{% trans "Not registered?" %} <a href="{% url join %}" rel="nofollow">{% trans "Sign up here" %}</a></span>
+        <span><a href="{% url "password_reset" %}" rel="nofollow">{% blocktrans %}Forgot your password?{% endblocktrans %}</a></span>
+        <span>{% trans "Not registered?" %} <a href="{% url "join" %}" rel="nofollow">{% trans "Sign up here" %}</a></span>
     </form>
 
     <div class="social-buttons">
         {% if FOUNDRY_HAS_FACEBOOK_CONNECT %}
         <div>
-            <a href="{% url socialauth_begin 'facebook' %}" class="facebook"><span></span>{% trans "Sign in with Facebook" %}</a>
+            <a href="{% url "socialauth_begin" 'facebook' %}" class="facebook"><span></span>{% trans "Sign in with Facebook" %}</a>
         </div>
         {% endif %}
         {% if FOUNDRY_HAS_TWITTER_OAUTH %}
         <div>
-            <a href="{% url socialauth_begin 'twitter' %}" class="twitter"><span></span>{% trans "Sign in with Twitter" %}</a>
+            <a href="{% url "socialauth_begin" 'twitter' %}" class="twitter"><span></span>{% trans "Sign in with Twitter" %}</a>
         </div>
         {% endif %}
         {% if FOUNDRY_HAS_GOOGLE_OAUTH2 %}
         <div>
-            <a href="{% url socialauth_begin 'google-oauth2' %}" class="google"><span></span>{% trans "Sign in with Google" %}</a>
+            <a href="{% url "socialauth_begin" 'google-oauth2' %}" class="google"><span></span>{% trans "Sign in with Google" %}</a>
         </div>
         {% endif %}
 

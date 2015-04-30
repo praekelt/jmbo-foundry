@@ -30,6 +30,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template import Context
 from django.utils.html import strip_tags
 from django.core.cache import cache
+from django.views.generic.base import TemplateView
 
 # Comment post required imports
 from django.contrib.comments.views.comments import CommentPostBadRequest
@@ -42,13 +43,17 @@ from django.contrib.comments import signals
 from django.http import QueryDict
 from django.contrib.comments.views.utils import next_redirect
 from django.contrib.comments.views.comments import comment_done
+from django.views.generic import DetailView, ListView
 
 from category.models import Category
 from jmbo.models import ModelBase
-from jmbo.generic.views import GenericObjectDetail, GenericObjectList
 from jmbo.view_modifiers import DefaultViewModifier
 from preferences import preferences
-from gallery.models import GalleryImage
+try:
+    from gallery.models import GalleryImage
+    HAS_GALLERY = True
+except:
+    HAS_GALLERY = False
 
 from foundry.models import Listing, Page, ChatRoom, BlogPost, Notification, \
     Member, FoundryComment, CommentReport, Country
@@ -179,8 +184,11 @@ def search_results(request):
     if search_term:
         q1 = Q(title__icontains=search_term)
         q2 = Q(description__icontains=search_term)
-        ct = ContentType.objects.get_for_model(GalleryImage)
-        queryset = ModelBase.permitted.filter(q1|q2).exclude(content_type=ct)
+        queryset = ModelBase.permitted.filter(q1|q2)
+        if "gallery" in settings.INSTALLED_APPS:
+            from gallery.models import GalleryImage
+            ct = ContentType.objects.get_for_model(GalleryImage)
+            queryset = queryset.exclude(content_type=ct)
     else:
         queryset = ModelBase.objects.none()
     extra = dict(
@@ -379,13 +387,13 @@ def create_blogpost(request):
     return render_to_response('foundry/create_blogpost.html', extra, context_instance=RequestContext(request))
 
 
-class BlogPostObjectList(GenericObjectList):
+class BlogPostObjectList(ListView):
+    queryset = BlogPost.permitted.all()
 
-    def get_queryset(self, *args, **kwargs):
-        return BlogPost.permitted.all()
-
-    def get_extra_context(self, *args, **kwargs):
-        return {'title': _('Blog Posts')}
+    def get_context_data(self, **kwargs):
+        context = super(BlogPostObjectList, self).get_context_data(**kwargs)
+        context['title'] = _('Blog Posts')
+        return context
 
     def get_view_modifier(self, request, *args, **kwargs):
         return DefaultViewModifier(request, *args, **kwargs)
@@ -393,18 +401,14 @@ class BlogPostObjectList(GenericObjectList):
     def get_paginate_by(self, *args, **kwargs):
         return 10
 
-blogpost_object_list = BlogPostObjectList()
 
+class BlogPostObjectDetail(DetailView):
+    queryset = BlogPost.permitted.all()
 
-class BlogPostObjectDetail(GenericObjectDetail):
-
-    def get_queryset(self, *args, **kwargs):
-        return BlogPost.permitted.all()
-
-    def get_extra_context(self, *args, **kwargs):
-        return {'title': 'Blog Posts'}
-
-blogpost_object_detail = BlogPostObjectDetail()
+    def get_context_data(self, **kwargs):
+        context = super(BlogPostObjectDetail, self).get_context_data(**kwargs)
+        context['title'] = 'Blog Posts'
+        return context
 
 
 @login_required
@@ -480,6 +484,20 @@ def fetch_new_comments_ajax(request, content_type_id, oid, last_comment_id):
 def server_error(request, template_name='500.html'):
     t = loader.get_template(template_name)
     return HttpResponseServerError(t.render(RequestContext(request)))
+
+
+class StaticView(TemplateView):
+    """Used by pages driven by preferences, eg. abous-us"""
+
+    template_name = "foundry/static_page.html"
+    title = None
+    content = None
+
+    def get_context_data(self, **kwargs):
+        context = super(StaticView, self).get_context_data(**kwargs)
+        context["title"] = self.title
+        context["content"] = self.content
+        return context
 
 
 # Views for testing

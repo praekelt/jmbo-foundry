@@ -5,8 +5,8 @@
 
     <div class="age-gateway">
         <div class="title">{% trans "Confirm your age" %}</div>
-            
-        <form action="{% url age-gateway %}" method="POST" class="foundry-form">   
+
+        <form action="{% url "age-gateway" %}" method="POST" class="foundry-form">
             {% csrf_token %}
             <input type="hidden" name="next" value="{{ request.REQUEST.next }}" />
             {{ form.as_div }}

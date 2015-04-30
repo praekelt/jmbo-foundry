@@ -3,60 +3,62 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='1.3.0',
+    version='2.0.0a1',
     description='Jmbo Foundry ties together the various Jmbo products enabling you to rapidly build multilingual web and mobi sites with the minimum amount of code and customization.',
-    long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
+    long_description=open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
     author_email='dev@praekelt.com',
     license='BSD',
     url='http://github.com/praekelt/jmbo-foundry',
-    packages = find_packages(),
-    dependency_links = [
+    packages=find_packages(),
+    dependency_links=[
     ],
-    install_requires = [
-        # todo: attempt to get rid of these five
-        'django-section',
-        'django-gizmo',
-        'django-generate',
-        'django-registration',
+    install_requires=[
+        'django>=1.6,<1.7',
+
+        'django_compressor',
+        'django-dfp>=0.3.3',
+        'django-export',
+        'django-googlesearch',
+        'django-layers-hr>=0.4',
+        'django-object-tools>=0.0.5',
+        'django-pagination',
+        'django-publisher',             # legacy, required by migrations
+        'django-simple-autocomplete',
+        'django-social-auth==0.7.18',   # 0.7.19 introduces a migration scoping bug
         'django-snippetscream',
 
-        'django-googlesearch',
-        'django-export',
-        'django-simple-autocomplete',
-        'django-pagination',
-        'django-object-tools>=0.0.5',
-        'django-debug-toolbar',
-        'django_compressor',
-        'django-social-auth==0.7.18',   # 0.7.19 introduces a migration scoping bug
+        # These Jmbo apps are always part of Foundry
+        'jmbo==2.0.0a2',
+        'jmbo-analytics',
+        'jmbo-contact==2.0.0a2',
+        'jmbo-post==2.0.0a2',
 
-        'jmbo>=1.2.0',
-        'jmbo-gallery>=0.2.1',
-        'jmbo-music',
-        'jmbo-calendar',
-        'jmbo-chart',
-        'jmbo-post>=0.4',
-        'jmbo-show>=0.2',
-        'jmbo-banner>=0.2.2',
-        'jmbo-competition',
-        'jmbo-contact>=0.1.2',
-        'jmbo-poll',
-        'jmbo_analytics',
-        'jmbo-friends',
-	    'jmbo-downloads',
-        'jmbo_twitter',
-        'jmbo_sitemap>=0.1',
-
-        'jellyfish',
+        # Python libraries
         'BeautifulSoup',
-        'PyJWT==0.1.6',
-        'requests',
-        'gunicorn',
+        'jellyfish',
         'python-memcached',
+        'PyJWT',
+        'requests',
+        'zope.interface'
     ],
     include_package_data=True,
     tests_require=[
-        'django-setuptest>=0.1.4',
+        # Foundry provides high-level testing tools for other content types
+        'jmbo-banner>=0.6',
+        'jmbo-calendar==2.0.0a1',
+        'jmbo-chart==2.0.0a1',
+        #'jmbo-competition',
+        'jmbo-downloads==2.0.0a1',
+        #'jmbo-friends==2.0.0a1',   # add back on 2.0.0a2 release. Circular thing.
+        'jmbo-gallery==2.0.0a1',
+        'jmbo-music==2.0.0a1',
+        'jmbo-poll==2.0.0a1',
+        #'jmbo-sitemap>=0.1',
+        #'jmbo-show>=0.2',
+        #'jmbo-twitter',
+        'django-setuptest>=0.1.6',
+        'psycopg2',
     ],
     test_suite="setuptest.setuptest.SetupTestSuite",
     classifiers=[

@@ -34,8 +34,8 @@ $(document).ready(function(){
                         {% with creator=comment.creator %}
                         {% if creator %}
                             {% if creator.image %}
-                                <a href="{% url user-detail creator.username %}">
-                                    <img src="{{ creator.get_thumbnail_LAYER_url }}" />
+                                <a href="{% url "user-detail" creator.username %}">
+                                    <img src="{{ creator.get_thumbnail_url }}" />
                                 </a>
                             {% else %}
                                 <img src="{{ STATIC_URL }}/images/anonymous.png" />
@@ -52,7 +52,7 @@ $(document).ready(function(){
                         <!-- todo: Need can comment test -->
                         <div class="reply">
                             {% with request.POST.next|default:request.META.PATH_INFO as next %}
-                                <a href="{% url comment-reply-form %}?content_type_id={{ comment.content_type_id }}&oid={{ comment.object_pk }}&next={{ next }}&paginate_by={{ paginate_by }}"
+                                <a href="{% url "comment-reply-form" %}?content_type_id={{ comment.content_type_id }}&oid={{ comment.object_pk }}&next={{ next }}&paginate_by={{ paginate_by }}"
                                    class="comment-reply"
                                    comment_id="{{ comment.id }}"
                                    creator="{{ comment.user.username|default:comment.name }}"
@@ -62,7 +62,7 @@ $(document).ready(function(){
                         </div>
                         {% if can_report_comment %}
                             {% with request.POST.next|default:request.META.PATH_INFO as next %}
-                                <a href="{% url report-comment comment.id %}?next={{ next|add:"?"|add:request.META.QUERY_STRING|urlencode }}" class="report" rel="nofollow">{% trans "Report" %}</a>
+                                <a href="{% url "report-comment" comment.id %}?next={{ next|add:"?"|add:request.META.QUERY_STRING|urlencode }}" class="report" rel="nofollow">{% trans "Report" %}</a>
                             {% endwith %}
                         {% else %}
                             {% if request.user.is_authenticated %}

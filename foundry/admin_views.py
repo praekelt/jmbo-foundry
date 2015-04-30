@@ -27,21 +27,21 @@ def row_create_ajax(request):
 def row_edit_ajax(request):
     instance = get_object_or_404(Row, id=int(request.REQUEST.get('row_id')))
     if request.method == 'POST':
-        form = RowEditAjaxForm(request.POST, instance=instance)      
+        form = RowEditAjaxForm(request.POST, instance=instance)
         if form.is_valid():
             row = form.save()
             di = dict(
-                id=row.id, 
+                id=row.id,
                 block_name=row.block_name,
             )
             return HttpResponse(simplejson.dumps(di))
     else:
-        form = RowEditAjaxForm(instance=instance) 
+        form = RowEditAjaxForm(instance=instance)
 
     extra = dict(form=form)
     return render_to_response(
-        'admin/foundry/page/row_edit_ajax.html', 
-        extra, 
+        'admin/foundry/page/row_edit_ajax.html',
+        extra,
         context_instance=RequestContext(request)
     )
 
@@ -52,7 +52,7 @@ def row_delete_ajax(request):
     row = get_object_or_404(Row, id=int(row_id))
     row.delete()
     di = dict(
-        status='success', 
+        status='success',
     )
     return HttpResponse(simplejson.dumps(di))
 
@@ -64,7 +64,7 @@ def column_create_ajax(request):
         if form.is_valid():
             column = form.save()
             di = dict(
-                id=column.id, 
+                id=column.id,
                 width=column.width,
                 title=column.title,
                 row_id=column.row.id,
@@ -77,8 +77,8 @@ def column_create_ajax(request):
 
     extra = dict(form=form)
     return render_to_response(
-        'admin/foundry/page/column_create_ajax.html', 
-        extra, 
+        'admin/foundry/page/column_create_ajax.html',
+        extra,
         context_instance=RequestContext(request)
     )
 
@@ -87,22 +87,22 @@ def column_create_ajax(request):
 def column_edit_ajax(request):
     instance = get_object_or_404(Column, id=int(request.REQUEST.get('column_id')))
     if request.method == 'POST':
-        form = ColumnEditAjaxForm(request.POST, instance=instance)      
+        form = ColumnEditAjaxForm(request.POST, instance=instance)
         if form.is_valid():
             column = form.save()
             di = dict(
-                id=column.id, 
+                id=column.id,
                 width=column.width,
                 title=column.title,
             )
             return HttpResponse(simplejson.dumps(di))
     else:
-        form = ColumnEditAjaxForm(instance=instance) 
+        form = ColumnEditAjaxForm(instance=instance)
 
     extra = dict(form=form)
     return render_to_response(
-        'admin/foundry/page/column_edit_ajax.html', 
-        extra, 
+        'admin/foundry/page/column_edit_ajax.html',
+        extra,
         context_instance=RequestContext(request)
     )
 
@@ -113,7 +113,7 @@ def column_delete_ajax(request):
     column = get_object_or_404(Column, id=int(column_id))
     column.delete()
     di = dict(
-        status='success', 
+        status='success',
     )
     return HttpResponse(simplejson.dumps(di))
 
@@ -123,7 +123,7 @@ def tile_create_ajax(request):
     tile = Tile(column_id=request.REQUEST['column_id'])
     tile.save()
     di = dict(
-        id=tile.id, 
+        id=tile.id,
         column_id=tile.column.id,
         column_render_height=tile.column.render_height,
         row_id=tile.column.row.id,
@@ -137,7 +137,7 @@ def tile_create_ajax(request):
 def tile_edit_ajax(request):
     instance = get_object_or_404(Tile, id=int(request.REQUEST.get('tile_id')))
     if request.method == 'POST':
-        form = TileEditAjaxForm(request.POST, instance=instance) 
+        form = TileEditAjaxForm(request.POST, instance=instance)
         if form.is_valid():
             tile = form.save()
             di = dict(
@@ -150,8 +150,8 @@ def tile_edit_ajax(request):
 
     extra = dict(form=form)
     return render_to_response(
-        'admin/foundry/page/tile_edit_ajax.html', 
-        extra, 
+        'admin/foundry/page/tile_edit_ajax.html',
+        extra,
         context_instance=RequestContext(request)
     )
 
@@ -162,14 +162,14 @@ def tile_delete_ajax(request):
     tile = get_object_or_404(Tile, id=int(tile_id))
     tile.delete()
     di = dict(
-        status='success', 
+        status='success',
     )
     return HttpResponse(simplejson.dumps(di))
 
 
 @staff_member_required
 def persist_sort_ajax(request):
-    # Yes, I am aware this code can be more efficient, but it does not execute 
+    # Yes, I am aware this code can be more efficient, but it does not execute
     # regularly.
     model_name = request.REQUEST['model_name']
     model = get_model('foundry', model_name)

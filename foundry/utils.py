@@ -25,7 +25,7 @@ from preferences import preferences
 _foundry_utils_cache = {}
 
 
-def _build_view_names_recurse(url_patterns=None):
+def _build_view_names_recurse(url_patterns=None, namespace=None):
     """
     Returns a tuple of url pattern names suitable for use as field choices
     """
@@ -40,13 +40,17 @@ def _build_view_names_recurse(url_patterns=None):
             # Rules: (1) named patterns (2) may not contain arguments.
             if pattern.name is not None:
                 if pattern.regex.pattern.find('<') == -1:
-                    result.append((pattern.name, pattern.name))
+                    key = ""
+                    if namespace:
+                        key = namespace + ":"
+                    key += pattern.name
+                    result.append((key, key))
         except AttributeError:
             # If the pattern itself is an include, recursively fetch its
             # patterns. Ignore admin patterns.
             if not pattern.regex.pattern.startswith('^admin'):
                 try:
-                    result += _build_view_names_recurse(pattern.url_patterns)
+                    result += _build_view_names_recurse(pattern.url_patterns, pattern.namespace)
                 except AttributeError:
                     pass
     return result

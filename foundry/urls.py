@@ -1,12 +1,14 @@
-from django.conf.urls.defaults import patterns, url, include
+from django.conf.urls import patterns, include, url
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.views.generic.base import TemplateView
+from django.views.generic.detail import DetailView
+from django.views.generic.base import RedirectView
 
 from preferences import preferences
-from jmbo_sitemap import sitemaps
 from jmbo.urls import v1_api
 # Trivial imports so resource registration works
 import post.urls
@@ -42,83 +44,41 @@ urlpatterns = patterns('',
         name='comments-post-comment'
     ),
 
-    (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/static/images/favicon.ico'}),
+    (r'^favicon\.ico$', RedirectView.as_view(url='/static/images/favicon.ico', permanent=False)),
 
-    # Unidentified issue with Jmbo URLPatternItem class means
-    # (r'^', include('jmbo_sitemap.urls')) causes error. Use a workaround.
-    url(
-        r'^sitemap\.xml$',
-        'jmbo_sitemap.sitemap',
-        {'sitemaps': sitemaps},
-        name='sitemap'
-    ),
-    url(
-        r'^sitemap/$',
-        'django.views.generic.simple.direct_to_template',
-        {
-            'template': 'jmbo_sitemap/sitemap.html',
-            'extra_context': {'content': lambda: preferences.HTMLSitemap.content}
-        },
-        name='html-sitemap'
-    ),
-
-    (r'^downloads/', include('downloads.urls')),
-    (r'^friends/', include('friends.urls')),
-    (r'^gallery/', include('gallery.urls')),
     (r'^googlesearch/', include('googlesearch.urls')),
-    (r'^music/', include('music.urls')),
     (r'^jmbo/', include('jmbo.urls')),
-    (r'^chart/', include('chart.urls')),
     (r'^comments/', include('django.contrib.comments.urls')),
     (r'^likes/', include('likes.urls')),
     (r'^object-tools/', include(object_tools.tools.urls)),
-    (r'^show/', include('show.urls')),
-    (r'^competition/', include('competition.urls')),
     (r'^ckeditor/', include('ckeditor.urls')),
     (r'^contact/', include('contact.urls')),
     (r'^post/', include('post.urls')),
-    (r'^poll/', include('poll.urls')),
     (r'^simple-autocomplete/', include('simple_autocomplete.urls')),
     (r'^jmbo-analytics/', include('jmbo_analytics.urls')),
     (r'^api/', include(v1_api.urls)),
-    (r'^banner/', include('banner.urls')),
-    (r'^calendar/', include('jmbo_calendar.urls')),
     url(r'social-auth', include('social_auth.urls')),
 
-    (r'^admin/', include('gallery.admin_urls')),
-    (r'^admin/', include('jmbo_twitter.admin_urls')),
     (r'^admin/', include(admin.site.urls)),
 
     url(
         r'^$',
-        'django.views.generic.simple.direct_to_template',
-        {
-            'template':'base.html',
-        },
+        TemplateView.as_view(template_name='base.html'),
         name='home'
     ),
     url(
         r'^logo/$',
-        'django.views.generic.simple.direct_to_template',
-        {
-            'template':'foundry/logo.html',
-        },
+        TemplateView.as_view(template_name='foundry/logo.html'),
         name='logo'
     ),
     url(
         r'^header/$',
-        'django.views.generic.simple.direct_to_template',
-        {
-            'template':'foundry/inclusion_tags/header.html',
-        },
+        TemplateView.as_view(template_name='foundry/inclusion_tags/header.html'),
         name='header'
     ),
     url(
         r'^footer/$',
-        'django.views.generic.simple.direct_to_template',
-        {
-            'template':'foundry/inclusion_tags/footer.html',
-        },
+        TemplateView.as_view(template_name='foundry/inclusion_tags/footer.html'),
         name='footer'
     ),
 
@@ -161,29 +121,26 @@ urlpatterns = patterns('',
     # Pages defined in preferences
     url(
         r'^about-us/$',
-        'django.views.generic.simple.direct_to_template',
-        {
-            'template':'foundry/static_page.html',
-            'extra_context':{'content':lambda:preferences.GeneralPreferences.about_us, 'title':_("About us")}
-        },
+        views.StaticView.as_view(
+            content=lambda:preferences.GeneralPreferences.about_us,
+            title=_("About us")
+        ),
         name='about-us'
     ),
     url(
         r'^terms-and-conditions/$',
-        'django.views.generic.simple.direct_to_template',
-        {
-            'template':'foundry/static_page.html',
-            'extra_context':{'content':lambda:preferences.GeneralPreferences.terms_and_conditions, 'title':_("Terms and conditions")}
-        },
+        views.StaticView.as_view(
+            content=lambda:preferences.GeneralPreferences.terms_and_conditions,
+            title=_("Terms and conditions")
+        ),
         name='terms-and-conditions'
     ),
     url(
         r'^privacy-policy/$',
-        'django.views.generic.simple.direct_to_template',
-        {
-            'template':'foundry/static_page.html',
-            'extra_context':{'content':lambda:preferences.GeneralPreferences.privacy_policy, 'title':_("Privacy policy")}
-        },
+        views.StaticView.as_view(
+            content=lambda:preferences.GeneralPreferences.privacy_policy,
+            title=_("Privacy policy")
+        ),
         name='privacy-policy'
     ),
 
@@ -244,10 +201,7 @@ urlpatterns = patterns('',
     # Lorem ipsum
     url(
         r'^lorem-ipsum/$',
-        'django.views.generic.simple.direct_to_template',
-        {
-            'template':'foundry/lorem_ipsum.html',
-        },
+        TemplateView.as_view(template_name='foundry/lorem_ipsum.html'),
         name='lorem-ipsum'
     ),
 
@@ -302,7 +256,7 @@ urlpatterns = patterns('',
     # Blogpost list
     url(
         r'^blogposts/$',
-        'foundry.views.blogpost_object_list',
+        views.BlogPostObjectList.as_view(),
         {'limit': 300},
         name='blogpost_object_list'
     ),
@@ -310,7 +264,7 @@ urlpatterns = patterns('',
     # Blogpost detail
     url(
         r'^blogpost/(?P<slug>[\w-]+)/$',
-        'foundry.views.blogpost_object_detail',
+        views.BlogPostObjectDetail.as_view(),
         {},
         name='blogpost_object_detail'
     ),
@@ -331,21 +285,10 @@ urlpatterns = patterns('',
         name='user-detail'
     ),
 
-    # Member detail page. Legacy page. jmbo-friends member-detail will resolve first.
-#    url(
-#        r'^members/(?P<username>[\w-]+)/$',
-#        'foundry.views.member_detail',
-#        {},
-#        name='member-detail'
-#    ),
-
     # Coming soon
     url(
         r'^coming-soon/$',
-        'django.views.generic.simple.direct_to_template',
-        {
-            'template':'foundry/coming_soon.html',
-        },
+        TemplateView.as_view(template_name='foundry/coming_soon.html'),
         name='coming-soon'
     ),
 
@@ -372,9 +315,17 @@ urlpatterns = patterns('',
     ),
     url(
         r'^pages/$',
-        'django.views.generic.list_detail.object_list',
+        DetailView.as_view(),
         {'queryset':Page.permitted.all().order_by('title')},
         'page-list'
+    ),
+
+    # Member detail page
+    url(
+        r'^members/(?P<username>[\w-]+)/$',
+        'foundry.views.member_detail',
+        {},
+        name='member-detail'
     ),
 
     # Admin
@@ -452,6 +403,56 @@ urlpatterns = patterns('',
     ),
 
 )
+
+# Praekelt maintained Jmbo packages which are optional
+if "banner" in settings.INSTALLED_APPS:
+    urlpatterns += patterns('', (r'^banner/', include('banner.urls')))
+if "chart" in settings.INSTALLED_APPS:
+    urlpatterns += patterns('', (r'^chart/', include('chart.urls')))
+if "competition" in settings.INSTALLED_APPS:
+    urlpatterns += patterns('', (r'^competition/', include('competition.urls')))
+if "downloads" in settings.INSTALLED_APPS:
+    urlpatterns += patterns('', (r'^downloads/', include('downloads.urls')))
+if "friends" in settings.INSTALLED_APPS:
+    # Friends has a fancy member detail page and needs to resolve first
+    urlpatterns.insert(1, url(r'^friends/', include('friends.urls')))
+if "gallery" in settings.INSTALLED_APPS:
+    urlpatterns += patterns('',
+        (r'^gallery/', include('gallery.urls')),
+        (r'^admin/', include('gallery.admin_urls')),
+    )
+if "jmbo_calendar" in settings.INSTALLED_APPS:
+    urlpatterns += patterns('', (r'^calendar/', include('jmbo_calendar.urls')))
+if "jmbo_twitter" in settings.INSTALLED_APPS:
+    urlpatterns += patterns('',
+        (r'^jmbo_twitter', include('jmbo_twitter.urls')),
+        (r'^admin/', include('jmbo_twitter.admin_urls')),
+)
+if "music" in settings.INSTALLED_APPS:
+    urlpatterns += patterns('', (r'^music/', include('music.urls')))
+if "poll" in settings.INSTALLED_APPS:
+    urlpatterns += patterns('', (r'^poll/', include('poll.urls')))
+if "show" in settings.INSTALLED_APPS:
+    urlpatterns += patterns('', (r'^show/', include('show.urls')))
+if "sitemap" in settings.INSTALLED_APPS:
+    from jmbo_sitemap import sitemap, sitemaps
+    from jmbo_sitemap.views import SitemapHTMLView
+    urlpatterns += patterns(
+        '',
+        # Unidentified issue with Jmbo URLPatternItem class means
+        # (r'^', include('jmbo_sitemap.urls')) causes error. Use a workaround.
+        url(
+            r'^sitemap\.xml$',
+            sitemap,
+            {'sitemaps': sitemaps},
+            name='sitemap'
+        ),
+        url(
+            r'^sitemap/$',
+            SitemapHTMLView.as_view(),
+            name='html-sitemap'
+        ),
+    )
 
 urlpatterns += staticfiles_urlpatterns()
 
