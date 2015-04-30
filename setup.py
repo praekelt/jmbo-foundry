@@ -31,7 +31,6 @@ setup(
         'jmbo-analytics',
         'jmbo-contact==2.0.0a2',
         'jmbo-post==2.0.0a2',
-        'jmbo-sitemap>=0.1',
 
         # Python libraries
         'BeautifulSoup',
@@ -52,8 +51,9 @@ setup(
         'jmbo-gallery==2.0.0a1',
         'jmbo-music==2.0.0a1',
         'jmbo-poll==2.0.0a1',
-        #'jmbo-twitter',
+        #'jmbo-sitemap>=0.1',
         #'jmbo-show>=0.2',
+        #'jmbo-twitter',
         'django-setuptest>=0.1.6',
         'psycopg2',
     ],

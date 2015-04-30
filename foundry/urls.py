@@ -9,8 +9,6 @@ from django.views.generic.detail import DetailView
 from django.views.generic.base import RedirectView
 
 from preferences import preferences
-from jmbo_sitemap import sitemaps
-from jmbo_sitemap.views import SitemapHTMLView
 from jmbo.urls import v1_api
 # Trivial imports so resource registration works
 import post.urls
@@ -47,20 +45,6 @@ urlpatterns = patterns('',
     ),
 
     (r'^favicon\.ico$', RedirectView.as_view(url='/static/images/favicon.ico', permanent=False)),
-
-    # Unidentified issue with Jmbo URLPatternItem class means
-    # (r'^', include('jmbo_sitemap.urls')) causes error. Use a workaround.
-    url(
-        r'^sitemap\.xml$',
-        'jmbo_sitemap.sitemap',
-        {'sitemaps': sitemaps},
-        name='sitemap'
-    ),
-    url(
-        r'^sitemap/$',
-        SitemapHTMLView.as_view(),
-        name='html-sitemap'
-    ),
 
     (r'^googlesearch/', include('googlesearch.urls')),
     (r'^jmbo/', include('jmbo.urls')),
@@ -450,6 +434,25 @@ if "poll" in settings.INSTALLED_APPS:
     urlpatterns += patterns('', (r'^poll/', include('poll.urls')))
 if "show" in settings.INSTALLED_APPS:
     urlpatterns += patterns('', (r'^show/', include('show.urls')))
+if "sitemap" in settings.INSTALLED_APPS:
+    from jmbo_sitemap import sitemap, sitemaps
+    from jmbo_sitemap.views import SitemapHTMLView
+    urlpatterns += patterns(
+        '',
+        # Unidentified issue with Jmbo URLPatternItem class means
+        # (r'^', include('jmbo_sitemap.urls')) causes error. Use a workaround.
+        url(
+            r'^sitemap\.xml$',
+            sitemap,
+            {'sitemaps': sitemaps},
+            name='sitemap'
+        ),
+        url(
+            r'^sitemap/$',
+            SitemapHTMLView.as_view(),
+            name='html-sitemap'
+        ),
+    )
 
 urlpatterns += staticfiles_urlpatterns()
 
