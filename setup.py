@@ -55,6 +55,7 @@ setup(
         #'jmbo-twitter',
         #'jmbo-show>=0.2',
         'django-setuptest>=0.1.6',
+        'psycopg2',
     ],
     test_suite="setuptest.setuptest.SetupTestSuite",
     classifiers=[
