@@ -27,10 +27,10 @@ setup(
         'django-snippetscream',
 
         # These Jmbo apps are always part of Foundry
-        'jmbo==2.0.0a1',
+        'jmbo==2.0.0a2',
         'jmbo-analytics',
-        'jmbo-contact==2.0.0a1',
-        'jmbo-post==2.0.0a1',
+        'jmbo-contact==2.0.0a2',
+        'jmbo-post==2.0.0a2',
         'jmbo-sitemap>=0.1',
 
         # Python libraries
@@ -44,18 +44,17 @@ setup(
     include_package_data=True,
     tests_require=[
         # Foundry provides high-level testing tools for other content types
-        'jmbo-banner>=0.2.2',
-        'jmbo-calendar',
-        'jmbo-chart',
-        'jmbo-competition',
-        'jmbo-downloads',
-        'jmbo-friends',
-        'jmbo-gallery>=0.2.1',
-        'jmbo-music',
-        'jmbo-poll',
-        'jmbo-twitter',
-        'jmbo-show>=0.2',
-        'django-setuptest>=0.1.4',
+        'jmbo-banner>=0.6',
+        'jmbo-calendar==2.0.0a1',
+        'jmbo-chart==2.0.0a1',
+        #'jmbo-competition',
+        'jmbo-downloads==2.0.0a1',
+        'jmbo-gallery==2.0.0a1',
+        'jmbo-music==2.0.0a1',
+        'jmbo-poll==2.0.0a1',
+        #'jmbo-twitter',
+        #'jmbo-show>=0.2',
+        'django-setuptest>=0.1.6',
     ],
     test_suite="setuptest.setuptest.SetupTestSuite",
     classifiers=[
