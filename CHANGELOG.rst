@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.3.1
+-----
 #. Remove explicit PyJWT pin.
 
 1.3.0
