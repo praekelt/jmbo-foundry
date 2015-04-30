@@ -19,14 +19,15 @@ INSTALLED_APPS += (
     'banner',
     'jmbo_calendar',
     'chart',
-    'competition',
+    #'competition',
     'downloads',
     'friends',
     'gallery',
     'music',
     'poll',
-    'show',
-    'jmbo_twitter',
+    #'show',
+    #'jmbo_twitter',
+    #'jmbo_sitemap',
 )
 
 CKEDITOR_UPLOAD_PATH = expanduser('~')
