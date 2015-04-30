@@ -49,7 +49,7 @@ setup(
 
         'jellyfish',
         'BeautifulSoup',
-        'PyJWT==0.1.6',
+        'PyJWT',
         'requests',
         'gunicorn',
         'python-memcached',

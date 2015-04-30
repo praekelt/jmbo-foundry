@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Remove explicit PyJWT pin.
+
 1.3.0
 -----
 #. Deprecate `compute_settings` function.
