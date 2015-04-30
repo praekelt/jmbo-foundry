@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+2.0.0a1
+-------
 #. Move to Django 1.6 support. Backwards incompatible.
 #. Use `django-layers-hr` to handle layering. The FOUNDRY['layers'] setting is now deprecated.
 #. Deprecate legacy handling for substring `_LAYER_` in photosize name.
