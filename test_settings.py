@@ -6,7 +6,7 @@ from foundry.settings import *
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'jmbo_foundry',
+        'NAME': 'jmbo_spatial',
         'USER': 'postgres',
         'PASSWORD': '',
         'HOST': '',
