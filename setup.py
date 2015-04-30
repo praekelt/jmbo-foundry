@@ -14,6 +14,10 @@ setup(
     dependency_links = [
     ],
     install_requires = [
+        # Setuptools weirdness requires this. Basically jmbo_analytics has
+        # django<1.7 allowing 1.6.x to be installed, which is not supported.
+        'django>=1.4,<1.5',
+
         # todo: attempt to get rid of these five
         'django-section',
         'django-gizmo',
@@ -30,22 +34,22 @@ setup(
         'django_compressor',
         'django-social-auth==0.7.18',   # 0.7.19 introduces a migration scoping bug
 
-        'jmbo>=1.2.0',
-        'jmbo-gallery>=0.2.1',
-        'jmbo-music',
-        'jmbo-calendar',
-        'jmbo-chart',
-        'jmbo-post>=0.4',
-        'jmbo-show>=0.2',
-        'jmbo-banner>=0.2.2',
-        'jmbo-competition',
-        'jmbo-contact>=0.1.2',
-        'jmbo-poll',
+        'jmbo>=1.2.0,<1.99',
+        'jmbo-gallery>=0.2.1,<1.99',
+        'jmbo-music<1.99',
+        'jmbo-calendar<1.99',
+        'jmbo-chart<1.99',
+        'jmbo-post>=0.4,<1.99',
+        'jmbo-show>=0.2,<1.99',
+        'jmbo-banner>=0.2.2,<1.99',
+        'jmbo-competition<1.99',
+        'jmbo-contact>=0.1.2,<1.99',
+        'jmbo-poll<1.99',
         'jmbo_analytics',
-        'jmbo-friends',
-	    'jmbo-downloads',
-        'jmbo_twitter',
-        'jmbo_sitemap>=0.1',
+        'jmbo-friends<1.99',
+	    'jmbo-downloads<1.99',
+        'jmbo_twitter<1.99',
+        'jmbo_sitemap>=0.1,<1.99',
 
         'jellyfish',
         'BeautifulSoup',
