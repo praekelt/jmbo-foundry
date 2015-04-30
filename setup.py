@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='1.3.0',
+    version='1.3.1',
     description='Jmbo Foundry ties together the various Jmbo products enabling you to rapidly build multilingual web and mobi sites with the minimum amount of code and customization.',
     long_description=open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -14,6 +14,8 @@ setup(
     dependency_links=[
     ],
     install_requires=[
+        'django>=1.6,<1.7',
+
         'django_compressor',
         'django-dfp>=0.3.3',
         'django-export',
@@ -48,7 +50,7 @@ setup(
         'jmbo-chart==2.0.0a1',
         #'jmbo-competition',
         'jmbo-downloads==2.0.0a1',
-        'jmbo-friends==2.0.0a1',
+        #'jmbo-friends==2.0.0a1',   # add back on 2.0.0a2 release. Circular thing.
         'jmbo-gallery==2.0.0a1',
         'jmbo-music==2.0.0a1',
         'jmbo-poll==2.0.0a1',

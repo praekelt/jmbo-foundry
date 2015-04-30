@@ -14,17 +14,7 @@ from foundry.models import Member, Country
 from foundry.utils import get_preference, get_age
 
 
-PROTECTED_URLS_PATTERN = r'|'.join((
-    reverse('age-gateway'),
-    reverse('join'),
-    reverse('login'),
-    reverse('logout'),
-    reverse('password_reset'),
-    reverse('terms-and-conditions'),
-    '/auth/password_reset/',
-    '/static/',
-    '/admin/',
-))
+PROTECTED_URLS_PATTERN = None
 AG_TOKEN_MAX_TIME_TO_EXPIRY = 60  # in seconds
 AG_TOKEN_PARAMETER_NAME = 't_ag'
 
@@ -50,6 +40,19 @@ class AgeGateway:
             return response
 
         # Protected URLs
+        global PROTECTED_URLS_PATTERN
+        if not PROTECTED_URLS_PATTERN:
+            PROTECTED_URLS_PATTERN = r'|'.join((
+                reverse('age-gateway'),
+                reverse('join'),
+                reverse('login'),
+                reverse('logout'),
+                reverse('password_reset'),
+                reverse('terms-and-conditions'),
+                '/auth/password_reset/',
+                '/static/',
+                '/admin/',
+            ))
         if re.match(PROTECTED_URLS_PATTERN, request.META['PATH_INFO']) is not None:
             return response
 

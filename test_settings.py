@@ -6,7 +6,9 @@ from foundry.settings import *
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        #'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'jmbo_spatial',
+        #'NAME': 'jmbo',
         'USER': 'postgres',
         'PASSWORD': '',
         'HOST': '',
@@ -20,7 +22,7 @@ INSTALLED_APPS += (
     'chart',
     #'competition',
     'downloads',
-    'friends',
+    #'friends', # add back on 2.0.0a2 release. Circular thing.
     'gallery',
     'jmbo_calendar',
     #'jmbo_sitemap',
