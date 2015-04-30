@@ -1,8 +1,8 @@
 from foundry.settings import *
 
-#FOUNDRY['layers'] =  ('basic',)
-#FOUNDRY['layers'] =  ('smart', 'basic',)
-FOUNDRY['layers'] =  ('web', 'basic',)
+LAYERS = {
+    'layers': ('basic', 'web'),
+}
 
 CACHES = {
     'default': {

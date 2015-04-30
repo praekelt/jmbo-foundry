@@ -9,3 +9,5 @@ dist/
 .settings/
 *~
 *.egg
+.eggs
+ve/

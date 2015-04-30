@@ -13,7 +13,10 @@ import warnings
 FOUNDRY = {
     'sms_gateway_api_key': '',
     'sms_gateway_password': '',
-    'layers': ('basic',)
+}
+
+LAYERS = {
+    'layers': ('basic',),
 }
 
 # Paths
@@ -25,14 +28,22 @@ PROJECT_MODULE = 'foundry'
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-# For PostgreSQL first do from the command line
+# For older Postgres (location aware) do from command line
+# echo "CREATE USER foundry WITH PASSWORD 'foundry'" | sudo -u postgres psql
+# echo "CREATE DATABASE foundry WITH OWNER foundry ENCODING 'UTF8' TEMPLATE template_postgis" | sudo -u postgres psql
+
+# For modern Postgres (location aware) do from command line
 # echo "CREATE USER foundry WITH PASSWORD 'foundry'" | sudo -u postgres psql
 # echo "CREATE DATABASE foundry WITH OWNER foundry ENCODING 'UTF8'" | sudo -u postgres psql
+# echo "CREATE EXTENSION postgis" | sudo -u postgres psql foundry
+# echo "CREATE EXTENSION postgis_topology" | sudo -u postgres psql foundry
 
 DATABASES = {
     'default': {
+        # Must use postgis when developing foundry and Jmbo core itself else migrations are wrong
         'ENGINE': 'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'foundry', # Or path to database file if using sqlite3.
+        #'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'foundry16', # Or path to database file if using sqlite3.
         'USER': 'foundry', # Not used with sqlite3.
         'PASSWORD': 'foundry', # Not used with sqlite3.
         'HOST': '', # Set to empty string for localhost. Not used with sqlite3.
@@ -88,8 +99,6 @@ MIDDLEWARE_CLASSES = (
     'foundry.middleware.VerboseRequestMeta',
     'foundry.middleware.LastSeen',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
-    'django.middleware.transaction.TransactionMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 # A tuple of callables that are used to populate the context in RequestContext.
@@ -107,10 +116,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'foundry.context_processors.foundry',
 )
 
-# AppDirectoriesTypeLoader must be after filesystem loader
 TEMPLATE_LOADERS = (
+    'layers.loaders.filesystem.Loader',
     'django.template.loaders.filesystem.Loader',
-    'foundry.loaders.AppDirectoriesTypeLoader',
+    'layers.loaders.app_directories.Loader',
     'django.template.loaders.app_directories.Loader',
 )
 
@@ -119,49 +128,50 @@ ROOT_URLCONF = 'foundry.urls'
 INSTALLED_APPS = (
     # The order is important else template resolution may not work
     'foundry',
-    'downloads',
-    'friends',
-    'section',
-    'gallery',
-    'googlesearch',
-    'music',
-    'export',
-    'foundry',
-    'snippetscream',
-    'generate',
-    'jmbo_calendar',
-    'jmbo_twitter',
-    'jmbo',
-    'photologue',
-    'chart',
-    'captcha',
-    'secretballot',
-    'publisher',
-    'category',
-    'post',
-    'likes',
-    'gizmo',
-    'object_tools',
-    'registration',
-    'show',
-    'preferences',
-    'banner',
-    'competition',
-    'ckeditor',
+
+    # Optional praekelt-maintained apps. Uncomment for development and
+    # install with buildout or pip.
+    #'banner',          # requires dfp
+    #'chart',
+    #'competition',
+    #'downloads',
+    #'friends',
+    #'gallery',
+    #'jmbo_calendar',
+    #'jmbo_sitemap',
+    #'jmbo_twitter',
+    #'music',
+    #'poll',
+    #'show',            # requires jmbo_calendar
+
     'contact',
-    'poll',
-    'jmbo_sitemap',
-    'simple_autocomplete',
-    'pagination',
-    'south',
-    'compressor',
+    'post',
     'jmbo_analytics',
-    'gunicorn',
-    'sites_groups',
+    'jmbo',
+    'category',
+    'likes',
+    'photologue',
+    'secretballot',
+
     'atlas',
-    'tastypie',
-    'social_auth',
+    'captcha',
+    'ckeditor',
+    'compressor',
     'dfp',
+    'export',
+    'generate',
+    'googlesearch',
+    'object_tools',
+    'pagination',
+    'publisher',
+    'preferences',
+    'simple_autocomplete',
+    'sites_groups',
+    'snippetscream',
+    'social_auth',
+    'south',
+    'tastypie',
+
     'django.contrib.auth',
     'django.contrib.comments',
     'django.contrib.contenttypes',
@@ -173,8 +183,9 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     'django.contrib.sitemaps',
     'django.contrib.admin',
+
     'djcelery',
-#    'debug_toolbar',
+    'layers',
 )
 
 # Your ReCaptcha provided public key.
@@ -182,9 +193,6 @@ RECAPTCHA_PUBLIC_KEY = '6LccPr4SAAAAAJRDO8gKDYw2QodyRiRLdqBhrs0n'
 
 # Your ReCaptcha provided private key.
 RECAPTCHA_PRIVATE_KEY = '6LccPr4SAAAAAH5q006QCoql-RRrRs1TFCpoaOcw'
-
-# Module containing gizmo configuration
-ROOT_GIZMOCONF = '%s.gizmos' % PROJECT_MODULE
 
 # URL prefix for ckeditor JS and CSS media (not uploaded media). Make sure to use a trailing slash.
 CKEDITOR_MEDIA_PREFIX = '/media/ckeditor/'
@@ -229,10 +237,10 @@ SIMPLE_AUTOCOMPLETE = {
 }
 
 STATICFILES_FINDERS = (
-    'foundry.finders.FileSystemLayerAwareFinder',
+    'layers.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
+    'layers.finders.AppDirectoriesFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'compressor.finders.CompressorFinder',
 )
 
 JMBO_ANALYTICS = {

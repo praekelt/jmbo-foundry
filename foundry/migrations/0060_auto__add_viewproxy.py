@@ -1,316 +1,342 @@
 # -*- coding: utf-8 -*-
-import datetime
+from south.utils import datetime_utils as datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
-from django.conf import settings
+
 
 class Migration(SchemaMigration):
 
-    if "banner" in settings.INSTALLED_APPS:
-        depends_on = (
-            ("banner", "0001_initial"),
-        )
-
     def forwards(self, orm):
-        pass
+        # Adding model 'ViewProxy'
+        db.create_table(u'foundry_viewproxy', (
+            (u'modelbase_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['jmbo.ModelBase'], unique=True, primary_key=True)),
+            ('view_name', self.gf('django.db.models.fields.CharField')(max_length=256)),
+        ))
+        db.send_create_signal(u'foundry', ['ViewProxy'])
 
 
     def backwards(self, orm):
-        pass
+        # Deleting model 'ViewProxy'
+        db.delete_table(u'foundry_viewproxy')
 
 
     models = {
-        'auth.group': {
+        u'auth.group': {
             'Meta': {'object_name': 'Group'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '80'}),
-            'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'})
+            'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'})
         },
-        'auth.permission': {
-            'Meta': {'ordering': "('content_type__app_label', 'content_type__model', 'codename')", 'unique_together': "(('content_type', 'codename'),)", 'object_name': 'Permission'},
+        u'auth.permission': {
+            'Meta': {'ordering': "(u'content_type__app_label', u'content_type__model', u'codename')", 'unique_together': "((u'content_type', u'codename'),)", 'object_name': 'Permission'},
             'codename': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
-        'auth.user': {
+        u'auth.user': {
             'Meta': {'object_name': 'User'},
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Group']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
+            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Permission']"}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
-        'category.category': {
+        u'category.category': {
             'Meta': {'ordering': "('title',)", 'object_name': 'Category'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['category.Category']", 'null': 'True', 'blank': 'True'}),
-            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['category.Category']", 'null': 'True', 'blank': 'True'}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255'}),
             'subtitle': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         },
-        'category.tag': {
+        u'category.tag': {
             'Meta': {'ordering': "('title',)", 'object_name': 'Tag'},
-            'categories': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['category.Category']", 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'categories': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['category.Category']", 'null': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         },
-        'comments.comment': {
+        u'comments.comment': {
             'Meta': {'ordering': "('submit_date',)", 'object_name': 'Comment', 'db_table': "'django_comments'"},
-            'comment': ('django.db.models.fields.TextField', [], {'max_length': '256'}),
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'content_type_set_for_comment'", 'to': "orm['contenttypes.ContentType']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'ip_address': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'}),
+            'comment': ('django.db.models.fields.TextField', [], {'max_length': '3000'}),
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'content_type_set_for_comment'", 'to': u"orm['contenttypes.ContentType']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'ip_address': ('django.db.models.fields.GenericIPAddressField', [], {'max_length': '39', 'null': 'True', 'blank': 'True'}),
             'is_public': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_removed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'object_pk': ('django.db.models.fields.TextField', [], {}),
-            'site': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['sites.Site']"}),
+            'site': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['sites.Site']"}),
             'submit_date': ('django.db.models.fields.DateTimeField', [], {'default': 'None'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'comment_comments'", 'null': 'True', 'to': "orm['auth.User']"}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'comment_comments'", 'null': 'True', 'to': u"orm['auth.User']"}),
             'user_email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'user_name': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
             'user_url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'})
         },
-        'contenttypes.contenttype': {
+        u'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
             'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'foundry.blogpost': {
-            'Meta': {'ordering': "('-created',)", 'object_name': 'BlogPost', '_ormbases': ['jmbo.ModelBase']},
+        u'foundry.blogpost': {
+            'Meta': {'ordering': "('-publish_on', '-created')", 'object_name': 'BlogPost', '_ormbases': [u'jmbo.ModelBase']},
             'content': ('ckeditor.fields.RichTextField', [], {}),
-            'modelbase_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['jmbo.ModelBase']", 'unique': 'True', 'primary_key': 'True'})
+            u'modelbase_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['jmbo.ModelBase']", 'unique': 'True', 'primary_key': 'True'})
         },
-        'foundry.chatroom': {
-            'Meta': {'ordering': "('-created',)", 'object_name': 'ChatRoom', '_ormbases': ['jmbo.ModelBase']},
-            'modelbase_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['jmbo.ModelBase']", 'unique': 'True', 'primary_key': 'True'})
+        u'foundry.chatroom': {
+            'Meta': {'ordering': "('-publish_on', '-created')", 'object_name': 'ChatRoom', '_ormbases': [u'jmbo.ModelBase']},
+            u'modelbase_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['jmbo.ModelBase']", 'unique': 'True', 'primary_key': 'True'})
         },
-        'foundry.column': {
+        u'foundry.column': {
             'Meta': {'object_name': 'Column'},
+            'cache_timeout': ('django.db.models.fields.PositiveIntegerField', [], {'default': '60'}),
+            'cache_type': ('django.db.models.fields.CharField', [], {'default': "'all_users'", 'max_length': '32'}),
             'class_name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'designation': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '32', 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'enable_caching': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'index': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
-            'row': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Row']"}),
+            'row': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['foundry.Row']"}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'width': ('django.db.models.fields.PositiveIntegerField', [], {'default': '8'})
         },
-        'foundry.commentreport': {
+        u'foundry.commentreport': {
             'Meta': {'object_name': 'CommentReport'},
-            'comment': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.FoundryComment']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'reporter': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+            'comment': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['foundry.FoundryComment']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'reporter': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         },
-        'foundry.country': {
+        u'foundry.country': {
             'Meta': {'ordering': "('title',)", 'object_name': 'Country'},
             'country_code': ('django.db.models.fields.CharField', [], {'max_length': '2', 'unique': 'True', 'null': 'True', 'db_index': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'minimum_age': ('django.db.models.fields.PositiveIntegerField', [], {'default': '18'}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
-        'foundry.defaultavatar': {
+        u'foundry.defaultavatar': {
             'Meta': {'object_name': 'DefaultAvatar'},
             'crop_from': ('django.db.models.fields.CharField', [], {'default': "'center'", 'max_length': '10', 'blank': 'True'}),
             'date_taken': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'effect': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'defaultavatar_related'", 'null': 'True', 'to': "orm['photologue.PhotoEffect']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'effect': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'defaultavatar_related'", 'null': 'True', 'to': u"orm['photologue.PhotoEffect']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'blank': 'True'}),
             'view_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'})
         },
-        'foundry.foundrycomment': {
-            'Meta': {'ordering': "('submit_date',)", 'object_name': 'FoundryComment', '_ormbases': ['comments.Comment']},
-            'comment_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['comments.Comment']", 'unique': 'True', 'primary_key': 'True'}),
-            'in_reply_to': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.FoundryComment']", 'null': 'True', 'blank': 'True'}),
+        u'foundry.foundrycomment': {
+            'Meta': {'ordering': "('submit_date',)", 'object_name': 'FoundryComment', '_ormbases': [u'comments.Comment']},
+            u'comment_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['comments.Comment']", 'unique': 'True', 'primary_key': 'True'}),
+            'in_reply_to': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['foundry.FoundryComment']", 'null': 'True', 'blank': 'True'}),
             'moderated': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'})
         },
-        'foundry.link': {
+        u'foundry.link': {
             'Meta': {'ordering': "('title', 'subtitle')", 'object_name': 'Link'},
-            'category': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['category.Category']", 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'category': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['category.Category']", 'null': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'subtitle': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
-            'target_content_type': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'link_target_content_type'", 'null': 'True', 'to': "orm['contenttypes.ContentType']"}),
+            'target_content_type': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'link_target_content_type'", 'null': 'True', 'to': u"orm['contenttypes.ContentType']"}),
             'target_object_id': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
             'url': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'view_name': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'})
         },
-        'foundry.listing': {
+        u'foundry.listing': {
             'Meta': {'ordering': "('title', 'subtitle')", 'object_name': 'Listing'},
-            'category': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['category.Category']", 'null': 'True', 'blank': 'True'}),
-            'content': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['jmbo.ModelBase']", 'null': 'True', 'blank': 'True'}),
-            'content_type': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['contenttypes.ContentType']", 'null': 'True', 'blank': 'True'}),
+            'categories': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'listing_categories'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['category.Category']"}),
+            'content': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'listing_content'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['jmbo.ModelBase']"}),
+            'content_type': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['contenttypes.ContentType']", 'null': 'True', 'blank': 'True'}),
             'count': ('django.db.models.fields.IntegerField', [], {}),
             'display_title_tiled': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'enable_syndication': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'items_per_page': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
-            'pinned': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'listing_pinned'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['jmbo.ModelBase']"}),
-            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
+            'pinned': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'listing_pinned'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['jmbo.ModelBase']"}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32'}),
             'style': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'subtitle': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
+            'tags': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'listing_tags'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['category.Tag']"}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
             'view_modifier': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '255', 'null': 'True', 'blank': 'True'})
         },
-        'foundry.member': {
-            'Meta': {'object_name': 'Member', '_ormbases': ['auth.User']},
+        u'foundry.member': {
+            'Meta': {'object_name': 'Member', '_ormbases': [u'auth.User']},
             'about_me': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'address': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'city': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
-            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Country']", 'null': 'True', 'blank': 'True'}),
+            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['foundry.Country']", 'null': 'True', 'blank': 'True'}),
             'crop_from': ('django.db.models.fields.CharField', [], {'default': "'center'", 'max_length': '10', 'blank': 'True'}),
             'date_taken': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'dob': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
-            'effect': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'member_related'", 'null': 'True', 'to': "orm['photologue.PhotoEffect']"}),
+            'effect': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'member_related'", 'null': 'True', 'to': u"orm['photologue.PhotoEffect']"}),
             'facebook_id': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
             'gender': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'}),
             'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'blank': 'True'}),
             'is_profile_complete': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_seen': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
+            'last_seen': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'db_index': 'True'}),
             'mobile_number': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
             'province': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'receive_email': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'receive_sms': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'twitter_username': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
-            'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'}),
+            u'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['auth.User']", 'unique': 'True', 'primary_key': 'True'}),
             'view_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
             'zipcode': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'})
         },
-        'foundry.menu': {
+        u'foundry.menu': {
             'Meta': {'ordering': "('title', 'subtitle')", 'object_name': 'Menu'},
+            'cache_timeout': ('django.db.models.fields.PositiveIntegerField', [], {'default': '60'}),
+            'cache_type': ('django.db.models.fields.CharField', [], {'default': "'all_users'", 'max_length': '32'}),
             'display_title': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
+            'enable_caching': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32'}),
             'subtitle': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
-        'foundry.menulinkposition': {
+        u'foundry.menulinkposition': {
             'Meta': {'ordering': "('position',)", 'object_name': 'MenuLinkPosition'},
             'class_name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'condition_expression': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'link': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Link']"}),
-            'menu': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Menu']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'link': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['foundry.Link']"}),
+            'menu': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['foundry.Menu']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'position': ('django.db.models.fields.IntegerField', [], {})
         },
-        'foundry.navbar': {
+        u'foundry.navbar': {
             'Meta': {'ordering': "('title', 'subtitle')", 'object_name': 'Navbar'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
+            'cache_timeout': ('django.db.models.fields.PositiveIntegerField', [], {'default': '60'}),
+            'cache_type': ('django.db.models.fields.CharField', [], {'default': "'all_users'", 'max_length': '32'}),
+            'enable_caching': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32'}),
             'subtitle': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
-        'foundry.navbarlinkposition': {
+        u'foundry.navbarlinkposition': {
             'Meta': {'ordering': "('position',)", 'object_name': 'NavbarLinkPosition'},
             'class_name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'condition_expression': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'link': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Link']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'link': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['foundry.Link']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'navbar': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Navbar']"}),
+            'navbar': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['foundry.Navbar']"}),
             'position': ('django.db.models.fields.IntegerField', [], {})
         },
-        'foundry.notification': {
+        u'foundry.notification': {
             'Meta': {'object_name': 'Notification'},
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'link': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Link']"}),
-            'member': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Member']"})
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'link': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['foundry.Link']"}),
+            'member': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['foundry.Member']"})
         },
-        'foundry.page': {
+        u'foundry.page': {
             'Meta': {'object_name': 'Page'},
             'css': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_homepage': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '32'}),
             'subtitle': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         },
-        'foundry.pageview': {
+        u'foundry.pageview': {
             'Meta': {'object_name': 'PageView'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'page': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Page']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'page': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['foundry.Page']"}),
             'view_name': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         },
-        'foundry.row': {
+        u'foundry.row': {
             'Meta': {'object_name': 'Row'},
             'block_name': ('django.db.models.fields.CharField', [], {'default': "'content'", 'max_length': '32'}),
+            'cache_timeout': ('django.db.models.fields.PositiveIntegerField', [], {'default': '60'}),
+            'cache_type': ('django.db.models.fields.CharField', [], {'default': "'all_users'", 'max_length': '32'}),
             'class_name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'enable_caching': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'has_left_or_right_column': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'index': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
-            'page': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Page']"})
+            'page': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['foundry.Page']"})
         },
-        'foundry.tile': {
+        u'foundry.tile': {
             'Meta': {'object_name': 'Tile'},
+            'cache_timeout': ('django.db.models.fields.PositiveIntegerField', [], {'default': '60'}),
+            'cache_type': ('django.db.models.fields.CharField', [], {'default': "'all_users'", 'max_length': '32'}),
             'class_name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'column': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['foundry.Column']"}),
+            'column': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['foundry.Column']"}),
             'condition_expression': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'enable_ajax': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'enable_caching': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'index': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
-            'target_content_type': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'tile_target_content_type'", 'null': 'True', 'to': "orm['contenttypes.ContentType']"}),
+            'target_content_type': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'tile_target_content_type'", 'null': 'True', 'to': u"orm['contenttypes.ContentType']"}),
             'target_object_id': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True'}),
             'view_name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
         },
-        'jmbo.modelbase': {
-            'Meta': {'ordering': "('-created',)", 'object_name': 'ModelBase'},
+        u'foundry.viewproxy': {
+            'Meta': {'ordering': "('-publish_on', '-created')", 'object_name': 'ViewProxy', '_ormbases': [u'jmbo.ModelBase']},
+            u'modelbase_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['jmbo.ModelBase']", 'unique': 'True', 'primary_key': 'True'}),
+            'view_name': ('django.db.models.fields.CharField', [], {'max_length': '256'})
+        },
+        u'jmbo.modelbase': {
+            'Meta': {'ordering': "('-publish_on', '-created')", 'object_name': 'ModelBase'},
             'anonymous_comments': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'anonymous_likes': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'categories': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['category.Category']", 'null': 'True', 'blank': 'True'}),
+            'categories': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['category.Category']", 'null': 'True', 'blank': 'True'}),
             'class_name': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True'}),
+            'comment_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
             'comments_closed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'comments_enabled': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']", 'null': 'True'}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'blank': 'True'}),
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']", 'null': 'True'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {'db_index': 'True', 'blank': 'True'}),
             'crop_from': ('django.db.models.fields.CharField', [], {'default': "'center'", 'max_length': '10', 'blank': 'True'}),
             'date_taken': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'effect': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'modelbase_related'", 'null': 'True', 'to': "orm['photologue.PhotoEffect']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'effect': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'modelbase_related'", 'null': 'True', 'to': u"orm['photologue.PhotoEffect']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'blank': 'True'}),
+            'image_attribution': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'likes_closed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'likes_enabled': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'modified': ('django.db.models.fields.DateTimeField', [], {}),
-            'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
-            'primary_category': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'primary_modelbase_set'", 'null': 'True', 'to': "orm['category.Category']"}),
+            'modified': ('django.db.models.fields.DateTimeField', [], {'db_index': 'True'}),
+            'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'}),
+            'owner_override': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
+            'primary_category': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'primary_modelbase_set'", 'null': 'True', 'to': u"orm['category.Category']"}),
             'publish_on': ('django.db.models.fields.DateTimeField', [], {'db_index': 'True', 'null': 'True', 'blank': 'True'}),
-            'publishers': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['publisher.Publisher']", 'null': 'True', 'blank': 'True'}),
+            'publishers': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['publisher.Publisher']", 'null': 'True', 'blank': 'True'}),
             'retract_on': ('django.db.models.fields.DateTimeField', [], {'db_index': 'True', 'null': 'True', 'blank': 'True'}),
-            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255'}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255'}),
             'state': ('django.db.models.fields.CharField', [], {'default': "'unpublished'", 'max_length': '32', 'null': 'True', 'blank': 'True'}),
             'subtitle': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'tags': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['category.Tag']", 'null': 'True', 'blank': 'True'}),
+            'tags': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['category.Tag']", 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
-            'view_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'})
+            'view_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
+            'vote_total': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'})
         },
-        'photologue.photo': {
+        u'photologue.photo': {
             'Meta': {'ordering': "['-date_added']", 'object_name': 'Photo'},
             'caption': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'crop_from': ('django.db.models.fields.CharField', [], {'default': "'center'", 'max_length': '10', 'blank': 'True'}),
             'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'date_taken': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'effect': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'photo_related'", 'null': 'True', 'to': "orm['photologue.PhotoEffect']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'effect': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'photo_related'", 'null': 'True', 'to': u"orm['photologue.PhotoEffect']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'blank': 'True'}),
             'is_public': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'tags': ('photologue.models.TagField', [], {'max_length': '255', 'blank': 'True'}),
@@ -318,7 +344,7 @@ class Migration(SchemaMigration):
             'title_slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50'}),
             'view_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'})
         },
-        'photologue.photoeffect': {
+        u'photologue.photoeffect': {
             'Meta': {'object_name': 'PhotoEffect'},
             'background_color': ('django.db.models.fields.CharField', [], {'default': "'#FFFFFF'", 'max_length': '7'}),
             'brightness': ('django.db.models.fields.FloatField', [], {'default': '1.0'}),
@@ -326,32 +352,24 @@ class Migration(SchemaMigration):
             'contrast': ('django.db.models.fields.FloatField', [], {'default': '1.0'}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'filters': ('django.db.models.fields.CharField', [], {'max_length': '200', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'}),
             'reflection_size': ('django.db.models.fields.FloatField', [], {'default': '0'}),
             'reflection_strength': ('django.db.models.fields.FloatField', [], {'default': '0.6'}),
             'sharpness': ('django.db.models.fields.FloatField', [], {'default': '1.0'}),
             'transpose_method': ('django.db.models.fields.CharField', [], {'max_length': '15', 'blank': 'True'})
         },
-        'publisher.publisher': {
+        u'publisher.publisher': {
             'Meta': {'object_name': 'Publisher'},
             'class_name': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True'}),
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']", 'null': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']", 'null': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '64'})
         },
-        'secretballot.vote': {
-            'Meta': {'unique_together': "(('token', 'content_type', 'object_id'),)", 'object_name': 'Vote'},
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'token': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'vote': ('django.db.models.fields.SmallIntegerField', [], {})
-        },
-        'sites.site': {
-            'Meta': {'ordering': "('domain',)", 'object_name': 'Site', 'db_table': "'django_site'"},
+        u'sites.site': {
+            'Meta': {'ordering': "(u'domain',)", 'object_name': 'Site', 'db_table': "u'django_site'"},
             'domain': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         }
     }

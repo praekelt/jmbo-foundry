@@ -23,9 +23,9 @@ TEMPLATE = '''
     <div>
         {{ comment.comment }}
         <br />
-        <a href="http://{{ site_domain}}{% url admin-remove-comment comment.id %}" target="_">Remove this comment</a>
+        <a href="http://{{ site_domain}}{% url "admin-remove-comment" comment.id %}" target="_">Remove this comment</a>
         |
-        <a href="http://{{ site_domain}}{% url admin-allow-comment comment.id %}" target="_">Allow this comment</a>
+        <a href="http://{{ site_domain}}{% url "admin-allow-comment" comment.id %}" target="_">Allow this comment</a>
     </div>
     <br />
 {% endfor %}
@@ -41,11 +41,11 @@ class Command(BaseCommand):
 
     def flag(self, text):
         """Very simple check for naughty words"""
-        # Normalize diacritic characters into ASCII since current version of 
+        # Normalize diacritic characters into ASCII since current version of
         # jaro_distance cannot handle them.
         normalized_text = ''.join((c for c in unicodedata.normalize('NFD', text) if unicodedata.category(c) != 'Mn'))
         total_weight = 0
-        words = normalized_text.lower().split()        
+        words = normalized_text.lower().split()
         for naughty in self.words:
             for word in words:
                 score = jellyfish.jaro_distance(word, naughty)
