@@ -10,7 +10,7 @@ env:
   - DJANGO=Django==1.6.11
 
 install:
-  - sudo apt-get install -y postgis libproj-dev gdal-bin libgeos-dev
+  - sudo apt-get install -y postgis build-essential libproj0 libproj-dev libgeos-dev libgdal1-dev
   - pip install -q $DJANGO --use-mirrors
 
 before_script:
