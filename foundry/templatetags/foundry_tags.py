@@ -1,11 +1,14 @@
 import types
 import hashlib
-from BeautifulSoup import BeautifulSoup
 import cPickle
+import re
+
+from BeautifulSoup import BeautifulSoup
 
 from django import template
 from django.core.cache import cache
-from django.core.urlresolvers import reverse, resolve, NoReverseMatch
+from django.core.urlresolvers import reverse, resolve, NoReverseMatch, \
+    get_script_prefix
 from django.template.loader import render_to_string
 from django.http import HttpResponse, Http404
 from django.template.response import TemplateResponse
@@ -571,6 +574,8 @@ class RenderViewNode(template.Node):
     def render(self, context):
         view_name = self.view_name.resolve(context)
         url = reverse(view_name)
+        # Resolve needs any possible prefix removed
+        url = re.sub(r'^%s' % get_script_prefix().rstrip('/'), '', url)
         view, args, kwargs = resolve(url)
         # Call the view. Let any error propagate.
         request = context['request']

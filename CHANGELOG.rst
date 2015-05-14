@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Fix case where `resolve()` would fail if site is run from a subpath.
+
 2.0.0a1
 -------
 #. Move to Django 1.6 support. Backwards incompatible.
