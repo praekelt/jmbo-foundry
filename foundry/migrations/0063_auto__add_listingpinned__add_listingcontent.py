@@ -42,11 +42,14 @@ class Migration(SchemaMigration):
                         modelbase_obj_id=tu[0], listing=listing, position=tu[0]
                     )
 
+        # Do not delete tables. Paranoia.
+        '''
         # Removing M2M table for field content on 'Listing'
-        #db.delete_table(db.shorten_name(u'foundry_listing_content'))
+        db.delete_table(db.shorten_name(u'foundry_listing_content'))
 
         # Removing M2M table for field pinned on 'Listing'
-        #db.delete_table(db.shorten_name(u'foundry_listing_pinned'))
+        db.delete_table(db.shorten_name(u'foundry_listing_pinned'))
+        '''
 
 
     def backwards(self, orm):
@@ -56,8 +59,9 @@ class Migration(SchemaMigration):
         # Deleting model 'ListingContent'
         db.delete_table(u'foundry_listingcontent')
 
-        # Adding M2M table for field content on 'Listing'
+        # No need to re-add tables since we didn't delete them
         '''
+        # Adding M2M table for field content on 'Listing'
         m2m_table_name = db.shorten_name(u'foundry_listing_content')
         db.create_table(m2m_table_name, (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
