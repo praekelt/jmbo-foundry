@@ -157,9 +157,9 @@ class TestCase(BaseTestCase):
             slug='published-content',
             count=0, items_per_page=0, style='VerticalThumbnail',
         )
-        listing_pc.content = [cls.post1]
         listing_pc.sites = [1]
         listing_pc.save()
+        listing_pc.set_content([cls.post1])
         setattr(cls, listing_pc.slug, listing_pc)
 
         # Content points to unpublished content
@@ -168,9 +168,9 @@ class TestCase(BaseTestCase):
             slug='unpublished-content',
             count=0, items_per_page=0, style='VerticalThumbnail',
         )
-        listing_upc.content = [cls.post1, cls.post5]
         listing_upc.sites = [1]
         listing_upc.save()
+        listing_upc.set_content([cls.post1, cls.post5])
         setattr(cls, listing_upc.slug, listing_upc)
 
         # Pinned items
@@ -179,9 +179,9 @@ class TestCase(BaseTestCase):
             slug='listing-pinned',
             count=0, items_per_page=0, style='VerticalThumbnail',
         )
-        listing_pinned.pinned = [cls.post1]
         listing_pinned.sites = [1]
         listing_pinned.save()
+        listing_pinned.set_pinned([cls.post1])
         setattr(cls, listing_pinned.slug, listing_pinned)
 
         # Listing with categories
@@ -229,9 +229,9 @@ class TestCase(BaseTestCase):
                     slug='listing-%s' % style.lower(),
                     count=0, items_per_page=0, style=style,
                 )
-                listing.pinned = [cls.post1]
                 listing.sites = [1]
                 listing.save()
+                listing.set_pinned([cls.post1])
                 setattr(cls, listing.slug, listing)
 
         # Page with row, column and tile
