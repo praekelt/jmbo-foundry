@@ -29,7 +29,8 @@ from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
     NavbarLinkPosition, Navbar, GeneralPreferences, GeneralPreferences, \
     RegistrationPreferences, LoginPreferences, Member, DefaultAvatar, \
     PasswordResetPreferences, Country, Page, ChatRoom, BlogPost, Notification, \
-    FoundryComment, CommentReport, PageView, NaughtyWordPreferences, ViewProxy
+    FoundryComment, CommentReport, PageView, NaughtyWordPreferences, \
+    ViewProxy, ListingContent, ListingPinned
 from foundry.widgets import SelectCommaWidget, DragDropOrderingWidget, RadioImageSelect
 from foundry.utils import get_view_choices
 from foundry.templatetags.listing_styles import LISTING_CLASSES
@@ -183,14 +184,20 @@ class NavbarAdmin(admin.ModelAdmin):
 
 
 class ListingAdminForm(forms.ModelForm):
+    content = forms.models.ModelMultipleChoiceField(
+        queryset=ModelBase.objects.all().order_by('title')
+    )
+    pinned = forms.models.ModelMultipleChoiceField(
+        queryset=ModelBase.objects.all().order_by('title')
+    )
 
     class Meta:
         model = Listing
         fields = (
             'title', 'slug', 'subtitle', 'content_type', 'categories', 'tags',
-            'content', 'pinned', 'style', 'count', 'items_per_page',
+            'style', 'count', 'items_per_page',
             'view_modifier', 'display_title_tiled', 'enable_syndication',
-            'sites'
+            'sites',
         )
         widgets = {
             'sites': SitesGroupsWidget,
@@ -228,9 +235,10 @@ class ListingAdminForm(forms.ModelForm):
                         ))
         self.fields['view_modifier'].widget.choices = choices
 
-        # Order
-        field = self.fields['content']
-        field._set_queryset(field._queryset.order_by('title'))
+        # Set initial through values
+        if self.instance.id:
+            self.fields['content'].initial = self.instance.content.all()
+            self.fields['pinned'].initial = self.instance.pinned.all()
 
     def clean(self):
         for site in self.cleaned_data['sites']:
@@ -243,6 +251,30 @@ class ListingAdminForm(forms.ModelForm):
                     slug the listings may not have overlapping sites." % q[0]
                 ))
         return self.cleaned_data
+
+    def save(self, commit=True):
+        #import pdb;pdb.set_trace()
+        instance = super(ListingAdminForm, self).save(commit=False)
+
+        # Set through fields. Requires m2m trickery.
+        old_save_m2m = self.save_m2m
+        def save_m2m():
+            old_save_m2m()
+            ListingContent.objects.filter(listing=instance).delete()
+            for n, obj in enumerate(self.cleaned_data['content']):
+                ListingContent.objects.create(
+                    modelbase_obj=obj, listing=instance, position=n
+                )
+            for n, obj in enumerate(self.cleaned_data['pinned']):
+                ListingPinned.objects.filter(listing=instance).delete()
+                ListingPinned.objects.create(
+                    modelbase_obj=obj, listing=instance, position=n
+                )
+        self.save_m2m = save_m2m
+
+        if commit:
+            instance.save()
+            self.save_m2m()
 
 
 class ListingAdmin(admin.ModelAdmin):

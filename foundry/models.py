@@ -271,6 +271,7 @@ any setting for <i>Content Type</i>, <i>Categories</i> and <i>Tags</i>.""",
         blank=True,
         null=True,
         related_name='listing_content',
+        through='ListingContent',
     )
     categories = models.ManyToManyField(
         'category.Category',
@@ -293,6 +294,7 @@ items are visible across all pages when navigating the listing.""",
         blank=True,
         null=True,
         related_name='listing_pinned',
+        through='ListingPinned',
     )
     count = models.IntegerField(
         help_text="""Number of items to display (excludes any pinned items).
@@ -387,6 +389,20 @@ complex page."""
         return ModelBase.permitted.filter(listing_pinned__id=self.id).order_by(
             'listing_pinned__id'
         )
+
+
+class ListingContent(models.Model):
+    """Through model to facilitate ordering"""
+    modelbase_obj = models.ForeignKey('jmbo.ModelBase')
+    listing = models.ForeignKey(Listing)
+    position = models.PositiveIntegerField(default=0)
+
+
+class ListingPinned(models.Model):
+    """Through model to facilitate ordering"""
+    modelbase_obj = models.ForeignKey('jmbo.ModelBase')
+    listing = models.ForeignKey(Listing)
+    position = models.PositiveIntegerField(default=0)
 
 
 class AbstractLinkPosition(models.Model):

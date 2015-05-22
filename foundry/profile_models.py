@@ -7,30 +7,33 @@ from django.db import models
 
 from photologue.models import ImageModel
 
+
 class AbstractProfileBase(models.Model):
     class Meta:
         abstract = True
 
     user = models.ForeignKey(
-        User, 
+        User,
         unique=True
     )
-    
+
     def __unicode__(self):
         return self.user.username
-    
+
+
 class AbstractAvatarProfile(ImageModel):
     class Meta:
         abstract = True
 
+
 class AbstractSocialProfile(models.Model):
     class Meta:
         abstract = True
-    
+
     facebook_id = models.CharField(
         verbose_name=_('Facebook ID'),
         max_length=128,
-        blank=True, 
+        blank=True,
         null=True,
     )
     twitter_username = models.CharField(
@@ -46,7 +49,7 @@ class AbstractSocialProfile(models.Model):
             return "http://www.facebook.com/profile.php?id=%s" % self.facebook_id
         else:
             return None
-    
+
     @property
     def twitter_url(self):
         if self.twitter_username:
@@ -54,10 +57,11 @@ class AbstractSocialProfile(models.Model):
         else:
             return None
 
+
 class AbstractLocationProfile(models.Model):
     class Meta:
         abstract = True
-    
+
     address = models.TextField(
         verbose_name=_('Address'),
         blank=True,
@@ -82,16 +86,16 @@ class AbstractLocationProfile(models.Model):
         null=True,
     )
 
+
 class AbstractPersonalProfile(models.Model):
     class Meta:
         abstract = True
-    
+
     dob = models.DateField(
         verbose_name=_("Date of Birth"),
         blank=True,
         null=True,
     )
-    
     gender = models.CharField(
         verbose_name=_("Gender"),
         max_length=1,
@@ -106,13 +110,14 @@ class AbstractPersonalProfile(models.Model):
     about_me = models.TextField(
         verbose_name=_("About me"),
         blank=True,
-        null=True,                                
+        null=True,
     )
+
 
 class AbstractContactProfile(models.Model):
     class Meta:
         abstract = True
-   
+
     mobile_number = models.CharField(
         verbose_name=_("Mobile number"),
         max_length=64,
@@ -120,10 +125,11 @@ class AbstractContactProfile(models.Model):
         null=True,
     )
 
+
 class AbstractSubscriptionProfile(models.Model):
     class Meta:
         abstract = True
-    
+
     receive_sms = models.BooleanField(
         verbose_name=_("Receive sms"),
         default=False,
@@ -132,6 +138,7 @@ class AbstractSubscriptionProfile(models.Model):
         verbose_name=_("Receive email"),
         default=False,
     )
+
 
 class AbstractWebuserProfile(AbstractProfileBase, AbstractAvatarProfile, AbstractContactProfile, AbstractLocationProfile, AbstractPersonalProfile, AbstractSocialProfile, AbstractSubscriptionProfile):
     class Meta:
