@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+2.0.0a3
+-------
 #. Listing fields content and pinned now use a through manager making ordering possible.
 
 2.0.0a2
