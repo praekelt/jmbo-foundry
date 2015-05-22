@@ -231,7 +231,7 @@ SIMPLE_AUTOCOMPLETE = {
     'auth.user': {'threshold': 20},
     'category.category': {'threshold':20},
     'jmbo.modelbase': {
-        'threshold': 50,
+        'threshold': 20,
         'duplicate_format_function': lambda item, model, content_type: item.as_leaf_class().content_type.name
     }
 }

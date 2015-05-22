@@ -1,5 +1,5 @@
 addons:
-    postgresql: "9.3"
+    postgresql: "9.4"
 
 language: python
 
@@ -10,6 +10,7 @@ env:
   - DJANGO=Django==1.6.11
 
 install:
+  - sudo apt-get install -y postgis build-essential libproj0 libproj-dev libgeos-dev libgdal-dev libgdal1h postgresql-9.4-postgis-2.1
   - pip install -q $DJANGO --use-mirrors
 
 before_script:
