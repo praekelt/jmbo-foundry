@@ -24,7 +24,7 @@ setup(
         'django-object-tools>=0.0.5',
         'django-pagination',
         'django-publisher',             # legacy, required by migrations
-        'django-simple-autocomplete',
+        'django-simple-autocomplete>=0.5',
         'django-social-auth==0.7.18',   # 0.7.19 introduces a migration scoping bug
         'django-snippetscream',
 
