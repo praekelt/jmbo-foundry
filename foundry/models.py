@@ -271,6 +271,7 @@ any setting for <i>Content Type</i>, <i>Categories</i> and <i>Tags</i>.""",
         blank=True,
         null=True,
         related_name='listing_content',
+        through='ListingContent',
     )
     categories = models.ManyToManyField(
         'category.Category',
@@ -293,6 +294,7 @@ items are visible across all pages when navigating the listing.""",
         blank=True,
         null=True,
         related_name='listing_pinned',
+        through='ListingPinned',
     )
     count = models.IntegerField(
         help_text="""Number of items to display (excludes any pinned items).
@@ -382,11 +384,51 @@ complex page."""
 
         return q
 
+    def set_pinned(self, iterable):
+        for n, obj in enumerate(iterable):
+            ListingPinned.objects.create(
+                modelbase_obj=obj, listing=self, position=n
+            )
+
+    def set_content(self, iterable):
+        for n, obj in enumerate(iterable):
+            ListingContent.objects.create(
+                modelbase_obj=obj, listing=self, position=n
+            )
+
     @property
     def pinned_queryset(self):
-        return ModelBase.permitted.filter(listing_pinned__id=self.id).order_by(
-            'listing_pinned__id'
-        )
+        # See https://docs.djangoproject.com/en/1.8/topics/db/queries/#using-a-custom-reverse-manager.
+        # Django 1.7 will remove the need for this slow workaround.
+        li = [o for o in ModelBase.permitted.filter(listing_pinned=self)]
+        order = [o.modelbase_obj.id for o in ListingPinned.objects.filter(
+            listing=self).order_by('position')]
+        li.sort(lambda a, b: cmp(order.index(a.id), order.index(b.id)))
+        return AttributeWrapper(li, exists=len(li))
+
+    @property
+    def content_queryset(self):
+        # See https://docs.djangoproject.com/en/1.8/topics/db/queries/#using-a-custom-reverse-manager.
+        # Django 1.7 will remove the need for this slow workaround.
+        li = [o for o in ModelBase.permitted.filter(listing_content=self)]
+        order = [o.modelbase_obj.id for o in ListingContent.objects.filter(
+            listing=self).order_by('position')]
+        li.sort(lambda a, b: cmp(order.index(a.id), order.index(b.id)))
+        return AttributeWrapper(li, exists=len(li))
+
+
+class ListingContent(models.Model):
+    """Through model to facilitate ordering"""
+    modelbase_obj = models.ForeignKey('jmbo.ModelBase')
+    listing = models.ForeignKey(Listing, related_name='content_link_to_listing')
+    position = models.PositiveIntegerField(default=0)
+
+
+class ListingPinned(models.Model):
+    """Through model to facilitate ordering"""
+    modelbase_obj = models.ForeignKey('jmbo.ModelBase')
+    listing = models.ForeignKey(Listing, related_name='pinned_link_to_listing')
+    position = models.PositiveIntegerField(default=0)
 
 
 class AbstractLinkPosition(models.Model):

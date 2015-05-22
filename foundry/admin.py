@@ -29,7 +29,8 @@ from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
     NavbarLinkPosition, Navbar, GeneralPreferences, GeneralPreferences, \
     RegistrationPreferences, LoginPreferences, Member, DefaultAvatar, \
     PasswordResetPreferences, Country, Page, ChatRoom, BlogPost, Notification, \
-    FoundryComment, CommentReport, PageView, NaughtyWordPreferences, ViewProxy
+    FoundryComment, CommentReport, PageView, NaughtyWordPreferences, \
+    ViewProxy, ListingContent, ListingPinned
 from foundry.widgets import SelectCommaWidget, DragDropOrderingWidget, RadioImageSelect
 from foundry.utils import get_view_choices
 from foundry.templatetags.listing_styles import LISTING_CLASSES
@@ -183,14 +184,30 @@ class NavbarAdmin(admin.ModelAdmin):
 
 
 class ListingAdminForm(forms.ModelForm):
+    # Content and pinned fields use "through" and require manual handling
+    content_helper = forms.models.ModelMultipleChoiceField(
+        label=_('Content'),
+        queryset=ModelBase.objects.all().order_by('title'),
+        required=False,
+        help_text=_("Individual items to display. Setting this will ignore \
+any setting for <i>Content Type</i>, <i>Categories</i> and <i>Tags</i>."),
+    )
+    pinned_helper = forms.models.ModelMultipleChoiceField(
+        label=_('Pinned'),
+        queryset=ModelBase.objects.all().order_by('title'),
+        required=False,
+        help_text=_("Individual items to pin to the top of the listing. These \
+items are visible across all pages when navigating the listing."),
+    )
 
     class Meta:
         model = Listing
         fields = (
             'title', 'slug', 'subtitle', 'content_type', 'categories', 'tags',
-            'content', 'pinned', 'style', 'count', 'items_per_page',
+            'content_helper', 'pinned_helper',
+            'style', 'count', 'items_per_page',
             'view_modifier', 'display_title_tiled', 'enable_syndication',
-            'sites'
+            'sites',
         )
         widgets = {
             'sites': SitesGroupsWidget,
@@ -199,6 +216,20 @@ class ListingAdminForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+
+        # Initial through values must be set here else the widgets get the
+        # initial order wrong.
+        instance = kwargs.get('instance')
+        if instance:
+            if not 'initial' in kwargs:
+                kwargs['initial'] = {}
+            kwargs['initial']['content_helper'] = \
+                [o.modelbase_obj for o in ListingContent.objects.filter(
+                    listing=instance).order_by('position')]
+            kwargs['initial']['pinned_helper'] = \
+                [o.modelbase_obj for o in ListingPinned.objects.filter(
+                    listing=instance).order_by('position')]
+
         super(ListingAdminForm, self).__init__(*args, **kwargs)
 
         # Limit content_type vocabulary. Cannot do it with limit_choices_to.
@@ -228,11 +259,9 @@ class ListingAdminForm(forms.ModelForm):
                         ))
         self.fields['view_modifier'].widget.choices = choices
 
-        # Order
-        field = self.fields['content']
-        field._set_queryset(field._queryset.order_by('title'))
 
     def clean(self):
+        super(ListingAdminForm, self).clean()
         for site in self.cleaned_data['sites']:
             q = Listing.objects.filter(slug=self.cleaned_data['slug'], sites=site)
             if self.instance.id:
@@ -243,6 +272,31 @@ class ListingAdminForm(forms.ModelForm):
                     slug the listings may not have overlapping sites." % q[0]
                 ))
         return self.cleaned_data
+
+    def save(self, commit=True):
+        instance = super(ListingAdminForm, self).save(commit=False)
+
+        # Set through fields. Requires m2m trickery.
+        old_save_m2m = self.save_m2m
+        def save_m2m():
+            old_save_m2m()
+            ListingContent.objects.filter(listing=instance).delete()
+            for n, obj in enumerate(self.cleaned_data['content_helper']):
+                ListingContent.objects.create(
+                    modelbase_obj=obj, listing=instance, position=n
+                )
+            ListingPinned.objects.filter(listing=instance).delete()
+            for n, obj in enumerate(self.cleaned_data['pinned_helper']):
+                ListingPinned.objects.create(
+                    modelbase_obj=obj, listing=instance, position=n
+                )
+        self.save_m2m = save_m2m
+
+        if commit:
+            instance.save()
+            self.save_m2m()
+
+        return instance
 
 
 class ListingAdmin(admin.ModelAdmin):

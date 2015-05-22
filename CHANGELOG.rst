@@ -3,6 +3,10 @@ Changelog
 
 next
 ----
+#. Listing fields content and pinned now use a through manager making ordering possible.
+
+2.0.0a2
+-------
 #. Fix case where `resolve()` would fail if site is run from a subpath.
 
 2.0.0a1
