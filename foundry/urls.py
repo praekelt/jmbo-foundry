@@ -434,9 +434,9 @@ if "poll" in settings.INSTALLED_APPS:
     urlpatterns += patterns('', (r'^poll/', include('poll.urls')))
 if "show" in settings.INSTALLED_APPS:
     urlpatterns += patterns('', (r'^show/', include('show.urls')))
-if "sitemap" in settings.INSTALLED_APPS:
-    from jmbo_sitemap import sitemap, sitemaps
-    from jmbo_sitemap.views import SitemapHTMLView
+if "jmbo_sitemap" in settings.INSTALLED_APPS:
+    from jmbo_sitemap import sitemaps
+    from jmbo_sitemap.views import sitemap, SitemapHTMLView
     urlpatterns += patterns(
         '',
         # Unidentified issue with Jmbo URLPatternItem class means
