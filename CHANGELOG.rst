@@ -1,6 +1,10 @@
 Changelog
 =========
 
+2.0.0a4
+-------
+#. Fix sitemap urls.
+
 2.0.0a3
 -------
 #. Listing fields content and pinned now use a through manager making ordering possible.
