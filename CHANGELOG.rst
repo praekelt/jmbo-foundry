@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+2.0.0a5
+-------
 #. Remove references to atlas in migrations.
 
 2.0.0a4
