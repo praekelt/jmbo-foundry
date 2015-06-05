@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Remove references to atlas in migrations.
+
 2.0.0a4
 -------
 #. Fix sitemap urls.
