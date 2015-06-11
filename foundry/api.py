@@ -14,13 +14,7 @@ class ListingResource(ModelResource):
         queryset = Listing.permitted.all()
         resource_name = 'listing'
 
-    def override_urls(self):
-        return [
-            url(r"^(?P<resource_name>%s)/(?P<slug>[\w-]+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
-        ]
-
-    def dehydrate(self, bundle):        
-        bundle.data['resource_name'] = self._meta.resource_name
+    def dehydrate(self, bundle):
         bundle.data['permalink'] = bundle.obj.get_absolute_url()
         bundle.data['items'] = []
 
@@ -49,7 +43,6 @@ class LinkResource(ModelResource):
         fields = ('title',)
 
     def dehydrate(self, bundle):
-        bundle.data['resource_name'] = self._meta.resource_name
         bundle.data['permalink'] = bundle.obj.get_absolute_url()
         return bundle
 
@@ -60,13 +53,7 @@ class NavbarResource(ModelResource):
         queryset = Navbar.permitted.all()
         resource_name = 'navbar'
 
-    def override_urls(self):
-        return [
-            url(r"^(?P<resource_name>%s)/(?P<slug>[\w-]+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
-        ]
-
     def dehydrate(self, bundle):
-        bundle.data['resource_name'] = self._meta.resource_name
         bundle.data['items'] = []
         for o in bundle.obj.navbarlinkposition_set.all().order_by('position'):
             if o.condition_expression_result(bundle.request):
@@ -78,20 +65,14 @@ class NavbarResource(ModelResource):
                 bundle.data['items'].append(b)
         return bundle
 
- 
+
 class MenuResource(ModelResource):
 
     class Meta:
         queryset = Menu.permitted.all()
         resource_name = 'menu'
 
-    def override_urls(self):
-        return [
-            url(r"^(?P<resource_name>%s)/(?P<slug>[\w-]+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
-        ]
-
     def dehydrate(self, bundle):
-        bundle.data['resource_name'] = self._meta.resource_name
         bundle.data['items'] = []
         for o in bundle.obj.menulinkposition_set.all().order_by('position'):
             if o.condition_expression_result(bundle.request):
@@ -102,7 +83,7 @@ class MenuResource(ModelResource):
                 b = r.full_dehydrate(r.build_bundle(o.link, request=bundle.request))
                 bundle.data['items'].append(b)
         return bundle
-  
+
 
 class TileResource(ModelResource):
 
@@ -111,7 +92,6 @@ class TileResource(ModelResource):
         resource_name = 'tile'
 
     def dehydrate(self, bundle):
-        bundle.data['resource_name'] = self._meta.resource_name
         bundle.data['content'] = ''
 
         tile = bundle.obj
@@ -140,7 +120,6 @@ class ColumnResource(ModelResource):
         resource_name = 'column'
 
     def dehydrate(self, bundle):
-        bundle.data['resource_name'] = self._meta.resource_name
         tiles = []
         for tile_obj in bundle.obj.tiles:
             r = TileResource()
@@ -157,7 +136,6 @@ class RowResource(ModelResource):
         resource_name = 'row'
 
     def dehydrate(self, bundle):
-        bundle.data['resource_name'] = self._meta.resource_name
         columns = []
         for column_obj in bundle.obj.columns:
             r = ColumnResource()
@@ -173,13 +151,7 @@ class PageResource(ModelResource):
         queryset = Page.permitted.all()
         resource_name = 'page'
 
-    def override_urls(self):
-        return [
-            url(r"^(?P<resource_name>%s)/(?P<slug>[\w-]+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
-        ]
-
     def dehydrate(self, bundle):
-        bundle.data['resource_name'] = self._meta.resource_name
         rows = []
         for row_obj in bundle.obj.rows_by_block_name['content']:
             r = RowResource()
@@ -188,6 +160,7 @@ class PageResource(ModelResource):
         bundle.data['rows'] = rows
         return bundle
 
+
 class BlogPostResource(ModelResource):
 
     class Meta:
@@ -195,5 +168,4 @@ class BlogPostResource(ModelResource):
         resource_name = 'blogpost'
 
     def dehydrate(self, bundle):
-        bundle.data['resource_name'] = self._meta.resource_name
         return bundle
