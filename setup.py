@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='2.0.0a5',
+    version='2.0.0',
     description='Jmbo Foundry ties together the various Jmbo products enabling you to rapidly build multilingual web and mobi sites with the minimum amount of code and customization.',
     long_description=open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -29,10 +29,10 @@ setup(
         'django-snippetscream',
 
         # These Jmbo apps are always part of Foundry
-        'jmbo==2.0.0a2',
+        'jmbo>=2.0.0',
         'jmbo-analytics',
-        'jmbo-contact==2.0.0a2',
-        'jmbo-post==2.0.0a2',
+        'jmbo-contact>=2.0.0',
+        'jmbo-post>=2.0.0',
 
         # Python libraries
         'BeautifulSoup',
@@ -46,14 +46,14 @@ setup(
     tests_require=[
         # Foundry provides high-level testing tools for other content types
         'jmbo-banner>=0.6',
-        'jmbo-calendar==2.0.0a1',
-        'jmbo-chart==2.0.0a1',
+        'jmbo-calendar>=2.0.0',
+        'jmbo-chart>=2.0.0',
         #'jmbo-competition',
-        'jmbo-downloads==2.0.0a1',
-        #'jmbo-friends==2.0.0a1',   # add back on 2.0.0a2 release. Circular thing.
-        'jmbo-gallery==2.0.0a1',
-        'jmbo-music==2.0.0a1',
-        'jmbo-poll==2.0.0a1',
+        'jmbo-downloads>=2.0.0',
+        #'jmbo-friends==2.0.0a1',   # add back when friends gets a stable release
+        'jmbo-gallery>=2.0.0',
+        'jmbo-music>=2.0.0',
+        'jmbo-poll>=2.0.0',
         #'jmbo-sitemap>=0.1',
         #'jmbo-show>=0.2',
         #'jmbo-twitter',
