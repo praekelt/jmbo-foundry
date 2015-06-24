@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+2.0.1
+-----
 #. Change position of api in urls.py so resource registration works properly.
 
 2.0.0
