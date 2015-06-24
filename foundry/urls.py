@@ -10,8 +10,6 @@ from django.views.generic.base import RedirectView
 
 from preferences import preferences
 from jmbo.urls import v1_api
-# Trivial imports so resource registration works
-import post.urls
 
 from foundry.models import Page
 from foundry import views, forms
@@ -56,7 +54,6 @@ urlpatterns = patterns('',
     (r'^post/', include('post.urls')),
     (r'^simple-autocomplete/', include('simple_autocomplete.urls')),
     (r'^jmbo-analytics/', include('jmbo_analytics.urls')),
-    (r'^api/', include(v1_api.urls)),
     url(r'social-auth', include('social_auth.urls')),
 
     (r'^admin/', include(admin.site.urls)),
@@ -434,6 +431,8 @@ if "poll" in settings.INSTALLED_APPS:
     urlpatterns += patterns('', (r'^poll/', include('poll.urls')))
 if "show" in settings.INSTALLED_APPS:
     urlpatterns += patterns('', (r'^show/', include('show.urls')))
+if "video" in settings.INSTALLED_APPS:
+    urlpatterns += patterns('', (r'^video/', include('video.urls')))
 if "jmbo_sitemap" in settings.INSTALLED_APPS:
     from jmbo_sitemap import sitemaps
     from jmbo_sitemap.views import sitemap, SitemapHTMLView
@@ -453,6 +452,9 @@ if "jmbo_sitemap" in settings.INSTALLED_APPS:
             name='html-sitemap'
         ),
     )
+
+# Add api last because all resources are registered at this point
+urlpatterns += patterns('', (r'^api/', include(v1_api.urls)))
 
 urlpatterns += staticfiles_urlpatterns()
 

@@ -22,14 +22,15 @@
 -e git+git@github.com:praekelt/jmbo-contact.git@develop#egg=jmbo-contact
 -e git+git@github.com:praekelt/jmbo-downloads.git@develop#egg=jmbo-downloads
 -e git+git@github.com:praekelt/jmbo-gallery.git@develop#egg=jmbo-gallery
--e git+git@github.com:praekelt/jmbo-foundry.git@feature/django-1.6#egg=jmbo-foundry
+-e git+git@github.com:praekelt/jmbo-foundry.git@develop#egg=jmbo-foundry
 -e git+git@github.com:praekelt/jmbo-friends.git@develop#egg=jmbo-friends
 -e git+git@github.com:praekelt/jmbo-music.git@develop#egg=jmbo-music
 -e git+git@github.com:praekelt/jmbo-poll.git@develop#egg=jmbo-poll
 -e git+git@github.com:praekelt/jmbo-post.git@develop#egg=jmbo-post
 -e git+git@github.com:praekelt/jmbo-show.git@feature/django-1.6#egg=jmbo-show
--e git+git@github.com:praekelt/jmbo-sitemap.git@feature/django-1.6#egg=jmbo-sitemap
+-e git+git@github.com:praekelt/jmbo-sitemap.git@develop#egg=jmbo-sitemap
 -e git+git@github.com:praekelt/jmbo-twitter.git@feature/django-1.6#egg=jmbo-twitter
+-e git+git@github.com:praekelt/jmbo-video.git@develop#egg=jmbo-video
 -e git+git@github.com:hedleyroos/django-layers.git@develop#egg=django-layers
 
 psycopg2==2.5.4

@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Change position of api in urls.py so resource registration works properly.
+
 2.0.0
 -----
 #. Simplify API to use primary keys.
