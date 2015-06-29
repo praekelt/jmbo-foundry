@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Do not attempt to call photologue getters in template if image is not set.
+
 2.0.1
 -----
 #. Change position of api in urls.py so resource registration works properly.

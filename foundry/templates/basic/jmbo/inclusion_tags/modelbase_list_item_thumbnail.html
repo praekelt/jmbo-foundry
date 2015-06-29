@@ -1,11 +1,13 @@
 {% load jmbo_template_tags foundry_tags i18n %}
 
 {% jmbocache 3600 'modelbase-list-item-thumbnail-inclusion' object.id object.modified %}
-    <div class="image">
-        <a href="{{ object.get_absolute_url_categorized }}" title="{{ object.title|escape }}">
-            <img src="{{ object.get_modelbase_list_item_thumbnail_url }}" alt="{{ object.title }}" />
-        </a>
-    </div>
+    {% if object.image %}
+        <div class="image">
+            <a href="{{ object.get_absolute_url_categorized }}" title="{{ object.title|escape }}">
+                <img src="{{ object.get_modelbase_list_item_thumbnail_url }}" alt="{{ object.title }}" />
+            </a>
+        </div>
+    {% endif %}
 
     <div class="title">
         {% if object.categories.all.exists %}<span class="category">{{ object.categories.all|join_titles }}:</span>{% endif %}
