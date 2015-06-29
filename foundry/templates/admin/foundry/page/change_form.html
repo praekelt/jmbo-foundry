@@ -1,7 +1,9 @@
 {% extends "admin/change_form.html" %}
+{% load admin_static %}
 
 {% block extrahead %}
     {{ block.super }}
+
     <style type="text/css">
         ul#rows {
             list-style-type: none;
@@ -94,7 +96,7 @@
 
             {% if adminform.form.instance.id %}
             // New row. No dialog.
-            $('a#new-row').click(function(event){
+            $(document).on('click', 'a#new-row', function(event){
                 event.preventDefault();
                 $.ajax({
                     url:'{% url "admin-row-create-ajax" %}',
@@ -119,7 +121,7 @@
             {% endif %}
 
             // New column. Launch dialog.
-            $('a.new-column').click(function(event){
+            $(document).on('click', 'a.new-column', function(event){
                 event.preventDefault();
                 var row = $(this).parent();
                 // Create new column. We need the id.
@@ -138,7 +140,7 @@
             });
 
             // New tile. No dialog. Yet.
-            $('a.new-tile').click(function(event){
+            $(document).on('click', 'a.new-tile', function(event){
                 event.preventDefault();
                 var column = $(this).parent();
                 $.ajax({
@@ -168,7 +170,7 @@
 
             {% if adminform.form.instance.id %}
             // Edit row. Launch dialog.
-            $('a.row-edit-launcher').click(function(event){
+            $(document).on('click', 'a.row-edit-launcher', function(event){
                 event.preventDefault();
                 var popup = $('#edit-dialog');
                 var li = $(this).parent();
@@ -187,7 +189,7 @@
             });
 
             // Edit column. Launch dialog.
-            $('a.column-edit-launcher').click(function(event){
+            $(document).on('click', 'a.column-edit-launcher', function(event){
                 event.preventDefault();
                 var popup = $('#edit-dialog');
                 var li = $(this).parent();
@@ -206,7 +208,7 @@
             });
 
             // Edit tile. Launch dialog.
-            $('a.tile-edit-launcher').click(function(event){
+            $(document).on('click', 'a.tile-edit-launcher', function(event){
                 event.preventDefault();
                 var popup = $('#edit-dialog');
                 var li = $(this).parent();
@@ -224,7 +226,7 @@
             {% endif %}
 
             // Delete row
-            $('a.row-delete').click(function(event){
+            $(document).on('click', 'a.row-delete', function(event){
                 event.preventDefault();
                 if (window.confirm('Delete this row?'))
                 {
@@ -236,7 +238,7 @@
             });
 
             // Delete column
-            $('a.column-delete').click(function(event){
+            $(document).on('click', 'a.column-delete', function(event){
                 event.preventDefault();
                 if (window.confirm('Delete this column?'))
                 {
@@ -248,7 +250,7 @@
             });
 
             // Delete tile
-            $('a.tile-delete').click(function(event){
+            $(document).on('click', 'a.tile-delete', function(event){
                 event.preventDefault();
                 if (window.confirm('Delete this tile?'))
                 {
@@ -260,7 +262,7 @@
             });
 
             // Intercept row edit form submit
-            $('form#row-edit-form').live('submit', function(event){
+            $(document).on('submit', 'form#row-edit-form', function(event){
                 event.preventDefault();
                 var form = $(this);
                 var url = $(this).attr('action');
@@ -290,7 +292,7 @@
             });
 
             // Intercept column create form submit
-            $('form#column-create-form').live('submit', function(event){
+            $(document).on('submit', 'form#column-create-form', function(event){
                 event.preventDefault();
                 var form = $(this);
                 var url = $(this).attr('action');
@@ -325,7 +327,7 @@
             });
 
             // Intercept column edit form submit
-            $('form#column-edit-form').live('submit', function(event){
+            $(document).on('submit', 'form#column-edit-form', function(event){
                 event.preventDefault();
                 var form = $(this);
                 var url = $(this).attr('action');
@@ -352,7 +354,7 @@
             });
 
             // Intercept tile edit form submit
-            $('form#tile-edit-form').live('submit', function(event){
+            $(document).on('submit', 'form#tile-edit-form', function(event){
                 event.preventDefault();
                 var form = $(this);
                 var url = $(this).attr('action');
