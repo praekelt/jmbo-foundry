@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+2.0.2
+-----
 #. Do not attempt to call photologue getters in template if image is not set.
 #. Page editor now uses jQuery 1.10.2 and jQuery UI 1.10.4.
 
