@@ -228,7 +228,7 @@ AUTHENTICATION_BACKENDS = (
 COMMENTS_APP = 'foundry'
 
 SIMPLE_AUTOCOMPLETE = {
-    'auth.user': {'threshold': 20},
+    'auth.user': {'threshold': 20, 'search_field': 'username'},
     'category.category': {'threshold':20},
     'jmbo.modelbase': {
         'threshold': 20,
