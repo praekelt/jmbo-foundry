@@ -531,8 +531,8 @@ def set_session_expiry(sender, request, user, **kwargs):
     # Override session expiry date. We effectively ignore
     # SESSION_EXPIRE_AT_BROWSER_CLOSE.
     if request.REQUEST.get('remember_me'):
-        now = timezone.now()
-        expires = now.replace(year=now.year+10)
-        request.session.set_expiry(expires)
+        # The PickleSerializer had security issues and was removed in 1.6, so
+        # we can't pass a datetime object anymore.
+        request.session.set_expiry(86400*365)
     else:
         request.session.set_expiry(0)
