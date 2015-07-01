@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.3
+-----
+#. Work around deprecated PickleSerializer when setting session expiry.
+#. Defensive code in member detail view.
+
 2.0.2
 -----
 #. Do not attempt to call photologue getters in template if image is not set.
