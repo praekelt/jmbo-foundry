@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+2.0.3
+-----
 #. Work around deprecated PickleSerializer when setting session expiry.
 #. Defensive code in member detail view.
 
