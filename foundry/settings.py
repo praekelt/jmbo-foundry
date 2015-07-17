@@ -171,6 +171,7 @@ INSTALLED_APPS = (
     'social_auth',
     'south',
     'tastypie',
+    'ultracache',
 
     'django.contrib.auth',
     'django.contrib.comments',
