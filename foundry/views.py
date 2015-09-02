@@ -20,7 +20,7 @@ from django.contrib import messages
 from django.contrib.sites.models import get_current_site
 from django.template import Template
 from django.views.decorators.cache import cache_page
-from django.views.decorators.csrf import requires_csrf_token
+from django.views.decorators.csrf import requires_csrf_token, csrf_exempt
 from django.dispatch import receiver
 from django.contrib.auth.signals import user_logged_in
 from django.db.models import Q
@@ -164,6 +164,7 @@ def page_detail(request, slug):
     return render_to_response('foundry/page_detail.html', extra, context_instance=RequestContext(request))
 
 
+@csrf_exempt
 def search(request):
     if request.method == 'POST':
         form = SearchForm(request.POST)

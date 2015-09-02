@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Remove CSRF protection from search form since searcging is always a readonly operation.
+
 2.0.3
 -----
 #. Work around deprecated PickleSerializer when setting session expiry.
