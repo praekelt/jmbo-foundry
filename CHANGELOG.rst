@@ -3,7 +3,7 @@ Changelog
 
 next
 ----
-#. Remove CSRF protection from search form since searcging is always a readonly operation.
+#. Remove CSRF protection from search form since searching is always a readonly operation.
 
 2.0.3
 -----
