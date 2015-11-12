@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Preferences &mdash; jmbo-foundry 2.0.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.0.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jmbo-foundry 2.0.6 documentation" href="index.html" />
+    <link rel="next" title="Listings" href="listings.html" />
+    <link rel="prev" title="Sites" href="sites.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="listings.html" title="Listings"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="sites.html" title="Sites"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">jmbo-foundry 2.0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="preferences">
+<h1>Preferences<a class="headerlink" href="#preferences" title="Permalink to this headline">¶</a></h1>
+<p>Preferences can be published to certain sites.</p>
+<div class="section" id="general-preferences">
+<h2>General preferences<a class="headerlink" href="#general-preferences" title="Permalink to this headline">¶</a></h2>
+<p>Check <cite>Private site</cite> to make the site accessible only to visitors who are
+logged in.</p>
+<p>Check <cite>Show age gateway</cite> to enable the age gateway for the site. Visitors must
+confirm their age before they are allowed to browse the site.</p>
+<p><cite>Exempted URLs</cite> are URLs which must always be visible regardless of <cite>Private
+site</cite> or <cite>Age gateway</cite> settings. Certain URLs like <cite>/login</cite> are visible by
+default and do not need to be listed.</p>
+<p>The <cite>Analytics tags</cite> field may contain javascript. There is a fallback to
+enable analytics on low-end browsers but it is not configurable through the
+web. See the <cite>settings.py</cite> section.</p>
+</div>
+<div class="section" id="registration-preferences">
+<h2>Registration preferences<a class="headerlink" href="#registration-preferences" title="Permalink to this headline">¶</a></h2>
+<p>You can select which fields to display on the registration form. Some fields
+(eg. <cite>username</cite>) are always visible on the registration form and cannot be
+removed.</p>
+<p>You can select a subset of the displayed fields to be required. Fields which
+are absolutely required (eg. <cite>username</cite>) cannot be set to be optional. For
+instance, if the site users my log in using their mobile number then set
+<cite>mobile_number</cite> as a required field.</p>
+<p>Some fields may need to be unique, especially those that may be used to log in
+to the site. Using the mobile number example above you should set
+<cite>mobile_number</cite> to be a unique field. It is important to decide beforehand
+which fields must be unique since it is difficult to remove duplicates if you
+change this setting. An exeption is raised if you attempt to change this
+setting and duplicates are detected (friendlier validation still to be added).</p>
+</div>
+<div class="section" id="login-preferences">
+<h2>Login preferences<a class="headerlink" href="#login-preferences" title="Permalink to this headline">¶</a></h2>
+<p>Users typically log in to a normal site with their username or email address,
+whereas a mobile number is a natural login field for a mobile site. Choose from
+<cite>Username only</cite>, <cite>Email address only</cite>, <cite>Mobile number only</cite> or <cite>Username or
+email address</cite>.</p>
+</div>
+<div class="section" id="password-reset-preferences">
+<h2>Password reset preferences<a class="headerlink" href="#password-reset-preferences" title="Permalink to this headline">¶</a></h2>
+<p>When a user loses his password he may request a password reset. Normally this
+is accomplished by sending an email to the user, but in the case of a mobile
+site it is desirable to send a text. Choose between <cite>Email address</cite> or <cite>Mobile
+number</cite>. Note that a password reset request does not automatically generate a
+new password for the user since this may lead to malicious people disabling
+users&#8217; accounts.</p>
+</div>
+<div class="section" id="naughty-word-preferences">
+<h2>Naughty word preferences<a class="headerlink" href="#naughty-word-preferences" title="Permalink to this headline">¶</a></h2>
+<p>You can set a list of weighted words. The <cite>report_naughty_words</cite> management
+command identifies potentially offensive comments. An email containing
+clickable links for approval or deletion is sent to the <cite>Email recipients</cite>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Preferences</a><ul>
+<li><a class="reference internal" href="#general-preferences">General preferences</a></li>
+<li><a class="reference internal" href="#registration-preferences">Registration preferences</a></li>
+<li><a class="reference internal" href="#login-preferences">Login preferences</a></li>
+<li><a class="reference internal" href="#password-reset-preferences">Password reset preferences</a></li>
+<li><a class="reference internal" href="#naughty-word-preferences">Naughty word preferences</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="sites.html"
+                        title="previous chapter">Sites</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="listings.html"
+                        title="next chapter">Listings</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/preferences.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="listings.html" title="Listings"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="sites.html" title="Sites"
+             >previous</a> |</li>
+        <li><a href="index.html">jmbo-foundry 2.0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Praekelt.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

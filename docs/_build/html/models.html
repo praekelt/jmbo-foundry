@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ModelBase &mdash; jmbo-foundry 2.0.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.0.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jmbo-foundry 2.0.6 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">jmbo-foundry 2.0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="modelbase">
+<h1>ModelBase<a class="headerlink" href="#modelbase" title="Permalink to this headline">¶</a></h1>
+<p>Jmbo itself has no content type. For our purposes assume a trivial content type
+called Trivial Content which subclasses ModelBase.</p>
+<img alt="_images/admin.png" src="_images/admin.png" />
+<ol class="arabic">
+<li><p class="first">Title is self-explanatory.</p>
+</li>
+<li><p class="first">Subtitle is an optional field that is only visible in the admin interface.
+If you have two items with the same title (a common case in multilingual sites)
+then add extra text in the subtitle to distinguish between the items.</p>
+</li>
+<li><p class="first">Description is an optional field. It is good practice to set it since
+sites like Facebook read it when content is shared.</p>
+</li>
+<li><p class="first">See below.</p>
+</li>
+<li><p class="first">See below.</p>
+</li>
+<li><p class="first">You should always attempt to set an image since sites look dull without them!
+All popular formats up to 1MB in size are supported. An aspect ratio of 4:3
+is preferred but an attempt is made to convert the uploaded image into
+a 4:3 format. Applications may override this aspect ratio as they wish.</p>
+<p><tt class="docutils literal"><span class="pre">Crop</span> <span class="pre">from</span></tt> and <tt class="docutils literal"><span class="pre">Effect</span></tt> are for advanced use. <tt class="docutils literal"><span class="pre">Crop</span> <span class="pre">from</span></tt> is used when the
+default cropping algorithm is eg. chopping a person&#8217;s head off.</p>
+</li>
+<li><p class="first">See below.</p>
+</li>
+<li><p class="first">See below.</p>
+</li>
+<li><p class="first">Image overrides are for advanced use. The image you upload in 6 is
+converted behind the scenes into potentially many sizes. If the algorithm
+produces undesirable results you can override each size as required.</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">Save</span> <span class="pre">and</span> <span class="pre">publish</span></tt> saves the item and makes it publicly accessible.</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">Save</span> <span class="pre">and</span> <span class="pre">add</span> <span class="pre">another</span></tt> saves the item. You are redirected to a screen to
+add a new trivial content item.</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">Save</span> <span class="pre">and</span> <span class="pre">continue</span> <span class="pre">editing</span></tt> saves the item. You stay on the edit screen.</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">Save</span></tt> saves the item. You are redirected to a listing of all trivial
+content items.</p>
+</li>
+</ol>
+<img alt="_images/publishing.png" src="_images/publishing.png" />
+<ol class="arabic simple">
+<li>Jmbo uses the Django sites framework. This means items can be selectively
+published to one or more sites. Select the applicable sites, or use the
+shortcuts to select a group of sites.</li>
+<li><tt class="docutils literal"><span class="pre">Publish</span> <span class="pre">on</span></tt> is an optional date on which to publish the item. If you leave
+it empty you must publish the item manually, eg. by clicking <tt class="docutils literal"><span class="pre">Save</span> <span class="pre">and</span>
+<span class="pre">publish</span></tt>.</li>
+<li><tt class="docutils literal"><span class="pre">Retract</span> <span class="pre">on</span></tt> is an optional date on which to retract the item. If you leave
+it empty you must unpublish the item manually, eg. by clicking <tt class="docutils literal"><span class="pre">Save</span> <span class="pre">and</span>
+<span class="pre">unpublish</span></tt>.</li>
+<li>Publishers is marked for deprecation. The idea was to publish an item to eg. Facebook. Unfortunately
+those platforms often have unstable API&#8217;s, making it impractical.</li>
+</ol>
+<img alt="_images/meta.png" src="_images/meta.png" />
+<ol class="arabic simple">
+<li>Jmbo uses categories from <tt class="docutils literal"><span class="pre">django-category</span></tt>. Categorizing an item enables
+you to display it in a certain context. An example is a listing (as defined by
+<tt class="docutils literal"><span class="pre">jmbo-foundry</span></tt>) of all items in a category.</li>
+<li>The primary category is considered the most important category. Once again it enables
+you do display the item in a certain context.</li>
+<li>Freeform tagging of an item allows more ways of searching for it.</li>
+<li><tt class="docutils literal"><span class="pre">Created</span> <span class="pre">date</span> <span class="pre">and</span> <span class="pre">time</span></tt> is when the item was created. If you leave it
+empty it is automatically set to the current time.</li>
+<li>The owner of the item. The dropdown may change into an autocomplete field
+if there are many people to choose from.</li>
+</ol>
+<img alt="_images/commenting-liking.png" src="_images/commenting-liking.png" />
+<ol class="arabic simple">
+<li>Enable commenting for this item. Comments will not display when disabled.</li>
+<li>Enable anonymous commenting for this item.</li>
+<li>Close commenting for this item. Comments will still display, but users won&#8217;t be able to add new comments.</li>
+<li>Enable liking for this item. Likes will not display when disabled.</li>
+<li>Enable anonymous liking for this item.</li>
+<li>Close liking for this item. Likes will still display, but users won&#8217;t be able to add new likes.</li>
+</ol>
+<div class="figure align-center">
+<img alt="_images/content.png" src="_images/content.png" />
+<p class="caption">A trivial item as it is seen by the public.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/models.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="index.html">jmbo-foundry 2.0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Praekelt.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
