@@ -153,7 +153,7 @@ INSTALLED_APPS = (
     'photologue',
     'secretballot',
 
-    'atlas',
+    #'atlas',
     'captcha',
     'ckeditor',
     'compressor',

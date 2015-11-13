@@ -10,12 +10,12 @@ env:
   - DJANGO=Django==1.6.11
 
 install:
-  - sudo apt-get install -y postgis build-essential libproj0 libproj-dev libgeos-dev libgdal-dev libgdal1h postgresql-9.4-postgis-2.1
+  #- sudo apt-get install -y postgis build-essential libproj0 libproj-dev libgeos-dev libgdal-dev libgdal1h postgresql-9.4-postgis-2.1
   - pip install -q $DJANGO --use-mirrors
 
 before_script:
     - psql -U postgres -c "create database jmbo_spatial encoding 'UTF8'"
-    - psql -U postgres jmbo_spatial -c "CREATE EXTENSION postgis;"
-    - psql -U postgres jmbo_spatial -c "CREATE EXTENSION postgis_topology;"
+    #- psql -U postgres jmbo_spatial -c "CREATE EXTENSION postgis;"
+    #- psql -U postgres jmbo_spatial -c "CREATE EXTENSION postgis_topology;"
 
 script: python setup.py test
