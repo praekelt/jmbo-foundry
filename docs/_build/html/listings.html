@@ -72,6 +72,42 @@ a listing of polls. Polls you have already voted on are read-only, and the
 others may change content once you vote on them. The content type being
 represented as a widget needs to provide code for this functionality.</p>
 </div>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<p>A listing iterates over a set of items and offloads the rendering of each item.
+This is easier to understand looking at the <tt class="docutils literal"><span class="pre">Horizontal</span></tt> style.</p>
+<p>A snippet from <tt class="docutils literal"><span class="pre">templates/basic/foundry/inclusion_tags/listing_horizontal.html</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>{% for object in object_list %}
+    &lt;div class=&quot;item {% if forloop.first %}first{% endif %} {% if forloop.last %}last{% endif %} item-{{ object.class_name|lower }}&quot;&gt;
+        {% render_object object.as_leaf_class &quot;list_item_ipod&quot; %}
+        &lt;div class=&quot;clear&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+{% endfor %}
+</pre></div>
+</div>
+<p>Note how the template only cares about the layout of the items. Actual rendering of each
+item is offloaded to <tt class="docutils literal"><span class="pre">{%</span> <span class="pre">render_object</span> <span class="pre">object.as_leaf_class</span> <span class="pre">&quot;list_item_ipod&quot;</span> <span class="pre">%}</span></tt>.
+The logic behind <tt class="docutils literal"><span class="pre">render_object</span></tt> is fully documented in Jmbo, but in summary the
+naming convention is <tt class="docutils literal"><span class="pre">templates/basic/{{</span> <span class="pre">app_label</span> <span class="pre">}}/inclusion_tags/{{</span> <span class="pre">model_name</span> <span class="pre">}}_list_item_ipod.html</span></tt>.
+If you don&#8217;t have a specific template for a model then it falls back to
+<tt class="docutils literal"><span class="pre">templates/basic/jmbo/inclusion_tags/modelbase_list_item_ipod.html</span></tt>.</p>
+<p>The convention provides enough flexibility to combine different content types in the same
+listing and have each item decide how to render itself.</p>
+</div>
+<div class="section" id="custom-listings">
+<h2>Custom listings<a class="headerlink" href="#custom-listings" title="Permalink to this headline">¶</a></h2>
+<p>Jmfo Foundry provides many standard listings but in many cases you may need to
+create your own listing. Create <tt class="docutils literal"><span class="pre">templatetags/listing_styles.py</span></tt> in your product:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">foundry.templatetags.listing_styles</span> <span class="kn">import</span> <span class="n">AbstractBaseStyle</span>
+
+
+<span class="k">class</span> <span class="nc">MyListing</span><span class="p">(</span><span class="n">AbstractBaseStyle</span><span class="p">):</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s">&quot;myproduct/inclusion_tags/listing_mylisting.html&quot;</span>
+</pre></div>
+</div>
+<p>The listing style is autodetected and can be used in the admin interface and
+templates. Naming your listing is the hardest part!</p>
+</div>
 </div>
 
 
@@ -84,6 +120,8 @@ represented as a widget needs to provide code for this functionality.</p>
   <ul>
 <li><a class="reference internal" href="#">Listings</a><ul>
 <li><a class="reference internal" href="#listing-styles">Listing styles</a></li>
+<li><a class="reference internal" href="#implementation">Implementation</a></li>
+<li><a class="reference internal" href="#custom-listings">Custom listings</a></li>
 </ul>
 </li>
 </ul>
