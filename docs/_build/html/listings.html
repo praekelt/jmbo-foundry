@@ -91,12 +91,14 @@ The logic behind <tt class="docutils literal"><span class="pre">render_object</s
 naming convention is <tt class="docutils literal"><span class="pre">templates/basic/{{</span> <span class="pre">app_label</span> <span class="pre">}}/inclusion_tags/{{</span> <span class="pre">model_name</span> <span class="pre">}}_list_item_ipod.html</span></tt>.
 If you don&#8217;t have a specific template for a model then it falls back to
 <tt class="docutils literal"><span class="pre">templates/basic/jmbo/inclusion_tags/modelbase_list_item_ipod.html</span></tt>.</p>
+<p>Why the seemingly strange name &#8220;ipod&#8221;? Because the template needs to describe
+what it looks like. We try to use relatable names.</p>
 <p>The convention provides enough flexibility to combine different content types in the same
 listing and have each item decide how to render itself.</p>
 </div>
 <div class="section" id="custom-listings">
 <h2>Custom listings<a class="headerlink" href="#custom-listings" title="Permalink to this headline">¶</a></h2>
-<p>Jmfo Foundry provides many standard listings but in many cases you may need to
+<p>Jmfo Foundry provides many standard listings but you may need to
 create your own listing. Create <tt class="docutils literal"><span class="pre">templatetags/listing_styles.py</span></tt> in your product:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">foundry.templatetags.listing_styles</span> <span class="kn">import</span> <span class="n">AbstractBaseStyle</span>
 

@@ -53,6 +53,9 @@ naming convention is ``templates/basic/{{ app_label }}/inclusion_tags/{{ model_n
 If you don't have a specific template for a model then it falls back to
 ``templates/basic/jmbo/inclusion_tags/modelbase_list_item_ipod.html``.
 
+Why the seemingly strange name "ipod"? Because the template needs to describe
+what it looks like. We try to use relatable names.
+
 The convention provides enough flexibility to combine different content types in the same
 listing and have each item decide how to render itself.
 
