@@ -74,3 +74,19 @@ create your own listing. Create ``templatetags/listing_styles.py`` in your produ
 
 The listing style is autodetected and can be used in the admin interface and
 templates. Naming your listing is the hardest part!
+
+Template tags
+*************
+
+Render a listing directly in a template::
+
+    {% listing "my-listing-slug" %}
+
+Render a listing on the fly::
+
+    {% listing queryset style="Horizontal" title="Foo" %}
+
+Changing an existing listing's style is a bit more involved::
+
+    {% get_listing_queryset "my-listing-slug" as "qs" %}
+    {% listing qs style="Vertical" title="Foo" %}

@@ -110,6 +110,22 @@ create your own listing. Create <tt class="docutils literal"><span class="pre">t
 <p>The listing style is autodetected and can be used in the admin interface and
 templates. Naming your listing is the hardest part!</p>
 </div>
+<div class="section" id="template-tags">
+<h2>Template tags<a class="headerlink" href="#template-tags" title="Permalink to this headline">¶</a></h2>
+<p>Render a listing directly in a template:</p>
+<div class="highlight-python"><div class="highlight"><pre>{% listing &quot;my-listing-slug&quot; %}
+</pre></div>
+</div>
+<p>Render a listing on the fly:</p>
+<div class="highlight-python"><div class="highlight"><pre>{% listing queryset style=&quot;Horizontal&quot; title=&quot;Foo&quot; %}
+</pre></div>
+</div>
+<p>Changing an existing listing&#8217;s style is a bit more involved:</p>
+<div class="highlight-python"><div class="highlight"><pre>{% get_listing_queryset &quot;my-listing-slug&quot; as &quot;qs&quot; %}
+{% listing qs style=&quot;Vertical&quot; title=&quot;Foo&quot; %}
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -124,6 +140,7 @@ templates. Naming your listing is the hardest part!</p>
 <li><a class="reference internal" href="#listing-styles">Listing styles</a></li>
 <li><a class="reference internal" href="#implementation">Implementation</a></li>
 <li><a class="reference internal" href="#custom-listings">Custom listings</a></li>
+<li><a class="reference internal" href="#template-tags">Template tags</a></li>
 </ul>
 </li>
 </ul>
