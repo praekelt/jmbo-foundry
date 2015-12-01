@@ -212,7 +212,10 @@ items are visible across all pages when navigating the listing."),
         widgets = {
             'sites': SitesGroupsWidget,
             'view_modifier': forms.widgets.RadioSelect,
-            'style': RadioImageSelect(choices=(('x','x'),('y','y'))),
+            'style': RadioImageSelect(
+                choices=(('x','x'),('y','y')),
+                attrs={'image_attrs': {'style': 'max-height: 96px;'}}
+            ),
         }
 
     def __init__(self, *args, **kwargs):
