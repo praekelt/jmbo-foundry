@@ -33,7 +33,7 @@ from foundry.models import Listing, Link, MenuLinkPosition, Menu, \
     ViewProxy, ListingContent, ListingPinned
 from foundry.widgets import SelectCommaWidget, DragDropOrderingWidget, RadioImageSelect
 from foundry.utils import get_view_choices
-from foundry.templatetags.listing_styles import LISTING_CLASSES
+from foundry.templatetags.listing_styles import LISTING_CLASSES, LISTING_MAP
 
 
 BLOGPOST_PREVIEW_SIZE = 256
@@ -302,13 +302,21 @@ items are visible across all pages when navigating the listing."),
 class ListingAdmin(admin.ModelAdmin):
     form = ListingAdminForm
     prepopulated_fields = {'slug': ('title',)}
-    list_display = ('title', 'subtitle', '_get_absolute_url')
+    list_display = ('title', 'subtitle', 'style', '_layout', '_get_absolute_url')
 
     def _get_absolute_url(self, obj):
         url = obj.get_absolute_url()
         return '<a href="%s" target="public">%s</a>' % (url, url)
     _get_absolute_url.short_description = 'Permalink'
     _get_absolute_url.allow_tags = True
+
+    def _layout(self, obj):
+        pth = getattr(LISTING_MAP[obj.style], 'image_path', None)
+        if pth:
+            return '<img src="%s%s" style="max-height: 96px;" />' % (settings.STATIC_URL, pth)
+        return ''
+    _layout.short_description = 'Layout'
+    _layout.allow_tags = True
 
 
 class GeneralPreferencesAdmin(PreferencesAdmin):
