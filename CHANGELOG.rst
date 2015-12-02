@@ -1,6 +1,10 @@
 Changelog
 =========
 
+2.0.5
+-----
+#. Cosmetic change. Listing image background clashed with alternate row colour in Django admin.
+
 2.0.4
 -----
 #. Remove CSRF protection from search form since searching is always a readonly operation.
