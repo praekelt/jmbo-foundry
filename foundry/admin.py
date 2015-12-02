@@ -214,7 +214,7 @@ items are visible across all pages when navigating the listing."),
             'view_modifier': forms.widgets.RadioSelect,
             'style': RadioImageSelect(
                 choices=(('x','x'),('y','y')),
-                attrs={'image_attrs': {'style': 'max-height: 96px;'}}
+                attrs={'image_attrs': {'style': 'max-width: 128px;'}}
             ),
         }
 
@@ -316,7 +316,7 @@ class ListingAdmin(admin.ModelAdmin):
     def _layout(self, obj):
         pth = getattr(LISTING_MAP[obj.style], 'image_path', None)
         if pth:
-            return '<img src="%s%s" style="max-height: 96px;" />' % (settings.STATIC_URL, pth)
+            return '<img src="%s%s" style="max-width: 128px;" />' % (settings.STATIC_URL, pth)
         return ''
     _layout.short_description = 'Layout'
     _layout.allow_tags = True
