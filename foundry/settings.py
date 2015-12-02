@@ -41,8 +41,8 @@ TEMPLATE_DEBUG = DEBUG
 DATABASES = {
     'default': {
         # Must use postgis when developing foundry and Jmbo core itself else migrations are wrong
-        'ENGINE': 'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        #'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        #'ENGINE': 'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'foundry16', # Or path to database file if using sqlite3.
         'USER': 'foundry', # Not used with sqlite3.
         'PASSWORD': 'foundry', # Not used with sqlite3.
