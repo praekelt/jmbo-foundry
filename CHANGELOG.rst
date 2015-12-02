@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+2.0.4
+-----
 #. Remove CSRF protection from search form since searching is always a readonly operation.
 #. Improve listing admin UI.
 
