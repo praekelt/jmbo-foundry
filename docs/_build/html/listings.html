@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Listings &mdash; jmbo-foundry 2.0.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.0.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jmbo-foundry 2.0.6 documentation" href="index.html" />
+    <link rel="next" title="Menus" href="menus.html" />
+    <link rel="prev" title="Preferences" href="preferences.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="menus.html" title="Menus"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="preferences.html" title="Preferences"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">jmbo-foundry 2.0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="listings">
+<h1>Listings<a class="headerlink" href="#listings" title="Permalink to this headline">¶</a></h1>
+<p>A <cite>listing</cite> is essentially a stored search that can be rendered in a certain
+style. A listing can be published to certain sites.</p>
+<p><cite>Content type</cite>, <cite>Category</cite> and <cite>Content</cite> are criteria which define the items
+present in the listing. These criteria are optional and logically OR-ed.</p>
+<p><cite>Count</cite> specifies the maximum number of items in the listing.</p>
+<p><cite>Style</cite> is the default way in which the listing is rendered. The default styles are
+vertical, vertical, vertical thumbnail, horizontal, promo and widget. See
+<cite>Listing styles</cite> for detail.</p>
+<p><cite>Items per page</cite> is the number of items to display on a single listing page.</p>
+<div class="section" id="listing-styles">
+<h2>Listing styles<a class="headerlink" href="#listing-styles" title="Permalink to this headline">¶</a></h2>
+<p><cite>Vertical</cite> is a vertical listing with no images.</p>
+<p><cite>Vertical thumbnail</cite> is a vertical listing with images.</p>
+<p><cite>Horizontal</cite> is a side-by-side listing with images. Each item looks like a
+baseball trading card.</p>
+<p><cite>Promo</cite> collates the items in a slideshow.</p>
+<p><cite>Widget</cite> is the most complex. It is used when each item can be interactive, eg.
+a listing of polls. Polls you have already voted on are read-only, and the
+others may change content once you vote on them. The content type being
+represented as a widget needs to provide code for this functionality.</p>
+</div>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<p>A listing iterates over a set of items and offloads the rendering of each item.
+This is easier to understand looking at the <tt class="docutils literal"><span class="pre">Horizontal</span></tt> style.</p>
+<p>A snippet from <tt class="docutils literal"><span class="pre">templates/basic/foundry/inclusion_tags/listing_horizontal.html</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>{% for object in object_list %}
+    &lt;div class=&quot;item {% if forloop.first %}first{% endif %} {% if forloop.last %}last{% endif %} item-{{ object.class_name|lower }}&quot;&gt;
+        {% render_object object.as_leaf_class &quot;list_item_ipod&quot; %}
+        &lt;div class=&quot;clear&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+{% endfor %}
+</pre></div>
+</div>
+<p>Note how the template only cares about the layout of the items. Actual rendering of each
+item is offloaded to <tt class="docutils literal"><span class="pre">{%</span> <span class="pre">render_object</span> <span class="pre">object.as_leaf_class</span> <span class="pre">&quot;list_item_ipod&quot;</span> <span class="pre">%}</span></tt>.
+The logic behind <tt class="docutils literal"><span class="pre">render_object</span></tt> is fully documented in Jmbo, but in summary the
+naming convention is <tt class="docutils literal"><span class="pre">templates/basic/{{</span> <span class="pre">app_label</span> <span class="pre">}}/inclusion_tags/{{</span> <span class="pre">model_name</span> <span class="pre">}}_list_item_ipod.html</span></tt>.
+If you don&#8217;t have a specific template for a model then it falls back to
+<tt class="docutils literal"><span class="pre">templates/basic/jmbo/inclusion_tags/modelbase_list_item_ipod.html</span></tt>.</p>
+<p>Why the seemingly strange name &#8220;ipod&#8221;? Because the template needs to describe
+what it looks like. We try to use relatable names.</p>
+<p>The convention provides enough flexibility to combine different content types in the same
+listing and have each item decide how to render itself.</p>
+</div>
+<div class="section" id="custom-listings">
+<h2>Custom listings<a class="headerlink" href="#custom-listings" title="Permalink to this headline">¶</a></h2>
+<p>Jmfo Foundry provides many standard listings but you may need to
+create your own listing. Create <tt class="docutils literal"><span class="pre">templatetags/listing_styles.py</span></tt> in your product:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">foundry.templatetags.listing_styles</span> <span class="kn">import</span> <span class="n">AbstractBaseStyle</span>
+
+
+<span class="k">class</span> <span class="nc">MyListing</span><span class="p">(</span><span class="n">AbstractBaseStyle</span><span class="p">):</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s">&quot;myproduct/inclusion_tags/listing_mylisting.html&quot;</span>
+</pre></div>
+</div>
+<p>The listing style is autodetected and can be used in the admin interface and
+templates. Naming your listing is the hardest part!</p>
+</div>
+<div class="section" id="template-tags">
+<h2>Template tags<a class="headerlink" href="#template-tags" title="Permalink to this headline">¶</a></h2>
+<p>Render a listing directly in a template:</p>
+<div class="highlight-python"><div class="highlight"><pre>{% listing &quot;my-listing-slug&quot; %}
+</pre></div>
+</div>
+<p>Render a listing on the fly:</p>
+<div class="highlight-python"><div class="highlight"><pre>{% listing queryset style=&quot;Horizontal&quot; title=&quot;Foo&quot; %}
+</pre></div>
+</div>
+<p>Changing an existing listing&#8217;s style is a bit more involved:</p>
+<div class="highlight-python"><div class="highlight"><pre>{% get_listing_queryset &quot;my-listing-slug&quot; as &quot;qs&quot; %}
+{% listing qs style=&quot;Vertical&quot; title=&quot;Foo&quot; %}
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Listings</a><ul>
+<li><a class="reference internal" href="#listing-styles">Listing styles</a></li>
+<li><a class="reference internal" href="#implementation">Implementation</a></li>
+<li><a class="reference internal" href="#custom-listings">Custom listings</a></li>
+<li><a class="reference internal" href="#template-tags">Template tags</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="preferences.html"
+                        title="previous chapter">Preferences</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="menus.html"
+                        title="next chapter">Menus</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/listings.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="menus.html" title="Menus"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="preferences.html" title="Preferences"
+             >previous</a> |</li>
+        <li><a href="index.html">jmbo-foundry 2.0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Praekelt.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

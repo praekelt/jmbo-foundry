@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Templates &mdash; jmbo-foundry 2.0.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.0.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jmbo-foundry 2.0.6 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">jmbo-foundry 2.0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="templates">
+<h1>Templates<a class="headerlink" href="#templates" title="Permalink to this headline">¶</a></h1>
+<p>Jmbo provides a generic detail template <tt class="docutils literal"><span class="pre">templates/jmbo/modelbase_detail.html</span></tt> for subclasses. This template
+has been aliased to <tt class="docutils literal"><span class="pre">object_detail.html</span></tt> to follow Django naming conventions:</p>
+<div class="highlight-python"><div class="highlight"><pre>{% extends &quot;base.html&quot; %}
+{% load jmbo_inclusion_tags jmbo_template_tags %}
+
+{% block extratitle %} - {{ object.title }}{% endblock %}
+
+{% block extrameta %}
+    {% jmbocache 1200 &#39;object-detail&#39; object.id object.modified %}
+        &lt;link rel=&quot;canonical&quot; href=&quot;{{ object.get_absolute_url }}&quot; /&gt;
+        &lt;meta name=&quot;description&quot; content=&quot;{{ object.description|default_if_none:&#39;&#39; }}&quot; /&gt;
+        {% with object.tags.all as tags %}
+            {% if tags %}
+                &lt;meta name=&quot;keywords&quot; content=&quot;{{ tags|join:&quot;, &quot; }}&quot; /&gt;
+            {% endif %}
+        {% endwith %}
+        &lt;meta property=&quot;og:title&quot; content=&quot;{{ object.title }}&quot; /&gt;
+        &lt;meta property=&quot;og:type&quot; content=&quot;article&quot;/&gt;
+        &lt;meta property=&quot;og:url&quot; content=&quot;http{% if request.is_secure %}s{%endif %}://{{ request.get_host }}{{ object.get_absolute_url }}&quot; /&gt;
+        {% if object.image %}
+            &lt;meta property=&quot;og:image&quot; content=&quot;http{% if request.is_secure %}s{%endif %}://{{ request.get_host }}{{ object.image_detail_url }}&quot; /&gt;
+        {% endif %}
+        &lt;meta property=&quot;og:description&quot; content=&quot;{{ object.description|default_if_none:&#39;&#39; }}&quot; /&gt;
+    {% endjmbocache %}
+{% endblock %}
+
+{% block content %}
+    &lt;div class=&quot;object-detail {{ object.class_name.lower }}-detail&quot;&gt;
+
+        {% with object.as_leaf_class as object %}
+            {% object_header object %}
+            {% render_object object &quot;detail&quot; %}
+            {% object_footer object %}
+            {% object_comments object %}
+        {% endwith %}
+
+    &lt;/div&gt;
+{% endblock %}
+</pre></div>
+</div>
+<p>Jmbo breaks a detail template into a number of elements that are customizable per content type by creating
+specially named templates:</p>
+<ol class="arabic simple">
+<li>Header provided by <tt class="docutils literal"><span class="pre">templates/jmbo/inclusion_tags/object_header.html</span></tt>.</li>
+<li>Body (the meat of the item) provided by
+<tt class="docutils literal"><span class="pre">templates/jmbo/inclusion_tags/modelbase_detail.html</span></tt>. This template has been
+aliased to <tt class="docutils literal"><span class="pre">templates/jmbo/inclusion_tags/object_detail.html</span></tt> to follow
+Django naming conventions.</li>
+<li>Footer provided by <tt class="docutils literal"><span class="pre">templates/jmbo/inclusion_tags/object_footer.html</span></tt>.</li>
+<li>Comments provided by <tt class="docutils literal"><span class="pre">templates/jmbo/inclusion_tags/object_comments.html</span></tt>.</li>
+</ol>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/templates.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="index.html">jmbo-foundry 2.0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Praekelt.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

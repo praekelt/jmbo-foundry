@@ -117,13 +117,19 @@ class PrettyFileInput(FileInput):
 class RadioImageInput(RadioInput):
 
     def __init__(self, name, value, attrs, choice, index):
+        self.image_attrs = attrs.pop('image_attrs', {})
         super(RadioImageInput, self).__init__(name, value, attrs, choice, index)
         self.image_path = choice[2]
 
     def tag(self):
         result = super(RadioImageInput, self).tag()
         if self.image_path:
-            return mark_safe(result + '<img src="' + settings.STATIC_URL + self.image_path + '"/>')
+            attrs = ' '.join(['%s="%s"' % (k, v) for k, v in self.image_attrs.items()])
+            return mark_safe(
+                result + '<img src="%s%s" %s />' % (
+                    settings.STATIC_URL, self.image_path, attrs
+                )
+            )
         else:
             return result
 

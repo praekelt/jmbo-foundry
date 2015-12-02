@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Customizing templates &mdash; jmbo-foundry 2.0.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.0.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jmbo-foundry 2.0.6 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">jmbo-foundry 2.0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="customizing-templates">
+<h1>Customizing templates<a class="headerlink" href="#customizing-templates" title="Permalink to this headline">¶</a></h1>
+<p>Custom templates can be created for the following:</p>
+<ul class="simple">
+<li>Individual models that extend ModelBase</li>
+<li>All application models that extend ModelBase</li>
+</ul>
+<div class="section" id="objects-extending-modelbase">
+<h2>Objects extending ModelBase<a class="headerlink" href="#objects-extending-modelbase" title="Permalink to this headline">¶</a></h2>
+<p>Create templates and inclusion_tags folders.</p>
+<p>In your app folder you require the following folder structure:</p>
+<ul class="simple">
+<li><em>&lt;app name&gt;/templates/jmbo/inclusion_tags/</em></li>
+</ul>
+<div class="section" id="create-templates-to-override">
+<h3>Create templates to override<a class="headerlink" href="#create-templates-to-override" title="Permalink to this headline">¶</a></h3>
+<p>Create template HTML files inside:</p>
+<ul class="simple">
+<li><em>&lt;app name&gt;/templates/jmbo/inclusion_tags/object_&lt;type&gt;.html</em></li>
+</ul>
+<p>Creating object templates in this folder will override all objects that extend ModelBase.</p>
+<p>Eg. Creating object_header.html and editing its content will change
+what is displayed on your page headers.</p>
+</div>
+<div class="section" id="default-templates">
+<h3>Default templates<a class="headerlink" href="#default-templates" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="inclusion_tags.html">Default Inclusion Tags:</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="inclusion_tags.html#object-header-html"><em>object_header.html</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="inclusion_tags.html#object-detail-html"><em>object_detail.html</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="inclusion_tags.html#object-footer-html"><em>object_footer.html</em></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="app-specific-models">
+<h2>App specific models<a class="headerlink" href="#app-specific-models" title="Permalink to this headline">¶</a></h2>
+<p>The folder structure changes slightly.</p>
+<ul class="simple">
+<li><em>&lt;app name&gt;/templates/&lt;app name&gt;/inclusion_tags/object_&lt;type&gt;.html</em></li>
+</ul>
+<p>This will override all Models that extend ModelBase in the app,
+while external ModelBase objects can still be overridden separately.</p>
+<p>Alternatively each app Model can also be overridden to use their own separate templates.</p>
+</div>
+<div class="section" id="individual-models">
+<h2>Individual models<a class="headerlink" href="#individual-models" title="Permalink to this headline">¶</a></h2>
+<p>The template naming convention changes slightly.</p>
+<ul class="simple">
+<li><em>&lt;app name&gt;/templates/&lt;app name&gt;/&lt;model&gt;/inclusion_tags/object_&lt;type&gt;.html</em></li>
+</ul>
+<p>Instead of generic object templates, model specific templates are now used.</p>
+</div>
+<div class="section" id="template-resolution">
+<h2>Template resolution<a class="headerlink" href="#template-resolution" title="Permalink to this headline">¶</a></h2>
+<p>ModelBase templates get resolved in the following order:</p>
+<ol class="arabic simple">
+<li><em>&lt;app name&gt;/inclusion_tags/&lt;model&gt;_&lt;type&gt;.html</em></li>
+<li><em>&lt;app name&gt;/&lt;model&gt;/inclusion_tags/object_&lt;type&gt;.html</em></li>
+<li><em>&lt;app name&gt;/inclusion_tags/object_&lt;type&gt;.html</em></li>
+<li><em>jmbo/inclusion_tags/object_&lt;type&gt;.html</em></li>
+</ol>
+<p>The list from top to bottom lists the order in which templates are found and resolved.
+Paths that are higher up take priority and are rendered.
+If template is not found in any of these paths a default template is used.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Customizing templates</a><ul>
+<li><a class="reference internal" href="#objects-extending-modelbase">Objects extending ModelBase</a><ul>
+<li><a class="reference internal" href="#create-templates-to-override">Create templates to override</a></li>
+<li><a class="reference internal" href="#default-templates">Default templates</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app-specific-models">App specific models</a></li>
+<li><a class="reference internal" href="#individual-models">Individual models</a></li>
+<li><a class="reference internal" href="#template-resolution">Template resolution</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/customize_templates.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="index.html">jmbo-foundry 2.0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Praekelt.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

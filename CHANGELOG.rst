@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.4
+-----
+#. Remove CSRF protection from search form since searching is always a readonly operation.
+#. Improve listing admin UI.
+
 2.0.3
 -----
 #. Work around deprecated PickleSerializer when setting session expiry.
@@ -128,7 +133,6 @@ Changelog
 ------
 #. Provide two more custom listing styles.
 #. Listings can now be filtered by tag.
->>>>>>> develop
 
 1.1.19.3
 --------

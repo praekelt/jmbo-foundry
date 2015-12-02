@@ -1,0 +1,782 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Changelog &mdash; jmbo-foundry 2.0.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.0.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jmbo-foundry 2.0.6 documentation" href="index.html" />
+    <link rel="prev" title="Layers" href="layers.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="layers.html" title="Layers"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">jmbo-foundry 2.0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="next">
+<h2>next<a class="headerlink" href="#next" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Remove CSRF protection from search form since searching is always a readonly operation.</li>
+</ol>
+</div>
+<div class="section" id="id1">
+<h2>2.0.3<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Work around deprecated PickleSerializer when setting session expiry.</li>
+<li>Defensive code in member detail view.</li>
+</ol>
+</div>
+<div class="section" id="id2">
+<h2>2.0.2<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Do not attempt to call photologue getters in template if image is not set.</li>
+<li>Page editor now uses jQuery 1.10.2 and jQuery UI 1.10.4.</li>
+</ol>
+</div>
+<div class="section" id="id3">
+<h2>2.0.1<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Change position of api in urls.py so resource registration works properly.</li>
+</ol>
+</div>
+<div class="section" id="id4">
+<h2>2.0.0<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Simplify API to use primary keys.</li>
+<li>Depend on stable versions of Jmbo products.</li>
+</ol>
+</div>
+<div class="section" id="a5">
+<h2>2.0.0a5<a class="headerlink" href="#a5" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Remove references to atlas in migrations.</li>
+</ol>
+</div>
+<div class="section" id="a4">
+<h2>2.0.0a4<a class="headerlink" href="#a4" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Fix sitemap urls.</li>
+</ol>
+</div>
+<div class="section" id="a3">
+<h2>2.0.0a3<a class="headerlink" href="#a3" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Listing fields content and pinned now use a through manager making ordering possible.</li>
+</ol>
+</div>
+<div class="section" id="a2">
+<h2>2.0.0a2<a class="headerlink" href="#a2" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Fix case where <cite>resolve()</cite> would fail if site is run from a subpath.</li>
+</ol>
+</div>
+<div class="section" id="a1">
+<h2>2.0.0a1<a class="headerlink" href="#a1" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Move to Django 1.6 support. Backwards incompatible.</li>
+<li>Use <cite>django-layers-hr</cite> to handle layering. The FOUNDRY[&#8216;layers&#8217;] setting is now deprecated.</li>
+<li>Deprecate legacy handling for substring <cite>_LAYER_</cite> in photosize name.</li>
+<li>Add a <cite>ViewProxy</cite> model enabling views to appear in listings.</li>
+</ol>
+</div>
+<div class="section" id="id5">
+<h2>1.3.0<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Deprecate <cite>compute_settings</cite> function.</li>
+<li>Ignore result of celery tasks as appropriate.</li>
+<li>Up <cite>jmbo</cite> requirement to 1.2.0.</li>
+<li>Up <cite>jmbo-post</cite> requirement to 0.4.</li>
+<li>SEO improvements in templates.</li>
+</ol>
+</div>
+<div class="section" id="id6">
+<h2>1.2.6.1<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Delegate photologue dependency to Jmbo.</li>
+</ol>
+</div>
+<div class="section" id="id7">
+<h2>1.2.6<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Fix naughty word task emoji handling.</li>
+</ol>
+</div>
+<div class="section" id="id8">
+<h2>1.2.5.1<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Fix typo leading to unassigned variable.</li>
+</ol>
+</div>
+<div class="section" id="id9">
+<h2>1.2.5<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>RSS2 feed now includes canonical image.</li>
+</ol>
+</div>
+<div class="section" id="id10">
+<h2>1.2.4<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Validate member profile image strictly.</li>
+<li>Allow = in username.</li>
+<li>Friendly error message when attempting to use the same slug for overlapping sites.</li>
+</ol>
+</div>
+<div class="section" id="id11">
+<h2>1.2.3.1<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Use new version of <cite>django-ckeditor</cite> with prettier toolbars.</li>
+<li>Make ajax pagination more robust. It now always targets the correct listing.</li>
+<li>Fix password setting on member change form.</li>
+</ol>
+</div>
+<div class="section" id="id12">
+<h2>1.2.2.3<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Hotfix - fix missing import.</li>
+</ol>
+</div>
+<div class="section" id="id13">
+<h2>1.2.2.2<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Hotfix - image layer fallback functionality restored.</li>
+</ol>
+</div>
+<div class="section" id="id14">
+<h2>1.2.2.1<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Hotfix - added dependency link to photologue.</li>
+</ol>
+</div>
+<div class="section" id="id15">
+<h2>1.2.2<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Fix forms.css rule for required fields.</li>
+<li>Adapt monkey patch because of <cite>django-photologue</cite> version 2.8.praekelt.</li>
+<li>Make it possible to define custom listings.</li>
+</ol>
+</div>
+<div class="section" id="id16">
+<h2>1.2.1<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Use <cite>next</cite> parameter when redirecting to age gateway. On successfully passing the age gateway, the user is redirected to <cite>next</cite>.</li>
+<li>Allow a partner site to automatically pass the age gateway for a user by providing age gateway data in a JWT token.</li>
+</ol>
+</div>
+<div class="section" id="id17">
+<h2>1.2<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Move to jQuery 1.10.2 as recommended version. If you have customized and static Javascript resources you will have to update them manually.</li>
+<li>Use a newer version of AnythingSlider.</li>
+<li>Allow form class to be passed to join view.</li>
+<li>Cache individual comments on comment list.</li>
+<li>Minor performance improvements.</li>
+</ol>
+</div>
+<div class="section" id="id18">
+<h2>1.1.23<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Fix template error in <cite>modelbase_list_item_ipod.html</cite>.</li>
+</ol>
+</div>
+<div class="section" id="id19">
+<h2>1.1.22<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Fix bug where it was possible for an event handler to change the default avatar during user registration.</li>
+<li>Cache individual listing item templates.</li>
+</ol>
+</div>
+<div class="section" id="id20">
+<h2>1.1.21<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Content type, categories and tags fields on listings are now ANDed when evaluating the listing.</li>
+<li>Do not allow comments containing only spaces.</li>
+</ol>
+</div>
+<div class="section" id="id21">
+<h2>1.1.20<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Provide two more custom listing styles.</li>
+<li>Listings can now be filtered by tag.</li>
+</ol>
+</div>
+<div class="section" id="id22">
+<h2>1.1.19.3<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Use <cite>django-setuptest</cite> 0.1.4. It handles South migrations correctly.</li>
+<li>Use workaround so <cite>jmbo-sitemap</cite> works correctly again.</li>
+</ol>
+</div>
+<div class="section" id="id23">
+<h2>1.1.19.2<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Really do what is stated in 1.1.19.1.</li>
+</ol>
+</div>
+<div class="section" id="id24">
+<h2>1.1.19.1<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Found a critical error in legacy Jmbo code that is triggered by <cite>jmbo-sitemap</cite> URL pattern. Remove <cite>jmbo-sitemap</cite> URL patterns.</li>
+</ol>
+</div>
+<div class="section" id="id25">
+<h2>1.1.19<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Remove potential <cite>get_preference</cite> cache key collision.</li>
+<li>Port XML sitemap over to <cite>jmbo-sitemap</cite>.</li>
+</ol>
+</div>
+<div class="section" id="id26">
+<h2>1.1.18.2<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Protect comment creation against manually crafted POSTs.</li>
+</ol>
+</div>
+<div class="section" id="id27">
+<h2>1.1.18.1<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Hotfix. Fix bug where page change form did not display rows.</li>
+</ol>
+</div>
+<div class="section" id="id28">
+<h2>1.1.18<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Change listing to accept multiple categories. A South data migration is involved and should work without issue, but it is recommended to backup your database.</li>
+<li>Generate intentionally simple XML sitemap from the main navigation elements.</li>
+<li>Offer Google Oauth2 login.</li>
+</ol>
+</div>
+<div class="section" id="id29">
+<h2>1.1.17<a class="headerlink" href="#id29" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Web promo listing now displays pinned items.</li>
+<li>Make ajax pagination more robust.</li>
+<li>Allow &#64; in username.</li>
+<li>Friendlier admin form when setting required fields in Registration Preferences.</li>
+</ol>
+</div>
+<div class="section" id="id30">
+<h2>1.1.16.1<a class="headerlink" href="#id30" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Hotfix. foundrycache template tag was using wrong class to compute key.</li>
+</ol>
+</div>
+<div class="section" id="id31">
+<h2>1.1.16<a class="headerlink" href="#id31" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Ensure that <cite>user_logged_in</cite> signal is dispatched when a user joins.</li>
+<li>Don&#8217;t allow the creation of a <cite>BlogPost</cite> where the <cite>content</cite> field contains scripting.</li>
+<li>Map as many fields as possible to member when doing Facebook Connect.</li>
+<li>Twitter Oauth is now standard functionality.</li>
+<li><cite>base_inner.html</cite> provides now has an extratitle block.</li>
+<li>A comment posted to eg. basic will now show up in the other layers comprising the same logical site.</li>
+<li>Flatpages are now part of our standard set of products.</li>
+<li>Through-the-web configurable caching for rows, columns, tiles, menus and navbars.</li>
+<li>Identify poorly performing areas and optimize code.</li>
+</ol>
+</div>
+<div class="section" id="id32">
+<h2>1.1.15<a class="headerlink" href="#id32" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>The Open Graph site description can now be set under General Preferences.</li>
+<li>Allow dot in username.</li>
+</ol>
+</div>
+<div class="section" id="id33">
+<h2>1.1.14<a class="headerlink" href="#id33" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Exclude gallery images from search results.</li>
+<li>Include URLs from <cite>jmbo-gallery</cite>.</li>
+</ol>
+</div>
+<div class="section" id="id34">
+<h2>1.1.13<a class="headerlink" href="#id34" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Use <cite>django-banner&gt;=0.2.2</cite>. DFP banners loaded by ajax will now work.</li>
+</ol>
+</div>
+<div class="section" id="id35">
+<h2>1.1.12<a class="headerlink" href="#id35" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Fire <cite>onListingRefresh</cite> event when listing is updated via ajax. Extra <cite>target</cite> parameter is passed to handler.</li>
+<li>Basic ajax comment loading until jQuery-replacement is added.</li>
+<li>Add name attribute to logo anchor so it is possible to jump to top of page.</li>
+<li>Ajaxify view modifier navigation on listings.</li>
+<li>Use <cite>django-dfp&gt;=0.2</cite> which works across all browsers.</li>
+</ol>
+</div>
+<div class="section" id="id36">
+<h2>1.1.11<a class="headerlink" href="#id36" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Add an index on Member.last_seen - useful for fast online user queries.</li>
+</ol>
+</div>
+<div class="section" id="id37">
+<h2>1.1.10<a class="headerlink" href="#id37" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>The <cite>jmbo-banner</cite> migration dependency was not in the correct migration step. Fixed.</li>
+</ol>
+</div>
+<div class="section" id="id38">
+<h2>1.1.9<a class="headerlink" href="#id38" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Initial migration now depends on <cite>jmbo-banner</cite> migrations.</li>
+</ol>
+</div>
+<div class="section" id="id39">
+<h2>1.1.8<a class="headerlink" href="#id39" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Restore version of <cite>jmbo-banner</cite> to 0.2.</li>
+</ol>
+</div>
+<div class="section" id="id40">
+<h2>1.1.7<a class="headerlink" href="#id40" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Hotfix release. Use safe method to get HTTP_USER_AGENT in middlewares since it might not be present.</li>
+<li>Deprecated. Use 1.1.8.</li>
+</ol>
+</div>
+<div class="section" id="id41">
+<h2>1.1.6<a class="headerlink" href="#id41" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Hotfix release. An url import went missing.</li>
+<li>Deprecated. Use 1.1.8.</li>
+</ol>
+</div>
+<div class="section" id="id42">
+<h2>1.1.5<a class="headerlink" href="#id42" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Newer version of <cite>jmbo-banner</cite> implies a DFP header to be added to the base template.</li>
+<li>Deprecated. Use 1.1.8.</li>
+</ol>
+</div>
+<div class="section" id="id43">
+<h2>1.1.4<a class="headerlink" href="#id43" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Add optional CSS classes to page rows and columns.</li>
+<li>Add last_seen field to Member and a middleware to update this timestamp at most every 5 minutes.</li>
+</ol>
+</div>
+<div class="section" id="id44">
+<h2>1.1.3<a class="headerlink" href="#id44" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Use <cite>django-social-auth</cite> to authenticate against external providers. You must add <cite>social_auth</cite> to <cite>INSTALLED_APPS</cite> and set <cite>SOCIAL_AUTH_USER_MODEL = &#8216;foundry.Member&#8217;</cite> at the very least. See the django-social auth documentation for more settings.</li>
+<li>Drop the wizard style of registration. This is required for consistent UX when registering via Facebook.</li>
+<li>Listings no longer include unpublished items that are referenced by the Content or Pinned fields.</li>
+</ol>
+</div>
+<div class="section" id="id45">
+<h2>1.1.2<a class="headerlink" href="#id45" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Fix migration 0045 which would case South to complain about a previous set not being frozen.</li>
+<li>Page objects can now be styled with extra CSS. This is useful when using a page as a campaign.</li>
+</ol>
+</div>
+<div class="section" id="id46">
+<h2>1.1.1<a class="headerlink" href="#id46" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Filter Foundry comments by content type in admin.</li>
+<li>Remove redundant chatroom detail template. It caused a comment count bug.</li>
+<li>Allow social sharing of content even if it is a private site.</li>
+<li>Remove jquery from basic layer since it causes out of memory errors on some devices. We will in future look for an API compatible replacement.</li>
+<li>Add <cite>jmbo-twitter</cite> as dependency.</li>
+<li>Provide three customizable listings to enable developers to easily add more listings.</li>
+</ol>
+</div>
+<div class="section" id="id47">
+<h2>1.1<a class="headerlink" href="#id47" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Rename potentially confusing photosizes used in listing item templates. Old photosizes are retained for backward compatibility. If your app redefines a photosize for <cite>listing_*</cite> then you must update those photosize names.</li>
+<li>Handle favicon.ico requests so they do not 404.</li>
+<li>Include <cite>jmbo-gallery</cite> admin urls.</li>
+</ol>
+</div>
+<div class="section" id="id48">
+<h2>1.0.1<a class="headerlink" href="#id48" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Make fields in registration form reorderable.</li>
+<li>Set initial values for location and age in registration form, when possible.</li>
+<li>Remove hack to django-autopaginate to allow last page as default view. We have our own replacement autopaginate tag now.</li>
+</ol>
+</div>
+<div class="section" id="id49">
+<h2>1.0<a class="headerlink" href="#id49" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Patch django.contrib.sites.models.Site.__unicode__ so it returns name and not domain. The UI gets confusing since we have up to three sites comprising one logical mobi site.</li>
+<li>Listings now have automatic RSS feeds.</li>
+<li>Comment form now fires up correct virtual keyboard for a smart phone.</li>
+<li>Logged in members can now flag offensive comments. After three flags a moderator is notified.</li>
+<li>Some IP addresses can now be allowed to bypass the age gateway / private site.</li>
+<li>Listing gets an optional RSS feed.</li>
+<li>Simplified paginator. No more breadcrumbs.</li>
+<li>Show less metadata in mobi listings.</li>
+<li>Ditch addthis sharing widget. It is too slow.</li>
+<li>Simplified commenting and chatroom. Removed some navigation links.</li>
+<li>Some user agents can now be allowed to bypass the age gateway. This allows bots to crawl the site.</li>
+<li>Up required jmbo to 1.0.</li>
+</ol>
+</div>
+<div class="section" id="id50">
+<h2>0.7.2<a class="headerlink" href="#id50" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Hotfix. Apps with empty URL patterns cause infinite recursion when adding a page.</li>
+</ol>
+</div>
+<div class="section" id="id51">
+<h2>0.7.1<a class="headerlink" href="#id51" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Hotfix. Remove references deprecated <cite>jmbo-gallery</cite> views.</li>
+</ol>
+</div>
+<div class="section" id="id52">
+<h2>0.7<a class="headerlink" href="#id52" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>A listing now has an optional view modifier. This makes it possible to filter or order the listing.</li>
+<li><cite>compute_settings</cite> function is now redundant thanks to the introduction of <cite>foundry.finders.FileSystemLayerAwareFinder</cite>. Add this finder to STATICFILES_FINDERS as the first item.</li>
+<li>Gallery specific code ported to <cite>jmbo-gallery</cite>. <cite>base_inner.html</cite> has a new link to gallery CSS and JS. If you have a customized template then update accordingly.</li>
+<li>Up required <cite>jmbo-gallery</cite> to 0.1.</li>
+</ol>
+</div>
+<div class="section" id="id53">
+<h2>0.6.4<a class="headerlink" href="#id53" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Replace deprecated message_set call.</li>
+</ol>
+</div>
+<div class="section" id="id54">
+<h2>0.6.3<a class="headerlink" href="#id54" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Move FileSystemStorage listdir monkey patch to __init__.py so it is applied for collectstatic.</li>
+</ol>
+</div>
+<div class="section" id="id55">
+<h2>0.6.2<a class="headerlink" href="#id55" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Django 1.4 incompatibilities with login and password reset fixed.</li>
+<li>More tests.</li>
+</ol>
+</div>
+<div class="section" id="id56">
+<h2>0.6.1<a class="headerlink" href="#id56" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Change admin static file urls to use &#8216;static&#8217; filter instead of deprecated &#8216;ADMIN_MEDIA_PREFIX&#8217;.</li>
+</ol>
+</div>
+<div class="section" id="id57">
+<h2>0.6<a class="headerlink" href="#id57" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Up required jmbo to 0.5. Django 1.4 now implicitly required. You may get errors on template loaders not being found. See the Django 1.4 changelog in that case.</li>
+</ol>
+</div>
+<div class="section" id="id58">
+<h2>0.5.1<a class="headerlink" href="#id58" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Clean up ajax batching of listings for basic and smart layers.</li>
+<li>View modifiers and modelbase_list.html style templates are not ajaxified anymore.</li>
+<li>Country model has new field country code.</li>
+<li>Up required jmbo to 0.4.</li>
+</ol>
+</div>
+<div class="section" id="id59">
+<h2>0.5<a class="headerlink" href="#id59" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>&#8220;More&#8221; style batching for smart layer.</li>
+<li>Listings now have optional pinned items which are anchored to the top of a listing.</li>
+<li>Default photosizes for basic, mid, smart and web. Some old settings have changed so existing images may be scaled differently.</li>
+</ol>
+</div>
+<div class="section" id="id60">
+<h2>0.4<a class="headerlink" href="#id60" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><cite>layered</cite> decorator so you can write different views for different layers without cluttering urls.py.</li>
+</ol>
+</div>
+<div class="section" id="id61">
+<h2>0.3.10<a class="headerlink" href="#id61" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Translation for search form.</li>
+<li>Member profile editing regression fixed.</li>
+</ol>
+</div>
+<div class="section" id="id62">
+<h2>0.3.9<a class="headerlink" href="#id62" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Searching now working.</li>
+</ol>
+</div>
+<div class="section" id="id63">
+<h2>0.3.8<a class="headerlink" href="#id63" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Bug fix for regression introduced into 0.3.7.</li>
+</ol>
+</div>
+<div class="section" id="id64">
+<h2>0.3.7<a class="headerlink" href="#id64" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Listings being used within a tile can now choose whether to display a title.</li>
+<li>Columns now have an optional title.</li>
+</ol>
+</div>
+<div class="section" id="id65">
+<h2>0.3.6<a class="headerlink" href="#id65" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Demo is now part og jmbo-skeleton.</li>
+<li>Minimum jmbo version required is now &gt;= 0.3.4.</li>
+<li>Management command load_photosizes loads photosizes in a sane way.</li>
+</ol>
+</div>
+<div class="section" id="id66">
+<h2>0.3.5<a class="headerlink" href="#id66" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Adjust South migration dependencies.</li>
+<li>Simplify and extend demo.</li>
+</ol>
+</div>
+<div class="section" id="id67">
+<h2>0.3.4<a class="headerlink" href="#id67" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Batching on tastypie listing API.</li>
+<li>Remove django-ckeditor dependency. Handled by jmbo-post.</li>
+<li>Patch CsrfTokenNode.render so the input is not wrapped in a hidden container.</li>
+</ol>
+</div>
+<div class="section" id="id68">
+<h2>0.3.3<a class="headerlink" href="#id68" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Version pins for jmbo and jmbo-post.</li>
+</ol>
+</div>
+<div class="section" id="id69">
+<h2>0.3.2<a class="headerlink" href="#id69" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Use slug for lookups in tastypie API.</li>
+</ol>
+</div>
+<div class="section" id="id70">
+<h2>0.3.1<a class="headerlink" href="#id70" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Chatrooms and normal comments can now have distinct appearances. jmbo&gt;=0.3.1 required.</li>
+</ol>
+</div>
+<div class="section" id="id71">
+<h2>0.3<a class="headerlink" href="#id71" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Reduce ajax polling when user is inactive</li>
+<li>django-tastypie support added. jmbo and jmbo-post have minimum version requirements.</li>
+</ol>
+</div>
+<div class="section" id="id72">
+<h2>0.2.2<a class="headerlink" href="#id72" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Pin django-ckeditor to &gt;= 3.6.2</li>
+<li>Remember me field now on login and join forms. Checked by default.</li>
+<li>Any call to get_XXX_url is now layer aware.</li>
+<li>Comment posting now ajaxified depending on browser capabilities.</li>
+</ol>
+</div>
+<div class="section" id="id73">
+<h2>0.2.1<a class="headerlink" href="#id73" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Remove dependency links.</li>
+</ol>
+</div>
+<div class="section" id="id74">
+<h2>0.2<a class="headerlink" href="#id74" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Add a base_inner.html template so it is easier to override base.html.</li>
+<li>Patch listdir so collectstatic does not fail on custom layers for third party foundry-based products.</li>
+</ol>
+</div>
+<div class="section" id="id75">
+<h2>0.1<a class="headerlink" href="#id75" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Use Jaro Winkler for matching naughty words.</li>
+</ol>
+</div>
+<div class="section" id="id76">
+<h2>0.0.2 (2011-09-27)<a class="headerlink" href="#id76" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Detail view.</li>
+<li>Element preferences.</li>
+</ol>
+</div>
+<div class="section" id="id77">
+<h2>0.0.1 (2011-09-21)<a class="headerlink" href="#id77" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Initial release.</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Changelog</a><ul>
+<li><a class="reference internal" href="#next">next</a></li>
+<li><a class="reference internal" href="#id1">2.0.3</a></li>
+<li><a class="reference internal" href="#id2">2.0.2</a></li>
+<li><a class="reference internal" href="#id3">2.0.1</a></li>
+<li><a class="reference internal" href="#id4">2.0.0</a></li>
+<li><a class="reference internal" href="#a5">2.0.0a5</a></li>
+<li><a class="reference internal" href="#a4">2.0.0a4</a></li>
+<li><a class="reference internal" href="#a3">2.0.0a3</a></li>
+<li><a class="reference internal" href="#a2">2.0.0a2</a></li>
+<li><a class="reference internal" href="#a1">2.0.0a1</a></li>
+<li><a class="reference internal" href="#id5">1.3.0</a></li>
+<li><a class="reference internal" href="#id6">1.2.6.1</a></li>
+<li><a class="reference internal" href="#id7">1.2.6</a></li>
+<li><a class="reference internal" href="#id8">1.2.5.1</a></li>
+<li><a class="reference internal" href="#id9">1.2.5</a></li>
+<li><a class="reference internal" href="#id10">1.2.4</a></li>
+<li><a class="reference internal" href="#id11">1.2.3.1</a></li>
+<li><a class="reference internal" href="#id12">1.2.2.3</a></li>
+<li><a class="reference internal" href="#id13">1.2.2.2</a></li>
+<li><a class="reference internal" href="#id14">1.2.2.1</a></li>
+<li><a class="reference internal" href="#id15">1.2.2</a></li>
+<li><a class="reference internal" href="#id16">1.2.1</a></li>
+<li><a class="reference internal" href="#id17">1.2</a></li>
+<li><a class="reference internal" href="#id18">1.1.23</a></li>
+<li><a class="reference internal" href="#id19">1.1.22</a></li>
+<li><a class="reference internal" href="#id20">1.1.21</a></li>
+<li><a class="reference internal" href="#id21">1.1.20</a></li>
+<li><a class="reference internal" href="#id22">1.1.19.3</a></li>
+<li><a class="reference internal" href="#id23">1.1.19.2</a></li>
+<li><a class="reference internal" href="#id24">1.1.19.1</a></li>
+<li><a class="reference internal" href="#id25">1.1.19</a></li>
+<li><a class="reference internal" href="#id26">1.1.18.2</a></li>
+<li><a class="reference internal" href="#id27">1.1.18.1</a></li>
+<li><a class="reference internal" href="#id28">1.1.18</a></li>
+<li><a class="reference internal" href="#id29">1.1.17</a></li>
+<li><a class="reference internal" href="#id30">1.1.16.1</a></li>
+<li><a class="reference internal" href="#id31">1.1.16</a></li>
+<li><a class="reference internal" href="#id32">1.1.15</a></li>
+<li><a class="reference internal" href="#id33">1.1.14</a></li>
+<li><a class="reference internal" href="#id34">1.1.13</a></li>
+<li><a class="reference internal" href="#id35">1.1.12</a></li>
+<li><a class="reference internal" href="#id36">1.1.11</a></li>
+<li><a class="reference internal" href="#id37">1.1.10</a></li>
+<li><a class="reference internal" href="#id38">1.1.9</a></li>
+<li><a class="reference internal" href="#id39">1.1.8</a></li>
+<li><a class="reference internal" href="#id40">1.1.7</a></li>
+<li><a class="reference internal" href="#id41">1.1.6</a></li>
+<li><a class="reference internal" href="#id42">1.1.5</a></li>
+<li><a class="reference internal" href="#id43">1.1.4</a></li>
+<li><a class="reference internal" href="#id44">1.1.3</a></li>
+<li><a class="reference internal" href="#id45">1.1.2</a></li>
+<li><a class="reference internal" href="#id46">1.1.1</a></li>
+<li><a class="reference internal" href="#id47">1.1</a></li>
+<li><a class="reference internal" href="#id48">1.0.1</a></li>
+<li><a class="reference internal" href="#id49">1.0</a></li>
+<li><a class="reference internal" href="#id50">0.7.2</a></li>
+<li><a class="reference internal" href="#id51">0.7.1</a></li>
+<li><a class="reference internal" href="#id52">0.7</a></li>
+<li><a class="reference internal" href="#id53">0.6.4</a></li>
+<li><a class="reference internal" href="#id54">0.6.3</a></li>
+<li><a class="reference internal" href="#id55">0.6.2</a></li>
+<li><a class="reference internal" href="#id56">0.6.1</a></li>
+<li><a class="reference internal" href="#id57">0.6</a></li>
+<li><a class="reference internal" href="#id58">0.5.1</a></li>
+<li><a class="reference internal" href="#id59">0.5</a></li>
+<li><a class="reference internal" href="#id60">0.4</a></li>
+<li><a class="reference internal" href="#id61">0.3.10</a></li>
+<li><a class="reference internal" href="#id62">0.3.9</a></li>
+<li><a class="reference internal" href="#id63">0.3.8</a></li>
+<li><a class="reference internal" href="#id64">0.3.7</a></li>
+<li><a class="reference internal" href="#id65">0.3.6</a></li>
+<li><a class="reference internal" href="#id66">0.3.5</a></li>
+<li><a class="reference internal" href="#id67">0.3.4</a></li>
+<li><a class="reference internal" href="#id68">0.3.3</a></li>
+<li><a class="reference internal" href="#id69">0.3.2</a></li>
+<li><a class="reference internal" href="#id70">0.3.1</a></li>
+<li><a class="reference internal" href="#id71">0.3</a></li>
+<li><a class="reference internal" href="#id72">0.2.2</a></li>
+<li><a class="reference internal" href="#id73">0.2.1</a></li>
+<li><a class="reference internal" href="#id74">0.2</a></li>
+<li><a class="reference internal" href="#id75">0.1</a></li>
+<li><a class="reference internal" href="#id76">0.0.2 (2011-09-27)</a></li>
+<li><a class="reference internal" href="#id77">0.0.1 (2011-09-21)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="layers.html"
+                        title="previous chapter">Layers</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/changelog.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="layers.html" title="Layers"
+             >previous</a> |</li>
+        <li><a href="index.html">jmbo-foundry 2.0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Praekelt.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

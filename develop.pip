@@ -13,6 +13,7 @@
 -e git+git@github.com:praekelt/django-simple-autocomplete.git@develop#egg=django-simple-autocomplete
 -e git+git@github.com:praekelt/django-sites-groups.git@develop#egg=django-sites-groups
 -e git+git@github.com:shaunsephton/django-snippetscream.git#egg=django-snippetscream
+-e git+git@github.com:praekelt/django-ultracache.git@develop#egg=django-ultracache
 -e git+git@github.com:praekelt/jmbo.git@develop#egg=jmbo
 -e git+git@github.com:praekelt/jmbo-analytics.git@develop#egg=jmbo-analytics
 -e git+git@github.com:praekelt/jmbo-banner.git@develop#egg=jmbo-banner

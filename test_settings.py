@@ -2,11 +2,12 @@ from os.path import expanduser
 
 from foundry.settings import *
 
+
 # Postgis because we want to test full functionality
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        #'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        #'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'jmbo_spatial',
         #'NAME': 'jmbo',
         'USER': 'postgres',
@@ -20,16 +21,16 @@ DATABASES = {
 INSTALLED_APPS += (
     'banner',
     'chart',
-    #'competition',
+    'competition',
     'downloads',
-    #'friends', # add back on 2.0.0a2 release. Circular thing.
+    'friends',
     'gallery',
     'jmbo_calendar',
-    #'jmbo_sitemap',
-    #'jmbo_twitter',
+    'jmbo_sitemap',
+    'jmbo_twitter',
     'music',
     'poll',
-    #'show',
+    'show',
 )
 
 CKEDITOR_UPLOAD_PATH = expanduser('~')
