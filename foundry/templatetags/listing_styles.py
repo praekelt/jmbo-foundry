@@ -6,6 +6,7 @@ from django.conf import settings
 
 
 class AbstractBaseStyle(object):
+    image_path = "/admin/images/listing-unknown.png"
 
     def __init__(self, listing):
         self.listing = listing
