@@ -206,12 +206,11 @@ items are visible across all pages when navigating the listing."),
             'title', 'slug', 'subtitle', 'content_type', 'categories', 'tags',
             'content_helper', 'pinned_helper',
             'style', 'count', 'items_per_page',
-            'view_modifier', 'display_title_tiled', 'enable_syndication',
+            'display_title_tiled', 'enable_syndication',
             'sites',
         )
         widgets = {
             'sites': SitesGroupsWidget,
-            'view_modifier': forms.widgets.RadioSelect,
             'style': RadioImageSelect(
                 choices=(('x','x'),('y','y')),
                 attrs={'image_attrs': {'style': 'max-width: 128px;'}}
@@ -260,8 +259,6 @@ items are visible across all pages when navigating the listing."),
                         choices.append((
                             klass.__module__ + '.' + klass.__name__, label
                         ))
-        self.fields['view_modifier'].widget.choices = choices
-
 
     def clean(self):
         super(ListingAdminForm, self).clean()

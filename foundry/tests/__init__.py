@@ -159,7 +159,7 @@ class TestCase(BaseTestCase):
         )
         listing_pc.sites = [1]
         listing_pc.save()
-        listing_pc.set_content([cls.post1])
+        listing_pc.set_content([cls.post1, cls.post2])
         setattr(cls, listing_pc.slug, listing_pc)
 
         # Content points to unpublished content
@@ -220,6 +220,31 @@ class TestCase(BaseTestCase):
         listing_all.save()
         setattr(cls, listing_all.slug, listing_all)
 
+        # Listing with content_type and pinned
+        content_type = ContentType.objects.get(app_label='post', model='post')
+        listing_ctp, dc = Listing.objects.get_or_create(
+            title='Listing content type and pinned',
+            slug='listing-content-type-and-pinned',
+            count=0, items_per_page=0, style='VerticalThumbnail',
+        )
+        listing_ctp.content_type = [content_type]
+        listing_ctp.sites = [1]
+        listing_ctp.save()
+        listing_ctp.set_pinned([cls.post1])
+        setattr(cls, listing_ctp.slug, listing_ctp)
+
+        # Listing with content and pinned
+        listing_cp, dc = Listing.objects.get_or_create(
+            title='Listing content and pinned',
+            slug='listing-content-and-pinned',
+            count=0, items_per_page=0, style='VerticalThumbnail',
+        )
+        listing_cp.sites = [1]
+        listing_cp.save()
+        listing_cp.set_pinned([cls.post1])
+        listing_cp.set_content([cls.post1, cls.post2])
+        setattr(cls, listing_cp.slug, listing_cp)
+
         # Listings for each style
         content_type = ContentType.objects.get(app_label='post', model='post')
         for klass in LISTING_CLASSES:
@@ -273,40 +298,51 @@ class TestCase(BaseTestCase):
 
     def test_listing_pvt(self):
         listing = getattr(self, 'posts-vertical-thumbnail')
-        self.failUnless(self.post1.modelbase_obj in listing.queryset().all())
+        self.failUnless(self.post1.modelbase_obj in listing.queryset())
 
     def test_listing_pc(self):
         # Published content must be present in listing queryset
         listing = getattr(self, 'published-content')
-        self.failUnless(self.post1.modelbase_obj in listing.queryset().all())
+        self.failUnless(self.post1.modelbase_obj in listing.queryset())
+
+        # Check the order
+        self.failUnless(listing.queryset()[0] == self.post1.modelbase_obj)
 
     def test_listing_upc(self):
         # Unpublished content must not be present in listing queryset
         listing = getattr(self, 'unpublished-content')
-        self.failIf(self.post5.modelbase_obj in listing.queryset().all())
+        self.failIf(self.post5.modelbase_obj in listing.queryset())
 
     def test_listing_pinned(self):
         listing = getattr(self, 'listing-pinned')
-        self.failIf(self.post1.modelbase_obj in listing.queryset().all())
+        self.failIf(self.post1.modelbase_obj in listing.queryset())
 
     def test_listing_categories(self):
         listing = getattr(self, 'listing-categories')
-        self.failUnless(self.post1.modelbase_obj in listing.queryset().all())
-        self.failUnless(self.post2.modelbase_obj in listing.queryset().all())
-        self.failIf(self.post3.modelbase_obj in listing.queryset().all())
+        self.failUnless(self.post1.modelbase_obj in listing.queryset())
+        self.failUnless(self.post2.modelbase_obj in listing.queryset())
+        self.failIf(self.post3.modelbase_obj in listing.queryset())
 
     def test_listing_tags(self):
         listing = getattr(self, 'listing-tags')
-        self.failUnless(self.post1.modelbase_obj in listing.queryset().all())
-        self.failIf(self.post2.modelbase_obj in listing.queryset().all())
+        self.failUnless(self.post1.modelbase_obj in listing.queryset())
+        self.failIf(self.post2.modelbase_obj in listing.queryset())
 
     def test_listing_all_filters(self):
         listing = getattr(self, 'listing-all-filters')
-        self.failUnless(self.post1.modelbase_obj in listing.queryset().all())
-        self.failIf(self.post2.modelbase_obj in listing.queryset().all())
-        self.failIf(self.post3.modelbase_obj in listing.queryset().all())
+        self.failUnless(self.post1.modelbase_obj in listing.queryset())
+        self.failIf(self.post2.modelbase_obj in listing.queryset())
+        self.failIf(self.post3.modelbase_obj in listing.queryset())
         if "gallery" in settings.INSTALLED_APPS:
-            self.failIf(self.gallery1.modelbase_obj in listing.queryset().all())
+            self.failIf(self.gallery1.modelbase_obj in listing.queryset())
+
+    def test_listing_content_type_and_pinned(self):
+        listing = getattr(self, 'listing-content-type-and-pinned')
+        self.failIf(self.post1.modelbase_obj in listing.queryset())
+
+    def test_listing_content_and_pinned(self):
+        listing = getattr(self, 'listing-content-and-pinned')
+        self.failIf(self.post1.modelbase_obj in listing.queryset())
 
     def test_listing_styles(self):
         """Confirm the listings of each style render"""

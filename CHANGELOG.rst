@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.1
+---
+#. Fix bug where listing did not return content in the correct order. Note that `listing.queryset` is not guaranteed to return a real queryset anymore.
+#. Remove view_modifier field from listing change form until we move to Django 1.8.
+
 2.0.5
 -----
 #. Cosmetic change. Listing image background clashed with alternate row colour in Django admin.
