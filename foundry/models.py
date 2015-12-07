@@ -349,23 +349,29 @@ complex page."""
         return reverse('listing-detail', args=[self.slug])
 
     def queryset(self, request=None):
-        q = ModelBase.permitted.filter(id__in=self.content.all())
-        if not q.exists():
-            q = ModelBase.permitted.all()
-            one_match = False
-            if self.content_type.exists():
-                q = q.filter(content_type__in=self.content_type.all())
-                one_match = True
-            if self.categories.exists():
-                q1 = Q(primary_category__in=self.categories.all())
-                q2 = Q(categories__in=self.categories.all())
-                q = q.filter(q1|q2)
-                one_match = True
-            if self.tags.exists():
-                q = q.filter(tags__in=self.tags.all())
-                one_match = True
-            if not one_match:
-                q = ModelBase.objects.none()
+        # See https://docs.djangoproject.com/en/1.8/topics/db/queries/#using-a-custom-reverse-manager.
+        # Django 1.7 will remove the need for this slow workaround for the
+        # content field. Due to the workaround we're not always returning a
+        # real queryset.
+        content = self.content_queryset
+        if content:
+            return content
+
+        q = ModelBase.permitted.all()
+        one_match = False
+        if self.content_type.exists():
+            q = q.filter(content_type__in=self.content_type.all())
+            one_match = True
+        if self.categories.exists():
+            q1 = Q(primary_category__in=self.categories.all())
+            q2 = Q(categories__in=self.categories.all())
+            q = q.filter(q1|q2)
+            one_match = True
+        if self.tags.exists():
+            q = q.filter(tags__in=self.tags.all())
+            one_match = True
+        if not one_match:
+            q = ModelBase.objects.none()
         q = q.exclude(id__in=self.pinned.all())
 
         if request and self.view_modifier:
@@ -399,7 +405,8 @@ complex page."""
     @property
     def pinned_queryset(self):
         # See https://docs.djangoproject.com/en/1.8/topics/db/queries/#using-a-custom-reverse-manager.
-        # Django 1.7 will remove the need for this slow workaround.
+        # Django 1.7 will remove the need for this slow workaround. Note we
+        # return an emulated queryset.
         li = [o for o in ModelBase.permitted.filter(listing_pinned=self)]
         order = [o.modelbase_obj.id for o in ListingPinned.objects.filter(
             listing=self).order_by('position')]
@@ -409,8 +416,10 @@ complex page."""
     @property
     def content_queryset(self):
         # See https://docs.djangoproject.com/en/1.8/topics/db/queries/#using-a-custom-reverse-manager.
-        # Django 1.7 will remove the need for this slow workaround.
-        li = [o for o in ModelBase.permitted.filter(listing_content=self)]
+        # Django 1.7 will remove the need for this slow workaround. Note we
+        # return an emulated queryset.
+        li = [o for o in ModelBase.permitted.filter(listing_content=self)\
+            .exclude(id__in=self.pinned.all())]
         order = [o.modelbase_obj.id for o in ListingContent.objects.filter(
             listing=self).order_by('position')]
         li.sort(lambda a, b: cmp(order.index(a.id), order.index(b.id)))
