@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Deprecate legacy photosizes named `listing_*`.
+
 2.1
 ---
 #. Fix bug where listing did not return content in the correct order. Note that `listing.queryset` is not guaranteed to return a real queryset anymore.
