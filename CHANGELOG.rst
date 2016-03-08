@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.1.1
+-----
+#. Deprecate legacy photosizes named `listing_*`.
+#. Fix smart layer Javascript to correctly identify listing on ajax actions.
+
 2.1
 ---
 #. Fix bug where listing did not return content in the correct order. Note that `listing.queryset` is not guaranteed to return a real queryset anymore.
