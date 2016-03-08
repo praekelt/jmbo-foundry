@@ -4,6 +4,7 @@ Changelog
 next
 ----
 #. Deprecate legacy photosizes named `listing_*`.
+#. Fix smart layer Javascript to correctly identify listing on ajax actions.
 
 2.1
 ---
