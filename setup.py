@@ -44,21 +44,6 @@ setup(
     ],
     include_package_data=True,
     tests_require=[
-        # Foundry provides high-level testing tools for other content types
-        'jmbo-banner>=0.6',
-        'jmbo-calendar>=2.0.0',
-        'jmbo-chart>=2.0.0',
-        #'jmbo-competition',
-        'jmbo-downloads>=2.0.2',
-        #'jmbo-friends==2.0.0a1',   # add back when friends gets a stable release
-        'jmbo-gallery>=2.0.1',
-        'jmbo-music>=2.0.0',
-        'jmbo-poll>=2.0.0',
-        #'jmbo-sitemap>=0.1',
-        #'jmbo-show>=0.2',
-        #'jmbo-twitter',
-        'django-setuptest>=0.1.6',
-        'psycopg2',
     ],
     test_suite="setuptest.setuptest.SetupTestSuite",
     classifiers=[
