@@ -17,7 +17,7 @@ celery==3.1.17
 django-appconf==0.6
 django-celery==3.1.16
 django-ckeditor==4.4.7
-#django-compressor==1.4
+django-compressor==1.4
 django-debug-toolbar==1.2.2
 django-pagination==1.0.7
 django-secretballot==0.2.3
