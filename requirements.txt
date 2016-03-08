@@ -59,7 +59,6 @@ jmbo==2.0.6
 jmbo-post==2.0.0
 jmbo-contact==2.0.0
 jmbo-banner==0.6
-django-atlas==0.1
 jmbo-calendar==2.0.0
 jmbo-analytics==0.2
 django-category==0.1.3
