@@ -103,6 +103,11 @@ class TestCase(BaseTestCase):
                 post.tags = [getattr(cls, 'tag%s' % i)]
             else:
                 post.primary_category = getattr(cls, 'cat%s' % i)
+
+            # create primary category on one post with categories
+            if i == 1:
+                post.primary_category = getattr(cls, 'cat%s' % i)
+
             post.sites = [1]
             set_image(post)
             post.save()
