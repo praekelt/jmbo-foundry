@@ -195,6 +195,18 @@ class TestCase(BaseTestCase):
         listing_categories.save()
         setattr(cls, listing_categories.slug, listing_categories)\
 
+        # Listing with categories and primary category
+        listing_categories_with_primary, dc = Listing.objects.get_or_create(
+            title='Listing categories',
+            slug='listing-categories',
+            count=0, items_per_page=0, style='VerticalThumbnail',
+            primary_category=cls.cat1
+        )
+        listing_categories.categories = [cls.cat1, cls.cat2]
+        listing_categories.sites = [1]
+        listing_categories.save()
+        setattr(cls, listing_categories.slug, listing_categories)
+
         # Listing with tags
         listing_tags, dc = Listing.objects.get_or_create(
             title='Listing tags',
@@ -322,6 +334,13 @@ class TestCase(BaseTestCase):
         self.failUnless(self.post1.modelbase_obj in listing.queryset())
         self.failUnless(self.post2.modelbase_obj in listing.queryset())
         self.failIf(self.post3.modelbase_obj in listing.queryset())
+
+    def test_listing_categories_with_primary(self):
+        listing = getattr(self, 'listing_categories_with_primary')
+        self.failUnless(self.post1.modelbase_obj in listing.queryset())
+        self.failUnless(self.post2.modelbase_obj in listing.queryset())
+        self.failIf(self.post3.modelbase_obj in listing.queryset())
+        self.failIf(listing.queryset().count() > 2)
 
     def test_listing_tags(self):
         listing = getattr(self, 'listing-tags')
