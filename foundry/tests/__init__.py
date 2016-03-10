@@ -198,14 +198,14 @@ class TestCase(BaseTestCase):
         # Listing with categories and primary category
         listing_categories_with_primary, dc = Listing.objects.get_or_create(
             title='Listing categories',
-            slug='listing-categories',
+            slug='listing-categories-with-primary',
             count=0, items_per_page=0, style='VerticalThumbnail',
             primary_category=cls.cat1
         )
-        listing_categories.categories = [cls.cat1, cls.cat2]
-        listing_categories.sites = [1]
-        listing_categories.save()
-        setattr(cls, listing_categories.slug, listing_categories)
+        listing_categories_with_primary.categories = [cls.cat1, cls.cat2]
+        listing_categories_with_primary.sites = [1]
+        listing_categories_with_primary.save()
+        setattr(cls, listing_categories_with_primary.slug, listing_categories_with_primary)
 
         # Listing with tags
         listing_tags, dc = Listing.objects.get_or_create(
