@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmbo-foundry',
-    version='2.1',
+    version='2.1.1',
     description='Jmbo Foundry ties together the various Jmbo products enabling you to rapidly build multilingual web and mobi sites with the minimum amount of code and customization.',
     long_description=open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
     author='Praekelt Foundation',
@@ -44,21 +44,6 @@ setup(
     ],
     include_package_data=True,
     tests_require=[
-        # Foundry provides high-level testing tools for other content types
-        'jmbo-banner>=0.6',
-        'jmbo-calendar>=2.0.0',
-        'jmbo-chart>=2.0.0',
-        #'jmbo-competition',
-        'jmbo-downloads>=2.0.2',
-        #'jmbo-friends==2.0.0a1',   # add back when friends gets a stable release
-        'jmbo-gallery>=2.0.1',
-        'jmbo-music>=2.0.0',
-        'jmbo-poll>=2.0.0',
-        #'jmbo-sitemap>=0.1',
-        #'jmbo-show>=0.2',
-        #'jmbo-twitter',
-        'django-setuptest>=0.1.6',
-        'psycopg2',
     ],
     test_suite="setuptest.setuptest.SetupTestSuite",
     classifiers=[

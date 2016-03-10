@@ -3,13 +3,12 @@ from os.path import expanduser
 from foundry.settings import *
 
 
-# Postgis because we want to test full functionality
 DATABASES = {
     'default': {
         #'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'jmbo_spatial',
-        #'NAME': 'jmbo',
+        #'NAME': 'jmbo_spatial',
+        'NAME': 'jmbo',
         'USER': 'postgres',
         'PASSWORD': '',
         'HOST': '',
