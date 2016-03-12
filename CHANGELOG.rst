@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Add indexes for `title` and `description` fields.
+
 2.1.1
 -----
 #. Deprecate legacy photosizes named `listing_*`.

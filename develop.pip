@@ -75,3 +75,5 @@ sqlparse==0.1.14
 wsgiref==0.1.2
 zope.interface==4.1.2
 django-photologue==3.1.1
+django-model-utils==2.3.1
+
