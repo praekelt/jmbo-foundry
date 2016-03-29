@@ -104,10 +104,6 @@ class TestCase(BaseTestCase):
             else:
                 post.primary_category = getattr(cls, 'cat%s' % i)
 
-            # create primary category on one post with categories
-            if i == 1:
-                post.primary_category = getattr(cls, 'cat%s' % i)
-
             post.sites = [1]
             set_image(post)
             post.save()
@@ -123,6 +119,19 @@ class TestCase(BaseTestCase):
             set_image(post)
             post.save()
             setattr(cls, 'post%s' % i, post)
+
+        # Published post with primary category and that same primary category
+        # appearing in its categories.
+        post, dc = Post.objects.get_or_create(
+            title='Post Issue 69', content='<b>aaa</b>',
+            owner=cls.editor, state='published',
+        )
+        post.categories = [cls.cat1, cls.cat2]
+        post.primary_category = cls.cat1
+        post.sites = [1]
+        set_image(post)
+        post.save()
+        setattr(cls, 'post-issue-69', post)
 
         # Published galleries
         if "gallery" in settings.INSTALLED_APPS:
@@ -200,17 +209,19 @@ class TestCase(BaseTestCase):
         listing_categories.save()
         setattr(cls, listing_categories.slug, listing_categories)\
 
-        # Listing with categories and primary category
-        listing_categories_with_primary, dc = Listing.objects.get_or_create(
-            title='Listing categories',
-            slug='listing-categories-with-primary',
+        # Listing with primary category cat1, categories cat1 and cat2. This
+        # was causing duplicates up to 2.1.1.
+        listing_issue_69, dc = Listing.objects.get_or_create(
+            title='Listing only cat1',
+            slug='listing-issue-69',
             count=0, items_per_page=0, style='VerticalThumbnail',
-            primary_category=cls.cat1
         )
-        listing_categories_with_primary.categories = [cls.cat1, cls.cat2]
-        listing_categories_with_primary.sites = [1]
-        listing_categories_with_primary.save()
-        setattr(cls, listing_categories_with_primary.slug, listing_categories_with_primary)
+        listing_issue_69.categories = [cls.cat1]
+        content_type = ContentType.objects.get(app_label='post', model='post')
+        listing_issue_69.content_type = [content_type]
+        listing_issue_69.sites = [1]
+        listing_issue_69.save()
+        setattr(cls, listing_issue_69.slug, listing_issue_69)
 
         # Listing with tags
         listing_tags, dc = Listing.objects.get_or_create(
@@ -340,12 +351,14 @@ class TestCase(BaseTestCase):
         self.failUnless(self.post2.modelbase_obj in listing.queryset())
         self.failIf(self.post3.modelbase_obj in listing.queryset())
 
-    def test_listing_categories_with_primary(self):
-        listing = getattr(self, 'listing_categories_with_primary')
-        self.failUnless(self.post1.modelbase_obj in listing.queryset())
-        self.failUnless(self.post2.modelbase_obj in listing.queryset())
-        self.failIf(self.post3.modelbase_obj in listing.queryset())
-        self.failIf(listing.queryset().count() > 2)
+    def test_listing_issue_69(self):
+        listing = getattr(self, 'listing-issue-69')
+        post = getattr(self, 'post-issue-69')
+        #import pdb;pdb.set_trace()
+        queryset = listing.queryset()
+        # The post must appear exactly once in the queryset
+        li = [o for o in queryset if o == post.modelbase_obj]
+        self.failUnless(len(li) == 1)
 
     def test_listing_tags(self):
         listing = getattr(self, 'listing-tags')

@@ -1,3 +1,4 @@
+# This is used in automated testing.
 -e git+https://github.com/praekelt/jmbo-competition.git@feature/django-1.6#egg=jmbo-competition
 -e git+https://github.com/praekelt/jmbo-show.git@feature/django-1.6#egg=jmbo-show
 -e git+https://github.com/praekelt/jmbo-twitter.git@feature/django-1.6#egg=jmbo-twitter

@@ -388,7 +388,8 @@ complex page."""
         if self.count:
             q = q[:self.count]
 
-        return q.only("id").distinct()
+        #return q.only("id").distinct()
+        return q
 
     def set_pinned(self, iterable):
         for n, obj in enumerate(iterable):
