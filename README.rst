@@ -6,5 +6,4 @@ Jmbo Foundry
    :align: center
    :alt: Travis
 
-Documentation at http://jmbo-fiundry.readthedocs.org.
-
+Documentation at http://jmbo-foundry.readthedocs.org.
