@@ -1,6 +1,10 @@
 Changelog
 =========
 
+2.1.2
+-----
+#. Fix issue 69 - possible duplicate items in a listing.
+
 2.1.1
 -----
 #. Deprecate legacy photosizes named `listing_*`.

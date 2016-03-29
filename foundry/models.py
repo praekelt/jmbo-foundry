@@ -16,6 +16,7 @@ from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 from django.utils.importlib import import_module
 from django.utils import simplejson as json
+from django.db import connection
 from django.conf import settings
 
 from ckeditor.fields import RichTextField
@@ -388,7 +389,16 @@ complex page."""
         if self.count:
             q = q[:self.count]
 
-        return q
+        # Ensure there are no duplicates. Oracle bugs require special handling
+        # around distinct which incur a performance penalty when fetching
+        # attributes. Avoid the penalty for other databases by doing database
+        # detection.
+        if 'oracle' in connection.vendor.lower():
+            return q.only('id').distinct()
+
+        return q.distinct('publish_on', 'created', 'id').order_by(
+            '-publish_on', '-created'
+        )
 
     def set_pinned(self, iterable):
         for n, obj in enumerate(iterable):
