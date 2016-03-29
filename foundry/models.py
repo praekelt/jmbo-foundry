@@ -396,7 +396,9 @@ complex page."""
         if 'oracle' in connection.vendor.lower():
             return q.only('id').distinct()
 
-        return q.distinct()
+        return q.distinct('publish_on', 'created', 'id').order_by(
+            '-publish_on', '-created'
+        )
 
     def set_pinned(self, iterable):
         for n, obj in enumerate(iterable):
