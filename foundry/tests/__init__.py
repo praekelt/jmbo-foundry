@@ -354,7 +354,6 @@ class TestCase(BaseTestCase):
     def test_listing_issue_69(self):
         listing = getattr(self, 'listing-issue-69')
         post = getattr(self, 'post-issue-69')
-        #import pdb;pdb.set_trace()
         queryset = listing.queryset()
         # The post must appear exactly once in the queryset
         li = [o for o in queryset if o == post.modelbase_obj]
