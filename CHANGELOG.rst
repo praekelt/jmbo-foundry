@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+2.1.3
+-----
 #. Fix critical issue where slice happens before distinct in some code paths.
 
 2.1.2
