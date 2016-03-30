@@ -386,19 +386,21 @@ complex page."""
             modifier.modify(view)
             q = view.params['queryset']
 
-        if self.count:
-            q = q[:self.count]
-
         # Ensure there are no duplicates. Oracle bugs require special handling
         # around distinct which incur a performance penalty when fetching
         # attributes. Avoid the penalty for other databases by doing database
         # detection.
         if 'oracle' in connection.vendor.lower():
-            return q.only('id').distinct()
+            q = q.only('id').distinct()
+        else:
+            q = q.distinct('publish_on', 'created', 'id').order_by(
+                '-publish_on', '-created'
+            )
 
-        return q.distinct('publish_on', 'created', 'id').order_by(
-            '-publish_on', '-created'
-        )
+        if self.count:
+            q = q[:self.count]
+
+        return q
 
     def set_pinned(self, iterable):
         for n, obj in enumerate(iterable):

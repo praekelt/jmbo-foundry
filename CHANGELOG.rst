@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Fix critical issue where slice happens before distinct in some code paths.
+
 2.1.2
 -----
 #. Fix issue 69 - possible duplicate items in a listing.
