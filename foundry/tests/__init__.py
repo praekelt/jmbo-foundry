@@ -158,7 +158,7 @@ class TestCase(BaseTestCase):
         listing_pvt, dc = Listing.objects.get_or_create(
             title='Posts vertical thumbnail',
             slug='posts-vertical-thumbnail',
-            count=0, items_per_page=0, style='VerticalThumbnail',
+            count=10, items_per_page=0, style='VerticalThumbnail',
         )
         listing_pvt.content_type = [content_type]
         listing_pvt.sites = [1]
